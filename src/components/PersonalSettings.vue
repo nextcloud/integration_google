@@ -1,0 +1,182 @@
+<template>
+	<div id="google_prefs" class="section">
+		<h2>
+			<a class="icon icon-google-settings" />
+			{{ t('integration_google', 'Google integration') }}
+		</h2>
+		<!--p class="settings-hint">
+			{{ t('integration_google', 'When you create a personal access token yourself, give it at least "read:user", "user:email" and "notifications" permissions.') }}
+		</p-->
+		<div id="google-content">
+			<button v-if="!connected" id="google-oauth" @click="onOAuthClick">
+				<span class="icon icon-external" />
+				{{ t('integration_google', 'Connect to Google') }}
+			</button>
+			<div v-else class="google-grid-form">
+				<label class="google-connected">
+					<a class="icon icon-checkmark-color" />
+					{{ t('integration_google', 'Connected as {user}', { user: state.user_name }) }}
+				</label>
+				<button id="google-rm-cred" @click="onLogoutClick">
+					<span class="icon icon-close" />
+					{{ t('integration_google', 'Disconnect from Google') }}
+				</button>
+				<span />
+			</div>
+		</div>
+	</div>
+</template>
+
+<script>
+import { loadState } from '@nextcloud/initial-state'
+import { generateUrl } from '@nextcloud/router'
+import axios from '@nextcloud/axios'
+import { showSuccess, showError } from '@nextcloud/dialogs'
+
+export default {
+	name: 'PersonalSettings',
+
+	components: {
+	},
+
+	props: [],
+
+	data() {
+		return {
+			state: loadState('integration_google', 'user-config'),
+			readonly: true,
+		}
+	},
+
+	computed: {
+		showOAuth() {
+			return this.state.client_id && this.state.client_secret
+		},
+		connected() {
+			return this.state.token && this.state.token !== ''
+			// && this.state.user_name && this.state.user_name !== ''
+		},
+	},
+
+	watch: {
+	},
+
+	mounted() {
+		const paramString = window.location.search.substr(1)
+		// eslint-disable-next-line
+		const urlParams = new URLSearchParams(paramString)
+		const ghToken = urlParams.get('googleToken')
+		if (ghToken === 'success') {
+			showSuccess(t('integration_google', 'Successfully connected to Google!'))
+		} else if (ghToken === 'error') {
+			showError(t('integration_google', 'Google connection error:') + ' ' + urlParams.get('message'))
+		}
+	},
+
+	methods: {
+		onLogoutClick() {
+			this.state.token = ''
+			this.saveOptions()
+		},
+		onSearchChange(e) {
+			this.state.search_enabled = e.target.checked
+			this.saveOptions()
+		},
+		saveOptions() {
+			const req = {
+				values: {
+					token: this.state.token,
+					search_enabled: this.state.search_enabled ? '1' : '0',
+				},
+			}
+			const url = generateUrl('/apps/integration_google/config')
+			axios.put(url, req)
+				.then((response) => {
+					showSuccess(t('integration_google', 'Google options saved.'))
+					if (response.data.user_name !== undefined) {
+						this.state.user_name = response.data.user_name
+						if (response.data.user_name === '') {
+							showError(t('integration_google', 'Incorrect access token'))
+						}
+					}
+				})
+				.catch((error) => {
+					showError(
+						t('integration_google', 'Failed to save Google options')
+						+ ': ' + error.response.request.responseText
+					)
+				})
+				.then(() => {
+				})
+		},
+		onOAuthClick() {
+			const redirectEndpoint = generateUrl('/apps/integration_google/oauth-redirect')
+			const redirectUri = window.location.protocol + '//' + window.location.host + redirectEndpoint
+			const oauthState = Math.random().toString(36).substring(3)
+			const requestUrl = 'https://accounts.google.com/o/oauth2/v2/auth?'
+				+ 'client_id=' + encodeURIComponent(this.state.client_id)
+				+ '&redirect_uri=' + encodeURIComponent(redirectUri)
+				+ '&response_type=code'
+				+ '&access_type=offline'
+				+ '&state=' + encodeURIComponent(oauthState)
+				+ '&scope=' + encodeURIComponent('openid profile https://www.googleapis.com/auth/calendar')
+
+			const req = {
+				values: {
+					oauth_state: oauthState,
+				},
+			}
+			const url = generateUrl('/apps/integration_google/config')
+			axios.put(url, req)
+				.then((response) => {
+					window.location.replace(requestUrl)
+				})
+				.catch((error) => {
+					showError(
+						t('integration_google', 'Failed to save Google OAuth state')
+						+ ': ' + error.response.request.responseText
+					)
+				})
+				.then(() => {
+				})
+		},
+	},
+}
+</script>
+
+<style scoped lang="scss">
+.google-grid-form label {
+	line-height: 38px;
+}
+.google-grid-form input {
+	width: 100%;
+}
+.google-grid-form {
+	max-width: 600px;
+	display: grid;
+	grid-template: 1fr / 1fr 1fr;
+	button .icon {
+		margin-bottom: -1px;
+	}
+}
+#google_prefs .icon {
+	display: inline-block;
+	width: 32px;
+}
+#google_prefs .grid-form .icon {
+	margin-bottom: -3px;
+}
+.icon-google-settings {
+	background-image: url('./../../img/app-dark.svg');
+	background-size: 23px 23px;
+	height: 23px;
+	margin-bottom: -4px;
+}
+
+body.theme--dark .icon-google-settings {
+	background-image: url('./../../img/app.svg');
+}
+#google-content {
+	margin-left: 40px;
+}
+</style>
