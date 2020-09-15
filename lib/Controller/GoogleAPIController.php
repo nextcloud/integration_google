@@ -71,11 +71,11 @@ class GoogleAPIController extends Controller {
 	 * @param ?string $since optional date to filter notifications
 	 * @return DataResponse the notifications
 	 */
-	public function getNotifications(?string $since) {
+	public function addCalendars(): DataResponse {
 		if ($this->accessToken === '') {
 			return new DataResponse($result, 400);
 		}
-		$result = $this->googleAPIService->getNotifications($this->accessToken, $since, false);
+		$result = $this->googleAPIService->addCalendars($this->accessToken, $this->userId);
 		if (isset($result['error'])) {
 			$response = new DataResponse($result['error'], 401);
 		} else {

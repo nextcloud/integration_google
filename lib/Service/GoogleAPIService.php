@@ -15,6 +15,7 @@ use OCP\IL10N;
 use OCP\IConfig;
 use OCP\ILogger;
 use OCP\Http\Client\IClientService;
+use GuzzleHttp\Exception\ClientException;
 
 class GoogleAPIService {
 
@@ -38,140 +39,34 @@ class GoogleAPIService {
 	}
 
 	/**
-	 * Request an avatar image
-	 * @param string $url The avatar URL
-	 * @return string Avatar image data
-	 */
-	public function getAvatar(string $url): string {
-		return $this->client->get($url)->getBody();
-	}
-
-	/**
-	 * Actually get notifications
 	 * @param string $accessToken
-	 * @param ?string $since optional date to filter notifications
-	 * @param ?bool $participating optional param to only show notifications the user is participating to
+	 * @param string $userId
 	 */
-	public function getNotifications(string $accessToken, ?string $since, ?bool $participating): array {
+	public function addCalendars(string $accessToken, string $userId): array {
 		$params = [];
-		if (is_null($since)) {
-			$twoWeeksEarlier = new \DateTime();
-			$twoWeeksEarlier->sub(new \DateInterval('P14D'));
-			$params['since'] = $twoWeeksEarlier->format('Y-m-d\TH:i:s\Z');
-		} else {
-			$params['since'] = $since;
-		}
-		if (!is_null($participating)) {
-			$params['participating'] = $participating ? 'true' : 'false';
-		}
-		$result = $this->request($accessToken, 'notifications', $params);
-		return $result;
-	}
-
-	/**
-	 * Unsubscribe a notification, does the same as in Google notifications page
-	 * @param string $accessToken
-	 * @param int $id Notification id
-	 * @return array request result
-	 */
-	public function unsubscribeNotification(string $accessToken, int $id): array {
-		$params = [
-			'ignored' => true
-		];
-		$result = $this->request($accessToken, 'notifications/threads/' . $id . '/subscription', $params, 'PUT');
-		return $result;
-	}
-
-	/**
-	 * Mark a notification as read
-	 * @param string $accessToken
-	 * @param int $id Notification id
-	 * @return array request result
-	 */
-	public function markNotificationAsRead(string $accessToken, int $id): array {
-		$result = $this->request($accessToken, 'notifications/threads/' . $id, [], 'POST');
-		return $result;
-	}
-
-	/**
-	 * Search Google
-	 * @param string $accessToken
-	 * @param string $query What to search for
-	 * @return array request result
-	 */
-	public function search(string $accessToken, string $query): array {
-		$entries = [];
-		// 5 repositories
-		$result = $this->searchRepositories($accessToken, $query);
-		if (isset($result['items'])) {
-			$result['items'] = array_slice($result['items'], 0, 5);
-			foreach($result['items'] as $k => $entry) {
-				$entry['entry_type'] = 'repository';
-				array_push($entries, $entry);
-			}
-		}
-		// 10 issues
-		$result = $this->searchIssues($accessToken, $query);
-		if (isset($result['items'])) {
-			$result['items'] = array_slice($result['items'], 0, 10);
-			foreach($result['items'] as $k => $entry) {
-				$entry['entry_type'] = 'issue';
-				array_push($entries, $entry);
-			}
-		}
-
-		//// sort by score
-		//$a = usort($entries, function($a, $b) {
-		//	$sa = floatval($a['score']);
-		//	$sb = floatval($b['score']);
-		//	return ($sa > $sb) ? -1 : 1;
-		//});
-		return $entries;
-	}
-
-	/**
-	 * Search repositories
-	 * @param string $accessToken
-	 * @param string $query What to search for
-	 * @return array request result
-	 */
-	private function searchRepositories(string $accessToken, string $query): array {
-		$params = [
-			'q' => $query,
-			'order' => 'desc'
-		];
-		$result = $this->request($accessToken, 'search/repositories', $params, 'GET');
-		return $result;
-	}
-
-	/**
-	 * Search issues and PRs
-	 * @param string $accessToken
-	 * @param string $query What to search for
-	 * @return array request result
-	 */
-	private function searchIssues(string $accessToken, string $query): array {
-		$params = [
-			'q' => $query,
-			'order' => 'desc'
-		];
-		$result = $this->request($accessToken, 'search/issues', $params, 'GET');
+		$result = $this->request($accessToken, $userId, 'calendar/v3/users/me/calendarList');
+		// ical url is https://calendar.google.com/calendar/ical/br3sqt6mgpunkh2dr2p8p5obso%40group.calendar.google.com/private-640b335ca58effb904dd4570b50096eb/basic.ics
+		// https://calendar.google.com/calendar/ical/ID/../basic.ics
+		// in ->items : list
+		// ID : URL encoded item['id']
+		$result = $this->request($accessToken, $userId, 'calendar/v3/users/me/calendarList/' . urlencode('br3sqt6mgpunkh2dr2p8p5obso@group.calendar.google.com'));
 		return $result;
 	}
 
 	/**
 	 * Make the HTTP request
 	 * @param string $accessToken
+	 * @param string $userId the user from which the request is coming
 	 * @param string $endPoint The path to reach in api.google.com
 	 * @param array $params Query parameters (key/val pairs)
 	 * @param string $method HTTP query method
 	 */
-	public function request(string $accessToken, string $endPoint, ?array $params = [], ?string $method = 'GET'): array {
+	public function request(string $accessToken, string $userId, string $endPoint, ?array $params = [], ?string $method = 'GET'): array {
 		try {
-			$url = 'https://api.google.com/' . $endPoint;
+			$url = 'https://www.googleapis.com/' . $endPoint;
 			$options = [
 				'headers' => [
-					'Authorization' => 'token ' . $accessToken,
+					'Authorization' => 'Bearer ' . $accessToken,
 					'User-Agent' => 'Nextcloud Google integration'
 				],
 			];
@@ -200,10 +95,31 @@ class GoogleAPIService {
 			if ($respCode >= 400) {
 				return ['error', $this->l10n->t('Bad credentials')];
 			} else {
+				file_put_contents('/tmp/aa', $body);
 				return json_decode($body, true);
 			}
-		} catch (\Exception $e) {
+		} catch (ClientException $e) {
 			$this->logger->warning('Google API error : '.$e->getMessage(), array('app' => $this->appName));
+			$response = $e->getResponse();
+			$body = (string) $response->getBody();
+			// refresh token if it's invalid and we are using oauth
+			$this->logger->warning('Trying to REFRESH the access token', array('app' => $this->appName));
+			$refreshToken = $this->config->getUserValue($userId, Application::APP_ID, 'refresh_token', '');
+			$clientID = $this->config->getAppValue(Application::APP_ID, 'client_id', '');
+			$clientSecret = $this->config->getAppValue(Application::APP_ID, 'client_secret', '');
+			$result = $this->requestOAuthAccessToken([
+				'client_id' => $clientID,
+				'client_secret' => $clientSecret,
+				'grant_type' => 'refresh_token',
+				'refresh_token' => $refreshToken,
+			], 'POST');
+			if (isset($result['access_token'])) {
+				$accessToken = $result['access_token'];
+				$this->config->setUserValue($userId, Application::APP_ID, 'token', $accessToken);
+				return $this->request(
+					$accessToken, $userId, $endPoint, $params, $method
+				);
+			}
 			return ['error', $e->getMessage()];
 		}
 	}

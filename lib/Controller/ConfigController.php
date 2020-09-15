@@ -132,7 +132,7 @@ class ConfigController extends Controller {
             ], 'POST');
             if (isset($result['access_token']) && isset($result['refresh_token'])) {
                 $accessToken = $result['access_token'];
-                $refreshToken = $result['access_token'];
+                $refreshToken = $result['refresh_token'];
                 $this->config->setUserValue($this->userId, Application::APP_ID, 'token', $accessToken);
                 $this->config->setUserValue($this->userId, Application::APP_ID, 'refresh_token', $refreshToken);
                 //$this->storeUserInfo($accessToken);

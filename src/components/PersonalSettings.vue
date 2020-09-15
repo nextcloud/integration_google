@@ -1,5 +1,5 @@
 <template>
-	<div id="google_prefs" class="section">
+	<div v-if="showOAuth" id="google_prefs" class="section">
 		<h2>
 			<a class="icon icon-google-settings" />
 			{{ t('integration_google', 'Google integration') }}
@@ -21,7 +21,10 @@
 					<span class="icon icon-close" />
 					{{ t('integration_google', 'Disconnect from Google') }}
 				</button>
-				<span />
+				<button id="google-add-cal" @click="onAddCal">
+					<span class="icon icon-calendar-dark" />
+					{{ t('integration_google', 'Add Google calendars') }}
+				</button>
 			</div>
 		</div>
 	</div>
@@ -82,6 +85,19 @@ export default {
 			this.state.search_enabled = e.target.checked
 			this.saveOptions()
 		},
+		onAddCal() {
+			const url = generateUrl('/apps/integration_google/add-calendars')
+			axios.get(url)
+				.then((response) => {
+					showSuccess(t('integration_google', 'Google calendars were successfully added.'))
+				}).catch((error) => {
+					showError(
+						t('integration_google', 'Failed to add calendars')
+						+ ': ' + error.response.request.responseText
+					)
+				}).then(() => {
+				})
+		},
 		saveOptions() {
 			const req = {
 				values: {
@@ -93,12 +109,12 @@ export default {
 			axios.put(url, req)
 				.then((response) => {
 					showSuccess(t('integration_google', 'Google options saved.'))
-					if (response.data.user_name !== undefined) {
+					/* if (response.data.user_name !== undefined) {
 						this.state.user_name = response.data.user_name
 						if (response.data.user_name === '') {
 							showError(t('integration_google', 'Incorrect access token'))
 						}
-					}
+					} */
 				})
 				.catch((error) => {
 					showError(
