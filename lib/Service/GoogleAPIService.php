@@ -17,6 +17,8 @@ use OCP\ILogger;
 use OCP\Http\Client\IClientService;
 use GuzzleHttp\Exception\ClientException;
 
+use OCA\Google\AppInfo\Application;
+
 class GoogleAPIService {
 
 	private $l10n;
