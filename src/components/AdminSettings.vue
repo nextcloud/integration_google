@@ -6,18 +6,21 @@
 		</h2>
 		<p class="settings-hint">
 			{{ t('integration_google', 'If you want to allow your Nextcloud users to use OAuth to authenticate to https://google.com, create an OAuth application in your Google settings.') }}
-			(<a href="https://console.developers.google.com/" class="mylink">{{ t('integration_google', 'direct link to Google API settings') }}</a>)
+			(<a href="https://console.developers.google.com/" class="external">{{ t('integration_google', 'Direct link to Google API settings') }}</a>)
 			<br>
-			{{ t('integration_google', 'Make sure you set the authorized redirection URL to') }}
-			<br>
+			{{ t('integration_google', 'Go to "Credentials" and click on "+ CREATE CREDENTIALS" -> "OAuth client ID". Set the "Application type" to "Web application".') }}
+			<br><br>
+			<span class="icon icon-details" />
+			{{ t('integration_google', 'Make sure you set one "Authorized redirect URI" to') }}
 			<b> {{ redirect_uri }} </b>
-			<br>
-			{{ t('integration_google', 'Then set the client ID and client secret below.') }}
+			<br><br>
+			{{ t('integration_google', 'Put the "Client ID" and "Client secret" below.') }}
+			{{ t('integration_google', 'Your Nextcloud users will then see a "Connect to Google" button in their personal settings.') }}
 		</p>
 		<div class="grid-form">
 			<label for="google-client-id">
 				<a class="icon icon-category-auth" />
-				{{ t('integration_google', 'Google application client ID') }}
+				{{ t('integration_google', 'Client ID') }}
 			</label>
 			<input id="google-client-id"
 				v-model="state.client_id"
@@ -28,7 +31,7 @@
 				@input="onInput">
 			<label for="google-client-secret">
 				<a class="icon icon-category-auth" />
-				{{ t('integration_google', 'Google application client secret') }}
+				{{ t('integration_google', 'Client secret') }}
 			</label>
 			<input id="google-client-secret"
 				v-model="state.client_secret"
@@ -125,13 +128,5 @@ export default {
 }
 body.dark .icon-google {
 	background-image: url(./../../img/app.svg);
-}
-.mylink {
-	color: var(--color-main-text);
-
-	&:hover,
-	&:focus {
-		border-bottom: 2px solid var(--color-text-maxcontrast);
-	}
 }
 </style>
