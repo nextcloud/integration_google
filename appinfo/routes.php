@@ -18,5 +18,6 @@ return [
         ['name' => 'googleAPI#getCalendarList', 'url' => '/calendars', 'verb' => 'GET'],
         ['name' => 'googleAPI#importCalendar', 'url' => '/import-calendar', 'verb' => 'GET'],
         ['name' => 'googleAPI#importContacts', 'url' => '/import-contacts', 'verb' => 'GET'],
+        ['name' => 'googleAPI#importPhotos', 'url' => '/import-photos', 'verb' => 'GET'],
     ]
 ];

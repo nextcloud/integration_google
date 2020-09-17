@@ -90,6 +90,26 @@ class GoogleAPIController extends Controller {
 	 * @param ?string $since optional date to filter notifications
 	 * @return DataResponse the notifications
 	 */
+	public function importPhotos(?string $targetPath = 'Google'): DataResponse {
+		if ($this->accessToken === '') {
+			return new DataResponse(null, 400);
+		}
+		$result = $this->googleAPIService->importPhotos($this->accessToken, $this->userId, $targetPath);
+		if (isset($result['error'])) {
+			$response = new DataResponse($result['error'], 401);
+		} else {
+			$response = new DataResponse($result);
+		}
+		return $response;
+	}
+
+	/**
+	 * @NoAdminRequired
+	 *
+	 *
+	 * @param ?string $since optional date to filter notifications
+	 * @return DataResponse the notifications
+	 */
 	public function importCalendar(string $calId, string $calName, ?string $color = null): DataResponse {
 		if ($this->accessToken === '') {
 			return new DataResponse(null, 400);

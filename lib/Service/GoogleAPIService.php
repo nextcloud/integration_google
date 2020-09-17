@@ -21,6 +21,9 @@ use Sabre\VObject\Component\VCard;
 use Sabre\VObject\Property\Text;
 use OCA\DAV\CardDAV\CardDavBackend;
 use OCA\DAV\CalDAV\CalDavBackend;
+use OCP\Files\IRootFolder;
+use OCP\Files\FileInfo;
+use OCP\Files\Node;
 
 use OCA\Google\AppInfo\Application;
 
@@ -39,6 +42,7 @@ class GoogleAPIService {
 								IContactManager $contactsManager,
 								CardDavBackend $cdBackend,
 								CalDavBackend $caldavBackend,
+								IRootFolder $root,
 								IClientService $clientService) {
 		$this->appName = $appName;
 		$this->l10n = $l10n;
@@ -48,7 +52,101 @@ class GoogleAPIService {
 		$this->contactsManager = $contactsManager;
 		$this->cdBackend = $cdBackend;
 		$this->caldavBackend = $caldavBackend;
+		$this->root = $root;
 		$this->client = $clientService->newClient();
+	}
+
+	/**
+	 * @param string $accessToken
+	 * @param string $userId
+	 */
+	public function importPhotos(string $accessToken, string $userId, ?string $targetPath = 'Google'): array {
+		// create root folder
+		$userFolder = $this->root->getUserFolder($userId);
+		if (!$userFolder->nodeExists($targetPath)) {
+			$folder = $userFolder->newFolder($targetPath);
+		} else {
+			$folder = $userFolder->get($targetPath);
+			if ($folder->getType() !== FileInfo::TYPE_FOLDER) {
+				return ['error' => 'Impossible to create Google folder'];
+			}
+		}
+
+		$albums = [];
+		$params = [
+			'pageSize' => '50',
+		];
+		$result = $this->request($accessToken, $userId, 'v1/albums', $params, 'GET', 'https://photoslibrary.googleapis.com/');
+		if (isset($result['error'])) {
+			return $result;
+		}
+		foreach ($result['albums'] as $album) {
+			array_push($albums, $album);
+		}
+		while (isset($result['nextPageToken'])) {
+			$params['pageToken'] = $result['nextPageToken'];
+			$result = $this->request($accessToken, $userId, 'v1/albums', $params, 'GET', 'https://photoslibrary.googleapis.com/');
+			if (isset($result['error'])) {
+				return $result;
+			}
+			foreach ($result['albums'] as $album) {
+				array_push($albums, $album);
+			}
+		}
+
+		$nbDownloaded = 0;
+		foreach ($albums as $album) {
+			$albumId = $album['id'];
+			$albumName = $album['title'];
+			if (!$folder->nodeExists($albumName)) {
+				$albumFolder = $folder->newFolder($albumName);
+			} else {
+				$albumFolder = $folder->get($albumName);
+				if ($albumFolder->getType() !== FileInfo::TYPE_FOLDER) {
+					return ['error' => 'Impossible to create album folder'];
+				}
+			}
+
+			$params = [
+				'pageSize' => '100',
+				'albumId' => $albumId,
+			];
+			$result = $this->request($accessToken, $userId, 'v1/mediaItems:search', $params, 'POST', 'https://photoslibrary.googleapis.com/');
+			foreach ($result['mediaItems'] as $photo) {
+				if ($this->getPhoto($accessToken, $userId, $photo, $albumFolder)) {
+					$nbDownloaded++;
+				}
+			}
+			while (isset($result['nextPageToken'])) {
+				$params['pageToken'] = $result['nextPageToken'];
+				$result = $this->request($accessToken, $userId, 'v1/mediaItems:search', $params, 'POST', 'https://photoslibrary.googleapis.com/');
+				if (isset($result['error'])) {
+					return $result;
+				}
+				foreach ($result['mediaItems'] as $photo) {
+					if ($this->getPhoto($accessToken, $userId, $photo, $albumFolder)) {
+						$nbDownloaded++;
+					}
+				}
+			}
+		}
+		return [
+			'nbDownloaded' => $nbDownloaded,
+			'targetPath' => $targetPath,
+		];
+	}
+
+	private function getPhoto(string $accessToken, string $userId, array $photo, Node $albumFolder): bool {
+		$photoName = $photo['filename'];
+		if (!$albumFolder->nodeExists($photoName)) {
+			$photoUrl = $photo['baseUrl'];
+			$res = $this->simpleRequest($accessToken, $userId, $photoUrl);
+			if (!isset($res['error'])) {
+				$albumFolder->newFile($photoName, $res['content']);
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -441,9 +539,8 @@ class GoogleAPIService {
 			$respCode = $response->getStatusCode();
 
 			if ($respCode >= 400) {
-				return ['error', $this->l10n->t('Bad credentials')];
+				return ['error' => $this->l10n->t('Bad credentials')];
 			} else {
-				file_put_contents('/tmp/aa', $body);
 				return json_decode($body, true);
 			}
 		} catch (ClientException $e) {
@@ -470,7 +567,7 @@ class GoogleAPIService {
 					);
 				}
 			}
-			return ['error', $e->getMessage()];
+			return ['error' => $e->getMessage()];
 		}
 	}
 
@@ -519,4 +616,76 @@ class GoogleAPIService {
 			return ['error' => $e->getMessage()];
 		}
 	}
+
+	/**
+	 * Make a simple authenticated HTTP request
+	 * @param string $accessToken
+	 * @param string $userId the user from which the request is coming
+	 * @param string $endPoint The path to reach
+	 * @param array $params Query parameters (key/val pairs)
+	 * @param string $method HTTP query method
+	 */
+	public function simpleRequest(string $accessToken, string $userId, string $url, ?array $params = [], ?string $method = 'GET'): array {
+		try {
+			$options = [
+				'headers' => [
+					'Authorization' => 'Bearer ' . $accessToken,
+					'User-Agent' => 'Nextcloud Google integration'
+				],
+			];
+
+			if (count($params) > 0) {
+				if ($method === 'GET') {
+					$paramsContent = http_build_query($params);
+					$url .= '?' . $paramsContent;
+				} else {
+					$options['body'] = json_encode($params);
+				}
+			}
+
+			if ($method === 'GET') {
+				$response = $this->client->get($url, $options);
+			} else if ($method === 'POST') {
+				$response = $this->client->post($url, $options);
+			} else if ($method === 'PUT') {
+				$response = $this->client->put($url, $options);
+			} else if ($method === 'DELETE') {
+				$response = $this->client->delete($url, $options);
+			}
+			$body = $response->getBody();
+			$respCode = $response->getStatusCode();
+
+			if ($respCode >= 400) {
+				return ['error' => $this->l10n->t('Bad credentials')];
+			} else {
+				return ['content' => $body];
+			}
+		} catch (ClientException $e) {
+			$this->logger->warning('Google API error : '.$e->getMessage(), array('app' => $this->appName));
+			$response = $e->getResponse();
+			$body = (string) $response->getBody();
+			if (strpos($body, 'Request had invalid authentication credentials') !== false) {
+				// refresh token if it's invalid and we are using oauth
+				$this->logger->warning('Trying to REFRESH the access token', array('app' => $this->appName));
+				$refreshToken = $this->config->getUserValue($userId, Application::APP_ID, 'refresh_token', '');
+				$clientID = $this->config->getAppValue(Application::APP_ID, 'client_id', '');
+				$clientSecret = $this->config->getAppValue(Application::APP_ID, 'client_secret', '');
+				$result = $this->requestOAuthAccessToken([
+					'client_id' => $clientID,
+					'client_secret' => $clientSecret,
+					'grant_type' => 'refresh_token',
+					'refresh_token' => $refreshToken,
+				], 'POST');
+				if (isset($result['access_token'])) {
+					$accessToken = $result['access_token'];
+					$this->config->setUserValue($userId, Application::APP_ID, 'token', $accessToken);
+					return $this->simpleRequest(
+						$accessToken, $userId, $url, $params, $method
+					);
+				}
+			}
+			return ['error' => $e->getMessage()];
+		}
+	}
+
 }

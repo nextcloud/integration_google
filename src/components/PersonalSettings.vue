@@ -47,7 +47,7 @@
 					:placeholder="t('integration_google', 'address book name')">
 				<button v-if="showAddressBooks && selectedAddressBook > -1 && (selectedAddressBook > 0 || newAddressBookName)"
 					id="google-import-contacts-in-book"
-					:class="{ loading: importing }"
+					:class="{ loading: importingContacts }"
 					@click="onFinalImportContacts">
 					<span class="icon icon-download" />
 					{{ t('integration_google', 'Import in {name} address book', { name: selectedAddressBookName }) }}
@@ -66,6 +66,14 @@
 						{{ t('integration_google', 'Import calendar') }}
 					</button>
 				</div>
+				<br><br>
+				<h2>{{ t('integration_google', 'Photos') }}</h2>
+				<button id="google-import-photos"
+					:class="{ loading: importingPhotos }"
+					@click="onImportPhotos">
+					<span class="icon icon-toggle-pictures" />
+					{{ t('integration_google', 'Import Google photos') }}
+				</button>
 			</div>
 		</div>
 	</div>
@@ -95,7 +103,8 @@ export default {
 			showAddressBooks: false,
 			selectedAddressBook: -1,
 			newAddressBookName: '',
-			importing: false,
+			importingContacts: false,
+			importingPhotos: false,
 			importingCalendar: {},
 		}
 	},
@@ -194,13 +203,21 @@ export default {
 			const redirectEndpoint = generateUrl('/apps/integration_google/oauth-redirect')
 			const redirectUri = window.location.protocol + '//' + window.location.host + redirectEndpoint
 			const oauthState = Math.random().toString(36).substring(3)
+			const scopes = [
+				'openid',
+				'profile',
+				'https://www.googleapis.com/auth/calendar.readonly',
+				'https://www.googleapis.com/auth/calendar.events.readonly',
+				'https://www.googleapis.com/auth/contacts.readonly',
+				'https://www.googleapis.com/auth/photoslibrary.readonly',
+			]
 			const requestUrl = 'https://accounts.google.com/o/oauth2/v2/auth?'
 				+ 'client_id=' + encodeURIComponent(this.state.client_id)
 				+ '&redirect_uri=' + encodeURIComponent(redirectUri)
 				+ '&response_type=code'
 				+ '&access_type=offline'
 				+ '&state=' + encodeURIComponent(oauthState)
-				+ '&scope=' + encodeURIComponent('openid profile https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/calendar.events.readonly https://www.googleapis.com/auth/contacts.readonly')
+				+ '&scope=' + encodeURIComponent(scopes.join(' '))
 
 			const req = {
 				values: {
@@ -270,7 +287,7 @@ export default {
 			this.showAddressBooks = !this.showAddressBooks
 		},
 		onFinalImportContacts() {
-			this.importing = true
+			this.importingContacts = true
 			const req = {
 				params: {
 					uri: this.selectedAddressBookUri,
@@ -292,7 +309,7 @@ export default {
 					)
 				})
 				.then(() => {
-					this.importing = false
+					this.importingContacts = false
 				})
 		},
 		onCalendarImport(cal) {
@@ -320,6 +337,30 @@ export default {
 				})
 				.then(() => {
 					this.importingCalendar[calId] = false
+				})
+		},
+		onImportPhotos() {
+			this.importingPhotos = true
+			const req = {
+				params: {
+					path: null,
+				},
+			}
+			const url = generateUrl('/apps/integration_google/import-photos')
+			axios.get(url, req)
+				.then((response) => {
+					const targetPath = response.data.targetPath
+					const number = response.data.nbDownloaded
+					showSuccess(t('integration_google', '{number} photos successfully imported in {targetPath}', { targetPath, number }))
+				})
+				.catch((error) => {
+					showError(
+						t('integration_google', 'Failed to import Google photos')
+						+ ': ' + error.response.request.responseText
+					)
+				})
+				.then(() => {
+					this.importingPhotos = false
 				})
 		},
 	},
