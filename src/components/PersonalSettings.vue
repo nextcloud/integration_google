@@ -46,6 +46,7 @@
 					:placeholder="t('integration_google', 'address book name')">
 				<button v-if="showAddressBooks && selectedAddressBook > -1 && (selectedAddressBook > 0 || newAddressBookName)"
 					id="google-import-contacts-in-book"
+					:class="{ loading: importing }"
 					@click="onFinalImportContacts">
 					<span class="icon icon-download" />
 					{{ t('integration_google', 'Import in {name} address book', { name: selectedAddressBookName }) }}
@@ -85,6 +86,7 @@ export default {
 			showAddressBooks: false,
 			selectedAddressBook: -1,
 			newAddressBookName: '',
+			importing: false,
 		}
 	},
 
@@ -253,6 +255,7 @@ export default {
 			this.showAddressBooks = !this.showAddressBooks
 		},
 		onFinalImportContacts() {
+			this.importing = true
 			const req = {
 				params: {
 					uri: this.selectedAddressBookUri,
@@ -274,6 +277,7 @@ export default {
 					)
 				})
 				.then(() => {
+					this.importing = false
 				})
 		},
 	},
