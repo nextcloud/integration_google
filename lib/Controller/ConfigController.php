@@ -19,6 +19,8 @@ use OCP\IConfig;
 use OCP\IServerContainer;
 use OCP\IL10N;
 use OCP\ILogger;
+use OCP\Contacts\IManager as IContactManager;
+use OCP\Constants;
 
 use OCP\IRequest;
 use OCP\IDBConnection;
@@ -48,6 +50,7 @@ class ConfigController extends Controller {
                                 IURLGenerator $urlGenerator,
                                 IL10N $l,
                                 ILogger $logger,
+                                IContactManager $contactsManager,
                                 GoogleAPIService $googleAPIService,
                                 $userId) {
         parent::__construct($AppName, $request);
@@ -60,6 +63,7 @@ class ConfigController extends Controller {
         $this->dbconnection = $dbconnection;
         $this->urlGenerator = $urlGenerator;
         $this->logger = $logger;
+        $this->contactsManager = $contactsManager;
         $this->googleAPIService = $googleAPIService;
     }
 
@@ -101,6 +105,26 @@ class ConfigController extends Controller {
             $this->config->setAppValue(Application::APP_ID, $key, $value);
         }
         return new DataResponse(1);
+    }
+
+    /**
+     * Get local address book list
+     *
+     * @return DataResponse
+     */
+    public function getLocalAddressBooks(): DataResponse {
+        $addressBooks = $this->contactsManager->getUserAddressBooks();
+        $result = [];
+        foreach ($addressBooks as $k => $ab) {
+            if ($ab->getUri() !== 'system') {
+                $result[$ab->getKey()] = [
+                    'uri' => $ab->getUri(),
+                    'name' => $ab->getDisplayName(),
+                    'canEdit' => ($ab->getPermissions() & Constants::PERMISSION_CREATE) ? true : false,
+                ];
+            }
+        }
+        return new DataResponse($result);
     }
 
     /**

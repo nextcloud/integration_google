@@ -102,4 +102,24 @@ class GoogleAPIController extends Controller {
 		}
 		return $response;
 	}
+
+	/**
+	 * @NoAdminRequired
+	 *
+	 *
+	 * @param ?string $since optional date to filter notifications
+	 * @return DataResponse the notifications
+	 */
+	public function importContacts(?string $uri = '', int $key): DataResponse {
+		if ($this->accessToken === '') {
+			return new DataResponse(null, 400);
+		}
+		$result = $this->googleAPIService->importContacts($this->accessToken, $this->userId, $uri, $key);
+		if (isset($result['error'])) {
+			$response = new DataResponse($result['error'], 401);
+		} else {
+			$response = new DataResponse($result);
+		}
+		return $response;
+	}
 }

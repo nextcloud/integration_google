@@ -16,6 +16,10 @@ use OCP\IConfig;
 use OCP\ILogger;
 use OCP\Http\Client\IClientService;
 use GuzzleHttp\Exception\ClientException;
+use OCP\Contacts\IManager as IContactManager;
+use Sabre\VObject\Component\VCard;
+use Sabre\VObject\Property\Text;
+use \OCA\DAV\CardDAV\CardDavBackend;
 
 use OCA\Google\AppInfo\Application;
 
@@ -31,12 +35,16 @@ class GoogleAPIService {
 								ILogger $logger,
 								IL10N $l10n,
 								IConfig $config,
+								IContactManager $contactsManager,
+								CardDavBackend $cdBackend,
 								IClientService $clientService) {
 		$this->appName = $appName;
 		$this->l10n = $l10n;
 		$this->config = $config;
 		$this->logger = $logger;
 		$this->clientService = $clientService;
+		$this->contactsManager = $contactsManager;
+		$this->cdBackend = $cdBackend;
 		$this->client = $clientService->newClient();
 	}
 
@@ -48,6 +56,196 @@ class GoogleAPIService {
 		$params = [];
 		$result = $this->request($accessToken, $userId, 'calendar/v3/users/me/calendarList');
 		return $result['items'];
+	}
+
+	/**
+	 * @param string $accessToken
+	 * @param string $userId
+	 */
+	public function getContactList(string $accessToken, string $userId): array {
+		$contacts = [];
+		$params = [
+			'personFields' => implode(',', [
+				'addresses',
+				'birthdays',
+				'emailAddresses',
+				'genders',
+				'metadata',
+				'names',
+				'nicknames',
+				'organizations',
+				'phoneNumbers',
+				'photos',
+				'relations',
+				'residences',
+			]),
+			'pageSize' => 100,
+		];
+		$result = $this->request($accessToken, $userId, 'v1/people/me/connections', $params, 'GET', 'https://people.googleapis.com/');
+		if (isset($result['error'])) {
+			return $result;
+		}
+		foreach ($result['connections'] as $contact) {
+			array_push($contacts, $contact);
+		}
+		while (isset($result['nextPageToken'])) {
+			$params['pageToken'] = $result['nextPageToken'];
+			$result = $this->request($accessToken, $userId, 'v1/people/me/connections', $params, 'GET', 'https://people.googleapis.com/');
+			if (isset($result['error'])) {
+				return $result;
+			}
+			foreach ($result['connections'] as $contact) {
+				array_push($contacts, $contact);
+			}
+		}
+		return $contacts;
+	}
+
+	/**
+	 * @param string $accessToken
+	 * @param string $userId
+	 */
+	public function importContacts(string $accessToken, string $userId, ?string $uri, int $key): array {
+		if ($key === 0) {
+			// new address book
+			return ['aa'];
+		} else {
+			// existing address book
+			// check if it exists
+			$addressBooks = $this->contactsManager->getUserAddressBooks();
+			$addressBook = null;
+			foreach ($addressBooks as $k => $ab) {
+				if ($ab->getUri() === $uri && intval($ab->getKey()) === $key) {
+					$addressBook = $ab;
+					break;
+				}
+			}
+			if (!$addressBook) {
+				return ['error' => 'no such address book'];
+			}
+			$contacts = $this->getContactList($accessToken, $userId);
+			$nbAdded = 0;
+			foreach ($contacts as $k => $c) {
+				// avoid existing contacts
+				if ($this->contactExists($c, $key)) {
+					continue;
+				}
+				$vCard = new VCard();
+
+				$displayName = null;
+				$familyName = null;
+				$firstName = null;
+				// we just take first name
+				foreach ($c['names'] as $n) {
+					$displayName = $n['displayName'];
+					$familyName = $n['familyName'];
+					$firstName = $n['givenName'];
+					if ($displayName) {
+						$prop = $vCard->createProperty('FN', $displayName);
+						$vCard->add($prop);
+					}
+					if ($familyName || $firstName) {
+						$prop = $vCard->createProperty('N', [0 => $familyName, 1 => $firstName, 2 => '', 3 => '', 4 => '']);
+						$vCard->add($prop);
+					}
+					break;
+				}
+				// we don't want empty names
+				if (!$displayName && !$familyName && !$firstName) {
+					return true;
+				}
+
+				// address
+				foreach ($c['addresses'] as $address) {
+					$streetAddress = $address['streetAddress'];
+					$extendedAddress = $address['extendedAddress'];
+					$postalCode = $address['postalCode'];
+					$city = $address['city'];
+					$addrType = $address['type'];
+					$country = $address['country'];
+					$postOfficeBox = $address['poBox'];
+
+					$type = $addrType ? ['TYPE' => strtoupper($addrType)] : null;
+					$addrProp = $vCard->createProperty('ADR',
+						[0 => $postOfficeBox, 1 => $extendedAddress, 2 => $streetAddress, 3 => $city, 4 => '', 5 => $postalCode, 6 => $country, 'TYPE' => $addressType],
+						$type
+					);
+					$vCard->add($addrProp);
+				}
+
+				// birthday
+				foreach ($c['birthdays'] as $birthday) {
+					$date = new \Datetime($birthday['date']['year'] . '-' . $birthday['date']['month'] . '-' . $birthday['date']['day']);
+					$strDate = $date->format('Ymd');
+
+					$type = ['VALUE' => 'DATE'];
+					$prop = $vCard->createProperty('BDAY', $strDate, $type);
+					$vCard->add($prop);
+				}
+
+				foreach ($c['nicknames'] as $nick) {
+					$prop = $vCard->createProperty('NICKNAME', $nick['value']);
+					$vCard->add($prop);
+				}
+
+				foreach ($c['emailAddresses'] as $email) {
+					$addrType = $email['type'];
+					$type = $addrType ? ['TYPE' => strtoupper($addrType)] : null;
+					$prop = $vCard->createProperty('EMAIL', $email['value'], $type);
+					$vCard->add($prop);
+				}
+
+				foreach ($c['phoneNumbers'] as $ph) {
+					$numberType = str_replace('mobile', 'cell', $ph['type']);
+					$numberType = str_replace('main', '', $numberType);
+					$numberType = $numberType ? $numberType : 'home';
+					$type = ['TYPE' => strtoupper($numberType)];
+					$prop = $vCard->createProperty('TEL', $ph['value'], $type);
+					$vCard->add($prop);
+				}
+
+				// we just take first org
+				foreach ($c['organizations'] as $org) {
+					$name = $org['name'];
+					if ($name) {
+						$prop = $vCard->createProperty('ORG', $name);
+						$vCard->add($prop);
+					}
+
+					$title = $org['title'];
+					if ($title) {
+						$prop = $vCard->createProperty('TITLE', $title);
+						$vCard->add($prop);
+					}
+					break;
+				}
+
+				$this->cdBackend->createCard($key, 'goog' . $k, $vCard->serialize());
+				$nbAdded++;
+			}
+			return ['nbAdded' => $nbAdded];
+		}
+	}
+
+	private function contactExists(array $contact, int $addressBookKey) {
+		$displayName = null;
+		$familyName = null;
+		$firstName = null;
+		foreach ($contact['names'] as $n) {
+			$displayName = $n['displayName'];
+			$familyName = $n['familyName'];
+			$firstName = $n['givenName'];
+			break;
+		}
+		if ($displayName) {
+			$searchResult = $this->contactsManager->search($displayName, ['FN']);
+			foreach ($searchResult as $resContact) {
+				if ($resContact['FN'] === $displayName) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -74,9 +272,10 @@ class GoogleAPIService {
 	 * @param array $params Query parameters (key/val pairs)
 	 * @param string $method HTTP query method
 	 */
-	public function request(string $accessToken, string $userId, string $endPoint, ?array $params = [], ?string $method = 'GET'): array {
+	public function request(string $accessToken, string $userId, string $endPoint, ?array $params = [], ?string $method = 'GET', ?string $baseUrl = null): array {
 		try {
-			$url = 'https://www.googleapis.com/' . $endPoint;
+			$url = $baseUrl ? $baseUrl : 'https://www.googleapis.com/';
+			$url = $url . $endPoint;
 			$options = [
 				'headers' => [
 					'Authorization' => 'Bearer ' . $accessToken,
@@ -115,23 +314,25 @@ class GoogleAPIService {
 			$this->logger->warning('Google API error : '.$e->getMessage(), array('app' => $this->appName));
 			$response = $e->getResponse();
 			$body = (string) $response->getBody();
-			// refresh token if it's invalid and we are using oauth
-			$this->logger->warning('Trying to REFRESH the access token', array('app' => $this->appName));
-			$refreshToken = $this->config->getUserValue($userId, Application::APP_ID, 'refresh_token', '');
-			$clientID = $this->config->getAppValue(Application::APP_ID, 'client_id', '');
-			$clientSecret = $this->config->getAppValue(Application::APP_ID, 'client_secret', '');
-			$result = $this->requestOAuthAccessToken([
-				'client_id' => $clientID,
-				'client_secret' => $clientSecret,
-				'grant_type' => 'refresh_token',
-				'refresh_token' => $refreshToken,
-			], 'POST');
-			if (isset($result['access_token'])) {
-				$accessToken = $result['access_token'];
-				$this->config->setUserValue($userId, Application::APP_ID, 'token', $accessToken);
-				return $this->request(
-					$accessToken, $userId, $endPoint, $params, $method
-				);
+			if (strpos($body, 'Request had invalid authentication credentials') !== false) {
+				// refresh token if it's invalid and we are using oauth
+				$this->logger->warning('Trying to REFRESH the access token', array('app' => $this->appName));
+				$refreshToken = $this->config->getUserValue($userId, Application::APP_ID, 'refresh_token', '');
+				$clientID = $this->config->getAppValue(Application::APP_ID, 'client_id', '');
+				$clientSecret = $this->config->getAppValue(Application::APP_ID, 'client_secret', '');
+				$result = $this->requestOAuthAccessToken([
+					'client_id' => $clientID,
+					'client_secret' => $clientSecret,
+					'grant_type' => 'refresh_token',
+					'refresh_token' => $refreshToken,
+				], 'POST');
+				if (isset($result['access_token'])) {
+					$accessToken = $result['access_token'];
+					$this->config->setUserValue($userId, Application::APP_ID, 'token', $accessToken);
+					return $this->request(
+						$accessToken, $userId, $endPoint, $params, $method, $baseUrl
+					);
+				}
 			}
 			return ['error', $e->getMessage()];
 		}

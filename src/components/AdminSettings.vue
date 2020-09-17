@@ -5,7 +5,7 @@
 			{{ t('integration_google', 'Google integration') }}
 		</h2>
 		<p class="settings-hint">
-			{{ t('integration_google', 'If you want to allow your Nextcloud users to use OAuth to authenticate to https://google.com, create an OAuth application in your Google settings.') }}
+			{{ t('integration_google', 'If you want to allow your Nextcloud users to use OAuth to authenticate to Google, create an OAuth application in your Google settings.') }}
 			<a href="https://console.developers.google.com/" class="external">{{ t('integration_google', 'Google API settings') }}</a>
 			<br>
 			{{ t('integration_google', 'Go to "Credentials" and click on "+ CREATE CREDENTIALS" -> "OAuth client ID". Set the "Application type" to "Web application".') }}

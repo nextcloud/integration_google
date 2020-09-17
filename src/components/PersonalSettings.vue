@@ -22,16 +22,35 @@
 						<span class="icon icon-close" />
 						{{ t('integration_google', 'Disconnect from Google') }}
 					</button>
-					<!--button id="google-add-cal" @click="onAddCal">
-						<span class="icon icon-calendar-dark" />
-						{{ t('integration_google', 'Add Google calendars') }}
-					</button-->
 				</div>
 				<br>
+				<button id="google-import-contacts" @click="onImportContacts">
+					<span class="icon icon-contacts-dark" />
+					{{ t('integration_google', 'Import Google contacts') }}
+				</button>
+				<select v-if="showAddressBooks"
+					v-model.number="selectedAddressBook">
+					<option :value="-1">
+						{{ t('integration_google', 'Choose where to import the contacts') }}
+					</option>
+					<option :value="0">
+						➕ {{ t('integration_google', 'New address book') }}
+					</option>
+					<option v-for="(ab, k) in addressbooks" :key="k" :value="k">
+						📕 {{ ab.name }}
+					</option>
+				</select>
+				<button v-if="showAddressBooks && selectedAddressBook > -1"
+					id="google-import-contacts-in-book"
+					@click="onFinalImportContacts">
+					<span class="icon icon-download" />
+					{{ t('integration_google', 'Import in {name} address book', { name: selectedAddressBookName }) }}
+				</button>
+				<br><br>
 				<li v-for="cal in calendars" :key="cal.id">
 					<button>
 						<span class="icon icon-calendar-dark" />
-						{{ t('integration_google', 'Import') }}
+						{{ t('integration_google', 'Import calendar') }}
 					</button>
 					<label>{{ getCalendarLabel(cal) }}</label>
 				</li>
@@ -58,6 +77,9 @@ export default {
 		return {
 			state: loadState('integration_google', 'user-config'),
 			calendars: [],
+			addressbooks: [],
+			showAddressBooks: false,
+			selectedAddressBook: -1,
 		}
 	},
 
@@ -68,6 +90,16 @@ export default {
 		connected() {
 			return this.state.token && this.state.token !== ''
 				&& this.state.user_name && this.state.user_name !== ''
+		},
+		selectedAddressBookName() {
+			return this.selectedAddressBook === 0
+				? t('integration_google', 'New address book')
+				: this.addressbooks[this.selectedAddressBook].name
+		},
+		selectedAddressBookUri() {
+			return this.selectedAddressBook === 0
+				? null
+				: this.addressbooks[this.selectedAddressBook].uri
 		},
 	},
 
@@ -87,7 +119,8 @@ export default {
 
 		// get calendars if we are connected
 		if (this.connected) {
-			this.getCalendars()
+			this.getGoogleCalendarList()
+			this.getLocalAddressBooks()
 		}
 	},
 
@@ -150,7 +183,7 @@ export default {
 				+ '&response_type=code'
 				+ '&access_type=offline'
 				+ '&state=' + encodeURIComponent(oauthState)
-				+ '&scope=' + encodeURIComponent('openid profile https://www.googleapis.com/auth/calendar')
+				+ '&scope=' + encodeURIComponent('openid profile https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/calendar.events.readonly https://www.googleapis.com/auth/contacts.readonly')
 
 			const req = {
 				values: {
@@ -171,14 +204,12 @@ export default {
 				.then(() => {
 				})
 		},
-		getCalendars() {
+		getGoogleCalendarList() {
 			const url = generateUrl('/apps/integration_google/calendars')
 			axios.get(url)
 				.then((response) => {
 					if (response.data && response.data.length && response.data.length > 0) {
 						this.calendars = response.data
-						console.debug('GOT CALENDAAAA')
-						console.debug(this.calendars)
 					}
 				})
 				.catch((error) => {
@@ -192,6 +223,51 @@ export default {
 		},
 		getCalendarLabel(cal) {
 			return cal.summary || cal.id
+		},
+		getLocalAddressBooks() {
+			const url = generateUrl('/apps/integration_google/local-addressbooks')
+			axios.get(url)
+				.then((response) => {
+					if (response.data && Object.keys(response.data).length > 0) {
+						this.addressbooks = response.data
+						console.debug('GOT BOOOKS')
+						console.debug(this.addressbooks)
+					}
+				})
+				.catch((error) => {
+					showError(
+						t('integration_google', 'Failed to get address book list')
+						+ ': ' + error.response.request.responseText
+					)
+				})
+				.then(() => {
+				})
+		},
+		onImportContacts() {
+			this.showAddressBooks = !this.showAddressBooks
+		},
+		onFinalImportContacts() {
+			const req = {
+				params: {
+					uri: this.selectedAddressBookUri,
+					key: this.selectedAddressBook,
+				},
+			}
+			const url = generateUrl('/apps/integration_google/import-contacts')
+			axios.get(url, req)
+				.then((response) => {
+					const nbAdded = response.data.nbAdded
+					showSuccess(t('integration_google', '{number} contacts successfully imported in {name}', { number: nbAdded, name: this.selectedAddressBookName }))
+					this.showAddressBooks = false
+				})
+				.catch((error) => {
+					showError(
+						t('integration_google', 'Failed to get address book list')
+						+ ': ' + error.response.request.responseText
+					)
+				})
+				.then(() => {
+				})
 		},
 	},
 }
