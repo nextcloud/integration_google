@@ -275,14 +275,18 @@ class GoogleAPIService {
 	 * @param string $accessToken
 	 * @param string $userId
 	 */
-	public function importCalendar(string $accessToken, string $userId, string $calId, string $calName): array {
+	public function importCalendar(string $accessToken, string $userId, string $calId, string $calName, ?string $color = null): array {
 		$calSuffix = 0;
 		$newCalName = $calName;
 		while ($this->calendarExists($userId, $newCalName)) {
 			$calSuffix++;
 			$newCalName = $calName . '-' . $calSuffix;
 		}
-		$newCalId = $this->caldavBackend->createCalendar('principals/users/' . $userId, $newCalName, []);
+		$params = [];
+		if ($color) {
+			$params['{http://apple.com/ns/ical/}calendar-color'] = $color;
+		}
+		$newCalId = $this->caldavBackend->createCalendar('principals/users/' . $userId, $newCalName, $params);
 
 		date_default_timezone_set('UTC');
 		$events = $this->getCalendarEvents($accessToken, $userId, $calId);
@@ -353,11 +357,10 @@ class GoogleAPIService {
 				. 'END:VEVENT' . "\n"
 				. 'END:VCALENDAR';
 
-			//error_log($calData);
-
 			$this->caldavBackend->createCalendarObject($newCalId, $nbAdded, $calData);
 			$nbAdded++;
 		}
+
 		$eventGeneratorReturn = $events->getReturn();
 		if (isset($eventGeneratorReturn['error'])) {
 			return $eventGeneratorReturn;

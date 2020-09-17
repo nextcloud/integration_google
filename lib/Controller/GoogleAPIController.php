@@ -90,11 +90,11 @@ class GoogleAPIController extends Controller {
 	 * @param ?string $since optional date to filter notifications
 	 * @return DataResponse the notifications
 	 */
-	public function importCalendar(string $calId, string $calName): DataResponse {
+	public function importCalendar(string $calId, string $calName, ?string $color = null): DataResponse {
 		if ($this->accessToken === '') {
 			return new DataResponse(null, 400);
 		}
-		$result = $this->googleAPIService->importCalendar($this->accessToken, $this->userId, $calId, $calName);
+		$result = $this->googleAPIService->importCalendar($this->accessToken, $this->userId, $calId, $calName, $color);
 		if (isset($result['error'])) {
 			$response = new DataResponse($result['error'], 401);
 		} else {

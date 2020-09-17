@@ -55,7 +55,10 @@
 				<br><br>
 				<h2>{{ t('integration_google', 'Calendars') }}</h2>
 				<div v-for="cal in calendars" :key="cal.id" class="google-grid-form">
-					<label>{{ getCalendarLabel(cal) }}</label>
+					<label>
+						<AppNavigationIconBullet slot="icon" :color="getCalendarColor(cal)" />
+						{{ getCalendarLabel(cal) }}
+					</label>
 					<button
 						:class="{ loading: importingCalendar[cal.id] }"
 						@click="onCalendarImport(cal)">
@@ -73,11 +76,13 @@ import { loadState } from '@nextcloud/initial-state'
 import { generateUrl } from '@nextcloud/router'
 import axios from '@nextcloud/axios'
 import { showSuccess, showError } from '@nextcloud/dialogs'
+import AppNavigationIconBullet from '@nextcloud/vue/dist/Components/AppNavigationIconBullet'
 
 export default {
 	name: 'PersonalSettings',
 
 	components: {
+		AppNavigationIconBullet,
 	},
 
 	props: [],
@@ -236,6 +241,11 @@ export default {
 		getCalendarLabel(cal) {
 			return cal.summary || cal.id
 		},
+		getCalendarColor(cal) {
+			return cal.backgroundColor
+				? cal.backgroundColor.replace('#', '')
+				: '0082c9'
+		},
 		getLocalAddressBooks() {
 			const url = generateUrl('/apps/integration_google/local-addressbooks')
 			axios.get(url)
@@ -286,12 +296,13 @@ export default {
 				})
 		},
 		onCalendarImport(cal) {
-			const calId = cal.id;
+			const calId = cal.id
 			this.importingCalendar[calId] = true
 			const req = {
 				params: {
 					calId,
 					calName: this.getCalendarLabel(cal),
+					color: cal.backgroundColor || '#0082c9',
 				},
 			}
 			const url = generateUrl('/apps/integration_google/import-calendar')
@@ -349,5 +360,11 @@ body.theme--dark .icon-google-settings {
 }
 #google-content {
 	margin-left: 40px;
+}
+::v-deep .app-navigation-entry__icon-bullet {
+	display: inline-block;
+	padding: 0;
+	height: 12px;
+	margin-right: 8px;
 }
 </style>
