@@ -310,14 +310,14 @@ class GoogleAPIService {
 			$updated = new \Datetime($e['updated']);
 			$calData .= 'LAST-MODIFIED:' . $created->format('Ymd\THis\Z') . "\n";
 
-			if ($e['reminders']['useDefault']) {
+			if (isset($e['reminders']) && $e['reminders']['useDefault']) {
 				// 30 min before
 				$calData .= 'BEGIN:VALARM' . "\n"
 					. 'ACTION:DISPLAY' . "\n"
 					. 'TRIGGER;RELATED=START:-PT15M' . "\n"
 					. 'END:VALARM' . "\n";
 			}
-			if (isset($e['reminders']['overrides'])) {
+			if (isset($e['reminders']) && isset($e['reminders']['overrides'])) {
 				foreach ($e['reminders']['overrides'] as $o) {
 					$nbMin = 0;
 					if (isset($o['minutes'])) {
@@ -339,6 +339,11 @@ class GoogleAPIService {
 				}
 			}
 
+			if (isset($e['recurrence'])) {
+				foreach ($e['recurrence'] as $r) {
+					$calData .= $r . "\n";
+				}
+			}
 
 			if (isset($e['start']['date']) && isset($e['end']['date'])) {
 				// whole days
