@@ -24,6 +24,7 @@
 					</button>
 				</div>
 				<br>
+				<h2>{{ t('integration_google', 'Contacts') }}</h2>
 				<button id="google-import-contacts" @click="onImportContacts">
 					<span class="icon icon-contacts-dark" />
 					{{ t('integration_google', 'Import Google contacts') }}
@@ -52,13 +53,16 @@
 					{{ t('integration_google', 'Import in {name} address book', { name: selectedAddressBookName }) }}
 				</button>
 				<br><br>
-				<li v-for="cal in calendars" :key="cal.id">
-					<button>
+				<h2>{{ t('integration_google', 'Calendars') }}</h2>
+				<div v-for="cal in calendars" :key="cal.id" class="google-grid-form">
+					<label>{{ getCalendarLabel(cal) }}</label>
+					<button
+						:class="{ loading: importingCalendar[cal.id] }"
+						@click="onCalendarImport(cal)">
 						<span class="icon icon-calendar-dark" />
 						{{ t('integration_google', 'Import calendar') }}
 					</button>
-					<label>{{ getCalendarLabel(cal) }}</label>
-				</li>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -87,6 +91,7 @@ export default {
 			selectedAddressBook: -1,
 			newAddressBookName: '',
 			importing: false,
+			importingCalendar: {},
 		}
 	},
 
@@ -278,6 +283,32 @@ export default {
 				})
 				.then(() => {
 					this.importing = false
+				})
+		},
+		onCalendarImport(cal) {
+			const calId = cal.id;
+			this.importingCalendar[calId] = true
+			const req = {
+				params: {
+					calId,
+					calName: this.getCalendarLabel(cal),
+				},
+			}
+			const url = generateUrl('/apps/integration_google/import-calendar')
+			axios.get(url, req)
+				.then((response) => {
+					const nbAdded = response.data.nbAdded
+					const calName = response.data.calName
+					showSuccess(t('integration_google', '{number} events successfully imported in {name}', { number: nbAdded, name: calName }))
+				})
+				.catch((error) => {
+					showError(
+						t('integration_google', 'Failed to import Google calendar')
+						+ ': ' + error.response.request.responseText
+					)
+				})
+				.then(() => {
+					this.importingCalendar[calId] = false
 				})
 		},
 	},

@@ -19,7 +19,8 @@ use GuzzleHttp\Exception\ClientException;
 use OCP\Contacts\IManager as IContactManager;
 use Sabre\VObject\Component\VCard;
 use Sabre\VObject\Property\Text;
-use \OCA\DAV\CardDAV\CardDavBackend;
+use OCA\DAV\CardDAV\CardDavBackend;
+use OCA\DAV\CalDAV\CalDavBackend;
 
 use OCA\Google\AppInfo\Application;
 
@@ -37,6 +38,7 @@ class GoogleAPIService {
 								IConfig $config,
 								IContactManager $contactsManager,
 								CardDavBackend $cdBackend,
+								CalDavBackend $caldavBackend,
 								IClientService $clientService) {
 		$this->appName = $appName;
 		$this->l10n = $l10n;
@@ -45,17 +47,8 @@ class GoogleAPIService {
 		$this->clientService = $clientService;
 		$this->contactsManager = $contactsManager;
 		$this->cdBackend = $cdBackend;
+		$this->caldavBackend = $caldavBackend;
 		$this->client = $clientService->newClient();
-	}
-
-	/**
-	 * @param string $accessToken
-	 * @param string $userId
-	 */
-	public function getCalendarList(string $accessToken, string $userId): array {
-		$params = [];
-		$result = $this->request($accessToken, $userId, 'calendar/v3/users/me/calendarList');
-		return $result['items'];
 	}
 
 	/**
@@ -255,16 +248,148 @@ class GoogleAPIService {
 	 * @param string $accessToken
 	 * @param string $userId
 	 */
-	public function addCalendars(string $accessToken, string $userId): array {
+	public function getCalendarList(string $accessToken, string $userId): array {
+		//$events = $this->getCalendarEvents($accessToken, $userId, 'ju-ggl@cassio.pe');
+		//$ee = [];
+		//foreach ($events as $e) {
+		//	array_push($ee, $e);
+		//}
+		//return $ee;
+
 		$params = [];
 		$result = $this->request($accessToken, $userId, 'calendar/v3/users/me/calendarList');
 		// ical url is https://calendar.google.com/calendar/ical/br3sqt6mgpunkh2dr2p8p5obso%40group.calendar.google.com/private-640b335ca58effb904dd4570b50096eb/basic.ics
 		// https://calendar.google.com/calendar/ical/ID/../basic.ics
 		// in ->items : list
 		// ID : URL encoded item['id']
+		// !! problem is there is no way to get the 'private-...' string except with the web interface :-)
 		return $result['items'];
-		//$result = $this->request($accessToken, $userId, 'calendar/v3/users/me/calendarList/' . urlencode('br3sqt6mgpunkh2dr2p8p5obso@group.calendar.google.com'));
-		//return $result;
+	}
+
+	private function calendarExists(string $userId, string $uri) {
+		$res = $this->caldavBackend->getCalendarByUri('principals/users/' . $userId, $uri);
+		return !is_null($res);
+	}
+
+	/**
+	 * @param string $accessToken
+	 * @param string $userId
+	 */
+	public function importCalendar(string $accessToken, string $userId, string $calId, string $calName): array {
+		$calSuffix = 0;
+		$newCalName = $calName;
+		while ($this->calendarExists($userId, $newCalName)) {
+			$calSuffix++;
+			$newCalName = $calName . '-' . $calSuffix;
+		}
+		$newCalId = $this->caldavBackend->createCalendar('principals/users/' . $userId, $newCalName, []);
+
+		date_default_timezone_set('UTC');
+		$events = $this->getCalendarEvents($accessToken, $userId, $calId);
+		$nbAdded = 0;
+		foreach ($events as $e) {
+			$calData = 'BEGIN:VCALENDAR' . "\n"
+				. 'VERSION:2.0' . "\n"
+				. 'PRODID:NextCloud Calendar' . "\n"
+				. 'BEGIN:VEVENT' . "\n";
+
+			$calData .= 'UID:' . $newCalId . '-' . $nbAdded . "\n";
+			$calData .= 'SUMMARY:' . $e['summary'] . "\n";
+			$calData .= 'SEQUENCE:' . $e['sequence'] . "\n";
+			$calData .= 'LOCATION:' . $e['location'] . "\n";
+			$calData .= 'DESCRIPTION:' . $e['description'] . "\n";
+			$calData .= 'STATUS:' . strtoupper($e['status']) . "\n";
+
+			$created = new \Datetime($e['created']);
+			$calData .= 'CREATED:' . $created->format('Ymd\THis\Z') . "\n";
+
+			$updated = new \Datetime($e['updated']);
+			$calData .= 'LAST-MODIFIED:' . $created->format('Ymd\THis\Z') . "\n";
+
+			if ($e['reminders']['useDefault']) {
+				// 30 min before
+				$calData .= 'BEGIN:VALARM' . "\n"
+					. 'ACTION:DISPLAY' . "\n"
+					. 'TRIGGER;RELATED=START:-PT15M' . "\n"
+					. 'END:VALARM' . "\n";
+			}
+			if (isset($e['reminders']['overrides'])) {
+				foreach ($e['reminders']['overrides'] as $o) {
+					$nbMin = 0;
+					if (isset($o['minutes'])) {
+						$nbMin += $o['minutes'];
+					}
+					if (isset($o['hours'])) {
+						$nbMin += $o['hours'] * 60;
+					}
+					if (isset($o['days'])) {
+						$nbMin += $o['days'] * 60 * 24;
+					}
+					if (isset($o['weeks'])) {
+						$nbMin += $o['weeks'] * 60 * 24 * 7;
+					}
+					$calData .= 'BEGIN:VALARM' . "\n"
+						. 'ACTION:DISPLAY' . "\n"
+						. 'TRIGGER;RELATED=START:-PT'.$nbMin.'M' . "\n"
+						. 'END:VALARM' . "\n";
+				}
+			}
+
+
+			if (isset($e['start']['date']) && isset($e['end']['date'])) {
+				// whole days
+				$start = new \Datetime($e['start']['date']);
+				$calData .= 'DTSTART;VALUE=DATE:' . $start->format('Ymd') . "\n";
+				$end = new \Datetime($e['end']['date']);
+				$calData .= 'DTEND;VALUE=DATE:' . $end->format('Ymd') . "\n";
+			} elseif (isset($e['start']['dateTime']) && isset($e['end']['dateTime'])) {
+				$start = new \Datetime($e['start']['dateTime']);
+				$calData .= 'DTSTART;VALUE=DATE-TIME:' . $start->format('Ymd\THis\Z') . "\n";
+				$end = new \Datetime($e['end']['dateTime']);
+				$calData .= 'DTEND;VALUE=DATE-TIME:' . $end->format('Ymd\THis\Z') . "\n";
+			}
+
+			$calData .= 'CLASS:PUBLIC' . "\n"
+				. 'END:VEVENT' . "\n"
+				. 'END:VCALENDAR';
+
+			//error_log($calData);
+
+			$this->caldavBackend->createCalendarObject($newCalId, $nbAdded, $calData);
+			$nbAdded++;
+		}
+		$eventGeneratorReturn = $events->getReturn();
+		if (isset($eventGeneratorReturn['error'])) {
+			return $eventGeneratorReturn;
+		}
+		return [
+			'nbAdded' => $nbAdded,
+			'calName' => $newCalName,
+		];
+	}
+
+	private function getCalendarEvents(string $accessToken, string $userId, string $calId): \Generator {
+		$params = [
+			'maxResults' => 100,
+		];
+		$result = $this->request($accessToken, $userId, 'calendar/v3/calendars/'.$calId.'/events');
+		if (isset($result['error'])) {
+			return $result;
+		}
+		foreach ($result['items'] as $event) {
+			yield $event;
+		}
+		while (isset($result['nextPageToken'])) {
+			$params['pageToken'] = $result['nextPageToken'];
+			$result = $this->request($accessToken, $userId, 'calendar/v3/calendars/'.$calId.'/events');
+			if (isset($result['error'])) {
+				return $result;
+			}
+			foreach ($result['items'] as $event) {
+				yield $event;
+			}
+		}
+		return [];
 	}
 
 	/**
