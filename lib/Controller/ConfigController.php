@@ -83,6 +83,7 @@ class ConfigController extends Controller {
             } else {
                 $this->config->setUserValue($this->userId, Application::APP_ID, 'user_id', '');
                 $this->config->setUserValue($this->userId, Application::APP_ID, 'user_name', '');
+                $this->config->setUserValue($this->userId, Application::APP_ID, 'refresh_token', '');
                 $result['user_name'] = '';
             }
         }
@@ -135,7 +136,7 @@ class ConfigController extends Controller {
                 $refreshToken = $result['refresh_token'];
                 $this->config->setUserValue($this->userId, Application::APP_ID, 'token', $accessToken);
                 $this->config->setUserValue($this->userId, Application::APP_ID, 'refresh_token', $refreshToken);
-                //$this->storeUserInfo($accessToken);
+                $this->storeUserInfo($accessToken);
                 return new RedirectResponse(
                     $this->urlGenerator->linkToRoute('settings.PersonalSettings.index', ['section' => 'connected-accounts']) .
                     '?googleToken=success'
@@ -152,11 +153,11 @@ class ConfigController extends Controller {
     }
 
     private function storeUserInfo(string $accessToken): string {
-        $info = $this->googleAPIService->request($accessToken, 'user');
-        if (isset($info['login']) && isset($info['id'])) {
+		$info = $this->googleAPIService->request($accessToken, $this->userId, 'oauth2/v1/userinfo', ['alt' => 'json']);
+        if (isset($info['name']) && isset($info['id'])) {
             $this->config->setUserValue($this->userId, Application::APP_ID, 'user_id', $info['id']);
-            $this->config->setUserValue($this->userId, Application::APP_ID, 'user_name', $info['login']);
-            return $info['login'];
+            $this->config->setUserValue($this->userId, Application::APP_ID, 'user_name', $info['name']);
+            return $info['name'];
         } else {
             $this->config->setUserValue($this->userId, Application::APP_ID, 'user_id', '');
             $this->config->setUserValue($this->userId, Application::APP_ID, 'user_name', '');

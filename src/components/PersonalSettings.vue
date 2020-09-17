@@ -12,19 +12,29 @@
 				<span class="icon icon-external" />
 				{{ t('integration_google', 'Connect to Google') }}
 			</button>
-			<div v-else class="google-grid-form">
-				<label class="google-connected">
-					<a class="icon icon-checkmark-color" />
-					{{ t('integration_google', 'Connected as {user}', { user: state.user_name }) }}
-				</label>
-				<button id="google-rm-cred" @click="onLogoutClick">
-					<span class="icon icon-close" />
-					{{ t('integration_google', 'Disconnect from Google') }}
-				</button>
-				<button id="google-add-cal" @click="onAddCal">
-					<span class="icon icon-calendar-dark" />
-					{{ t('integration_google', 'Add Google calendars') }}
-				</button>
+			<div v-else>
+				<div class="google-grid-form">
+					<label class="google-connected">
+						<a class="icon icon-checkmark-color" />
+						{{ t('integration_google', 'Connected as {user}', { user: state.user_name }) }}
+					</label>
+					<button id="google-rm-cred" @click="onLogoutClick">
+						<span class="icon icon-close" />
+						{{ t('integration_google', 'Disconnect from Google') }}
+					</button>
+					<!--button id="google-add-cal" @click="onAddCal">
+						<span class="icon icon-calendar-dark" />
+						{{ t('integration_google', 'Add Google calendars') }}
+					</button-->
+				</div>
+				<br>
+				<li v-for="cal in calendars" :key="cal.id">
+					<button>
+						<span class="icon icon-calendar-dark" />
+						{{ t('integration_google', 'Import') }}
+					</button>
+					<label>{{ getCalendarLabel(cal) }}</label>
+				</li>
 			</div>
 		</div>
 	</div>
@@ -47,7 +57,7 @@ export default {
 	data() {
 		return {
 			state: loadState('integration_google', 'user-config'),
-			readonly: true,
+			calendars: [],
 		}
 	},
 
@@ -57,7 +67,7 @@ export default {
 		},
 		connected() {
 			return this.state.token && this.state.token !== ''
-			// && this.state.user_name && this.state.user_name !== ''
+				&& this.state.user_name && this.state.user_name !== ''
 		},
 	},
 
@@ -73,6 +83,11 @@ export default {
 			showSuccess(t('integration_google', 'Successfully connected to Google!'))
 		} else if (ghToken === 'error') {
 			showError(t('integration_google', 'Google connection error:') + ' ' + urlParams.get('message'))
+		}
+
+		// get calendars if we are connected
+		if (this.connected) {
+			this.getCalendars()
 		}
 	},
 
@@ -109,12 +124,12 @@ export default {
 			axios.put(url, req)
 				.then((response) => {
 					showSuccess(t('integration_google', 'Google options saved.'))
-					/* if (response.data.user_name !== undefined) {
+					if (response.data.user_name !== undefined) {
 						this.state.user_name = response.data.user_name
-						if (response.data.user_name === '') {
+						if (this.state.token && response.data.user_name === '') {
 							showError(t('integration_google', 'Incorrect access token'))
 						}
-					} */
+					}
 				})
 				.catch((error) => {
 					showError(
@@ -155,6 +170,28 @@ export default {
 				})
 				.then(() => {
 				})
+		},
+		getCalendars() {
+			const url = generateUrl('/apps/integration_google/calendars')
+			axios.get(url)
+				.then((response) => {
+					if (response.data && response.data.length && response.data.length > 0) {
+						this.calendars = response.data
+						console.debug('GOT CALENDAAAA')
+						console.debug(this.calendars)
+					}
+				})
+				.catch((error) => {
+					showError(
+						t('integration_google', 'Failed to get calendar list')
+						+ ': ' + error.response.request.responseText
+					)
+				})
+				.then(() => {
+				})
+		},
+		getCalendarLabel(cal) {
+			return cal.summary || cal.id
 		},
 	},
 }

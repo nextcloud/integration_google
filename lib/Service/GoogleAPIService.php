@@ -44,6 +44,16 @@ class GoogleAPIService {
 	 * @param string $accessToken
 	 * @param string $userId
 	 */
+	public function getCalendarList(string $accessToken, string $userId): array {
+		$params = [];
+		$result = $this->request($accessToken, $userId, 'calendar/v3/users/me/calendarList');
+		return $result['items'];
+	}
+
+	/**
+	 * @param string $accessToken
+	 * @param string $userId
+	 */
 	public function addCalendars(string $accessToken, string $userId): array {
 		$params = [];
 		$result = $this->request($accessToken, $userId, 'calendar/v3/users/me/calendarList');
@@ -51,8 +61,9 @@ class GoogleAPIService {
 		// https://calendar.google.com/calendar/ical/ID/../basic.ics
 		// in ->items : list
 		// ID : URL encoded item['id']
-		$result = $this->request($accessToken, $userId, 'calendar/v3/users/me/calendarList/' . urlencode('br3sqt6mgpunkh2dr2p8p5obso@group.calendar.google.com'));
-		return $result;
+		return $result['items'];
+		//$result = $this->request($accessToken, $userId, 'calendar/v3/users/me/calendarList/' . urlencode('br3sqt6mgpunkh2dr2p8p5obso@group.calendar.google.com'));
+		//return $result;
 	}
 
 	/**

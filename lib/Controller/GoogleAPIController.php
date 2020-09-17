@@ -66,14 +66,33 @@ class GoogleAPIController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 *
-	 * Get notification list
+	 * Get calendar list
+	 *
+	 * @return DataResponse the notifications
+	 */
+	public function getCalendarList(): DataResponse {
+		if ($this->accessToken === '') {
+			return new DataResponse(null, 400);
+		}
+		$result = $this->googleAPIService->getCalendarList($this->accessToken, $this->userId);
+		if (isset($result['error'])) {
+			$response = new DataResponse($result['error'], 401);
+		} else {
+			$response = new DataResponse($result);
+		}
+		return $response;
+	}
+
+	/**
+	 * @NoAdminRequired
+	 *
 	 *
 	 * @param ?string $since optional date to filter notifications
 	 * @return DataResponse the notifications
 	 */
 	public function addCalendars(): DataResponse {
 		if ($this->accessToken === '') {
-			return new DataResponse($result, 400);
+			return new DataResponse(null, 400);
 		}
 		$result = $this->googleAPIService->addCalendars($this->accessToken, $this->userId);
 		if (isset($result['error'])) {

@@ -14,6 +14,7 @@ return [
         ['name' => 'config#oauthRedirect', 'url' => '/oauth-redirect', 'verb' => 'GET'],
         ['name' => 'config#setConfig', 'url' => '/config', 'verb' => 'PUT'],
         ['name' => 'config#setAdminConfig', 'url' => '/admin-config', 'verb' => 'PUT'],
+        ['name' => 'googleAPI#getCalendarList', 'url' => '/calendars', 'verb' => 'GET'],
         ['name' => 'googleAPI#addCalendars', 'url' => '/add-calendars', 'verb' => 'GET'],
     ]
 ];
