@@ -8,6 +8,7 @@
 			{{ t('integration_google', 'When you create a personal access token yourself, give it at least "read:user", "user:email" and "notifications" permissions.') }}
 		</p-->
 		<div id="google-content">
+			<h3>{{ t('integration_google', 'Authentication') }}</h3>
 			<button v-if="!connected" id="google-oauth" @click="onOAuthClick">
 				<span class="icon icon-external" />
 				{{ t('integration_google', 'Connect to Google') }}
@@ -24,36 +25,43 @@
 					</button>
 				</div>
 				<br>
-				<h2>{{ t('integration_google', 'Contacts') }}</h2>
-				<button id="google-import-contacts" @click="onImportContacts">
-					<span class="icon icon-contacts-dark" />
-					{{ t('integration_google', 'Import Google contacts') }}
-				</button>
-				<select v-if="showAddressBooks"
-					v-model.number="selectedAddressBook">
-					<option :value="-1">
-						{{ t('integration_google', 'Choose where to import the contacts') }}
-					</option>
-					<option :value="0">
-						➕ {{ t('integration_google', 'New address book') }}
-					</option>
-					<option v-for="(ab, k) in addressbooks" :key="k" :value="k">
-						📕 {{ ab.name }}
-					</option>
-				</select>
-				<input v-if="showAddressBooks && selectedAddressBook === 0"
-					v-model="newAddressBookName"
-					type="text"
-					:placeholder="t('integration_google', 'address book name')">
-				<button v-if="showAddressBooks && selectedAddressBook > -1 && (selectedAddressBook > 0 || newAddressBookName)"
-					id="google-import-contacts-in-book"
-					:class="{ loading: importingContacts }"
-					@click="onFinalImportContacts">
-					<span class="icon icon-download" />
-					{{ t('integration_google', 'Import in {name} address book', { name: selectedAddressBookName }) }}
-				</button>
+				<div v-if="nbContacts > 0"
+					id="google-contacts">
+					<h3>{{ t('integration_google', 'Contacts') }}</h3>
+					<label>
+						<span class="icon icon-contacts-dark" />
+						{{ t('integration_google', '{amount} Google contacts', { amount: nbContacts }) }}
+					</label>
+					<button id="google-import-contacts" @click="onImportContacts">
+						<span class="icon icon-contacts-dark" />
+						{{ t('integration_google', 'Import Google contacts') }}
+					</button>
+					<select v-if="showAddressBooks"
+						v-model.number="selectedAddressBook">
+						<option :value="-1">
+							{{ t('integration_google', 'Choose where to import the contacts') }}
+						</option>
+						<option :value="0">
+							➕ {{ t('integration_google', 'New address book') }}
+						</option>
+						<option v-for="(ab, k) in addressbooks" :key="k" :value="k">
+							📕 {{ ab.name }}
+						</option>
+					</select>
+					<input v-if="showAddressBooks && selectedAddressBook === 0"
+						v-model="newAddressBookName"
+						type="text"
+						:placeholder="t('integration_google', 'address book name')">
+					<button v-if="showAddressBooks && selectedAddressBook > -1 && (selectedAddressBook > 0 || newAddressBookName)"
+						id="google-import-contacts-in-book"
+						:class="{ loading: importingContacts }"
+						@click="onFinalImportContacts">
+						<span class="icon icon-download" />
+						{{ t('integration_google', 'Import in {name} address book', { name: selectedAddressBookName }) }}
+					</button>
+				</div>
 				<br><br>
-				<h2>{{ t('integration_google', 'Calendars') }}</h2>
+				<h3>{{ t('integration_google', 'Calendars') }}</h3>
 				<div v-for="cal in calendars" :key="cal.id" class="google-grid-form">
 					<label>
 						<AppNavigationIconBullet slot="icon" :color="getCalendarColor(cal)" />
@@ -66,12 +74,12 @@
 						{{ t('integration_google', 'Import calendar') }}
 					</button>
 				</div>
-				<br><br>
-				<h2>{{ t('integration_google', 'Photos') }}</h2>
+				<br>
+				<h3>{{ t('integration_google', 'Photos') }}</h3>
 				<button id="google-import-photos"
 					:class="{ loading: importingPhotos }"
 					@click="onImportPhotos">
-					<span class="icon icon-toggle-pictures" />
+					<span class="icon icon-category-multimedia" />
 					{{ t('integration_google', 'Import Google photos') }}
 				</button>
 			</div>
@@ -100,6 +108,7 @@ export default {
 			state: loadState('integration_google', 'user-config'),
 			calendars: [],
 			addressbooks: [],
+			nbContacts: 0,
 			showAddressBooks: false,
 			selectedAddressBook: -1,
 			newAddressBookName: '',
@@ -147,6 +156,7 @@ export default {
 		if (this.connected) {
 			this.getGoogleCalendarList()
 			this.getLocalAddressBooks()
+			this.getNbGoogleContacts()
 		}
 	},
 
@@ -263,14 +273,29 @@ export default {
 				? cal.backgroundColor.replace('#', '')
 				: '0082c9'
 		},
+		getNbGoogleContacts() {
+			const url = generateUrl('/apps/integration_google/contact-number')
+			axios.get(url)
+				.then((response) => {
+					if (response.data && Object.keys(response.data).length > 0) {
+						this.nbContacts = response.data.nbContacts
+					}
+				})
+				.catch((error) => {
+					showError(
+						t('integration_google', 'Failed to get number of Google contacts')
+						+ ': ' + error.response.request.responseText
+					)
+				})
+				.then(() => {
+				})
+		},
 		getLocalAddressBooks() {
 			const url = generateUrl('/apps/integration_google/local-addressbooks')
 			axios.get(url)
 				.then((response) => {
 					if (response.data && Object.keys(response.data).length > 0) {
 						this.addressbooks = response.data
-						console.debug('GOT BOOOKS')
-						console.debug(this.addressbooks)
 					}
 				})
 				.catch((error) => {
@@ -401,6 +426,23 @@ body.theme--dark .icon-google-settings {
 }
 #google-content {
 	margin-left: 40px;
+
+	h3 {
+		font-weight: bold;
+	}
+
+	#google-contacts > button {
+		width: 300px;
+	}
+
+	#google-contacts > label {
+		width: 300px;
+		display: inline-block;
+
+		span {
+			margin-bottom: -2px;
+		}
+	}
 }
 ::v-deep .app-navigation-entry__icon-bullet {
 	display: inline-block;

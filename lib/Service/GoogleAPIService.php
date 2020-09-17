@@ -153,6 +153,34 @@ class GoogleAPIService {
 	 * @param string $accessToken
 	 * @param string $userId
 	 */
+	public function getContactNumber(string $accessToken, string $userId): array {
+		$nbContacts = 0;
+		$params = [
+			'personFields' => implode(',', [
+				'names',
+			]),
+			'pageSize' => 100,
+		];
+		$result = $this->request($accessToken, $userId, 'v1/people/me/connections', $params, 'GET', 'https://people.googleapis.com/');
+		if (isset($result['error'])) {
+			return $result;
+		}
+		$nbContacts += count($result['connections']);
+		while (isset($result['nextPageToken'])) {
+			$params['pageToken'] = $result['nextPageToken'];
+			$result = $this->request($accessToken, $userId, 'v1/people/me/connections', $params, 'GET', 'https://people.googleapis.com/');
+			if (isset($result['error'])) {
+				return $result;
+			}
+			$nbContacts += count($result['connections']);
+		}
+		return ['nbContacts' => $nbContacts];
+	}
+
+	/**
+	 * @param string $accessToken
+	 * @param string $userId
+	 */
 	public function getContactList(string $accessToken, string $userId): \Generator {
 		$params = [
 			'personFields' => implode(',', [

@@ -70,6 +70,26 @@ class GoogleAPIController extends Controller {
 	 *
 	 * @return DataResponse the notifications
 	 */
+	public function getContactNumber(): DataResponse {
+		if ($this->accessToken === '') {
+			return new DataResponse(null, 400);
+		}
+		$result = $this->googleAPIService->getContactNumber($this->accessToken, $this->userId);
+		if (isset($result['error'])) {
+			$response = new DataResponse($result['error'], 401);
+		} else {
+			$response = new DataResponse($result);
+		}
+		return $response;
+	}
+
+	/**
+	 * @NoAdminRequired
+	 *
+	 * Get calendar list
+	 *
+	 * @return DataResponse the notifications
+	 */
 	public function getCalendarList(): DataResponse {
 		if ($this->accessToken === '') {
 			return new DataResponse(null, 400);
