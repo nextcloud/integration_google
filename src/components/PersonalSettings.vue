@@ -40,7 +40,11 @@
 						📕 {{ ab.name }}
 					</option>
 				</select>
-				<button v-if="showAddressBooks && selectedAddressBook > -1"
+				<input v-if="showAddressBooks && selectedAddressBook === 0"
+					v-model="newAddressBookName"
+					type="text"
+					:placeholder="t('integration_google', 'address book name')">
+				<button v-if="showAddressBooks && selectedAddressBook > -1 && (selectedAddressBook > 0 || newAddressBookName)"
 					id="google-import-contacts-in-book"
 					@click="onFinalImportContacts">
 					<span class="icon icon-download" />
@@ -80,6 +84,7 @@ export default {
 			addressbooks: [],
 			showAddressBooks: false,
 			selectedAddressBook: -1,
+			newAddressBookName: '',
 		}
 	},
 
@@ -93,7 +98,7 @@ export default {
 		},
 		selectedAddressBookName() {
 			return this.selectedAddressBook === 0
-				? t('integration_google', 'New address book')
+				? this.newAddressBookName
 				: this.addressbooks[this.selectedAddressBook].name
 		},
 		selectedAddressBookUri() {
@@ -244,6 +249,7 @@ export default {
 				})
 		},
 		onImportContacts() {
+			this.selectedAddressBook = -1
 			this.showAddressBooks = !this.showAddressBooks
 		},
 		onFinalImportContacts() {
@@ -251,6 +257,7 @@ export default {
 				params: {
 					uri: this.selectedAddressBookUri,
 					key: this.selectedAddressBook,
+					newAddressBookName: this.selectedAddressBook > 0 ? null : this.newAddressBookName,
 				},
 			}
 			const url = generateUrl('/apps/integration_google/import-contacts')

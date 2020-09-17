@@ -110,11 +110,11 @@ class GoogleAPIController extends Controller {
 	 * @param ?string $since optional date to filter notifications
 	 * @return DataResponse the notifications
 	 */
-	public function importContacts(?string $uri = '', int $key): DataResponse {
+	public function importContacts(?string $uri = '', int $key, ?string $newAddressBookName = ''): DataResponse {
 		if ($this->accessToken === '') {
 			return new DataResponse(null, 400);
 		}
-		$result = $this->googleAPIService->importContacts($this->accessToken, $this->userId, $uri, $key);
+		$result = $this->googleAPIService->importContacts($this->accessToken, $this->userId, $uri, $key, $newAddressBookName);
 		if (isset($result['error'])) {
 			$response = new DataResponse($result['error'], 401);
 		} else {
