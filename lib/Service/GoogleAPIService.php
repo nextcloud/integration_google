@@ -62,8 +62,7 @@ class GoogleAPIService {
 	 * @param string $accessToken
 	 * @param string $userId
 	 */
-	public function getContactList(string $accessToken, string $userId): array {
-		$contacts = [];
+	public function getContactList(string $accessToken, string $userId): \Generator {
 		$params = [
 			'personFields' => implode(',', [
 				'addresses',
@@ -86,7 +85,7 @@ class GoogleAPIService {
 			return $result;
 		}
 		foreach ($result['connections'] as $contact) {
-			array_push($contacts, $contact);
+			yield $contact;
 		}
 		while (isset($result['nextPageToken'])) {
 			$params['pageToken'] = $result['nextPageToken'];
@@ -95,10 +94,10 @@ class GoogleAPIService {
 				return $result;
 			}
 			foreach ($result['connections'] as $contact) {
-				array_push($contacts, $contact);
+				yield $contact;
 			}
 		}
-		return $contacts;
+		return [];
 	}
 
 	/**
@@ -223,6 +222,10 @@ class GoogleAPIService {
 
 			$this->cdBackend->createCard($key, 'goog' . $k, $vCard->serialize());
 			$nbAdded++;
+		}
+		$contactGeneratorReturn = $contacts->getReturn();
+		if (isset($contactGeneratorReturn['error'])) {
+			return $contactGeneratorReturn;
 		}
 		return ['nbAdded' => $nbAdded];
 	}
