@@ -29,12 +29,12 @@
 					id="google-contacts">
 					<h3>{{ t('integration_google', 'Contacts') }}</h3>
 					<label>
-						<span class="icon icon-contacts-dark" />
+						<span class="icon icon-menu-sidebar" />
 						{{ t('integration_google', '{amount} Google contacts', { amount: nbContacts }) }}
 					</label>
 					<button id="google-import-contacts" @click="onImportContacts">
 						<span class="icon icon-contacts-dark" />
-						{{ t('integration_google', 'Import Google contacts') }}
+						{{ t('integration_google', 'Import Google contacts in Nextcloud') }}
 					</button>
 					<select v-if="showAddressBooks"
 						v-model.number="selectedAddressBook">
@@ -60,7 +60,7 @@
 						{{ t('integration_google', 'Import in {name} address book', { name: selectedAddressBookName }) }}
 					</button>
 				</div>
-				<br><br>
+				<br>
 				<div v-if="calendars.length > 0"
 					id="google-calendars">
 					<h3>{{ t('integration_google', 'Calendars') }}</h3>
@@ -82,13 +82,13 @@
 					id="google-photos">
 					<h3>{{ t('integration_google', 'Photos') }}</h3>
 					<label>
-						<span class="icon icon-category-multimedia" />
+						<span class="icon icon-toggle-pictures" />
 						{{ t('integration_google', '{amount} Google photos', { amount: nbPhotos }) }}
 					</label>
 					<button id="google-import-photos"
 						:class="{ loading: importingPhotos }"
 						@click="onImportPhotos">
-						<span class="icon icon-category-multimedia" />
+						<span class="icon icon-picture" />
 						{{ t('integration_google', 'Import Google photos') }}
 					</button>
 				</div>
@@ -122,7 +122,7 @@ export default {
 			nbPhotos: 0,
 			showAddressBooks: false,
 			selectedAddressBook: -1,
-			newAddressBookName: '',
+			newAddressBookName: 'Google-contacts',
 			importingContacts: false,
 			importingPhotos: false,
 			importingCalendar: {},
@@ -479,6 +479,6 @@ body.theme--dark .icon-google-settings {
 	display: inline-block;
 	padding: 0;
 	height: 12px;
-	margin-right: 8px;
+	margin: 0 8px 0 10px;
 }
 </style>
