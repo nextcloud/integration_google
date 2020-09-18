@@ -5,16 +5,21 @@
 			{{ t('integration_google', 'Google integration') }}
 		</h2>
 		<p class="settings-hint">
-			{{ t('integration_google', 'If you want to allow your Nextcloud users to use OAuth to authenticate to Google, create an OAuth application in your Google settings.') }}
+			{{ t('integration_google', 'If you want to allow your Nextcloud users to authenticate to Google, create an OAuth application in your Google settings.') }}
 			<a href="https://console.developers.google.com/" class="external">{{ t('integration_google', 'Google API settings') }}</a>
 			<br>
-			{{ t('integration_google', 'Go to "Credentials" and click on "+ CREATE CREDENTIALS" -> "OAuth client ID". Set the "Application type" to "Web application".') }}
+			{{ t('integration_google', 'Go to "APIs & Services" => "Credentials" and click on "+ CREATE CREDENTIALS" -> "OAuth client ID".') }}
+			<br>
+			{{ t('integration_google', 'Set the "Application type" to "Web application" and give a name to the application.') }}
 			<br><br>
 			<span class="icon icon-details" />
 			{{ t('integration_google', 'Make sure you set one "Authorized redirect URI" to') }}
 			<b> {{ redirect_uri }} </b>
 			<br><br>
 			{{ t('integration_google', 'Put the "Client ID" and "Client secret" below.') }}
+			<br>
+			{{ t('integration_google', 'Finally, go to "APIs & Services" => "Library" and add the following APIs: "Google Calendar API", "People API" and "Photos Library API".') }}
+			<br>
 			{{ t('integration_google', 'Your Nextcloud users will then see a "Connect to Google" button in their personal settings.') }}
 		</p>
 		<div class="grid-form">
