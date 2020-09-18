@@ -61,27 +61,37 @@
 					</button>
 				</div>
 				<br><br>
-				<h3>{{ t('integration_google', 'Calendars') }}</h3>
-				<div v-for="cal in calendars" :key="cal.id" class="google-grid-form">
-					<label>
-						<AppNavigationIconBullet slot="icon" :color="getCalendarColor(cal)" />
-						{{ getCalendarLabel(cal) }}
-					</label>
-					<button
-						:class="{ loading: importingCalendar[cal.id] }"
-						@click="onCalendarImport(cal)">
-						<span class="icon icon-calendar-dark" />
-						{{ t('integration_google', 'Import calendar') }}
-					</button>
+				<div v-if="calendars.length > 0"
+					id="google-calendars">
+					<h3>{{ t('integration_google', 'Calendars') }}</h3>
+					<div v-for="cal in calendars" :key="cal.id" class="google-grid-form">
+						<label>
+							<AppNavigationIconBullet slot="icon" :color="getCalendarColor(cal)" />
+							{{ getCalendarLabel(cal) }}
+						</label>
+						<button
+							:class="{ loading: importingCalendar[cal.id] }"
+							@click="onCalendarImport(cal)">
+							<span class="icon icon-calendar-dark" />
+							{{ t('integration_google', 'Import calendar') }}
+						</button>
+					</div>
 				</div>
 				<br>
-				<h3>{{ t('integration_google', 'Photos') }}</h3>
-				<button id="google-import-photos"
-					:class="{ loading: importingPhotos }"
-					@click="onImportPhotos">
-					<span class="icon icon-category-multimedia" />
-					{{ t('integration_google', 'Import Google photos') }}
-				</button>
+				<div v-if="nbPhotos > 0"
+					id="google-photos">
+					<h3>{{ t('integration_google', 'Photos') }}</h3>
+					<label>
+						<span class="icon icon-category-multimedia" />
+						{{ t('integration_google', '{amount} Google photos', { amount: nbPhotos }) }}
+					</label>
+					<button id="google-import-photos"
+						:class="{ loading: importingPhotos }"
+						@click="onImportPhotos">
+						<span class="icon icon-category-multimedia" />
+						{{ t('integration_google', 'Import Google photos') }}
+					</button>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -109,6 +119,7 @@ export default {
 			calendars: [],
 			addressbooks: [],
 			nbContacts: 0,
+			nbPhotos: 0,
 			showAddressBooks: false,
 			selectedAddressBook: -1,
 			newAddressBookName: '',
@@ -157,6 +168,7 @@ export default {
 			this.getGoogleCalendarList()
 			this.getLocalAddressBooks()
 			this.getNbGoogleContacts()
+			this.getNbGooglePhotos()
 		}
 	},
 
@@ -272,6 +284,23 @@ export default {
 			return cal.backgroundColor
 				? cal.backgroundColor.replace('#', '')
 				: '0082c9'
+		},
+		getNbGooglePhotos() {
+			const url = generateUrl('/apps/integration_google/photo-number')
+			axios.get(url)
+				.then((response) => {
+					if (response.data && Object.keys(response.data).length > 0) {
+						this.nbPhotos = response.data.nbPhotos
+					}
+				})
+				.catch((error) => {
+					showError(
+						t('integration_google', 'Failed to get number of Google photos')
+						+ ': ' + error.response.request.responseText
+					)
+				})
+				.then(() => {
+				})
 		},
 		getNbGoogleContacts() {
 			const url = generateUrl('/apps/integration_google/contact-number')
@@ -431,10 +460,12 @@ body.theme--dark .icon-google-settings {
 		font-weight: bold;
 	}
 
+	#google-photos > button,
 	#google-contacts > button {
 		width: 300px;
 	}
 
+	#google-photos > label,
 	#google-contacts > label {
 		width: 300px;
 		display: inline-block;

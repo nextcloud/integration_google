@@ -74,7 +74,7 @@ class GoogleAPIService {
 
 		$albums = [];
 		$params = [
-			'pageSize' => '50',
+			'pageSize' => 50,
 		];
 		$result = $this->request($accessToken, $userId, 'v1/albums', $params, 'GET', 'https://photoslibrary.googleapis.com/');
 		if (isset($result['error'])) {
@@ -108,7 +108,7 @@ class GoogleAPIService {
 			}
 
 			$params = [
-				'pageSize' => '100',
+				'pageSize' => 100,
 				'albumId' => $albumId,
 			];
 			$result = $this->request($accessToken, $userId, 'v1/mediaItems:search', $params, 'POST', 'https://photoslibrary.googleapis.com/');
@@ -147,6 +147,31 @@ class GoogleAPIService {
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * @param string $accessToken
+	 * @param string $userId
+	 */
+	public function getPhotoNumber(string $accessToken, string $userId): array {
+		$nbPhotos = 0;
+		$params = [
+			'pageSize' => 100,
+		];
+		$result = $this->request($accessToken, $userId, 'v1/mediaItems', $params, 'GET', 'https://photoslibrary.googleapis.com/');
+		if (isset($result['error'])) {
+			return $result;
+		}
+		$nbPhotos += count($result['mediaItems']);
+		while (isset($result['nextPageToken'])) {
+			$params['pageToken'] = $result['nextPageToken'];
+			$result = $this->request($accessToken, $userId, 'v1/mediaItems', $params, 'GET', 'https://photoslibrary.googleapis.com/');
+			if (isset($result['error'])) {
+				return $result;
+			}
+			$nbPhotos += count($result['mediaItems']);
+		}
+		return ['nbPhotos' => $nbPhotos];
 	}
 
 	/**

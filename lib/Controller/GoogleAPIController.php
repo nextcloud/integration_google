@@ -66,9 +66,25 @@ class GoogleAPIController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 *
-	 * Get calendar list
+	 * @return DataResponse
+	 */
+	public function getPhotoNumber(): DataResponse {
+		if ($this->accessToken === '') {
+			return new DataResponse(null, 400);
+		}
+		$result = $this->googleAPIService->getPhotoNumber($this->accessToken, $this->userId);
+		if (isset($result['error'])) {
+			$response = new DataResponse($result['error'], 401);
+		} else {
+			$response = new DataResponse($result);
+		}
+		return $response;
+	}
+
+	/**
+	 * @NoAdminRequired
 	 *
-	 * @return DataResponse the notifications
+	 * @return DataResponse
 	 */
 	public function getContactNumber(): DataResponse {
 		if ($this->accessToken === '') {
@@ -86,9 +102,7 @@ class GoogleAPIController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 *
-	 * Get calendar list
-	 *
-	 * @return DataResponse the notifications
+	 * @return DataResponse
 	 */
 	public function getCalendarList(): DataResponse {
 		if ($this->accessToken === '') {

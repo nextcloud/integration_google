@@ -17,6 +17,7 @@ return [
         ['name' => 'config#getLocalAddressBooks', 'url' => '/local-addressbooks', 'verb' => 'GET'],
         ['name' => 'googleAPI#getCalendarList', 'url' => '/calendars', 'verb' => 'GET'],
         ['name' => 'googleAPI#getContactNumber', 'url' => '/contact-number', 'verb' => 'GET'],
+        ['name' => 'googleAPI#getPhotoNumber', 'url' => '/photo-number', 'verb' => 'GET'],
         ['name' => 'googleAPI#importCalendar', 'url' => '/import-calendar', 'verb' => 'GET'],
         ['name' => 'googleAPI#importContacts', 'url' => '/import-contacts', 'verb' => 'GET'],
         ['name' => 'googleAPI#importPhotos', 'url' => '/import-photos', 'verb' => 'GET'],
