@@ -9,13 +9,13 @@
     <author>Julien Veyssier</author>
     <namespace>Google</namespace>
     <documentation>
-        <developer>https://github.com/eneiluj/integration_google/wikis</developer>
+        <developer>https://github.com/nextcloud/integration_google</developer>
     </documentation>
     <category>integration</category>
     <category>dashboard</category>
-    <website>https://github.com/eneiluj/integration_google</website>
-    <bugs>https://github.com/eneiluj/integration_google/issues</bugs>
-    <screenshot>https://github.com/eneiluj/integration_google/raw/master/img/screenshot1.jpg</screenshot>
+    <website>https://github.com/nextcloud/integration_google</website>
+    <bugs>https://github.com/nextcloud/integration_google/issues</bugs>
+    <screenshot>https://github.com/nextcloud/integration_google/raw/master/img/screenshot1.jpg</screenshot>
     <dependencies>
         <database min-version="9.4">pgsql</database>
         <database>sqlite</database>
