@@ -1,0 +1,10 @@
+{ "translations": {
+    "Client ID" : "Kliens ID",
+    "Client secret" : "Kliens titok",
+    "Authentication" : "Hitelesítés",
+    "Contacts" : "Névjegyek",
+    "Import calendar" : "Naptár importálása",
+    "Photos" : "Fényképek",
+    "Comment" : "Megjegyzés"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}

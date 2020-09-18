@@ -1,0 +1,9 @@
+{ "translations": {
+    "Client ID" : "ID Klien",
+    "Client secret" : "Rahasia klien",
+    "Authentication" : "Otentikasi",
+    "Contacts" : "Kontak",
+    "Photos" : "Foto",
+    "Comment" : "Komentar"
+},"pluralForm" :"nplurals=1; plural=0;"
+}

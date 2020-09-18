@@ -1,0 +1,11 @@
+{ "translations": {
+    "Client ID" : "Bezeroaren IDa",
+    "Client secret" : "Bezeroaren sekretua",
+    "Authentication" : "Autentifikazioa",
+    "Contacts" : "Kontaktuak",
+    "Calendars" : "Egutegiak",
+    "Import calendar" : "Inportatu egutegia",
+    "Photos" : "Argazkiak",
+    "Comment" : "Iruzkina"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}

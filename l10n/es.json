@@ -1,0 +1,11 @@
+{ "translations": {
+    "Client ID" : "ID de cliente",
+    "Client secret" : "Cliente secreto",
+    "Authentication" : "Autentificación",
+    "Contacts" : "Contactos",
+    "Calendars" : "Calendarios",
+    "Import calendar" : "Importar calendario",
+    "Photos" : "Fotos",
+    "Comment" : "Comentario"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}

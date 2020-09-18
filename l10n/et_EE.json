@@ -1,0 +1,10 @@
+{ "translations": {
+    "Client ID" : "Kliendi ID",
+    "Client secret" : "Kliendi salasõna",
+    "Authentication" : "Autentimine",
+    "Contacts" : "Kontaktid",
+    "Import calendar" : "Impordi kalender",
+    "Photos" : "Fotod",
+    "Comment" : "Kommentaar"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}

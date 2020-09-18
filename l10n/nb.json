@@ -1,0 +1,10 @@
+{ "translations": {
+    "Client ID" : "Klient-ID",
+    "Client secret" : "Klient-hemmelighet",
+    "Authentication" : "Autentisering",
+    "Contacts" : "Kontakter",
+    "Import calendar" : "Importer kalender",
+    "Photos" : "Bilder",
+    "Comment" : "Kommentar"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}
