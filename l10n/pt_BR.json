@@ -1,4 +1,6 @@
 { "translations": {
+    "Bad credentials" : "Credenciais erradas",
+    "Connected accounts" : "Contas conectadas",
     "Client ID" : "ID do cliente",
     "Client secret" : "Segredo do cliente",
     "Authentication" : "Autenticação",
@@ -6,6 +8,7 @@
     "Calendars" : "Calendários",
     "Import calendar" : "Importar calendário",
     "Photos" : "Fotos",
+    "Nothing to show" : "Nada a mostrar",
     "Comment" : "Comentário"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }
