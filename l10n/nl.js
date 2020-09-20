@@ -1,6 +1,8 @@
 OC.L10N.register(
     "integration_google",
     {
+    "Bad credentials" : "Foute inloggegevens",
+    "Connected accounts" : "Verbonden accounts",
     "Client ID" : "Client ID",
     "Client secret" : "Client secret",
     "Authentication" : "Authenticatie",

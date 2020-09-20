@@ -1,9 +1,13 @@
 OC.L10N.register(
     "integration_google",
     {
+    "Error during OAuth exchanges" : "Błąd podczas wymiany OAuth",
+    "Bad credentials" : "Złe poświadczenia",
+    "Connected accounts" : "Połączone konta",
     "Client ID" : "ID klienta",
     "Client secret" : "Hasło klienta",
     "Authentication" : "Uwierzytelnienie",
+    "Connected as {user}" : "Połączono jako {user}",
     "Contacts" : "Kontakty",
     "Calendars" : "Kalendarze",
     "Import calendar" : "Importuj kalendarz",
