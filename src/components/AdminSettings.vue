@@ -94,7 +94,7 @@ export default {
 				})
 				.catch((error) => {
 					showError(
-						t('integration_google', 'Failed to save Google admin options')
+						t('integration_google', 'Failed to save Google admin options.')
 						+ ': ' + error.response.request.responseText
 					)
 				})
