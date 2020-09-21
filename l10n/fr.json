@@ -15,9 +15,6 @@
     "Calendars" : "Calendriers",
     "Import calendar" : "Importer un agenda",
     "Photos" : "Photos",
-    "{number} contacts successfully imported in {name}" : "{number} contacts importés dans {name}",
-    "{number} events successfully imported in {name}" : "{number} événements importés dans {name}",
-    "Failed to import Google photos" : "Impossible d'importer les photos Google",
     "Mark as read" : "Marquer comme lu",
     "Comment" : "Commenter"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"

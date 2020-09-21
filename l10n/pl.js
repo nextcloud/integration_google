@@ -1,8 +1,10 @@
 OC.L10N.register(
     "integration_google",
     {
+    "Error getting OAuth access token." : "Błąd podczas pobierania tokena dostępu OAuth.",
     "Error during OAuth exchanges" : "Błąd podczas wymiany OAuth",
     "Bad credentials" : "Złe poświadczenia",
+    "OAuth access token refused" : "Odmowa tokena dostępu OAuth",
     "Connected accounts" : "Połączone konta",
     "Client ID" : "ID klienta",
     "Client secret" : "Hasło klienta",

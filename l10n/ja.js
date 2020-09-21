@@ -19,6 +19,10 @@ OC.L10N.register(
     "Photos" : "写真",
     "Import Google photos" : "Google フォトをインポート",
     "Successfully connected to Google!" : "Google への接続に成功しました！",
+    "Incorrect access token." : "アクセストークンが正しくありません",
+    "Nothing to show" : "表示するものがありません",
+    "Mark as read" : "既読にする",
+    "Unsubscribe" : "購読解除",
     "Comment" : "コメント"
 },
 "nplurals=1; plural=0;");
