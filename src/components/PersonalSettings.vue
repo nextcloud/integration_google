@@ -188,7 +188,7 @@ export default {
 					showSuccess(t('integration_google', 'Google calendars were successfully added.'))
 				}).catch((error) => {
 					showError(
-						t('integration_google', 'Failed to add calendars.')
+						t('integration_google', 'Failed to add calendars')
 						+ ': ' + error.response.request.responseText
 					)
 				}).then(() => {
@@ -208,13 +208,13 @@ export default {
 					if (response.data.user_name !== undefined) {
 						this.state.user_name = response.data.user_name
 						if (this.state.token && response.data.user_name === '') {
-							showError(t('integration_google', 'Incorrect access token.'))
+							showError(t('integration_google', 'Incorrect access token'))
 						}
 					}
 				})
 				.catch((error) => {
 					showError(
-						t('integration_google', 'Failed to save Google options.')
+						t('integration_google', 'Failed to save Google options')
 						+ ': ' + error.response.request.responseText
 					)
 				})
@@ -253,7 +253,7 @@ export default {
 				})
 				.catch((error) => {
 					showError(
-						t('integration_google', 'Failed to save Google OAuth state.')
+						t('integration_google', 'Failed to save Google OAuth state')
 						+ ': ' + error.response.request.responseText
 					)
 				})
@@ -270,7 +270,7 @@ export default {
 				})
 				.catch((error) => {
 					showError(
-						t('integration_google', 'Failed to get calendar list.')
+						t('integration_google', 'Failed to get calendar list')
 						+ ': ' + error.response.request.responseText
 					)
 				})
@@ -295,7 +295,7 @@ export default {
 				})
 				.catch((error) => {
 					showError(
-						t('integration_google', 'Failed to get number of Google photos.')
+						t('integration_google', 'Failed to get number of Google photos')
 						+ ': ' + error.response.request.responseText
 					)
 				})
@@ -312,7 +312,7 @@ export default {
 				})
 				.catch((error) => {
 					showError(
-						t('integration_google', 'Failed to get number of Google contacts.')
+						t('integration_google', 'Failed to get number of Google contacts')
 						+ ': ' + error.response.request.responseText
 					)
 				})
@@ -329,7 +329,7 @@ export default {
 				})
 				.catch((error) => {
 					showError(
-						t('integration_google', 'Failed to get address book list.')
+						t('integration_google', 'Failed to get address book list')
 						+ ': ' + error.response.request.responseText
 					)
 				})
@@ -353,12 +353,12 @@ export default {
 			axios.get(url, req)
 				.then((response) => {
 					const nbAdded = response.data.nbAdded
-					showSuccess(t('integration_google', '{number} contacts successfully imported in {name}.', { number: nbAdded, name: this.selectedAddressBookName }))
+					showSuccess(t('integration_google', '{number} contacts successfully imported in {name}', { number: nbAdded, name: this.selectedAddressBookName }))
 					this.showAddressBooks = false
 				})
 				.catch((error) => {
 					showError(
-						t('integration_google', 'Failed to get address book list.')
+						t('integration_google', 'Failed to get address book list')
 						+ ': ' + error.response.request.responseText
 					)
 				})
@@ -381,11 +381,11 @@ export default {
 				.then((response) => {
 					const nbAdded = response.data.nbAdded
 					const calName = response.data.calName
-					showSuccess(t('integration_google', '{number} events successfully imported in {name}.', { number: nbAdded, name: calName }))
+					showSuccess(t('integration_google', '{number} events successfully imported in {name}', { number: nbAdded, name: calName }))
 				})
 				.catch((error) => {
 					showError(
-						t('integration_google', 'Failed to import Google calendar.')
+						t('integration_google', 'Failed to import Google calendar')
 						+ ': ' + error.response.request.responseText
 					)
 				})
@@ -405,11 +405,11 @@ export default {
 				.then((response) => {
 					const targetPath = response.data.targetPath
 					const number = response.data.nbDownloaded
-					showSuccess(t('integration_google', '{number} photos successfully imported in {targetPath}.', { targetPath, number }))
+					showSuccess(t('integration_google', '{number} photos successfully imported in {targetPath}', { targetPath, number }))
 				})
 				.catch((error) => {
 					showError(
-						t('integration_google', 'Failed to import Google photos.')
+						t('integration_google', 'Failed to import Google photos')
 						+ ': ' + error.response.request.responseText
 					)
 				})
