@@ -121,10 +121,10 @@ class GoogleAPIController extends Controller {
 	 * @NoAdminRequired
 	 *
 	 *
-	 * @param ?string $since optional date to filter notifications
-	 * @return DataResponse the notifications
+	 * @param string $targetPath
+	 * @return DataResponse
 	 */
-	public function importPhotos(?string $targetPath = 'Google'): DataResponse {
+	public function importPhotos(string $targetPath = 'Google'): DataResponse {
 		if ($this->accessToken === '') {
 			return new DataResponse(null, 400);
 		}
@@ -140,9 +140,10 @@ class GoogleAPIController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 *
-	 *
-	 * @param ?string $since optional date to filter notifications
-	 * @return DataResponse the notifications
+	 * @param string $calId
+	 * @param string $calName
+	 * @param ?string $color
+	 * @return DataResponse
 	 */
 	public function importCalendar(string $calId, string $calName, ?string $color = null): DataResponse {
 		if ($this->accessToken === '') {
@@ -160,9 +161,10 @@ class GoogleAPIController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 *
-	 *
-	 * @param ?string $since optional date to filter notifications
-	 * @return DataResponse the notifications
+	 * @param ?string $uri
+	 * @param int $key
+	 * @param ?string $newAddressBookName
+	 * @return DataResponse
 	 */
 	public function importContacts(?string $uri = '', int $key, ?string $newAddressBookName = ''): DataResponse {
 		if ($this->accessToken === '') {

@@ -59,8 +59,10 @@ class GoogleAPIService {
 	/**
 	 * @param string $accessToken
 	 * @param string $userId
+	 * @param string $targetPath
+	 * @return array
 	 */
-	public function importPhotos(string $accessToken, string $userId, ?string $targetPath = 'Google'): array {
+	public function importPhotos(string $accessToken, string $userId, string $targetPath = 'Google'): array {
 		// create root folder
 		$userFolder = $this->root->getUserFolder($userId);
 		if (!$userFolder->nodeExists($targetPath)) {
@@ -81,7 +83,7 @@ class GoogleAPIService {
 			return $result;
 		}
 		foreach ($result['albums'] as $album) {
-			array_push($albums, $album);
+			$albums[] = $album;
 		}
 		while (isset($result['nextPageToken'])) {
 			$params['pageToken'] = $result['nextPageToken'];
@@ -90,7 +92,7 @@ class GoogleAPIService {
 				return $result;
 			}
 			foreach ($result['albums'] as $album) {
-				array_push($albums, $album);
+				$albums[] = $album;
 			}
 		}
 
@@ -152,6 +154,7 @@ class GoogleAPIService {
 	/**
 	 * @param string $accessToken
 	 * @param string $userId
+	 * @return array
 	 */
 	public function getPhotoNumber(string $accessToken, string $userId): array {
 		$nbPhotos = 0;
@@ -177,6 +180,7 @@ class GoogleAPIService {
 	/**
 	 * @param string $accessToken
 	 * @param string $userId
+	 * @return array
 	 */
 	public function getContactNumber(string $accessToken, string $userId): array {
 		$nbContacts = 0;
@@ -205,6 +209,7 @@ class GoogleAPIService {
 	/**
 	 * @param string $accessToken
 	 * @param string $userId
+	 * @return \Generator
 	 */
 	public function getContactList(string $accessToken, string $userId): \Generator {
 		$params = [
@@ -247,6 +252,10 @@ class GoogleAPIService {
 	/**
 	 * @param string $accessToken
 	 * @param string $userId
+	 * @param string $uri
+	 * @param string $key
+	 * @param ?string $newAddrBookName
+	 * @return array
 	 */
 	public function importContacts(string $accessToken, string $userId, ?string $uri, int $key, ?string $newAddrBookName): array {
 		if ($key === 0) {
@@ -374,7 +383,12 @@ class GoogleAPIService {
 		return ['nbAdded' => $nbAdded];
 	}
 
-	private function contactExists(array $contact, int $addressBookKey) {
+	/**
+	 * @param array $contact
+	 * @param int $addressBookKey
+	 * @return bool
+	 */
+	private function contactExists(array $contact, int $addressBookKey): bool {
 		$displayName = null;
 		$familyName = null;
 		$firstName = null;
@@ -398,6 +412,7 @@ class GoogleAPIService {
 	/**
 	 * @param string $accessToken
 	 * @param string $userId
+	 * @return array
 	 */
 	public function getCalendarList(string $accessToken, string $userId): array {
 		//$events = $this->getCalendarEvents($accessToken, $userId, 'ju-ggl@cassio.pe');
@@ -417,7 +432,12 @@ class GoogleAPIService {
 		return $result['items'];
 	}
 
-	private function calendarExists(string $userId, string $uri) {
+	/**
+	 * @param string $userId
+	 * @param string $uri
+	 * @return bool
+	 */
+	private function calendarExists(string $userId, string $uri): bool {
 		$res = $this->caldavBackend->getCalendarByUri('principals/users/' . $userId, $uri);
 		return !is_null($res);
 	}
@@ -425,6 +445,10 @@ class GoogleAPIService {
 	/**
 	 * @param string $accessToken
 	 * @param string $userId
+	 * @param string $calId
+	 * @param string $calName
+	 * @param ?string $color
+	 * @return array
 	 */
 	public function importCalendar(string $accessToken, string $userId, string $calId, string $calName, ?string $color = null): array {
 		$calSuffix = 0;
@@ -527,6 +551,12 @@ class GoogleAPIService {
 		];
 	}
 
+	/**
+	 * @param string $accessToken
+	 * @param string $userId
+	 * @param string $calId
+	 * @return \Generator
+	 */
 	private function getCalendarEvents(string $accessToken, string $userId, string $calId): \Generator {
 		$params = [
 			'maxResults' => 100,
@@ -558,8 +588,11 @@ class GoogleAPIService {
 	 * @param string $endPoint The path to reach in api.google.com
 	 * @param array $params Query parameters (key/val pairs)
 	 * @param string $method HTTP query method
+	 * @param ?string $baseUrl
+	 * @return array
 	 */
-	public function request(string $accessToken, string $userId, string $endPoint, ?array $params = [], ?string $method = 'GET', ?string $baseUrl = null): array {
+	public function request(string $accessToken, string $userId,
+							string $endPoint, array $params = [], string $method = 'GET', ?string $baseUrl = null): array {
 		try {
 			$url = $baseUrl ? $baseUrl : 'https://www.googleapis.com/';
 			$url = $url . $endPoint;
@@ -628,8 +661,9 @@ class GoogleAPIService {
 	 * Make the request to get an OAuth token
 	 * @param array $params Query parameters (key/val pairs)
 	 * @param string $method HTTP query method
+	 * @return array
 	 */
-	public function requestOAuthAccessToken(?array $params = [], ?string $method = 'GET'): array {
+	public function requestOAuthAccessToken(array $params = [], string $method = 'GET'): array {
 		try {
 			$url = 'https://oauth2.googleapis.com/token';
 			$options = [
@@ -674,11 +708,12 @@ class GoogleAPIService {
 	 * Make a simple authenticated HTTP request
 	 * @param string $accessToken
 	 * @param string $userId the user from which the request is coming
-	 * @param string $endPoint The path to reach
+	 * @param string $url The path to reach
 	 * @param array $params Query parameters (key/val pairs)
 	 * @param string $method HTTP query method
+	 * @return array
 	 */
-	public function simpleRequest(string $accessToken, string $userId, string $url, ?array $params = [], ?string $method = 'GET'): array {
+	public function simpleRequest(string $accessToken, string $userId, string $url, array $params = [], string $method = 'GET'): array {
 		try {
 			$options = [
 				'headers' => [
@@ -740,5 +775,4 @@ class GoogleAPIService {
 			return ['error' => $e->getMessage()];
 		}
 	}
-
 }

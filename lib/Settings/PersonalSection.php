@@ -27,7 +27,7 @@ class PersonalSection implements IIconSection {
          *
          * @returns string
          */
-        public function getID() {
+        public function getID(): string {
                 return 'connected-accounts'; //or a generic id if feasible
         }
 
@@ -37,7 +37,7 @@ class PersonalSection implements IIconSection {
          *
          * @return string
          */
-        public function getName() {
+        public function getName(): string {
                 return $this->l->t('Connected accounts');
         }
 
@@ -46,14 +46,14 @@ class PersonalSection implements IIconSection {
          * the settings navigation. The sections are arranged in ascending order of
          * the priority values. It is required to return a value between 0 and 99.
          */
-        public function getPriority() {
+        public function getPriority(): int {
                 return 80;
         }
 
         /**
-         * @return The relative path to a an icon describing the section
+         * @return ?string The relative path to a an icon describing the section
          */
-        public function getIcon() {
+        public function getIcon(): ?string {
                 return $this->urlGenerator->imagePath('core', 'categories/integration.svg');
         }
 

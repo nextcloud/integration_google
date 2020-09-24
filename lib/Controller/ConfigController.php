@@ -135,10 +135,10 @@ class ConfigController extends Controller {
      *
      * @param string $code request code to use when requesting oauth token
      * @param string $state value that was sent with original GET request. Used to check auth redirection is valid
+     * @param ?string $error
      * @return RedirectResponse to user settings
      */
-    public function oauthRedirect(?string $code, ?string $state, ?string $error): RedirectResponse {
-        //return $access_token;
+    public function oauthRedirect(string $code = '', string $state = '', string $error = ''): RedirectResponse {
         $configState = $this->config->getUserValue($this->userId, Application::APP_ID, 'oauth_state', '');
         $clientID = $this->config->getAppValue(Application::APP_ID, 'client_id', '');
         $clientSecret = $this->config->getAppValue(Application::APP_ID, 'client_secret', '');
@@ -155,7 +155,7 @@ class ConfigController extends Controller {
                 'redirect_uri' => $redirect_uri,
                 'code' => $code,
             ], 'POST');
-            if (isset($result['access_token']) && isset($result['refresh_token'])) {
+            if (isset($result['access_token'], $result['refresh_token'])) {
                 $accessToken = $result['access_token'];
                 $refreshToken = $result['refresh_token'];
                 $this->config->setUserValue($this->userId, Application::APP_ID, 'token', $accessToken);
@@ -176,9 +176,13 @@ class ConfigController extends Controller {
         );
     }
 
+    /**
+     * @param string $accessToken
+     * @return string
+     */
     private function storeUserInfo(string $accessToken): string {
 		$info = $this->googleAPIService->request($accessToken, $this->userId, 'oauth2/v1/userinfo', ['alt' => 'json']);
-        if (isset($info['name']) && isset($info['id'])) {
+        if (isset($info['name'], $info['id'])) {
             $this->config->setUserValue($this->userId, Application::APP_ID, 'user_id', $info['id']);
             $this->config->setUserValue($this->userId, Application::APP_ID, 'user_name', $info['name']);
             return $info['name'];
