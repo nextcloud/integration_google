@@ -2,7 +2,7 @@
 	<div v-if="showOAuth" id="google_prefs" class="section">
 		<h2>
 			<a class="icon icon-google-settings" />
-			{{ t('integration_google', 'Google integration') }}
+			{{ t('integration_google', 'Google data migration') }}
 		</h2>
 		<!--p class="settings-hint">
 			{{ t('integration_google', 'When you create a personal access token yourself, give it at least "read:user", "user:email" and "notifications" permissions.') }}

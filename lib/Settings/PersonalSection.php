@@ -28,7 +28,7 @@ class PersonalSection implements IIconSection {
          * @returns string
          */
         public function getID(): string {
-                return 'connected-accounts'; //or a generic id if feasible
+                return 'migration'; //or a generic id if feasible
         }
 
         /**
@@ -38,7 +38,7 @@ class PersonalSection implements IIconSection {
          * @return string
          */
         public function getName(): string {
-                return $this->l->t('Connected accounts');
+                return $this->l->t('Data migration');
         }
 
         /**
@@ -54,7 +54,7 @@ class PersonalSection implements IIconSection {
          * @return ?string The relative path to a an icon describing the section
          */
         public function getIcon(): ?string {
-                return $this->urlGenerator->imagePath('core', 'categories/integration.svg');
+                return $this->urlGenerator->imagePath('core', 'actions/download.svg');
         }
 
 }
