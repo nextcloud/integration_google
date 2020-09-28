@@ -62,7 +62,7 @@ class GoogleAPIService {
 	 * @param string $targetPath
 	 * @return array
 	 */
-	public function importPhotos(string $accessToken, string $userId, string $targetPath = 'Google'): array {
+	public function importPhotos(string $accessToken, string $userId, string $targetPath = 'Google', int $maxDownloadNumber = 2): array {
 		// create root folder
 		$userFolder = $this->root->getUserFolder($userId);
 		if (!$userFolder->nodeExists($targetPath)) {
@@ -117,6 +117,12 @@ class GoogleAPIService {
 			foreach ($result['mediaItems'] as $photo) {
 				if ($this->getPhoto($accessToken, $userId, $photo, $albumFolder)) {
 					$nbDownloaded++;
+					if ($nbDownloaded === $maxDownloadNumber) {
+						return [
+							'nbDownloaded' => $nbDownloaded,
+							'targetPath' => $targetPath,
+						];
+					}
 				}
 			}
 			while (isset($result['nextPageToken'])) {
@@ -128,6 +134,12 @@ class GoogleAPIService {
 				foreach ($result['mediaItems'] as $photo) {
 					if ($this->getPhoto($accessToken, $userId, $photo, $albumFolder)) {
 						$nbDownloaded++;
+						if ($nbDownloaded === $maxDownloadNumber) {
+							return [
+								'nbDownloaded' => $nbDownloaded,
+								'targetPath' => $targetPath,
+							];
+						}
 					}
 				}
 			}
@@ -135,6 +147,7 @@ class GoogleAPIService {
 		return [
 			'nbDownloaded' => $nbDownloaded,
 			'targetPath' => $targetPath,
+			'finished' => true,
 		];
 	}
 
@@ -174,7 +187,13 @@ class GoogleAPIService {
 			}
 			$nbPhotos += count($result['mediaItems']);
 		}
-		return ['nbPhotos' => $nbPhotos];
+		// get free space
+		$userFolder = $this->root->getUserFolder($userId);
+		$freeSpace = $userFolder->getStorage()->free_space('/');
+		return [
+			'nbPhotos' => $nbPhotos,
+			'freeSpace' => $freeSpace,
+		];
 	}
 
 	/**
