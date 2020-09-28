@@ -366,7 +366,9 @@ export default {
 			axios.get(url, req)
 				.then((response) => {
 					const nbAdded = response.data.nbAdded
-					showSuccess(t('integration_google', '{number} contacts successfully imported in {name}', { number: nbAdded, name: this.selectedAddressBookName }))
+					showSuccess(
+						this.n('integration_google', '{number} contact successfully imported in {name}', '{number} contacts successfully imported in {name}', nbAdded, { number: nbAdded, name: this.selectedAddressBookName })
+					)
 					this.showAddressBooks = false
 				})
 				.catch((error) => {
@@ -394,7 +396,9 @@ export default {
 				.then((response) => {
 					const nbAdded = response.data.nbAdded
 					const calName = response.data.calName
-					showSuccess(t('integration_google', '{number} events successfully imported in {name}', { number: nbAdded, name: calName }))
+					showSuccess(
+						this.n('integration_google', '{number} event successfully imported in {name}', '{number} events successfully imported in {name}', nbAdded, { number: nbAdded, name: calName })
+					)
 				})
 				.catch((error) => {
 					showError(
@@ -418,7 +422,9 @@ export default {
 				.then((response) => {
 					const targetPath = response.data.targetPath
 					const number = response.data.nbDownloaded
-					showSuccess(t('integration_google', '{number} photos successfully imported in {targetPath}', { targetPath, number }))
+					showSuccess(
+						this.n('integration_google', '{number} photo successfully imported in {targetPath}', '{number} photos successfully imported in {targetPath}', number, { targetPath, number })
+					)
 				})
 				.catch((error) => {
 					showError(
