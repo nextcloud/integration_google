@@ -197,7 +197,7 @@ export default {
 			const url = generateUrl('/apps/integration_google/add-calendars')
 			axios.get(url)
 				.then((response) => {
-					showSuccess(t('integration_google', 'Google calendars were successfully added.'))
+					showSuccess(t('integration_google', 'Google calendars were successfully added'))
 				}).catch((error) => {
 					showError(
 						t('integration_google', 'Failed to add calendars')
@@ -216,7 +216,7 @@ export default {
 			const url = generateUrl('/apps/integration_google/config')
 			axios.put(url, req)
 				.then((response) => {
-					showSuccess(t('integration_google', 'Google options saved.'))
+					showSuccess(t('integration_google', 'Google options saved'))
 					if (response.data.user_name !== undefined) {
 						this.state.user_name = response.data.user_name
 						if (this.state.token && response.data.user_name === '') {

@@ -42,7 +42,6 @@ class Application extends App implements IBootstrap {
     }
 
     public function register(IRegistrationContext $context): void {
-        //$context->registerDashboardWidget(GoogleWidget::class);
     }
 
     public function boot(IBootContext $context): void {
