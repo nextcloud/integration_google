@@ -31,7 +31,7 @@
 				v-model="state.client_id"
 				type="password"
 				:readonly="readonly"
-				:placeholder="t('integration_google', 'Client ID or your Google application')"
+				:placeholder="t('integration_google', 'Client ID of your Google application')"
 				@focus="readonly = false"
 				@input="onInput">
 			<label for="google-client-secret">
@@ -42,7 +42,7 @@
 				v-model="state.client_secret"
 				type="password"
 				:readonly="readonly"
-				:placeholder="t('integration_google', 'Client secret or your Google application')"
+				:placeholder="t('integration_google', 'Client secret of your Google application')"
 				@input="onInput"
 				@focus="readonly = false">
 		</div>
