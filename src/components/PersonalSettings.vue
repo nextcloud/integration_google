@@ -4,9 +4,6 @@
 			<a class="icon icon-google-settings" />
 			{{ t('integration_google', 'Google data migration') }}
 		</h2>
-		<!--p class="settings-hint">
-			{{ t('integration_google', 'When you create a personal access token yourself, give it at least "read:user", "user:email" and "notifications" permissions.') }}
-		</p-->
 		<div id="google-content">
 			<h3>{{ t('integration_google', 'Authentication') }}</h3>
 			<button v-if="!connected" id="google-oauth" @click="onOAuthClick">
