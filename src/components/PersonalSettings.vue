@@ -193,19 +193,6 @@ export default {
 			this.state.search_enabled = e.target.checked
 			this.saveOptions()
 		},
-		onAddCal() {
-			const url = generateUrl('/apps/integration_google/add-calendars')
-			axios.get(url)
-				.then((response) => {
-					showSuccess(t('integration_google', 'Google calendars were successfully added'))
-				}).catch((error) => {
-					showError(
-						t('integration_google', 'Failed to add calendars')
-						+ ': ' + error.response.request.responseText
-					)
-				}).then(() => {
-				})
-		},
 		saveOptions() {
 			const req = {
 				values: {
