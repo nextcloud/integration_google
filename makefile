@@ -84,6 +84,8 @@ appstore: clean
 	--exclude=.gitlab-ci.yml \
 	--exclude=crowdin.yml \
 	--exclude=tools \
+	--exclude=.tx \
+	--exclude=.l10nignore \
 	--exclude=l10n/.tx \
 	--exclude=l10n/l10n.pl \
 	--exclude=l10n/templates \

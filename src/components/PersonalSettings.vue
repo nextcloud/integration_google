@@ -74,7 +74,7 @@
 						</button>
 					</div>
 				</div>
-				<br>
+				<!--br>
 				<div v-if="nbPhotos > 0"
 					id="google-photos">
 					<h3>{{ t('integration_google', 'Photos') }}</h3>
@@ -92,7 +92,7 @@
 					<span v-else>
 						{{ t('integration_google', 'You Google photo collection size is estimated to be bigger than your remaining space left ({formSpace})', { formSpace: humanFileSize(freeSpace) }) }}
 					</span>
-				</div>
+				</div-->
 			</div>
 		</div>
 	</div>

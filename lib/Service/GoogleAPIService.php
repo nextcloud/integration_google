@@ -62,7 +62,7 @@ class GoogleAPIService {
 	 * @param string $targetPath
 	 * @return array
 	 */
-	public function importPhotos(string $accessToken, string $userId, string $targetPath = 'Google', int $maxDownloadNumber = 2): array {
+	public function importPhotos(string $accessToken, string $userId, string $targetPath = 'Google', ?int $maxDownloadNumber = null): array {
 		// create root folder
 		$userFolder = $this->root->getUserFolder($userId);
 		if (!$userFolder->nodeExists($targetPath)) {
@@ -117,7 +117,7 @@ class GoogleAPIService {
 			foreach ($result['mediaItems'] as $photo) {
 				if ($this->getPhoto($accessToken, $userId, $photo, $albumFolder)) {
 					$nbDownloaded++;
-					if ($nbDownloaded === $maxDownloadNumber) {
+					if ($maxDownloadNumber && $nbDownloaded === $maxDownloadNumber) {
 						return [
 							'nbDownloaded' => $nbDownloaded,
 							'targetPath' => $targetPath,
@@ -134,7 +134,7 @@ class GoogleAPIService {
 				foreach ($result['mediaItems'] as $photo) {
 					if ($this->getPhoto($accessToken, $userId, $photo, $albumFolder)) {
 						$nbDownloaded++;
-						if ($nbDownloaded === $maxDownloadNumber) {
+						if ($maxDownloadNumber && $nbDownloaded === $maxDownloadNumber) {
 							return [
 								'nbDownloaded' => $nbDownloaded,
 								'targetPath' => $targetPath,
