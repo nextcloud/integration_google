@@ -76,7 +76,7 @@ export default {
 		redirectUri() {
 			const redirectEndpoint = generateUrl('/apps/integration_google/oauth-redirect')
 			return window.location.protocol + '//' + window.location.host + redirectEndpoint
-		}
+		},
 	},
 
 	methods: {
