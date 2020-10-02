@@ -1,7 +1,6 @@
 { "translations": {
     "Client ID" : "ক্লায়েন্ট পরিচিতি",
     "Contacts" : "পরিচিতজন",
-    "Photos" : "Photos",
-    "Comment" : "মন্তব্য"
+    "Photos" : "Photos"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

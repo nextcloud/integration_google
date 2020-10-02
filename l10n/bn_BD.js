@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "Client ID" : "ক্লায়েন্ট পরিচিতি",
     "Contacts" : "পরিচিতজন",
-    "Photos" : "Photos",
-    "Comment" : "মন্তব্য"
+    "Photos" : "Photos"
 },
 "nplurals=2; plural=(n != 1);");

@@ -1,13 +1,27 @@
 OC.L10N.register(
     "integration_google",
     {
+    "Bad credentials" : "Virheelliset kirjautumistiedot",
+    "Connected accounts" : "Yhdistetyt tilit",
+    "Google integration" : "Google-integraatio",
     "Client ID" : "Asiakkaan tunniste",
     "Client secret" : "Asiakassalaisuus",
     "Authentication" : "Tunnistautuminen",
+    "Connect to Google" : "Yhdistä Googleen",
+    "Connected as {user}" : "Yhdistetty käyttäjänä {user}",
+    "Disconnect from Google" : "Katkaise yhteys Googleen",
     "Contacts" : "Yhteystiedot",
+    "{amount} Google contacts" : "{amount} Google-yhteystietoa",
+    "Import Google contacts in Nextcloud" : "Tuo Google-yhteystiedot Nextcloudiin",
+    "Choose where to import the contacts" : "Valitse mihin yhteystiedot tuodaan",
+    "New address book" : "Uusi osoitekirja",
+    "address book name" : "osoitekirjan nimi",
     "Calendars" : "Kalenterit",
     "Import calendar" : "Tuo kalenteri",
     "Photos" : "Kuvat",
-    "Comment" : "Kommentti"
+    "Import Google photos" : "Tuo Google-kuvat",
+    "Successfully connected to Google!" : "Yhdistetty Googleen!",
+    "Google connection error:" : "Google-yhteysvirhe:",
+    "Failed to save Google options" : "Google-valintojen tallentaminen epäonnistui."
 },
 "nplurals=2; plural=(n != 1);");

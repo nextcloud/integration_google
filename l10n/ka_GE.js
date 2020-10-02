@@ -6,7 +6,6 @@ OC.L10N.register(
     "Authentication" : "აუტენტიფიკაცია",
     "Contacts" : "კონტაქტები",
     "Import calendar" : "კალენდრის იმპორტი",
-    "Photos" : "ფოტოები",
-    "Comment" : "კომენტარი"
+    "Photos" : "ფოტოები"
 },
 "nplurals=2; plural=(n!=1);");

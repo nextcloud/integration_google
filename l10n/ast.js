@@ -6,7 +6,6 @@ OC.L10N.register(
     "Authentication" : "Autenticación",
     "Contacts" : "Contautos",
     "Import calendar" : "Importar calendariu",
-    "Photos" : "Photos",
-    "Comment" : "Comentariu"
+    "Photos" : "Photos"
 },
 "nplurals=2; plural=(n != 1);");

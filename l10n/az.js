@@ -4,7 +4,6 @@ OC.L10N.register(
     "Client ID" : "Müştəri İD-s",
     "Client secret" : "Müxtəri sirri",
     "Contacts" : "Əlaqələr",
-    "Photos" : "Photos",
-    "Comment" : "Komentariya"
+    "Photos" : "Photos"
 },
 "nplurals=2; plural=(n != 1);");

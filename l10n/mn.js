@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "Contacts" : "Харилцагчид",
     "Import calendar" : "Цагийн хуваарь оруулах",
-    "Photos" : "Зурагнууд",
-    "Comment" : "undefined"
+    "Photos" : "Зурагнууд"
 },
 "nplurals=2; plural=(n != 1);");

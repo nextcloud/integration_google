@@ -4,7 +4,6 @@ OC.L10N.register(
     "Client ID" : "ID client",
     "Contacts" : "Contactes",
     "Import calendar" : "Importar un calendièr",
-    "Photos" : "Photos",
-    "Comment" : "Comentar"
+    "Photos" : "Photos"
 },
 "nplurals=2; plural=(n > 1);");

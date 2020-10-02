@@ -6,7 +6,6 @@ OC.L10N.register(
     "Authentication" : "รับรองความถูกต้อง",
     "Contacts" : "ข้อมูลผู้ติดต่อ",
     "Import calendar" : "นำเข้าปฏิทิน",
-    "Photos" : "Photos",
-    "Comment" : "แสดงความคิดเห็น"
+    "Photos" : "Photos"
 },
 "nplurals=1; plural=0;");

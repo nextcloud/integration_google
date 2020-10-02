@@ -1,11 +1,27 @@
 OC.L10N.register(
     "integration_google",
     {
+    "Bad credentials" : "Неточни акредитиви",
+    "Connected accounts" : "Поврзани сметки",
+    "Google integration" : "Google интеграција",
     "Client ID" : "Клиент ИД",
     "Client secret" : "Тајна на клиент",
     "Authentication" : "Автентикација",
+    "Connect to Google" : "Поврзи со Google",
+    "Connected as {user}" : "Поврзан како {user}",
+    "Disconnect from Google" : "Исклучи се од Google",
     "Contacts" : "Контакти",
+    "{amount} Google contacts" : "{amount} Google контакти",
+    "Import Google contacts in Nextcloud" : "Увези ги Google контактите",
+    "Choose where to import the contacts" : "Избери каде да ги увезете контактите",
+    "New address book" : "Нов адресар",
+    "address book name" : "име на адресарот",
+    "Import in {name} address book" : "Увези во адресарот {name}",
+    "Calendars" : "Календари",
+    "Import calendar" : "Увези календар",
     "Photos" : "Фотографии",
-    "Comment" : "Коментар"
+    "{amount} Google photos (>{formSize})" : "{amount} Google фотографии (>{formSize})",
+    "Import Google photos" : "Увези ги Google фотографиите",
+    "Successfully connected to Google!" : "Успешно поврзување со Google!"
 },
 "nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;");

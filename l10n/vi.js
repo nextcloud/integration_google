@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "Contacts" : "Liên hệ",
     "Import calendar" : "Nhập lịch biểu",
-    "Photos" : "Ảnh",
-    "Comment" : "Bình luận"
+    "Photos" : "Ảnh"
 },
 "nplurals=1; plural=0;");

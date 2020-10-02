@@ -6,7 +6,6 @@ OC.L10N.register(
     "Authentication" : "Godkendelse",
     "Contacts" : "Kontakter",
     "Import calendar" : "Importer kalender",
-    "Photos" : "Billeder",
-    "Comment" : "Kommentér"
+    "Photos" : "Billeder"
 },
 "nplurals=2; plural=(n != 1);");

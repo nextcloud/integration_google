@@ -6,7 +6,6 @@ OC.L10N.register(
     "Authentication" : "인증",
     "Contacts" : "연락처",
     "Import calendar" : "달력 가져오기",
-    "Photos" : "사진",
-    "Comment" : "설명"
+    "Photos" : "사진"
 },
 "nplurals=1; plural=0;");

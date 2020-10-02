@@ -6,7 +6,6 @@ OC.L10N.register(
     "Authentication" : "Aŭtentigo",
     "Contacts" : "Kontaktoj",
     "Import calendar" : "Enporti kalendaron",
-    "Photos" : "Fotoj",
-    "Comment" : "Komento"
+    "Photos" : "Fotoj"
 },
 "nplurals=2; plural=(n != 1);");

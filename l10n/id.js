@@ -5,7 +5,6 @@ OC.L10N.register(
     "Client secret" : "Rahasia klien",
     "Authentication" : "Otentikasi",
     "Contacts" : "Kontak",
-    "Photos" : "Foto",
-    "Comment" : "Komentar"
+    "Photos" : "Foto"
 },
 "nplurals=1; plural=0;");

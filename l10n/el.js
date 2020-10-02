@@ -7,7 +7,6 @@ OC.L10N.register(
     "Contacts" : "Επαφές",
     "Calendars" : "Ημερολόγια",
     "Import calendar" : "Εισαγωγή ημερολογίου",
-    "Photos" : "Φωτογραφίες",
-    "Comment" : "Σχόλιο"
+    "Photos" : "Φωτογραφίες"
 },
 "nplurals=2; plural=(n != 1);");

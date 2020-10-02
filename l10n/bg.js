@@ -5,7 +5,6 @@ OC.L10N.register(
     "Authentication" : "Удостоверяване",
     "Contacts" : "Контакти",
     "Import calendar" : "Внасяне на календар",
-    "Photos" : "Снимки",
-    "Comment" : "Коментар"
+    "Photos" : "Снимки"
 },
 "nplurals=2; plural=(n != 1);");

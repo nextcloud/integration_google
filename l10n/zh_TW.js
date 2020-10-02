@@ -6,7 +6,6 @@ OC.L10N.register(
     "Authentication" : "驗證",
     "Contacts" : "聯絡人",
     "Import calendar" : "匯入日曆",
-    "Photos" : "照片",
-    "Comment" : "備註"
+    "Photos" : "照片"
 },
 "nplurals=1; plural=0;");

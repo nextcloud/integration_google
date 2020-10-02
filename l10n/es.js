@@ -1,14 +1,26 @@
 OC.L10N.register(
     "integration_google",
     {
+    "Error getting OAuth access token." : "Error al obtener el token de acceso OAuth.",
+    "Error during OAuth exchanges" : "Error durante los intercambios OAuth",
+    "Bad credentials" : "Credenciales incorrectas",
+    "OAuth access token refused" : "Token de acceso OAuth rechazado",
     "Connected accounts" : "Cuentas conectadas",
+    "Google integration" : "Integración con Google",
+    "If you want to allow your Nextcloud users to authenticate to Google, create an OAuth application in your Google settings." : "Si quieres permitir a tus usuarios de Nextcloud que se autentiquen con Google, crea una aplicación OAuth en tu configuración de Google.",
+    "Google API settings" : "Configuración de la API de Google",
+    "Go to \"APIs & Services\" => \"Credentials\" and click on \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\"." : "Ve a «APIs y servicios» => «Credenciales» y pulsa en «+ CREAR CREDENCIALES» -> «ID del cliente OAuth»",
+    "Set the \"Application type\" to \"Web application\" and give a name to the application." : "Configura el «Tipo de aplicación » como «Aplicación web» y dale un nombre a la aplicación.",
+    "Make sure you set one \"Authorized redirect URI\" to" : "Asegúrate de configurar una «URI de redirección autorizada» como",
+    "Put the \"Client ID\" and \"Client secret\" below." : "Pon la «ID de cliente» y el «Secreto de cliente» a continación.",
     "Client ID" : "ID de cliente",
-    "Client secret" : "Cliente secreto",
+    "Client secret" : "Secreto de cliente",
+    "Failed to save Google admin options" : "Fallo al crear las opciones de administración de Google",
     "Authentication" : "Autentificación",
+    "Connected as {user}" : "Conectado como {user}",
     "Contacts" : "Contactos",
     "Calendars" : "Calendarios",
     "Import calendar" : "Importar calendario",
-    "Photos" : "Fotos",
-    "Comment" : "Comentario"
+    "Photos" : "Fotos"
 },
 "nplurals=2; plural=(n != 1);");
