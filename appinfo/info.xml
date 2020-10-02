@@ -4,7 +4,7 @@
     <name>Google integration</name>
     <summary>Import Google data into Nextcloud</summary>
     <description><![CDATA[Google integration allows you to automatically import your Google calendars and contacts into Nextcloud.]]></description>
-    <version>0.0.2</version>
+    <version>0.0.3</version>
     <licence>agpl</licence>
     <author>Julien Veyssier</author>
     <namespace>Google</namespace>
