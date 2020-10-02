@@ -234,6 +234,7 @@ export default {
 				+ '&redirect_uri=' + encodeURIComponent(redirectUri)
 				+ '&response_type=code'
 				+ '&access_type=offline'
+				+ '&prompt=consent'
 				+ '&state=' + encodeURIComponent(oauthState)
 				+ '&scope=' + encodeURIComponent(scopes.join(' '))
 
