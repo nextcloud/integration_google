@@ -162,16 +162,21 @@ class ConfigController extends Controller {
                 $this->config->setUserValue($this->userId, Application::APP_ID, 'refresh_token', $refreshToken);
                 $this->storeUserInfo($accessToken);
                 return new RedirectResponse(
-                    $this->urlGenerator->linkToRoute('settings.PersonalSettings.index', ['section' => 'connected-accounts']) .
+                    $this->urlGenerator->linkToRoute('settings.PersonalSettings.index', ['section' => 'migration']) .
                     '?googleToken=success'
                 );
             }
-            $result = $this->l->t('Error getting OAuth access token.') . ' ' . $result['error'];
+            $message = isset($result['error'])
+                ? $result['error']
+                : (isset($result['access_token'])
+                    ? $this->l->t('Missing refresh token in Google response.')
+                    : '');
+            $result = $this->l->t('Error getting OAuth access token.') . ' ' . $message;
         } else {
             $result = $this->l->t('Error during OAuth exchanges');
         }
         return new RedirectResponse(
-            $this->urlGenerator->linkToRoute('settings.PersonalSettings.index', ['section' => 'connected-accounts']) .
+            $this->urlGenerator->linkToRoute('settings.PersonalSettings.index', ['section' => 'migration']) .
             '?googleToken=error&message=' . urlencode($result)
         );
     }
