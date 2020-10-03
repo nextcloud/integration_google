@@ -363,7 +363,7 @@ export default {
 		},
 		onCalendarImport(cal) {
 			const calId = cal.id
-			this.importingCalendar[calId] = true
+			this.$set(this.importingCalendar, calId, true)
 			const req = {
 				params: {
 					calId,
@@ -387,7 +387,7 @@ export default {
 					)
 				})
 				.then(() => {
-					this.importingCalendar[calId] = false
+					this.$set(this.importingCalendar, calId, false)
 				})
 		},
 		onImportPhotos() {
