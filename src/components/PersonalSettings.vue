@@ -186,15 +186,10 @@ export default {
 			this.state.token = ''
 			this.saveOptions()
 		},
-		onSearchChange(e) {
-			this.state.search_enabled = e.target.checked
-			this.saveOptions()
-		},
 		saveOptions() {
 			const req = {
 				values: {
 					token: this.state.token,
-					search_enabled: this.state.search_enabled ? '1' : '0',
 				},
 			}
 			const url = generateUrl('/apps/integration_google/config')
