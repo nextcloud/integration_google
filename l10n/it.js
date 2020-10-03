@@ -8,6 +8,7 @@ OC.L10N.register(
     "Connected accounts" : "Account connessi",
     "Data migration" : "Migrazione dei dati",
     "Google integration" : "Integrazione Google",
+    "Import Google data into Nextcloud" : "Importa i dati di Google in Nextcloud",
     "Google API settings" : "Impostazioni API di Google",
     "Client ID" : "ID client",
     "Client ID of your Google application" : "ID client della tua applicazione Google",

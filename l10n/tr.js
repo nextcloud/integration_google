@@ -8,6 +8,8 @@ OC.L10N.register(
     "Connected accounts" : "Bağlı hesaplar",
     "Data migration" : "Veri aktarma",
     "Google integration" : "Google bütünleştirmesi",
+    "Import Google data into Nextcloud" : "Google verilerini Nextcloud içine aktar",
+    "Google integration allows you to automatically import your Google calendars and contacts into Nextcloud." : "Google bütünleştirmesi, Google takvimlerinizi ve kişilerinizi otomatik olarak Nextcloud içine aktarmanızı sağlar.",
     "If you want to allow your Nextcloud users to authenticate to Google, create an OAuth application in your Google settings." : "Nextcloud kullanıcılarınızın Google kimlik doğrulaması için OAuth uygulamasını kullanmak istiyorsanız, Google yönetici ayarlarınızdan bir uygulama oluşturun.",
     "Google API settings" : "Google API ayarları",
     "Go to \"APIs & Services\" => \"Credentials\" and click on \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\"." : "\"API`ler ve Hizmetler\" => \"Kimlik bilgileri\" bölümüne gidip \"+ KİMLİK BİLGİSİ OLUŞTUR\" -> \"OAuth istemci kimliği\" üzerine tıklayın.",
