@@ -8,6 +8,7 @@ OC.L10N.register(
     "Connected accounts" : "Propojené účty",
     "Data migration" : "Migrace dat",
     "Google integration" : "Napojení na Google",
+    "Import Google data into Nextcloud" : "Importovat data z Google do Nextcloud",
     "If you want to allow your Nextcloud users to authenticate to Google, create an OAuth application in your Google settings." : "Pokud chcete vašim Nextcloud uživatelům umožnit použít k ověřování se vůči Google, vytvořte v nastavení Google OAuth aplikaci.",
     "Google API settings" : "Nastavení pro Google API",
     "Go to \"APIs & Services\" => \"Credentials\" and click on \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\"." : "Jděte do „APIs & Services“ => „Credentials“ a klikněte na „+ CREATE CREDENTIALS“ -> „OAuth client ID“.",

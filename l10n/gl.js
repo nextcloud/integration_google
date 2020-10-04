@@ -1,6 +1,7 @@
 OC.L10N.register(
     "integration_google",
     {
+    "Missing refresh token in Google response." : "Falta un testemuño de actualización na resposta de Google.",
     "Error getting OAuth access token." : "Produciuse un erro ao obter o testemuño de acceso OAuth.",
     "Error during OAuth exchanges" : "Produciuse un erro durante os intercambios de OAuth",
     "Bad credentials" : "Credenciais incorrectas",

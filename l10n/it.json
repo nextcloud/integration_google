@@ -32,6 +32,7 @@
     "Import Google photos" : "Importa foto Google",
     "Successfully connected to Google!" : "Connesso correttamente a Google!",
     "Google connection error:" : "Errore di connessione a Google:",
+    "Google options saved" : "Opzioni di Google salvate",
     "Incorrect access token" : "Token di accesso non corretto",
     "Failed to save Google options" : "Salvataggio delle opzioni di Google non riuscito",
     "Failed to save Google OAuth state" : "Salvataggio dello stato OAuth di Google non riuscito",

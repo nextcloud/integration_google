@@ -1,4 +1,5 @@
 { "translations": {
+    "Connected accounts" : "حساب‌های متصل",
     "Client ID" : "شناسه مشتری",
     "Client secret" : "رمز مشتری",
     "Authentication" : "احراز هویت",

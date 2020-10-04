@@ -1,6 +1,7 @@
 OC.L10N.register(
     "integration_google",
     {
+    "Missing refresh token in Google response." : "Le token de rafraichissement est manquant dans la réponse de Google.",
     "Error getting OAuth access token." : "Erreur lors de l'obtention du jeton d'accès OAuth.",
     "Error during OAuth exchanges" : "Erreur lors des échanges OAuth",
     "Bad credentials" : "Identifiants incorrects",
