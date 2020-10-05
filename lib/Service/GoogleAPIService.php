@@ -13,7 +13,6 @@ namespace OCA\Google\Service;
 
 use OCP\IL10N;
 use OCP\IConfig;
-use OCP\ILogger;
 use OCP\Http\Client\IClientService;
 use GuzzleHttp\Exception\ClientException;
 use OCP\Contacts\IManager as IContactManager;
@@ -25,6 +24,8 @@ use OCP\Files\IRootFolder;
 use OCP\Files\FileInfo;
 use OCP\Files\Node;
 use OCP\BackgroundJob\IJobList;
+use Psr\Log\LoggerInterface;
+use OCP\Notification\IManager as INotificationManager;
 
 use OCA\Google\AppInfo\Application;
 use OCA\Google\BackgroundJob\ImportPhotosJob;
@@ -38,7 +39,7 @@ class GoogleAPIService {
 	 * Service to make requests to Google v3 (JSON) API
 	 */
 	public function __construct (string $appName,
-								ILogger $logger,
+								LoggerInterface $logger,
 								IL10N $l10n,
 								IConfig $config,
 								IContactManager $contactsManager,
@@ -46,17 +47,20 @@ class GoogleAPIService {
 								CalDavBackend $caldavBackend,
 								IRootFolder $root,
 								IJobList $jobList,
+								INotificationManager $notificationManager,
 								IClientService $clientService) {
 		$this->appName = $appName;
 		$this->l10n = $l10n;
 		$this->config = $config;
 		$this->logger = $logger;
+		$this->jobList = $jobList;
 		$this->clientService = $clientService;
 		$this->contactsManager = $contactsManager;
 		$this->cdBackend = $cdBackend;
 		$this->caldavBackend = $caldavBackend;
 		$this->root = $root;
 		$this->jobList = $jobList;
+		$this->notificationManager = $notificationManager;
 		$this->client = $clientService->newClient();
 	}
 
@@ -83,6 +87,60 @@ class GoogleAPIService {
 
 		$this->jobList->add(ImportPhotosJob::class, ['user_id' => $userId]);
 		return ['targetPath' => $targetPath];
+	}
+
+	/**
+	 * @param string $userId
+	 * @return array
+	 */
+	public function importPhotosJob(string $userId): void {
+		$this->logger->error('Importing photos for ' . $userId);
+		$importingPhotos = $this->config->getUserValue($userId, Application::APP_ID, 'importing_photos', '0') === '1';
+		if (!$importingPhotos) {
+			return;
+		}
+
+		$accessToken = $this->config->getUserValue($userId, Application::APP_ID, 'token', '');
+		$result = $this->importPhotos($accessToken, $userId, 'Google', 5);
+		if (isset($result['error']) || (isset($result['finished']) && $result['finished'])) {
+			$this->config->setUserValue($userId, Application::APP_ID, 'importing_photos', '0');
+			$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_photos', '0');
+			$this->config->setUserValue($userId, Application::APP_ID, 'last_import_timestamp', '0');
+			if (isset($result['finished']) && $result['finished']) {
+				$this->sendNCNotification($userId, 'import_photos_finished', [
+					'nbImported' => $result['total'],
+					'targetPath' => 'Google',
+				]);
+			}
+		} else {
+			$ts = (new \Datetime())->getTimestamp();
+			$this->config->setUserValue($userId, Application::APP_ID, 'last_import_timestamp', $ts);
+			$alreadyImported = $this->config->getUserValue($userId, Application::APP_ID, 'nb_imported_photos', '');
+			$alreadyImported = $alreadyImported ? (int) $alreadyImported : 0;
+			$newNbImported = $alreadyImported + $result['nbDownloaded'];
+			$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_photos', $newNbImported);
+			$this->jobList->add(ImportPhotosJob::class, ['user_id' => $userId]);
+		}
+	}
+
+	/**
+	 * @param string $userId
+	 * @param string $subject
+	 * @param string $params
+	 * @return void
+	 */
+	private function sendNCNotification(string $userId, string $subject, array $params): void {
+		$manager = $this->notificationManager;
+		$notification = $manager->createNotification();
+
+		$notification->setApp(Application::APP_ID)
+			->setUser($userId)
+			->setDateTime(new \DateTime())
+			->setObject('dum', 'dum')
+			->setSubject($subject, $params);
+
+		$manager->notify($notification);
+		error_log('NONONONONNONO');
 	}
 
 	/**
