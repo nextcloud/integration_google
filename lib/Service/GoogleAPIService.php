@@ -140,7 +140,6 @@ class GoogleAPIService {
 			->setSubject($subject, $params);
 
 		$manager->notify($notification);
-		error_log('NONONONONNONO');
 	}
 
 	/**
