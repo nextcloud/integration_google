@@ -68,6 +68,23 @@ class GoogleAPIController extends Controller {
 	 *
 	 * @return DataResponse
 	 */
+	public function getImportPhotosInformation(): DataResponse {
+		if ($this->accessToken === '') {
+			return new DataResponse(null, 400);
+		}
+		$response = new DataResponse([
+			'importing_photos' => $this->config->getUserValue($this->userId, Application::APP_ID, 'importing_photos', '') === '1',
+			'last_import_timestamp' => (int) $this->config->getUserValue($this->userId, Application::APP_ID, 'last_import_timestamp', '0'),
+			'nb_imported_photos' => (int) $this->config->getUserValue($this->userId, Application::APP_ID, 'nb_imported_photos', '0'),
+		]);
+		return $response;
+	}
+
+	/**
+	 * @NoAdminRequired
+	 *
+	 * @return DataResponse
+	 */
 	public function getPhotoNumber(): DataResponse {
 		if ($this->accessToken === '') {
 			return new DataResponse(null, 400);
@@ -128,7 +145,7 @@ class GoogleAPIController extends Controller {
 		if ($this->accessToken === '') {
 			return new DataResponse(null, 400);
 		}
-		$result = $this->googleAPIService->importPhotos($this->accessToken, $this->userId, $targetPath);
+		$result = $this->googleAPIService->startImportPhotos($this->accessToken, $this->userId, $targetPath);
 		if (isset($result['error'])) {
 			$response = new DataResponse($result['error'], 401);
 		} else {

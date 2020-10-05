@@ -24,8 +24,10 @@ use OCA\DAV\CalDAV\CalDavBackend;
 use OCP\Files\IRootFolder;
 use OCP\Files\FileInfo;
 use OCP\Files\Node;
+use OCP\BackgroundJob\IJobList;
 
 use OCA\Google\AppInfo\Application;
+use OCA\Google\BackgroundJob\ImportPhotosJob;
 
 class GoogleAPIService {
 
@@ -43,6 +45,7 @@ class GoogleAPIService {
 								CardDavBackend $cdBackend,
 								CalDavBackend $caldavBackend,
 								IRootFolder $root,
+								IJobList $jobList,
 								IClientService $clientService) {
 		$this->appName = $appName;
 		$this->l10n = $l10n;
@@ -53,7 +56,33 @@ class GoogleAPIService {
 		$this->cdBackend = $cdBackend;
 		$this->caldavBackend = $caldavBackend;
 		$this->root = $root;
+		$this->jobList = $jobList;
 		$this->client = $clientService->newClient();
+	}
+
+	/**
+	 * @param string $accessToken
+	 * @param string $userId
+	 * @param string $targetPath
+	 * @return array
+	 */
+	public function startImportPhotos(string $accessToken, string $userId, string $targetPath = 'Google'): array {
+		// create root folder
+		$userFolder = $this->root->getUserFolder($userId);
+		if (!$userFolder->nodeExists($targetPath)) {
+			$folder = $userFolder->newFolder($targetPath);
+		} else {
+			$folder = $userFolder->get($targetPath);
+			if ($folder->getType() !== FileInfo::TYPE_FOLDER) {
+				return ['error' => 'Impossible to create Google folder'];
+			}
+		}
+		$this->config->setUserValue($userId, Application::APP_ID, 'importing_photos', '1');
+		$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_photos', '0');
+		$this->config->setUserValue($userId, Application::APP_ID, 'last_import_timestamp', '0');
+
+		$this->jobList->add(ImportPhotosJob::class, ['user_id' => $userId]);
+		return ['targetPath' => $targetPath];
 	}
 
 	/**
@@ -97,6 +126,7 @@ class GoogleAPIService {
 		}
 
 		$nbDownloaded = 0;
+		$totalNumber = 0;
 		foreach ($albums as $album) {
 			$albumId = $album['id'];
 			$albumName = $album['title'];
@@ -115,6 +145,7 @@ class GoogleAPIService {
 			];
 			$result = $this->request($accessToken, $userId, 'v1/mediaItems:search', $params, 'POST', 'https://photoslibrary.googleapis.com/');
 			foreach ($result['mediaItems'] as $photo) {
+				$totalNumber++;
 				if ($this->getPhoto($accessToken, $userId, $photo, $albumFolder)) {
 					$nbDownloaded++;
 					if ($maxDownloadNumber && $nbDownloaded === $maxDownloadNumber) {
@@ -132,6 +163,7 @@ class GoogleAPIService {
 					return $result;
 				}
 				foreach ($result['mediaItems'] as $photo) {
+					$totalNumber++;
 					if ($this->getPhoto($accessToken, $userId, $photo, $albumFolder)) {
 						$nbDownloaded++;
 						if ($maxDownloadNumber && $nbDownloaded === $maxDownloadNumber) {
@@ -148,6 +180,7 @@ class GoogleAPIService {
 			'nbDownloaded' => $nbDownloaded,
 			'targetPath' => $targetPath,
 			'finished' => true,
+			'total' => $totalNumber,
 		];
 	}
 

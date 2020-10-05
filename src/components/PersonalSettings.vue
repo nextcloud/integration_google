@@ -74,7 +74,7 @@
 						</button>
 					</div>
 				</div>
-				<!--br>
+				<br>
 				<div v-if="nbPhotos > 0"
 					id="google-photos">
 					<h3>{{ t('integration_google', 'Photos') }}</h3>
@@ -82,17 +82,27 @@
 						<span class="icon icon-toggle-pictures" />
 						{{ t('integration_google', '{amount} Google photos (>{formSize})', { amount: nbPhotos, formSize: humanFileSize(estimatedPhotoCollectionSize, true) }) }}
 					</label>
-					<button v-if="enoughSpace"
+					<button v-if="enoughSpace && !importingPhotos"
 						id="google-import-photos"
-						:class="{ loading: importingPhotos }"
 						@click="onImportPhotos">
 						<span class="icon icon-picture" />
 						{{ t('integration_google', 'Import Google photos') }}
 					</button>
-					<span v-else>
-						{{ t('integration_google', 'You Google photo collection size is estimated to be bigger than your remaining space left ({formSpace})', { formSpace: humanFileSize(freeSpace) }) }}
+					<span v-else-if="!enoughSpace">
+						{{ t('integration_google', 'Your Google photo collection size is estimated to be bigger than your remaining space left ({formSpace})', { formSpace: humanFileSize(freeSpace) }) }}
 					</span>
-				</div-->
+					<div v-else>
+						<br>
+						{{ t('integration_google', '{amount} photos imported', { amount: nbImportedPhotos }) }}
+						<br>
+						{{ lastPhotoImportDate }}
+						<br>
+						<button @click="onCancelPhotoImport">
+							<span class="icon icon-close" />
+							{{ t('integration_google', 'Cancel photo import') }}
+						</button>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -102,6 +112,7 @@
 import { loadState } from '@nextcloud/initial-state'
 import { generateUrl } from '@nextcloud/router'
 import axios from '@nextcloud/axios'
+import moment from '@nextcloud/moment'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import AppNavigationIconBullet from '@nextcloud/vue/dist/Components/AppNavigationIconBullet'
 
@@ -126,8 +137,10 @@ export default {
 			selectedAddressBook: -1,
 			newAddressBookName: 'Google-contacts',
 			importingContacts: false,
-			importingPhotos: false,
 			importingCalendar: {},
+			importingPhotos: false,
+			lastPhotoImportTimestamp: 0,
+			nbImportedPhotos: 0,
 		}
 	},
 
@@ -156,6 +169,11 @@ export default {
 		enoughSpace() {
 			return this.nbPhotos === 0 || this.estimatedPhotoCollectionSize < this.freeSpace
 		},
+		lastPhotoImportDate() {
+			return this.lastPhotoImportTimestamp !== 0
+				? t('integration_google', 'Last photo import job at {date}', { date: moment.unix(this.lastPhotoImportTimestamp).format('LLL') })
+				: t('integration_google', 'Photo import process will begin soon')
+		},
 	},
 
 	watch: {
@@ -172,12 +190,13 @@ export default {
 			showError(t('integration_google', 'Google connection error:') + ' ' + urlParams.get('message'))
 		}
 
-		// get calendars if we are connected
+		// get informations if we are connected
 		if (this.connected) {
 			this.getGoogleCalendarList()
 			this.getLocalAddressBooks()
 			this.getNbGoogleContacts()
 			this.getNbGooglePhotos()
+			this.getPhotoImportValues()
 		}
 	},
 
@@ -276,6 +295,22 @@ export default {
 			return cal.backgroundColor
 				? cal.backgroundColor.replace('#', '')
 				: '0082c9'
+		},
+		getPhotoImportValues() {
+			const url = generateUrl('/apps/integration_google/import-photos-info')
+			axios.get(url)
+				.then((response) => {
+					if (response.data && Object.keys(response.data).length > 0) {
+						this.lastPhotoImportTimestamp = response.data.last_import_timestamp
+						this.nbImportedPhotos = response.data.nb_imported_photos
+						this.importingPhotos = response.data.importing_photos
+					}
+				})
+				.catch((error) => {
+					console.debug(error)
+				})
+				.then(() => {
+				})
 		},
 		getNbGooglePhotos() {
 			const url = generateUrl('/apps/integration_google/photo-number')
@@ -391,7 +426,6 @@ export default {
 				})
 		},
 		onImportPhotos() {
-			this.importingPhotos = true
 			const req = {
 				params: {
 					path: null,
@@ -401,19 +435,37 @@ export default {
 			axios.get(url, req)
 				.then((response) => {
 					const targetPath = response.data.targetPath
-					const number = response.data.nbDownloaded
 					showSuccess(
-						this.n('integration_google', '{number} photo successfully imported in {targetPath}', '{number} photos successfully imported in {targetPath}', number, { targetPath, number })
+						t('integration_google', 'Starting importing photos in {targetPath} directory', { targetPath })
 					)
+					this.getPhotoImportValues()
 				})
 				.catch((error) => {
 					showError(
-						t('integration_google', 'Failed to import Google photos')
+						t('integration_google', 'Failed to start importing Google photos')
 						+ ': ' + error.response.request.responseText
 					)
 				})
 				.then(() => {
-					this.importingPhotos = false
+				})
+		},
+		onCancelPhotoImport() {
+			this.importingPhotos = false
+			const req = {
+				values: {
+					importing_photos: '0',
+					last_import_timestamp: '0',
+					nb_imported_photos: '0',
+				},
+			}
+			const url = generateUrl('/apps/integration_google/config')
+			axios.put(url, req)
+				.then((response) => {
+				})
+				.catch((error) => {
+					console.debug(error)
+				})
+				.then(() => {
 				})
 		},
 		humanFileSize(bytes, approx = false, si = false, dp = 1) {
