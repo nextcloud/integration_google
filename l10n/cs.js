@@ -1,6 +1,7 @@
 OC.L10N.register(
     "integration_google",
     {
+    "Missing refresh token in Google response." : "V odpovědi ze služeb Google chybí obnovovací token.",
     "Error getting OAuth access token." : "Chyba při získávání přístupového OAuth přístupového tokenu.",
     "Error during OAuth exchanges" : "Chyba při výměnách informací v rámci OAuth",
     "Bad credentials" : "Nesprávné přihlašovací údaje",
@@ -9,6 +10,7 @@ OC.L10N.register(
     "Data migration" : "Migrace dat",
     "Google integration" : "Napojení na Google",
     "Import Google data into Nextcloud" : "Importovat data z Google do Nextcloud",
+    "Google integration allows you to automatically import your Google calendars and contacts into Nextcloud." : "Napojení na Google vám umožní automaticky importovat vaše kalendáře a kontakty z Google do Nextcloud.",
     "If you want to allow your Nextcloud users to authenticate to Google, create an OAuth application in your Google settings." : "Pokud chcete vašim Nextcloud uživatelům umožnit použít k ověřování se vůči Google, vytvořte v nastavení Google OAuth aplikaci.",
     "Google API settings" : "Nastavení pro Google API",
     "Go to \"APIs & Services\" => \"Credentials\" and click on \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\"." : "Jděte do „APIs & Services“ => „Credentials“ a klikněte na „+ CREATE CREDENTIALS“ -> „OAuth client ID“.",

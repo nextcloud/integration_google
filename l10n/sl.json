@@ -1,9 +1,24 @@
 { "translations": {
-    "Client ID" : "ID odjemalca",
+    "Bad credentials" : "Neustrezna poverila",
+    "Connected accounts" : "Povezani računi",
+    "Data migration" : "Selitev podatkov",
+    "Google integration" : "Podpora za račune Google",
+    "Import Google data into Nextcloud" : "Uvažanje podatkov Google v oblak Nextcloud",
+    "Google integration allows you to automatically import your Google calendars and contacts into Nextcloud." : "Podpora za Google omogoča samodejno uvažanje koledarjev in stikov v okolje Nextcloud.",
+    "Client ID" : "ID Odjemalca",
+    "Client ID of your Google application" : "ID Odjemalca Google",
     "Client secret" : "Skrivni ključ odjemalca",
+    "Google data migration" : "Selitev podatkov Google",
     "Authentication" : "Overitev",
+    "Connect to Google" : "Poveži račun Google",
+    "Connected as {user}" : "Poveži kot {user}",
+    "Disconnect from Google" : "Odklopi račun Google",
     "Contacts" : "Stiki",
+    "Calendars" : "Koledarji",
     "Import calendar" : "Uvozi koledar",
-    "Photos" : "Fotografije"
+    "Photos" : "Fotografije",
+    "Import Google photos" : "Uvozi slike Google",
+    "Google connection error:" : "Napaka povezave Google:",
+    "Google options saved" : "Možnosti Google so shranjene"
 },"pluralForm" :"nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);"
 }
