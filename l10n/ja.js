@@ -10,6 +10,7 @@ OC.L10N.register(
     "Client secret" : "クライアント秘密鍵",
     "Authentication" : "認証",
     "Connect to Google" : "Google に接続",
+    "Connected as {user}" : "{user} を接続済み",
     "Disconnect from Google" : "Google から切断",
     "Contacts" : "連絡先",
     "Import Google contacts in Nextcloud" : "Google の連絡先を Nextcloud にインポート",
@@ -21,7 +22,6 @@ OC.L10N.register(
     "Import calendar" : "カレンダーのインポート",
     "Photos" : "写真",
     "Import Google photos" : "Google フォトをインポート",
-    "Successfully connected to Google!" : "Google への接続に成功しました！",
-    "Failed to import Google photos" : "Google フォトのインポートに失敗しました"
+    "Successfully connected to Google!" : "Google への接続に成功しました！"
 },
 "nplurals=1; plural=0;");

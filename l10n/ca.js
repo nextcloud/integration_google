@@ -42,7 +42,6 @@ OC.L10N.register(
     "Failed to get number of Google photos" : "No s'ha pogut obtenir el nombre de fotos de Google",
     "Failed to get number of Google contacts" : "No s'ha pogut obtenir el nombre de contactes de Google",
     "Failed to get address book list" : "No s'ha pogut obtenir la llista de la llibreta d'adreces",
-    "Failed to import Google calendar" : "No s'ha pogut importar el calendari de Google",
-    "Failed to import Google photos" : "No s'han pogut importar les fotos de Google"
+    "Failed to import Google calendar" : "No s'ha pogut importar el calendari de Google"
 },
 "nplurals=2; plural=(n != 1);");

@@ -41,7 +41,6 @@ OC.L10N.register(
     "Photos" : "Fotoğraflar",
     "{amount} Google photos (>{formSize})" : "{amount} Google fotoğrafı (>{formSize})",
     "Import Google photos" : "Google fotoğraflarını içe aktar",
-    "You Google photo collection size is estimated to be bigger than your remaining space left ({formSpace})" : "Google fotoğraf albümünüzün boyutu kalan boş alanınızdan daha büyük gibi görünüyor ({formSpace})",
     "Successfully connected to Google!" : "Google ile bağlantı kuruldu!",
     "Google connection error:" : "Google bağlantı sorunu:",
     "Google options saved" : "Google ayarları kaydedildi",
@@ -53,9 +52,7 @@ OC.L10N.register(
     "Failed to get number of Google contacts" : "Google kişilerinin sayısı alınamadı",
     "Failed to get address book list" : "Adres defteri listesi alınamadı",
     "Failed to import Google calendar" : "Google takvimi içe aktarılamadı",
-    "Failed to import Google photos" : "Google fotoğrafları içe aktarılamadı",
     "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} kişi {name} içine aktarıldı","{number} kişi {name} içine aktarıldı"],
-    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number} etkinlik {name} içine aktarıldı","{number} etkinlik {name} içine aktarıldı"],
-    "_{number} photo successfully imported in {targetPath}_::_{number} photos successfully imported in {targetPath}_" : ["{number} fotoğraf {targetPath} içine aktarıldı","{number} fotoğraf {targetPath} içine aktarıldı"]
+    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number} etkinlik {name} içine aktarıldı","{number} etkinlik {name} içine aktarıldı"]
 },
 "nplurals=2; plural=(n > 1);");

@@ -42,7 +42,6 @@ OC.L10N.register(
     "Photos" : "Fotky",
     "{amount} Google photos (>{formSize})" : "{amount} Google fotek (>{formSize})",
     "Import Google photos" : "Importovat Google fotky",
-    "You Google photo collection size is estimated to be bigger than your remaining space left ({formSpace})" : "Velikost sbírka Google fotek je odhadována na více, než vám zbývá volného místa ({formSpace})",
     "Successfully connected to Google!" : "Úspěšně spojeno s Google!",
     "Google connection error:" : "Chyba připojení ke Google:",
     "Google options saved" : "Předvolby pro Google uloženy",
@@ -54,9 +53,7 @@ OC.L10N.register(
     "Failed to get number of Google contacts" : "Nepodařilo se získat počet Google kontaktů",
     "Failed to get address book list" : "Nepodařilo se získat seznam adresářů kontaktů",
     "Failed to import Google calendar" : "Nepodařilo se importovat Google kalendář",
-    "Failed to import Google photos" : "Nepodařilo se importovat fotky Google",
     "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} kontakt úspěšně naimportován v {name}","{number} kontakty úspěšně naimportovány v {name}","{number} kontaktů úspěšně naimportováno v {name}","{number} kontakty úspěšně naimportovány v {name}"],
-    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number} událost úspěšně naimportována v {name}","{number} události úspěšně naimportovány v {name}","{number} událostí úspěšně naimportováno v {name}","{number} události úspěšně naimportovány v {name}"],
-    "_{number} photo successfully imported in {targetPath}_::_{number} photos successfully imported in {targetPath}_" : ["{number} fotka úspěšně naimportována do {targetPath}","{number} fotky úspěšně naimportovány do {targetPath}","{number} fotek úspěšně naimportováno do {targetPath}","{number} fotky úspěšně naimportovány do {targetPath}"]
+    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number} událost úspěšně naimportována v {name}","{number} události úspěšně naimportovány v {name}","{number} událostí úspěšně naimportováno v {name}","{number} události úspěšně naimportovány v {name}"]
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;");

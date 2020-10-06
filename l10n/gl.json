@@ -40,7 +40,6 @@
     "Photos" : "Fotos",
     "{amount} Google photos (>{formSize})" : "{amount} fotos de Google (>{formSize})",
     "Import Google photos" : "Importar as fotos de Google",
-    "You Google photo collection size is estimated to be bigger than your remaining space left ({formSpace})" : "Calcúlase que o tamaño da súa colección de fotos de Google é maior que o espazo que lle queda ({formSpace})",
     "Successfully connected to Google!" : "Conectou satisfactoriamente con Google.",
     "Google connection error:" : "Produciuse un erro na conexión co Google:",
     "Google options saved" : "Gardáronse as opcións de Google",
@@ -52,9 +51,7 @@
     "Failed to get number of Google contacts" : "Produciuse un fallo ao obter o número de contactos de Google",
     "Failed to get address book list" : "Produciuse un fallo ao obter a lista de cadernos de enderezos",
     "Failed to import Google calendar" : "Produciuse un fallo ao importar o calendario de Google",
-    "Failed to import Google photos" : "Produciuse un fallo ao importar as fotos de Google",
     "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} contacto foi importado sactifactoriamente en {name}","{number} contactos foron importados sactifactoriamente en {name}"],
-    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number} evento foi importado sactifactoriamente en {name}","{number} eventos foron importados sactifactoriamente en {name}"],
-    "_{number} photo successfully imported in {targetPath}_::_{number} photos successfully imported in {targetPath}_" : ["{number} foto foi importada sactifactoriamente en {name}","{number} fotos foron importadas sactifactoriamente en {name}"]
+    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number} evento foi importado sactifactoriamente en {name}","{number} eventos foron importados sactifactoriamente en {name}"]
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

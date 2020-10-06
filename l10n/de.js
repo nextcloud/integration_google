@@ -42,7 +42,6 @@ OC.L10N.register(
     "Photos" : "Fotos",
     "{amount} Google photos (>{formSize})" : "{amount} Google Fotos (>{formSize})",
     "Import Google photos" : "Google Fotos importieren",
-    "You Google photo collection size is estimated to be bigger than your remaining space left ({formSpace})" : "Die Größe deiner Google-Fotosammlung ist schätzungsweise größer als der verbleibende verbleibende Speicherplatz ({formSpace})",
     "Successfully connected to Google!" : "Erfolgreich mit Google verbunden!",
     "Google connection error:" : "Google Verbindungsfehler:",
     "Google options saved" : "Google-Einstellungen gespeichert",
@@ -54,9 +53,7 @@ OC.L10N.register(
     "Failed to get number of Google contacts" : "Fehler beim Abrufen der Anzahl der Google-Kontakte",
     "Failed to get address book list" : "Fehler beim Abrufen der Adressbuch-Liste",
     "Failed to import Google calendar" : "Google-Kalender konnte nicht importiert werden",
-    "Failed to import Google photos" : "Fehler beim Importieren der Google-Fotos",
     "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} Kontakt erfolgreich importiert nach {name}","{number} Kontakte erfolgreich importiert nach {name}"],
-    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number} Termin erfolgreich importiert nach {name}","{number} Termine erfolgreich importiert nach {name}"],
-    "_{number} photo successfully imported in {targetPath}_::_{number} photos successfully imported in {targetPath}_" : ["{number} Foto erfolgreich importiert nach {targetPath}","{number} Fotos erfolgreich importiert nach {targetPath}"]
+    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number} Termin erfolgreich importiert nach {name}","{number} Termine erfolgreich importiert nach {name}"]
 },
 "nplurals=2; plural=(n != 1);");

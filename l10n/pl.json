@@ -40,7 +40,6 @@
     "Photos" : "Zdjęcia",
     "{amount} Google photos (>{formSize})" : "{amount} Zdjęcia Google (>{formSize})",
     "Import Google photos" : "Importuj zdjęcia Google",
-    "You Google photo collection size is estimated to be bigger than your remaining space left ({formSpace})" : "Szacuje się, że rozmiar Twojej kolekcji zdjęć Google jest większy niż pozostałe wolne miejsce ({formSpace})",
     "Successfully connected to Google!" : "Pomyślnie połączono z Google!",
     "Google connection error:" : "Błąd połączenia z Google:",
     "Google options saved" : "Opcje Google zostały zapisane",
@@ -52,9 +51,7 @@
     "Failed to get number of Google contacts" : "Nie udało się pobrać ilości kontaktów Google",
     "Failed to get address book list" : "Nie udało się pobrać listy książek adresowych",
     "Failed to import Google calendar" : "Nie udało się zaimportować kalendarza Google",
-    "Failed to import Google photos" : "Nie udało się zaimportować zdjęć Google",
     "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["Pomyślnie zaimportowano {number} kontakt do {name}","Pomyślnie zaimportowano {number} kontakty do {name}","Pomyślnie zaimportowano {number} kontaktów do {name}","Pomyślnie zaimportowano {number} kontaktów do {name}"],
-    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["Pomyślnie zaimportowano {number} wydarzenie do {name}","Pomyślnie zaimportowano {number} wydarzenia do {name}","Pomyślnie zaimportowano {number} wydarzeń do {name}","Pomyślnie zaimportowano {number} wydarzeń do {name}"],
-    "_{number} photo successfully imported in {targetPath}_::_{number} photos successfully imported in {targetPath}_" : ["Pomyślnie zaimportowano {number} zdjęcie do {targetPath}","Pomyślnie zaimportowano {number} zdjęcia do {targetPath}","Pomyślnie zaimportowano {number} zdjęć do {targetPath}","Pomyślnie zaimportowano {number} zdjęć do {targetPath}"]
+    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["Pomyślnie zaimportowano {number} wydarzenie do {name}","Pomyślnie zaimportowano {number} wydarzenia do {name}","Pomyślnie zaimportowano {number} wydarzeń do {name}","Pomyślnie zaimportowano {number} wydarzeń do {name}"]
 },"pluralForm" :"nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);"
 }
