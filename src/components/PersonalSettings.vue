@@ -145,6 +145,7 @@ export default {
 			importingPhotos: false,
 			lastPhotoImportTimestamp: 0,
 			nbImportedPhotos: 0,
+			photoImportLoop: null,
 		}
 	},
 
@@ -313,6 +314,9 @@ export default {
 						this.lastPhotoImportTimestamp = response.data.last_import_timestamp
 						this.nbImportedPhotos = response.data.nb_imported_photos
 						this.importingPhotos = response.data.importing_photos
+						if (!this.importingPhotos) {
+							clearInterval(this.photoImportLoop)
+						}
 					}
 				})
 				.catch((error) => {
@@ -448,6 +452,7 @@ export default {
 						t('integration_google', 'Starting importing photos in {targetPath} directory', { targetPath })
 					)
 					this.getPhotoImportValues()
+					this.photoImportLoop = setInterval(() => this.getPhotoImportValues(), 10000)
 				})
 				.catch((error) => {
 					showError(
@@ -460,6 +465,7 @@ export default {
 		},
 		onCancelPhotoImport() {
 			this.importingPhotos = false
+			clearInterval(this.photoImportLoop)
 			const req = {
 				values: {
 					importing_photos: '0',

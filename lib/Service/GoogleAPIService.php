@@ -101,7 +101,8 @@ class GoogleAPIService {
 		}
 
 		$accessToken = $this->config->getUserValue($userId, Application::APP_ID, 'token', '');
-		$result = $this->importPhotos($accessToken, $userId, 'Google', 5);
+		// import by batch of 50 photos per job
+		$result = $this->importPhotos($accessToken, $userId, 'Google', 50);
 		if (isset($result['error']) || (isset($result['finished']) && $result['finished'])) {
 			$this->config->setUserValue($userId, Application::APP_ID, 'importing_photos', '0');
 			$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_photos', '0');
