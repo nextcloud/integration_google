@@ -97,7 +97,7 @@
 					</span>
 					<div v-else>
 						<br>
-						{{ t('integration_google', '{amount} photos imported', { amount: nbImportedPhotos }) }}
+						{{ t('integration_google', '{amount} photos imported ({progress}%)', { amount: nbImportedPhotos, progress: photoImportProgress }) }}
 						<br>
 						{{ lastPhotoImportDate }}
 						<br>
@@ -177,6 +177,11 @@ export default {
 			return this.lastPhotoImportTimestamp !== 0
 				? t('integration_google', 'Last photo import job at {date}', { date: moment.unix(this.lastPhotoImportTimestamp).format('LLL') })
 				: t('integration_google', 'Photo import process will begin soon')
+		},
+		photoImportProgress() {
+			return this.nbPhotos > 0 && this.nbImportedPhotos > 0
+				? parseInt(this.nbImportedPhotos / this.nbPhotos * 100)
+				: 0
 		},
 	},
 
