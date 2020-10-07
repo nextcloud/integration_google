@@ -1,10 +1,14 @@
 <template>
-	<div v-if="showOAuth" id="google_prefs" class="section">
+	<div id="google_prefs" class="section">
 		<h2>
 			<a class="icon icon-google-settings" />
 			{{ t('integration_google', 'Google data migration') }}
 		</h2>
-		<div id="google-content">
+		<p v-if="!showOAuth" class="settings-hint">
+			{{ t('integration_google', 'No Google OAuth app configured. Ask your Nextcloud administrator to configure Google connected accounts admin section.') }}
+		</p>
+		<div v-else
+			id="google-content">
 			<h3>{{ t('integration_google', 'Authentication') }}</h3>
 			<button v-if="!connected" id="google-oauth" @click="onOAuthClick">
 				<span class="icon icon-external" />
@@ -191,7 +195,7 @@ export default {
 		}
 
 		// get informations if we are connected
-		if (this.connected) {
+		if (this.showOAuth && this.connected) {
 			this.getGoogleCalendarList()
 			this.getLocalAddressBooks()
 			this.getNbGoogleContacts()
