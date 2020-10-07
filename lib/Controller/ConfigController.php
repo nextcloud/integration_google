@@ -18,7 +18,7 @@ use OCP\IURLGenerator;
 use OCP\IConfig;
 use OCP\IServerContainer;
 use OCP\IL10N;
-use OCP\ILogger;
+use Psr\Log\LoggerInterface;
 use OCP\Contacts\IManager as IContactManager;
 use OCP\Constants;
 
@@ -49,7 +49,7 @@ class ConfigController extends Controller {
                                 IDBConnection $dbconnection,
                                 IURLGenerator $urlGenerator,
                                 IL10N $l,
-                                ILogger $logger,
+                                LoggerInterface $logger,
                                 IContactManager $contactsManager,
                                 GoogleAPIService $googleAPIService,
                                 $userId) {
