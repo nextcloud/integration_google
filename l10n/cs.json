@@ -2,6 +2,8 @@
     "Missing refresh token in Google response." : "V odpovědi ze služeb Google chybí obnovovací token.",
     "Error getting OAuth access token." : "Chyba při získávání přístupového OAuth přístupového tokenu.",
     "Error during OAuth exchanges" : "Chyba při výměnách informací v rámci OAuth",
+    "Google" : "Google",
+    "_%s photo was imported from Google._::_%s photos were imported from Google._" : ["Z Google byla importována %s fotka.","Z Google byla importovány %s fotky.","Z Google bylo importováno %s fotek.","Z Google byla importovány %s fotky."],
     "Bad credentials" : "Nesprávné přihlašovací údaje",
     "OAuth access token refused" : "OAuth přístupový token odmítnut",
     "Connected accounts" : "Propojené účty",
@@ -40,6 +42,10 @@
     "Photos" : "Fotky",
     "{amount} Google photos (>{formSize})" : "{amount} Google fotek (>{formSize})",
     "Import Google photos" : "Importovat Google fotky",
+    "Your Google photo collection size is estimated to be bigger than your remaining space left ({formSpace})" : "Velikost sbírka Google fotek je odhadována na více, než vám zbývá volného místa ({formSpace})",
+    "{amount} photos imported" : "importováno {amount} fotek",
+    "Cancel photo import" : "Zrušit import fotek",
+    "Photo import process will begin soon" : "Proces importu fotek brzy začne",
     "Successfully connected to Google!" : "Úspěšně spojeno s Google!",
     "Google connection error:" : "Chyba připojení ke Google:",
     "Google options saved" : "Předvolby pro Google uloženy",
@@ -51,7 +57,10 @@
     "Failed to get number of Google contacts" : "Nepodařilo se získat počet Google kontaktů",
     "Failed to get address book list" : "Nepodařilo se získat seznam adresářů kontaktů",
     "Failed to import Google calendar" : "Nepodařilo se importovat Google kalendář",
+    "Starting importing photos in {targetPath} directory" : "Zahajuje se import fotek do složky {targetPath}",
+    "Failed to start importing Google photos" : "Nepodařilo se zahájit import fotek z Google",
     "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} kontakt úspěšně naimportován v {name}","{number} kontakty úspěšně naimportovány v {name}","{number} kontaktů úspěšně naimportováno v {name}","{number} kontakty úspěšně naimportovány v {name}"],
-    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number} událost úspěšně naimportována v {name}","{number} události úspěšně naimportovány v {name}","{number} událostí úspěšně naimportováno v {name}","{number} události úspěšně naimportovány v {name}"]
+    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number} událost úspěšně naimportována v {name}","{number} události úspěšně naimportovány v {name}","{number} událostí úspěšně naimportováno v {name}","{number} události úspěšně naimportovány v {name}"],
+    "Last photo import job at {date}" : "Minulá úloha importu fotek v {date}"
 },"pluralForm" :"nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;"
 }

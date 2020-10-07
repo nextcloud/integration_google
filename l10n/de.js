@@ -4,6 +4,8 @@ OC.L10N.register(
     "Missing refresh token in Google response." : "Fehlender Refresh-Token in der Google-Antwort.",
     "Error getting OAuth access token." : "Fehler beim Abrufen des OAuth-Zugriffstokens",
     "Error during OAuth exchanges" : "Fehler beim OAuth-Austausch",
+    "Google" : "Google",
+    "_%s photo was imported from Google._::_%s photos were imported from Google._" : ["%s Foto wurde von Google importiert.","%s Fotos wurden von Google importiert."],
     "Bad credentials" : "Falsche Anmeldeinformationen",
     "OAuth access token refused" : "OAuth-Zugriffstoken abgelehnt",
     "Connected accounts" : "Verbundene Konten",
@@ -42,6 +44,10 @@ OC.L10N.register(
     "Photos" : "Fotos",
     "{amount} Google photos (>{formSize})" : "{amount} Google Fotos (>{formSize})",
     "Import Google photos" : "Google Fotos importieren",
+    "Your Google photo collection size is estimated to be bigger than your remaining space left ({formSpace})" : "Die Größe Ihrer Google-Fotosammlung ist schätzungsweise größer als Dein verbleibender Platz ({formSpace})",
+    "{amount} photos imported" : "{amount} Fotos importiert",
+    "Cancel photo import" : "Fotoimport abbrechen",
+    "Photo import process will begin soon" : "Prozess des Fotoimports wird bald beginnen",
     "Successfully connected to Google!" : "Erfolgreich mit Google verbunden!",
     "Google connection error:" : "Google Verbindungsfehler:",
     "Google options saved" : "Google-Einstellungen gespeichert",
@@ -53,7 +59,10 @@ OC.L10N.register(
     "Failed to get number of Google contacts" : "Fehler beim Abrufen der Anzahl der Google-Kontakte",
     "Failed to get address book list" : "Fehler beim Abrufen der Adressbuch-Liste",
     "Failed to import Google calendar" : "Google-Kalender konnte nicht importiert werden",
+    "Starting importing photos in {targetPath} directory" : "Beginn des Imports von Fotos im Verzeichnis {targetPath}",
+    "Failed to start importing Google photos" : "Fehler beim Starten des Imports von Google-Fotos",
     "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} Kontakt erfolgreich importiert nach {name}","{number} Kontakte erfolgreich importiert nach {name}"],
-    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number} Termin erfolgreich importiert nach {name}","{number} Termine erfolgreich importiert nach {name}"]
+    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number} Termin erfolgreich importiert nach {name}","{number} Termine erfolgreich importiert nach {name}"],
+    "Last photo import job at {date}" : "Letzter Fotoimport-Auftrag am {Datum}"
 },
 "nplurals=2; plural=(n != 1);");

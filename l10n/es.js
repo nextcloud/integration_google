@@ -4,6 +4,8 @@ OC.L10N.register(
     "Missing refresh token in Google response." : "Falta el token de refresco en la respuesta de Google.",
     "Error getting OAuth access token." : "Error al obtener el token de acceso OAuth.",
     "Error during OAuth exchanges" : "Error durante los intercambios OAuth",
+    "Google" : "Google",
+    "_%s photo was imported from Google._::_%s photos were imported from Google._" : ["Ha sido importada %s foto desde Google.","Han sido importadas %s fotos desde Google."],
     "Bad credentials" : "Credenciales incorrectas",
     "OAuth access token refused" : "Token de acceso OAuth rechazado",
     "Connected accounts" : "Cuentas conectadas",
@@ -42,6 +44,10 @@ OC.L10N.register(
     "Photos" : "Fotos",
     "{amount} Google photos (>{formSize})" : "{amount} fotos de Google (>{formSize})",
     "Import Google photos" : "Importar fotos de Google",
+    "Your Google photo collection size is estimated to be bigger than your remaining space left ({formSpace})" : "Estimamos que tu colección de fotos de Google es mayor que tu espacio disponible ({formSpace})",
+    "{amount} photos imported" : "{amount} fotos importadas",
+    "Cancel photo import" : "Cancelar importación de fotos",
+    "Photo import process will begin soon" : "El proceso de importación de fotos comenzará en breve",
     "Successfully connected to Google!" : "¡Conectado a Google con éxito!",
     "Google connection error:" : "Error de conexión con Google:",
     "Google options saved" : "Opciones de Google guardadas",
@@ -53,7 +59,10 @@ OC.L10N.register(
     "Failed to get number of Google contacts" : "Fallo al obtener el número de contactos de Google",
     "Failed to get address book list" : "Fallo al obtener la lista de libretas de direcciones",
     "Failed to import Google calendar" : "Fallo al importar el calendario de Google",
+    "Starting importing photos in {targetPath} directory" : "Comenzando la importación de fotos en el directorio {targetPath}",
+    "Failed to start importing Google photos" : "Fallo al iniciar la importación de las fotos de Google",
     "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} contacto importado con éxito en {name}","{number} contactos importados con éxito en {name}"],
-    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number} evento importado con éxito en {name}","{number} eventos importados con éxito en {name}"]
+    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number} evento importado con éxito en {name}","{number} eventos importados con éxito en {name}"],
+    "Last photo import job at {date}" : "Última tarea de importación de fotos a las {date}"
 },
 "nplurals=2; plural=(n != 1);");

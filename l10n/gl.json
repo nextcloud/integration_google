@@ -2,6 +2,8 @@
     "Missing refresh token in Google response." : "Falta un testemuño de actualización na resposta de Google.",
     "Error getting OAuth access token." : "Produciuse un erro ao obter o testemuño de acceso OAuth.",
     "Error during OAuth exchanges" : "Produciuse un erro durante os intercambios de OAuth",
+    "Google" : "Google",
+    "_%s photo was imported from Google._::_%s photos were imported from Google._" : ["Importouse %s foto de Google.","Importáronse %s fotos de Google."],
     "Bad credentials" : "Credenciais incorrectas",
     "OAuth access token refused" : "Foi rexeitado o testemuño de acceso de OAuth",
     "Connected accounts" : "Contas conectadas",
@@ -40,6 +42,10 @@
     "Photos" : "Fotos",
     "{amount} Google photos (>{formSize})" : "{amount} fotos de Google (>{formSize})",
     "Import Google photos" : "Importar as fotos de Google",
+    "Your Google photo collection size is estimated to be bigger than your remaining space left ({formSpace})" : "Calcúlase que o tamaño da súa colección de fotos de Google é maior que o espazo que lle queda libre ({formSpace})",
+    "{amount} photos imported" : "{amount} fotos importadas",
+    "Cancel photo import" : "Cancelar a importación de fotos",
+    "Photo import process will begin soon" : "O proceso de importación de fotos comezará en breve",
     "Successfully connected to Google!" : "Conectou satisfactoriamente con Google.",
     "Google connection error:" : "Produciuse un erro na conexión co Google:",
     "Google options saved" : "Gardáronse as opcións de Google",
@@ -51,7 +57,10 @@
     "Failed to get number of Google contacts" : "Produciuse un fallo ao obter o número de contactos de Google",
     "Failed to get address book list" : "Produciuse un fallo ao obter a lista de cadernos de enderezos",
     "Failed to import Google calendar" : "Produciuse un fallo ao importar o calendario de Google",
+    "Starting importing photos in {targetPath} directory" : "Comezando a importar fotos no directorio {targetPath}",
+    "Failed to start importing Google photos" : "Produciuse un fallo ao comezar a importar fotos de Google",
     "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} contacto foi importado sactifactoriamente en {name}","{number} contactos foron importados sactifactoriamente en {name}"],
-    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number} evento foi importado sactifactoriamente en {name}","{number} eventos foron importados sactifactoriamente en {name}"]
+    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number} evento foi importado sactifactoriamente en {name}","{number} eventos foron importados sactifactoriamente en {name}"],
+    "Last photo import job at {date}" : "Último traballo de importación de fotos o {date}"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
