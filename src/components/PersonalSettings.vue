@@ -113,16 +113,16 @@
 					<h3>{{ t('integration_google', 'Drive') }}</h3>
 					<label>
 						<span class="icon icon-folder" />
-						{{ n('integration_google', '{nbFiles} file in Google drive ({formSize})', '{nbFiles} files in Google drive ({formSize})', nbFiles, { nbFiles, formSize: humanFileSize(driveSize, true) }) }}
+						{{ n('integration_google', '{nbFiles} file in Google Drive ({formSize})', '{nbFiles} files in Google Drive ({formSize})', nbFiles, { nbFiles, formSize: humanFileSize(driveSize, true) }) }}
 					</label>
 					<button v-if="enoughSpaceForDrive && !importingDrive"
 						id="google-import-files"
 						@click="onImportDrive">
 						<span class="icon icon-files-dark" />
-						{{ t('integration_google', 'Import Google drive') }}
+						{{ t('integration_google', 'Import Google Drive files') }}
 					</button>
 					<span v-else-if="!enoughSpaceForDrive">
-						{{ t('integration_google', 'Your Google drive is bigger than your remaining space left ({formSpace})', { formSpace: humanFileSize(freeSpace) }) }}
+						{{ t('integration_google', 'Your Google Drive is bigger than your remaining space left ({formSpace})', { formSpace: humanFileSize(freeSpace) }) }}
 					</span>
 					<div v-else>
 						<br>
@@ -132,7 +132,7 @@
 						<br>
 						<button @click="onCancelDriveImport">
 							<span class="icon icon-close" />
-							{{ t('integration_google', 'Cancel drive import') }}
+							{{ t('integration_google', 'Cancel Drive import') }}
 						</button>
 					</div>
 				</div>
@@ -229,7 +229,7 @@ export default {
 		},
 		lastDriveImportDate() {
 			return this.lastDriveImportTimestamp !== 0
-				? t('integration_google', 'Last drive import job at {date}', { date: moment.unix(this.lastDriveImportTimestamp).format('LLL') })
+				? t('integration_google', 'Last Drive import job at {date}', { date: moment.unix(this.lastDriveImportTimestamp).format('LLL') })
 				: t('integration_google', 'Drive import process will begin soon')
 		},
 		driveImportProgress() {
@@ -550,6 +550,25 @@ export default {
 			const url = generateUrl('/apps/integration_google/config')
 			axios.put(url, req)
 				.then((response) => {
+				})
+				.catch((error) => {
+					console.debug(error)
+				})
+				.then(() => {
+				})
+		},
+		getDriveImportValues() {
+			const url = generateUrl('/apps/integration_google/import-files-info')
+			axios.get(url)
+				.then((response) => {
+					if (response.data && Object.keys(response.data).length > 0) {
+						this.lastDriveImportTimestamp = response.data.last_drive_import_timestamp
+						this.nbImportedFiles = response.data.nb_imported_files
+						this.importingDrive = response.data.importing_drive
+						if (!this.importingDrive) {
+							clearInterval(this.driveImportLoop)
+						}
+					}
 				})
 				.catch((error) => {
 					console.debug(error)

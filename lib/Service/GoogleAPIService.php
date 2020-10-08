@@ -29,6 +29,7 @@ use OCP\Notification\IManager as INotificationManager;
 
 use OCA\Google\AppInfo\Application;
 use OCA\Google\BackgroundJob\ImportPhotosJob;
+use OCA\Google\BackgroundJob\ImportDriveJob;
 
 class GoogleAPIService {
 
@@ -70,7 +71,221 @@ class GoogleAPIService {
 	 * @param string $targetPath
 	 * @return array
 	 */
-	public function startImportPhotos(string $accessToken, string $userId, string $targetPath = 'Google'): array {
+	public function startImportDrive(string $accessToken, string $userId, string $targetPath = 'GoogleDrive'): array {
+		// create root folder
+		$userFolder = $this->root->getUserFolder($userId);
+		if (!$userFolder->nodeExists($targetPath)) {
+			$folder = $userFolder->newFolder($targetPath);
+		} else {
+			$folder = $userFolder->get($targetPath);
+			if ($folder->getType() !== FileInfo::TYPE_FOLDER) {
+				return ['error' => 'Impossible to create Google Drive folder'];
+			}
+		}
+		$this->config->setUserValue($userId, Application::APP_ID, 'importing_drive', '1');
+		$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_files', '0');
+		$this->config->setUserValue($userId, Application::APP_ID, 'last_drive_import_timestamp', '0');
+
+		$this->jobList->add(ImportDriveJob::class, ['user_id' => $userId]);
+		return ['targetPath' => $targetPath];
+	}
+
+	/**
+	 * @param string $userId
+	 * @return array
+	 */
+	public function importDriveJob(string $userId): void {
+		$this->logger->error('Importing drive files for ' . $userId);
+		$importingDrive = $this->config->getUserValue($userId, Application::APP_ID, 'importing_drive', '0') === '1';
+		if (!$importingDrive) {
+			return;
+		}
+
+		$accessToken = $this->config->getUserValue($userId, Application::APP_ID, 'token', '');
+		// import batch of files
+		$result = $this->importFiles($accessToken, $userId, 'GoogleDrive', 2);
+		if (isset($result['error']) || (isset($result['finished']) && $result['finished'])) {
+			$this->config->setUserValue($userId, Application::APP_ID, 'importing_drive', '0');
+			$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_files', '0');
+			$this->config->setUserValue($userId, Application::APP_ID, 'last_drive_import_timestamp', '0');
+			if (isset($result['finished']) && $result['finished']) {
+				$this->sendNCNotification($userId, 'import_drive_finished', [
+					'nbImported' => $result['total'],
+					'targetPath' => 'GoogleDrive',
+				]);
+			}
+		} else {
+			$ts = (new \Datetime())->getTimestamp();
+			$this->config->setUserValue($userId, Application::APP_ID, 'last_drive_import_timestamp', $ts);
+			$alreadyImported = $this->config->getUserValue($userId, Application::APP_ID, 'nb_imported_files', '');
+			$alreadyImported = $alreadyImported ? (int) $alreadyImported : 0;
+			$newNbImported = $alreadyImported + $result['nbDownloaded'];
+			$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_files', $newNbImported);
+			$this->jobList->add(ImportDriveJob::class, ['user_id' => $userId]);
+		}
+	}
+
+	/**
+	 * @param string $accessToken
+	 * @param string $userId
+	 * @param string $targetPath
+	 * @return array
+	 */
+	public function importFiles(string $accessToken, string $userId, string $targetPath = 'GoogleDrive', ?int $maxDownloadNumber = null): array {
+		// create root folder
+		$userFolder = $this->root->getUserFolder($userId);
+		if (!$userFolder->nodeExists($targetPath)) {
+			$folder = $userFolder->newFolder($targetPath);
+		} else {
+			$folder = $userFolder->get($targetPath);
+			if ($folder->getType() !== FileInfo::TYPE_FOLDER) {
+				return ['error' => 'Impossible to create ' . $targetPath . ' folder'];
+			}
+		}
+
+		$directoriesById = [];
+		$params = [
+			'pageSize' => 1000,
+			'fields' => '*',
+			'q' => "mimeType='application/vnd.google-apps.folder'",
+		];
+		$result = $this->request($accessToken, $userId, 'drive/v3/files', $params);
+		if (isset($result['error'])) {
+			return $result;
+		}
+		foreach ($result['files'] as $dir) {
+			$directoriesById[$dir['id']] = [
+				'name' => $dir['name'],
+				'parent' => (isset($dir['parents']) && count($dir['parents']) > 0) ? $dir['parents'][0] : null,
+			];
+		}
+		while (isset($result['nextPageToken'])) {
+			$params['pageToken'] = $result['nextPageToken'];
+			$result = $this->request($accessToken, $userId, 'drive/v3/files', $params);
+			if (isset($result['error'])) {
+				return $result;
+			}
+			foreach ($result['files'] as $dir) {
+				$directoriesById[$dir['id']] = [
+					'name' => $dir['name'],
+					'parent' => (isset($dir['parents']) && count($dir['parents']) > 0) ? $dir['parents'][0] : null,
+				];
+			}
+		}
+		file_put_contents('/tmp/aa', json_encode($directoriesById));
+		// create top dirs
+		if (!$this->createDirsUnder($directoriesById, $folder)) {
+			return ['error' => 'Impossible to create Drive directories'];
+		}
+		return [
+			'nbDownloaded' => $nbDownloaded,
+			'targetPath' => $targetPath,
+			'finished' => true,
+			'total' => $totalNumber,
+		];
+
+		// get files
+		$nbDownloaded = 0;
+		$totalNumber = 0;
+
+		$params = [
+			'pageSize' => 1000,
+			'fields' => '*',
+			'q' => "mimeType!='application/vnd.google-apps.folder'",
+		];
+		$result = $this->request($accessToken, $userId, 'drive/v3/files', $params);
+		if (isset($result['error'])) {
+			return $result;
+		}
+		foreach ($result['files'] as $fileItem) {
+			$totalNumber++;
+			// TODO implement getfile, folder is fallback if file parent is not found
+			if ($this->getFile($accessToken, $userId, $fileItem, $directoriesById, $folder)) {
+				$nbDownloaded++;
+				if ($maxDownloadNumber && $nbDownloaded === $maxDownloadNumber) {
+					return [
+						'nbDownloaded' => $nbDownloaded,
+						'targetPath' => $targetPath,
+					];
+				}
+			}
+		}
+		while (isset($result['nextPageToken'])) {
+			$params['pageToken'] = $result['nextPageToken'];
+			$result = $this->request($accessToken, $userId, 'drive/v3/files', $params);
+			if (isset($result['error'])) {
+				return $result;
+			}
+			foreach ($result['files'] as $dir) {
+				$totalNumber++;
+				if ($this->getFile($accessToken, $userId, $photo, $)) {
+					$nbDownloaded++;
+					if ($maxDownloadNumber && $nbDownloaded === $maxDownloadNumber) {
+						return [
+							'nbDownloaded' => $nbDownloaded,
+							'targetPath' => $targetPath,
+						];
+					}
+				}
+			}
+		}
+
+		return [
+			'nbDownloaded' => $nbDownloaded,
+			'targetPath' => $targetPath,
+			'finished' => true,
+			'total' => $totalNumber,
+		];
+	}
+
+	/**
+	 * recursive directory creation
+	 */
+	private function createDirsUnder(array &$directoriesById, Node $currentFolder, string $currentFolderId = ''): bool {
+		foreach ($directoriesById as $id => $dir) {
+			$parentId = $dir['parent'];
+			// create dir if we are on top OR if its parent is current dir
+			if ( ($currentFolderId === '' && !array_key_exists($parentId, $directoriesById))
+				|| $parentId === $currentFolderId) {
+				$name = $dir['name'];
+				if (!$currentFolder->nodeExists($name)) {
+					$newDir = $currentFolder->newFolder($name);
+				} else {
+					$newDir = $currentFolder->get($name);
+					if ($newDir->getType() !== FileInfo::TYPE_FOLDER) {
+						return false;
+					}
+				}
+				$directoriesById[$id]['node'] = $newDir;
+				$success = $this->createDirsUnder($directoriesById, $newDir, $id);
+				if (!$success) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	private function getFile(string $accessToken, string $userId, array $photo, Node $albumFolder): bool {
+		$photoName = $photo['filename'];
+		if (!$albumFolder->nodeExists($photoName)) {
+			$photoUrl = $photo['baseUrl'];
+			$res = $this->simpleRequest($accessToken, $userId, $photoUrl);
+			if (!isset($res['error'])) {
+				$albumFolder->newFile($photoName, $res['content']);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * @param string $accessToken
+	 * @param string $userId
+	 * @param string $targetPath
+	 * @return array
+	 */
+	public function startImportPhotos(string $accessToken, string $userId, string $targetPath = 'GooglePhotos'): array {
 		// create root folder
 		$userFolder = $this->root->getUserFolder($userId);
 		if (!$userFolder->nodeExists($targetPath)) {
@@ -102,7 +317,7 @@ class GoogleAPIService {
 
 		$accessToken = $this->config->getUserValue($userId, Application::APP_ID, 'token', '');
 		// import by batch of 50 photos per job
-		$result = $this->importPhotos($accessToken, $userId, 'Google', 50);
+		$result = $this->importPhotos($accessToken, $userId, 'GooglePhotos', 50);
 		if (isset($result['error']) || (isset($result['finished']) && $result['finished'])) {
 			$this->config->setUserValue($userId, Application::APP_ID, 'importing_photos', '0');
 			$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_photos', '0');
@@ -110,7 +325,7 @@ class GoogleAPIService {
 			if (isset($result['finished']) && $result['finished']) {
 				$this->sendNCNotification($userId, 'import_photos_finished', [
 					'nbImported' => $result['total'],
-					'targetPath' => 'Google',
+					'targetPath' => 'GooglePhotos',
 				]);
 			}
 		} else {
@@ -125,31 +340,12 @@ class GoogleAPIService {
 	}
 
 	/**
-	 * @param string $userId
-	 * @param string $subject
-	 * @param string $params
-	 * @return void
-	 */
-	private function sendNCNotification(string $userId, string $subject, array $params): void {
-		$manager = $this->notificationManager;
-		$notification = $manager->createNotification();
-
-		$notification->setApp(Application::APP_ID)
-			->setUser($userId)
-			->setDateTime(new \DateTime())
-			->setObject('dum', 'dum')
-			->setSubject($subject, $params);
-
-		$manager->notify($notification);
-	}
-
-	/**
 	 * @param string $accessToken
 	 * @param string $userId
 	 * @param string $targetPath
 	 * @return array
 	 */
-	public function importPhotos(string $accessToken, string $userId, string $targetPath = 'Google', ?int $maxDownloadNumber = null): array {
+	public function importPhotos(string $accessToken, string $userId, string $targetPath = 'GooglePhotos', ?int $maxDownloadNumber = null): array {
 		// create root folder
 		$userFolder = $this->root->getUserFolder($userId);
 		if (!$userFolder->nodeExists($targetPath)) {
@@ -253,6 +449,25 @@ class GoogleAPIService {
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * @param string $userId
+	 * @param string $subject
+	 * @param string $params
+	 * @return void
+	 */
+	private function sendNCNotification(string $userId, string $subject, array $params): void {
+		$manager = $this->notificationManager;
+		$notification = $manager->createNotification();
+
+		$notification->setApp(Application::APP_ID)
+			->setUser($userId)
+			->setDateTime(new \DateTime())
+			->setObject('dum', 'dum')
+			->setSubject($subject, $params);
+
+		$manager->notify($notification);
 	}
 
 	/**
@@ -364,10 +579,10 @@ class GoogleAPIService {
 	 * @param string $userId
 	 * @param string $uri
 	 * @param string $key
-	 * @param ?string $newAddrBookName
+	 * @param string $newAddrBookName
 	 * @return array
 	 */
-	public function importContacts(string $accessToken, string $userId, ?string $uri, int $key, ?string $newAddrBookName): array {
+	public function importContacts(string $accessToken, string $userId, string $uri, int $key, string $newAddrBookName): array {
 		if ($key === 0) {
 			$key = $this->cdBackend->createAddressBook('principals/users/' . $userId, $newAddrBookName, []);
 		} else {
@@ -713,7 +928,7 @@ class GoogleAPIService {
 		// count files
 		$nbFiles = 0;
 		$params = [
-			'pageSize' => 2,
+			'pageSize' => 1000,
 		];
 		$result = $this->request($accessToken, $userId, 'drive/v3/files', $params);
 		if (isset($result['error']) || !isset($result['files'])) {
@@ -783,25 +998,23 @@ class GoogleAPIService {
 			$this->logger->warning('Google API error : '.$e->getMessage(), array('app' => $this->appName));
 			$response = $e->getResponse();
 			$body = (string) $response->getBody();
-			if (strpos($body, 'Request had invalid authentication credentials') !== false) {
-				// refresh token if it's invalid and we are using oauth
-				$this->logger->warning('Trying to REFRESH the access token', array('app' => $this->appName));
-				$refreshToken = $this->config->getUserValue($userId, Application::APP_ID, 'refresh_token', '');
-				$clientID = $this->config->getAppValue(Application::APP_ID, 'client_id', '');
-				$clientSecret = $this->config->getAppValue(Application::APP_ID, 'client_secret', '');
-				$result = $this->requestOAuthAccessToken([
-					'client_id' => $clientID,
-					'client_secret' => $clientSecret,
-					'grant_type' => 'refresh_token',
-					'refresh_token' => $refreshToken,
-				], 'POST');
-				if (isset($result['access_token'])) {
-					$accessToken = $result['access_token'];
-					$this->config->setUserValue($userId, Application::APP_ID, 'token', $accessToken);
-					return $this->request(
-						$accessToken, $userId, $endPoint, $params, $method, $baseUrl
-					);
-				}
+			// always try to refresh token if it's invalid
+			$this->logger->warning('Trying to REFRESH the access token', array('app' => $this->appName));
+			$refreshToken = $this->config->getUserValue($userId, Application::APP_ID, 'refresh_token', '');
+			$clientID = $this->config->getAppValue(Application::APP_ID, 'client_id', '');
+			$clientSecret = $this->config->getAppValue(Application::APP_ID, 'client_secret', '');
+			$result = $this->requestOAuthAccessToken([
+				'client_id' => $clientID,
+				'client_secret' => $clientSecret,
+				'grant_type' => 'refresh_token',
+				'refresh_token' => $refreshToken,
+			], 'POST');
+			if (isset($result['access_token'])) {
+				$accessToken = $result['access_token'];
+				$this->config->setUserValue($userId, Application::APP_ID, 'token', $accessToken);
+				return $this->request(
+					$accessToken, $userId, $endPoint, $params, $method, $baseUrl
+				);
 			}
 			return ['error' => $e->getMessage()];
 		}

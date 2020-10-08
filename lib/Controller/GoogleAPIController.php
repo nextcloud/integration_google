@@ -85,6 +85,23 @@ class GoogleAPIController extends Controller {
 	 *
 	 * @return DataResponse
 	 */
+	public function getImportDriveInformation(): DataResponse {
+		if ($this->accessToken === '') {
+			return new DataResponse(null, 400);
+		}
+		$response = new DataResponse([
+			'importing_drive' => $this->config->getUserValue($this->userId, Application::APP_ID, 'importing_drive', '') === '1',
+			'last_drive_import_timestamp' => (int) $this->config->getUserValue($this->userId, Application::APP_ID, 'last_drive_import_timestamp', '0'),
+			'nb_imported_files' => (int) $this->config->getUserValue($this->userId, Application::APP_ID, 'nb_imported_files', '0'),
+		]);
+		return $response;
+	}
+
+	/**
+	 * @NoAdminRequired
+	 *
+	 * @return DataResponse
+	 */
 	public function getPhotoNumber(): DataResponse {
 		if ($this->accessToken === '') {
 			return new DataResponse(null, 400);
@@ -155,15 +172,33 @@ class GoogleAPIController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 *
-	 *
 	 * @param string $targetPath
 	 * @return DataResponse
 	 */
-	public function importPhotos(string $targetPath = 'Google'): DataResponse {
+	public function importPhotos(string $targetPath = 'GooglePhotos'): DataResponse {
 		if ($this->accessToken === '') {
 			return new DataResponse(null, 400);
 		}
 		$result = $this->googleAPIService->startImportPhotos($this->accessToken, $this->userId, $targetPath);
+		if (isset($result['error'])) {
+			$response = new DataResponse($result['error'], 401);
+		} else {
+			$response = new DataResponse($result);
+		}
+		return $response;
+	}
+
+	/**
+	 * @NoAdminRequired
+	 *
+	 * @param string $targetPath
+	 * @return DataResponse
+	 */
+	public function importDrive(string $targetPath = 'GoogleDrive'): DataResponse {
+		if ($this->accessToken === '') {
+			return new DataResponse(null, 400);
+		}
+		$result = $this->googleAPIService->startImportDrive($this->accessToken, $this->userId, $targetPath);
 		if (isset($result['error'])) {
 			$response = new DataResponse($result['error'], 401);
 		} else {
@@ -196,12 +231,12 @@ class GoogleAPIController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 *
-	 * @param ?string $uri
+	 * @param string $uri
 	 * @param int $key
-	 * @param ?string $newAddressBookName
+	 * @param string $newAddressBookName
 	 * @return DataResponse
 	 */
-	public function importContacts(?string $uri = '', int $key, ?string $newAddressBookName = ''): DataResponse {
+	public function importContacts(string $uri = '', int $key, string $newAddressBookName = ''): DataResponse {
 		if ($this->accessToken === '') {
 			return new DataResponse(null, 400);
 		}

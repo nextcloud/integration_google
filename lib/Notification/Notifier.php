@@ -96,6 +96,17 @@ class Notifier implements INotifier {
 				->setLink($this->url->linkToRouteAbsolute('files.view.index', ['dir' => $targetPath]));
 			return $notification;
 
+		case 'import_drive_finished':
+			$p = $notification->getSubjectParameters();
+			$nbImported = (int) ($p['nbImported'] ?? 0);
+			$targetPath = $p['targetPath'];
+			$content = $l->n('%s file was imported from Google Drive.', '%s files were imported from Google Drive.', $nbImported, [$nbImported]);
+
+			$notification->setParsedSubject($content)
+				->setIcon($this->url->getAbsoluteURL($this->url->imagePath(Application::APP_ID, 'app-dark.svg')))
+				->setLink($this->url->linkToRouteAbsolute('files.view.index', ['dir' => $targetPath]));
+			return $notification;
+
 		default:
 			// Unknown subject => Unknown notification => throw
 			throw new \InvalidArgumentException();

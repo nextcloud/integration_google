@@ -23,5 +23,7 @@ return [
         ['name' => 'googleAPI#importContacts', 'url' => '/import-contacts', 'verb' => 'GET'],
         ['name' => 'googleAPI#importPhotos', 'url' => '/import-photos', 'verb' => 'GET'],
         ['name' => 'googleAPI#getImportPhotosInformation', 'url' => '/import-photos-info', 'verb' => 'GET'],
+        ['name' => 'googleAPI#importDrive', 'url' => '/import-files', 'verb' => 'GET'],
+        ['name' => 'googleAPI#getImportDriveInformation', 'url' => '/import-files-info', 'verb' => 'GET'],
     ]
 ];
