@@ -43,7 +43,6 @@ OC.L10N.register(
     "Photos" : "Photos",
     "{amount} Google photos (>{formSize})" : "{amount} photos Google (>{formSize})",
     "Import Google photos" : "Importer les photos Google",
-    "{amount} photos imported" : "{amount} photos importées",
     "Cancel photo import" : "Annuler l'import de photos",
     "Successfully connected to Google!" : "Connexion à Google réussie !",
     "Google connection error:" : "Erreur de connexion à Google :",

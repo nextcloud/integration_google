@@ -43,7 +43,6 @@
     "{amount} Google photos (>{formSize})" : "{amount} Google fotek (>{formSize})",
     "Import Google photos" : "Importovat Google fotky",
     "Your Google photo collection size is estimated to be bigger than your remaining space left ({formSpace})" : "Velikost sbírka Google fotek je odhadována na více, než vám zbývá volného místa ({formSpace})",
-    "{amount} photos imported" : "importováno {amount} fotek",
     "Cancel photo import" : "Zrušit import fotek",
     "Photo import process will begin soon" : "Proces importu fotek brzy začne",
     "Successfully connected to Google!" : "Úspěšně spojeno s Google!",

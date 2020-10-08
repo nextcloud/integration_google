@@ -45,7 +45,6 @@ OC.L10N.register(
     "{amount} Google photos (>{formSize})" : "{amount} zdjęcia Google (>{formSize})",
     "Import Google photos" : "Importuj zdjęcia Google",
     "Your Google photo collection size is estimated to be bigger than your remaining space left ({formSpace})" : "Szacuje się, że rozmiar Twojej kolekcji zdjęć Google jest większy niż pozostałe wolne miejsce ({formSpace})",
-    "{amount} photos imported" : "Zaimportowano {amount} zdjęć",
     "Cancel photo import" : "Anuluj importowanie zdjęć",
     "Photo import process will begin soon" : "Wkrótce rozpocznie się proces importowania zdjęć",
     "Successfully connected to Google!" : "Pomyślnie połączono z Google!",
