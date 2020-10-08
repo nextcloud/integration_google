@@ -103,7 +103,7 @@ class GoogleAPIService {
 
 		$accessToken = $this->config->getUserValue($userId, Application::APP_ID, 'token', '');
 		// import batch of files
-		$result = $this->importFiles($accessToken, $userId, 'GoogleDrive', 2);
+		$result = $this->importFiles($accessToken, $userId, 'GoogleDrive', 50);
 		if (isset($result['error']) || (isset($result['finished']) && $result['finished'])) {
 			$this->config->setUserValue($userId, Application::APP_ID, 'importing_drive', '0');
 			$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_files', '0');
@@ -129,6 +129,7 @@ class GoogleAPIService {
 	 * @param string $accessToken
 	 * @param string $userId
 	 * @param string $targetPath
+	 * @param ?int $maxDownloadNumber
 	 * @return array
 	 */
 	public function importFiles(string $accessToken, string $userId, string $targetPath = 'GoogleDrive', ?int $maxDownloadNumber = null): array {
@@ -172,17 +173,10 @@ class GoogleAPIService {
 				];
 			}
 		}
-		file_put_contents('/tmp/aa', json_encode($directoriesById));
 		// create top dirs
 		if (!$this->createDirsUnder($directoriesById, $folder)) {
 			return ['error' => 'Impossible to create Drive directories'];
 		}
-		return [
-			'nbDownloaded' => $nbDownloaded,
-			'targetPath' => $targetPath,
-			'finished' => true,
-			'total' => $totalNumber,
-		];
 
 		// get files
 		$nbDownloaded = 0;
@@ -199,7 +193,6 @@ class GoogleAPIService {
 		}
 		foreach ($result['files'] as $fileItem) {
 			$totalNumber++;
-			// TODO implement getfile, folder is fallback if file parent is not found
 			if ($this->getFile($accessToken, $userId, $fileItem, $directoriesById, $folder)) {
 				$nbDownloaded++;
 				if ($maxDownloadNumber && $nbDownloaded === $maxDownloadNumber) {
@@ -216,9 +209,9 @@ class GoogleAPIService {
 			if (isset($result['error'])) {
 				return $result;
 			}
-			foreach ($result['files'] as $dir) {
+			foreach ($result['files'] as $fileItem) {
 				$totalNumber++;
-				if ($this->getFile($accessToken, $userId, $photo, $)) {
+				if ($this->getFile($accessToken, $userId, $fileItem, $directoriesById, $folder)) {
 					$nbDownloaded++;
 					if ($maxDownloadNumber && $nbDownloaded === $maxDownloadNumber) {
 						return [
@@ -240,6 +233,12 @@ class GoogleAPIService {
 
 	/**
 	 * recursive directory creation
+	 * associate the folder node to directories on the fly
+	 *
+	 * @param array &$directoriesById
+	 * @param Node $currentFolder
+	 * @param string $currentFolder
+	 * @return bool success
 	 */
 	private function createDirsUnder(array &$directoriesById, Node $currentFolder, string $currentFolderId = ''): bool {
 		foreach ($directoriesById as $id => $dir) {
@@ -266,13 +265,26 @@ class GoogleAPIService {
 		return true;
 	}
 
-	private function getFile(string $accessToken, string $userId, array $photo, Node $albumFolder): bool {
-		$photoName = $photo['filename'];
-		if (!$albumFolder->nodeExists($photoName)) {
-			$photoUrl = $photo['baseUrl'];
-			$res = $this->simpleRequest($accessToken, $userId, $photoUrl);
+	/**
+	 * @param string $accessToken
+	 * @param string $userId
+	 * @param array $fileItem
+	 * @param array $directoriesById
+	 * @param Node $topFolder
+	 * @return bool success
+	 */
+	private function getFile(string $accessToken, string $userId, array $fileItem, array $directoriesById, Node $topFolder): bool {
+		$fileName = $fileItem['name'];
+		if (isset($fileItem['parents']) && count($fileItem['parents']) > 0 && array_key_exists($fileItem['parents'][0], $directoriesById)) {
+			$saveFolder = $directoriesById[$fileItem['parents'][0]]['node'];
+		} else {
+			$saveFolder = $topFolder;
+		}
+		if (!$saveFolder->nodeExists($fileName)) {
+			$fileUrl = 'https://www.googleapis.com/drive/v3/files/' . $fileItem['id'] . '?alt=media';
+			$res = $this->simpleRequest($accessToken, $userId, $fileUrl);
 			if (!isset($res['error'])) {
-				$albumFolder->newFile($photoName, $res['content']);
+				$saveFolder->newFile($fileName, $res['content']);
 				return true;
 			}
 		}
@@ -438,6 +450,13 @@ class GoogleAPIService {
 		];
 	}
 
+	/**
+	 * @param string $accessToken
+	 * @param string $userId
+	 * @param array $photo
+	 * @param Node $albumFolder
+	 * @return bool success
+	 */
 	private function getPhoto(string $accessToken, string $userId, array $photo, Node $albumFolder): bool {
 		$photoName = $photo['filename'];
 		if (!$albumFolder->nodeExists($photoName)) {
@@ -740,23 +759,11 @@ class GoogleAPIService {
 	 * @return array
 	 */
 	public function getCalendarList(string $accessToken, string $userId): array {
-		//$events = $this->getCalendarEvents($accessToken, $userId, 'ju-ggl@cassio.pe');
-		//$ee = [];
-		//foreach ($events as $e) {
-		//	array_push($ee, $e);
-		//}
-		//return $ee;
-
 		$params = [];
 		$result = $this->request($accessToken, $userId, 'calendar/v3/users/me/calendarList');
 		if (isset($result['error']) || !isset($result['items'])) {
 			return $result;
 		}
-		// ical url is https://calendar.google.com/calendar/ical/br3sqt6mgpunkh2dr2p8p5obso%40group.calendar.google.com/private-640b335ca58effb904dd4570b50096eb/basic.ics
-		// https://calendar.google.com/calendar/ical/ID/../basic.ics
-		// in ->items : list
-		// ID : URL encoded item['id']
-		// !! problem is there is no way to get the 'private-...' string except with the web interface :-)
 		return $result['items'];
 	}
 
@@ -929,6 +936,7 @@ class GoogleAPIService {
 		$nbFiles = 0;
 		$params = [
 			'pageSize' => 1000,
+			'q' => "mimeType!='application/vnd.google-apps.folder'",
 		];
 		$result = $this->request($accessToken, $userId, 'drive/v3/files', $params);
 		if (isset($result['error']) || !isset($result['files'])) {

@@ -261,7 +261,7 @@ export default {
 			this.getNbGooglePhotos()
 			this.getPhotoImportValues()
 			this.getGoogleDriveInfo()
-			// this.getDriveImportValues()
+			this.getDriveImportValues()
 		}
 	},
 
