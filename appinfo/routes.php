@@ -15,6 +15,7 @@ return [
         ['name' => 'config#setConfig', 'url' => '/config', 'verb' => 'PUT'],
         ['name' => 'config#setAdminConfig', 'url' => '/admin-config', 'verb' => 'PUT'],
         ['name' => 'config#getLocalAddressBooks', 'url' => '/local-addressbooks', 'verb' => 'GET'],
+        ['name' => 'googleAPI#getDriveSize', 'url' => '/drive-size', 'verb' => 'GET'],
         ['name' => 'googleAPI#getCalendarList', 'url' => '/calendars', 'verb' => 'GET'],
         ['name' => 'googleAPI#getContactNumber', 'url' => '/contact-number', 'verb' => 'GET'],
         ['name' => 'googleAPI#getPhotoNumber', 'url' => '/photo-number', 'verb' => 'GET'],

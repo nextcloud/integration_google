@@ -137,6 +137,24 @@ class GoogleAPIController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 *
+	 * @return DataResponse
+	 */
+	public function getDriveSize(): DataResponse {
+		if ($this->accessToken === '') {
+			return new DataResponse(null, 400);
+		}
+		$result = $this->googleAPIService->getDriveSize($this->accessToken, $this->userId);
+		if (isset($result['error'])) {
+			$response = new DataResponse($result['error'], 401);
+		} else {
+			$response = new DataResponse($result);
+		}
+		return $response;
+	}
+
+	/**
+	 * @NoAdminRequired
+	 *
 	 *
 	 * @param string $targetPath
 	 * @return DataResponse

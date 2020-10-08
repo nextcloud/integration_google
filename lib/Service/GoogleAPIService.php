@@ -534,6 +534,9 @@ class GoogleAPIService {
 
 		$params = [];
 		$result = $this->request($accessToken, $userId, 'calendar/v3/users/me/calendarList');
+		if (isset($result['error']) || !isset($result['items'])) {
+			return $result;
+		}
 		// ical url is https://calendar.google.com/calendar/ical/br3sqt6mgpunkh2dr2p8p5obso%40group.calendar.google.com/private-640b335ca58effb904dd4570b50096eb/basic.ics
 		// https://calendar.google.com/calendar/ical/ID/../basic.ics
 		// in ->items : list
@@ -671,7 +674,7 @@ class GoogleAPIService {
 		$params = [
 			'maxResults' => 100,
 		];
-		$result = $this->request($accessToken, $userId, 'calendar/v3/calendars/'.$calId.'/events');
+		$result = $this->request($accessToken, $userId, 'calendar/v3/calendars/'.$calId.'/events', $params);
 		if (isset($result['error'])) {
 			return $result;
 		}
@@ -680,7 +683,7 @@ class GoogleAPIService {
 		}
 		while (isset($result['nextPageToken'])) {
 			$params['pageToken'] = $result['nextPageToken'];
-			$result = $this->request($accessToken, $userId, 'calendar/v3/calendars/'.$calId.'/events');
+			$result = $this->request($accessToken, $userId, 'calendar/v3/calendars/'.$calId.'/events', $params);
 			if (isset($result['error'])) {
 				return $result;
 			}
@@ -691,6 +694,43 @@ class GoogleAPIService {
 		return [];
 	}
 
+	/**
+	 * @param string $accessToken
+	 * @param string $userId
+	 * @return array
+	 */
+	public function getDriveSize(string $accessToken, string $userId): array {
+		$params = [
+			'fields' => '*',
+		];
+		$result = $this->request($accessToken, $userId, 'drive/v3/about', $params);
+		if (isset($result['error']) || !isset($result['storageQuota']) || !isset($result['storageQuota']['usageInDrive'])) {
+			return $result;
+		}
+		$info = [
+			'usageInDrive' => $result['storageQuota']['usageInDrive']
+		];
+		// count files
+		$nbFiles = 0;
+		$params = [
+			'pageSize' => 2,
+		];
+		$result = $this->request($accessToken, $userId, 'drive/v3/files', $params);
+		if (isset($result['error']) || !isset($result['files'])) {
+			return $result;
+		}
+		$nbFiles += count($result['files']);
+		while (isset($result['nextPageToken'])) {
+			$params['pageToken'] = $result['nextPageToken'];
+			$result = $this->request($accessToken, $userId, 'drive/v3/files', $params);
+			if (isset($result['error']) || !isset($result['files'])) {
+				return $result;
+			}
+			$nbFiles += count($result['files']);
+		}
+		$info['nbFiles'] = $nbFiles;
+		return $info;
+	}
 	/**
 	 * Make the HTTP request
 	 * @param string $accessToken

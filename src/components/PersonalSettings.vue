@@ -84,15 +84,15 @@
 					<h3>{{ t('integration_google', 'Photos') }}</h3>
 					<label>
 						<span class="icon icon-toggle-pictures" />
-						{{ t('integration_google', '{amount} Google photos (>{formSize})', { amount: nbPhotos, formSize: humanFileSize(estimatedPhotoCollectionSize, true) }) }}
+						{{ n('integration_google', '{nbPhotos} Google photo (>{formSize})', '{nbPhotos} Google photos (>{formSize})', nbPhotos, { nbPhotos, formSize: humanFileSize(estimatedPhotoCollectionSize, true) }) }}
 					</label>
-					<button v-if="enoughSpace && !importingPhotos"
+					<button v-if="enoughSpaceForPhotos && !importingPhotos"
 						id="google-import-photos"
 						@click="onImportPhotos">
 						<span class="icon icon-picture" />
 						{{ t('integration_google', 'Import Google photos') }}
 					</button>
-					<span v-else-if="!enoughSpace">
+					<span v-else-if="!enoughSpaceForPhotos">
 						{{ t('integration_google', 'Your Google photo collection size is estimated to be bigger than your remaining space left ({formSpace})', { formSpace: humanFileSize(freeSpace) }) }}
 					</span>
 					<div v-else>
@@ -104,6 +104,35 @@
 						<button @click="onCancelPhotoImport">
 							<span class="icon icon-close" />
 							{{ t('integration_google', 'Cancel photo import') }}
+						</button>
+					</div>
+				</div>
+				<br>
+				<div v-if="nbFiles > 0"
+					id="google-drive">
+					<h3>{{ t('integration_google', 'Drive') }}</h3>
+					<label>
+						<span class="icon icon-folder" />
+						{{ n('integration_google', '{nbFiles} file in Google drive ({formSize})', '{nbFiles} files in Google drive ({formSize})', nbFiles, { nbFiles, formSize: humanFileSize(driveSize, true) }) }}
+					</label>
+					<button v-if="enoughSpaceForDrive && !importingDrive"
+						id="google-import-files"
+						@click="onImportDrive">
+						<span class="icon icon-files-dark" />
+						{{ t('integration_google', 'Import Google drive') }}
+					</button>
+					<span v-else-if="!enoughSpaceForDrive">
+						{{ t('integration_google', 'Your Google drive is bigger than your remaining space left ({formSpace})', { formSpace: humanFileSize(freeSpace) }) }}
+					</span>
+					<div v-else>
+						<br>
+						{{ n('integration_google', '{amount} files imported ({progress}%)', '{amount} files imported ({progress}%)', nbImportedFiles, { amount: nbImportedFiles, progress: driveImportProgress }) }}
+						<br>
+						{{ lastDriveImportDate }}
+						<br>
+						<button @click="onCancelDriveImport">
+							<span class="icon icon-close" />
+							{{ t('integration_google', 'Cancel drive import') }}
 						</button>
 					</div>
 				</div>
@@ -132,20 +161,31 @@ export default {
 	data() {
 		return {
 			state: loadState('integration_google', 'user-config'),
+			// calendars
 			calendars: [],
+			importingCalendar: {},
+			// contacts
 			addressbooks: [],
 			nbContacts: 0,
-			nbPhotos: 0,
-			freeSpace: 0,
 			showAddressBooks: false,
 			selectedAddressBook: -1,
 			newAddressBookName: 'Google-contacts',
 			importingContacts: false,
-			importingCalendar: {},
+			// photos
+			nbPhotos: 0,
 			importingPhotos: false,
 			lastPhotoImportTimestamp: 0,
 			nbImportedPhotos: 0,
 			photoImportLoop: null,
+			// drive
+			nbFiles: 0,
+			driveSize: 0,
+			importingDrive: false,
+			lastDriveImportTimestamp: 0,
+			nbImportedFiles: 0,
+			driveImportLoop: null,
+			// local
+			freeSpace: 0,
 		}
 	},
 
@@ -171,7 +211,7 @@ export default {
 			// we estimate with an average 1 MB size per photo
 			return this.nbPhotos * 1000000
 		},
-		enoughSpace() {
+		enoughSpaceForPhotos() {
 			return this.nbPhotos === 0 || this.estimatedPhotoCollectionSize < this.freeSpace
 		},
 		lastPhotoImportDate() {
@@ -182,6 +222,19 @@ export default {
 		photoImportProgress() {
 			return this.nbPhotos > 0 && this.nbImportedPhotos > 0
 				? parseInt(this.nbImportedPhotos / this.nbPhotos * 100)
+				: 0
+		},
+		enoughSpaceForDrive() {
+			return this.driveSize === 0 || this.driveSize < this.freeSpace
+		},
+		lastDriveImportDate() {
+			return this.lastDriveImportTimestamp !== 0
+				? t('integration_google', 'Last drive import job at {date}', { date: moment.unix(this.lastDriveImportTimestamp).format('LLL') })
+				: t('integration_google', 'Drive import process will begin soon')
+		},
+		driveImportProgress() {
+			return this.driveSize > 0 && this.nbImportedFiles > 0
+				? parseInt(this.nbImportedFiles / this.nbFiles * 100)
 				: 0
 		},
 	},
@@ -207,6 +260,8 @@ export default {
 			this.getNbGoogleContacts()
 			this.getNbGooglePhotos()
 			this.getPhotoImportValues()
+			this.getGoogleDriveInfo()
+			// this.getDriveImportValues()
 		}
 	},
 
@@ -252,6 +307,7 @@ export default {
 				'https://www.googleapis.com/auth/calendar.events.readonly',
 				'https://www.googleapis.com/auth/contacts.readonly',
 				'https://www.googleapis.com/auth/photoslibrary.readonly',
+				'https://www.googleapis.com/auth/drive.readonly',
 			]
 			const requestUrl = 'https://accounts.google.com/o/oauth2/v2/auth?'
 				+ 'client_id=' + encodeURIComponent(this.state.client_id)
@@ -275,6 +331,24 @@ export default {
 				.catch((error) => {
 					showError(
 						t('integration_google', 'Failed to save Google OAuth state')
+						+ ': ' + error.response.request.responseText
+					)
+				})
+				.then(() => {
+				})
+		},
+		getGoogleDriveInfo() {
+			const url = generateUrl('/apps/integration_google/drive-size')
+			axios.get(url)
+				.then((response) => {
+					if (response.data && response.data.usageInDrive && response.data.nbFiles) {
+						this.driveSize = response.data.usageInDrive
+						this.nbFiles = response.data.nbFiles
+					}
+				})
+				.catch((error) => {
+					showError(
+						t('integration_google', 'Failed to get drive information')
 						+ ': ' + error.response.request.responseText
 					)
 				})
@@ -483,6 +557,51 @@ export default {
 				.then(() => {
 				})
 		},
+		onImportDrive() {
+			const req = {
+				params: {
+					path: null,
+				},
+			}
+			const url = generateUrl('/apps/integration_google/import-files')
+			axios.get(url, req)
+				.then((response) => {
+					const targetPath = response.data.targetPath
+					showSuccess(
+						t('integration_google', 'Starting importing files in {targetPath} directory', { targetPath })
+					)
+					this.getDriveImportValues()
+					this.driveImportLoop = setInterval(() => this.getDriveImportValues(), 10000)
+				})
+				.catch((error) => {
+					showError(
+						t('integration_google', 'Failed to start importing Google drive')
+						+ ': ' + error.response.request.responseText
+					)
+				})
+				.then(() => {
+				})
+		},
+		onCancelDriveImport() {
+			this.importingDrive = false
+			clearInterval(this.driveImportLoop)
+			const req = {
+				values: {
+					importing_drive: '0',
+					last_drive_import_timestamp: '0',
+					nb_imported_files: '0',
+				},
+			}
+			const url = generateUrl('/apps/integration_google/config')
+			axios.put(url, req)
+				.then((response) => {
+				})
+				.catch((error) => {
+					console.debug(error)
+				})
+				.then(() => {
+				})
+		},
 		humanFileSize(bytes, approx = false, si = false, dp = 1) {
 			const thresh = si ? 1000 : 1024
 
@@ -550,11 +669,13 @@ body.theme--dark .icon-google-settings {
 		font-weight: bold;
 	}
 
+	#google-drive > button,
 	#google-photos > button,
 	#google-contacts > button {
 		width: 300px;
 	}
 
+	#google-drive > label,
 	#google-photos > label,
 	#google-contacts > label {
 		width: 300px;
