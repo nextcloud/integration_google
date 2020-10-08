@@ -97,7 +97,7 @@
 					</span>
 					<div v-else>
 						<br>
-						{{ t('integration_google', '{amount} photos imported ({progress}%)', { amount: nbImportedPhotos, progress: photoImportProgress }) }}
+						{{ n('integration_google', '{amount} photo imported ({progress}%)', '{amount} photos imported ({progress}%)', nbImportedPhotos, { amount: nbImportedPhotos, progress: photoImportProgress }) }}
 						<br>
 						{{ lastPhotoImportDate }}
 						<br>
