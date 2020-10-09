@@ -132,7 +132,7 @@
 						<br>
 						<button @click="onCancelDriveImport">
 							<span class="icon icon-close" />
-							{{ t('integration_google', 'Cancel Drive import') }}
+							{{ t('integration_google', 'Cancel Google Drive import') }}
 						</button>
 					</div>
 				</div>
@@ -229,8 +229,8 @@ export default {
 		},
 		lastDriveImportDate() {
 			return this.lastDriveImportTimestamp !== 0
-				? t('integration_google', 'Last Drive import job at {date}', { date: moment.unix(this.lastDriveImportTimestamp).format('LLL') })
-				: t('integration_google', 'Drive import process will begin soon')
+				? t('integration_google', 'Last Google Drive import job at {date}', { date: moment.unix(this.lastDriveImportTimestamp).format('LLL') })
+				: t('integration_google', 'Google Drive import process will begin soon')
 		},
 		driveImportProgress() {
 			return this.driveSize > 0 && this.nbImportedFiles > 0
@@ -348,7 +348,7 @@ export default {
 				})
 				.catch((error) => {
 					showError(
-						t('integration_google', 'Failed to get drive information')
+						t('integration_google', 'Failed to get Google Drive information')
 						+ ': ' + error.response.request.responseText
 					)
 				})
@@ -594,7 +594,7 @@ export default {
 				})
 				.catch((error) => {
 					showError(
-						t('integration_google', 'Failed to start importing Google drive')
+						t('integration_google', 'Failed to start importing Google Drive')
 						+ ': ' + error.response.request.responseText
 					)
 				})
