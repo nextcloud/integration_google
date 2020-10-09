@@ -600,12 +600,12 @@ class GoogleAPIService {
 	/**
 	 * @param string $accessToken
 	 * @param string $userId
-	 * @param string $uri
+	 * @param ?string $uri
 	 * @param string $key
-	 * @param string $newAddrBookName
+	 * @param ?string $newAddrBookName
 	 * @return array
 	 */
-	public function importContacts(string $accessToken, string $userId, string $uri, int $key, string $newAddrBookName): array {
+	public function importContacts(string $accessToken, string $userId, ?string $uri, int $key, ?string $newAddrBookName): array {
 		if ($key === 0) {
 			$key = $this->cdBackend->createAddressBook('principals/users/' . $userId, $newAddrBookName, []);
 		} else {

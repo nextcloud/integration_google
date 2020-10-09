@@ -229,12 +229,12 @@ class GoogleAPIController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 *
-	 * @param string $uri
+	 * @param ?string $uri
 	 * @param int $key
-	 * @param string $newAddressBookName
+	 * @param ?string $newAddressBookName
 	 * @return DataResponse
 	 */
-	public function importContacts(string $uri = '', int $key, string $newAddressBookName = ''): DataResponse {
+	public function importContacts(?string $uri = '', int $key, ?string $newAddressBookName = ''): DataResponse {
 		if ($this->accessToken === '') {
 			return new DataResponse(null, 400);
 		}
