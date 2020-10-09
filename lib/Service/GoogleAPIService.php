@@ -183,8 +183,8 @@ class GoogleAPIService {
 
 		// get files
 		$info = $this->getDriveSize($accessToken, $userId);
-		if (isset($result['error'])) {
-			return $result;
+		if (isset($info['error'])) {
+			return $info;
 		}
 		$nbFilesOnDrive = $info['nbFiles'];
 		$downloadedSize = 0;
@@ -347,16 +347,16 @@ class GoogleAPIService {
 		}
 
 		$accessToken = $this->config->getUserValue($userId, Application::APP_ID, 'token', '');
-		// import by batch of 50 photos per job
 		$targetPath = $this->l10n->t('Google Photos import');
-		$result = $this->importPhotos($accessToken, $userId, $targetPath, 50);
+		// import photos by batch of 500 Mo
+		$result = $this->importPhotos($accessToken, $userId, $targetPath, 500000000);
 		if (isset($result['error']) || (isset($result['finished']) && $result['finished'])) {
 			$this->config->setUserValue($userId, Application::APP_ID, 'importing_photos', '0');
 			$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_photos', '0');
 			$this->config->setUserValue($userId, Application::APP_ID, 'last_import_timestamp', '0');
 			if (isset($result['finished']) && $result['finished']) {
 				$this->sendNCNotification($userId, 'import_photos_finished', [
-					'nbImported' => $result['total'],
+					'nbImported' => $result['totalSeen'],
 					'targetPath' => $targetPath,
 				]);
 			}
@@ -377,7 +377,7 @@ class GoogleAPIService {
 	 * @param string $targetPath
 	 * @return array
 	 */
-	public function importPhotos(string $accessToken, string $userId, string $targetPath, ?int $maxDownloadNumber = null): array {
+	public function importPhotos(string $accessToken, string $userId, string $targetPath, ?int $maxDownloadSize = null): array {
 		// create root folder
 		$userFolder = $this->root->getUserFolder($userId);
 		if (!$userFolder->nodeExists($targetPath)) {
@@ -411,8 +411,16 @@ class GoogleAPIService {
 			}
 		}
 
+		// get the photos
+		$info = $this->getPhotoNumber($accessToken, $userId);
+		if (isset($info['error'])) {
+			return $info;
+		}
+
+		$nbPhotosOnGoogle = $info['nbPhotos'];
+		$downloadedSize = 0;
 		$nbDownloaded = 0;
-		$totalNumber = 0;
+		$totalSeenNumber = 0;
 		foreach ($albums as $album) {
 			$albumId = $album['id'];
 			$albumName = $album['title'];
@@ -430,14 +438,21 @@ class GoogleAPIService {
 				'albumId' => $albumId,
 			];
 			$result = $this->request($accessToken, $userId, 'v1/mediaItems:search', $params, 'POST', 'https://photoslibrary.googleapis.com/');
+			if (isset($result['error'])) {
+				return $result;
+			}
 			foreach ($result['mediaItems'] as $photo) {
-				$totalNumber++;
-				if ($this->getPhoto($accessToken, $userId, $photo, $albumFolder)) {
+				$totalSeenNumber++;
+				$size = $this->getPhoto($accessToken, $userId, $photo, $albumFolder);
+				if (!is_null($size)) {
 					$nbDownloaded++;
-					if ($maxDownloadNumber && $nbDownloaded === $maxDownloadNumber) {
+					$downloadedSize += $size;
+					if ($maxDownloadSize && $downloadedSize > $maxDownloadSize) {
 						return [
 							'nbDownloaded' => $nbDownloaded,
 							'targetPath' => $targetPath,
+							'finished' => ($totalSeenNumber >= $nbPhotosOnGoogle),
+							'totalSeen' => $totalSeenNumber,
 						];
 					}
 				}
@@ -449,13 +464,17 @@ class GoogleAPIService {
 					return $result;
 				}
 				foreach ($result['mediaItems'] as $photo) {
-					$totalNumber++;
-					if ($this->getPhoto($accessToken, $userId, $photo, $albumFolder)) {
+					$totalSeenNumber++;
+					$size = $this->getPhoto($accessToken, $userId, $photo, $albumFolder);
+					if (!is_null($size)) {
 						$nbDownloaded++;
-						if ($maxDownloadNumber && $nbDownloaded === $maxDownloadNumber) {
+						$downloadedSize += $size;
+						if ($maxDownloadSize && $downloadedSize > $maxDownloadSize) {
 							return [
 								'nbDownloaded' => $nbDownloaded,
 								'targetPath' => $targetPath,
+								'finished' => ($totalSeenNumber >= $nbPhotosOnGoogle),
+								'totalSeen' => $totalSeenNumber,
 							];
 						}
 					}
@@ -466,7 +485,7 @@ class GoogleAPIService {
 			'nbDownloaded' => $nbDownloaded,
 			'targetPath' => $targetPath,
 			'finished' => true,
-			'total' => $totalNumber,
+			'totalSeen' => $totalSeenNumber,
 		];
 	}
 
@@ -475,19 +494,19 @@ class GoogleAPIService {
 	 * @param string $userId
 	 * @param array $photo
 	 * @param Node $albumFolder
-	 * @return bool success
+	 * @return ?int downloaded size, null if already existing
 	 */
-	private function getPhoto(string $accessToken, string $userId, array $photo, Node $albumFolder): bool {
+	private function getPhoto(string $accessToken, string $userId, array $photo, Node $albumFolder): ?int {
 		$photoName = $photo['filename'];
 		if (!$albumFolder->nodeExists($photoName)) {
 			$photoUrl = $photo['baseUrl'];
 			$res = $this->simpleRequest($accessToken, $userId, $photoUrl);
 			if (!isset($res['error'])) {
-				$albumFolder->newFile($photoName, $res['content']);
-				return true;
+				$savedFile = $albumFolder->newFile($photoName, $res['content']);
+				return $savedFile->getSize();
 			}
 		}
-		return false;
+		return null;
 	}
 
 	/**
