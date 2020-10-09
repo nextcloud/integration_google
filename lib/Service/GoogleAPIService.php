@@ -71,7 +71,7 @@ class GoogleAPIService {
 	 * @param string $targetPath
 	 * @return array
 	 */
-	public function startImportDrive(string $accessToken, string $userId, string $targetPath = 'GoogleDrive'): array {
+	public function startImportDrive(string $accessToken, string $userId, string $targetPath = 'Google Drive import'): array {
 		// create root folder
 		$userFolder = $this->root->getUserFolder($userId);
 		if (!$userFolder->nodeExists($targetPath)) {
@@ -103,7 +103,7 @@ class GoogleAPIService {
 
 		$accessToken = $this->config->getUserValue($userId, Application::APP_ID, 'token', '');
 		// import batch of files
-		$result = $this->importFiles($accessToken, $userId, 'GoogleDrive', 50);
+		$result = $this->importFiles($accessToken, $userId, 'Google Drive import', 50);
 		if (isset($result['error']) || (isset($result['finished']) && $result['finished'])) {
 			$this->config->setUserValue($userId, Application::APP_ID, 'importing_drive', '0');
 			$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_files', '0');
@@ -111,7 +111,7 @@ class GoogleAPIService {
 			if (isset($result['finished']) && $result['finished']) {
 				$this->sendNCNotification($userId, 'import_drive_finished', [
 					'nbImported' => $result['total'],
-					'targetPath' => 'GoogleDrive',
+					'targetPath' => 'Google Drive import',
 				]);
 			}
 		} else {
@@ -132,7 +132,7 @@ class GoogleAPIService {
 	 * @param ?int $maxDownloadNumber
 	 * @return array
 	 */
-	public function importFiles(string $accessToken, string $userId, string $targetPath = 'GoogleDrive', ?int $maxDownloadNumber = null): array {
+	public function importFiles(string $accessToken, string $userId, string $targetPath = 'Google Drive import', ?int $maxDownloadNumber = null): array {
 		// create root folder
 		$userFolder = $this->root->getUserFolder($userId);
 		if (!$userFolder->nodeExists($targetPath)) {
@@ -297,7 +297,7 @@ class GoogleAPIService {
 	 * @param string $targetPath
 	 * @return array
 	 */
-	public function startImportPhotos(string $accessToken, string $userId, string $targetPath = 'GooglePhotos'): array {
+	public function startImportPhotos(string $accessToken, string $userId, string $targetPath = 'Google Photos import'): array {
 		// create root folder
 		$userFolder = $this->root->getUserFolder($userId);
 		if (!$userFolder->nodeExists($targetPath)) {
@@ -329,7 +329,7 @@ class GoogleAPIService {
 
 		$accessToken = $this->config->getUserValue($userId, Application::APP_ID, 'token', '');
 		// import by batch of 50 photos per job
-		$result = $this->importPhotos($accessToken, $userId, 'GooglePhotos', 50);
+		$result = $this->importPhotos($accessToken, $userId, 'Google Photos import', 50);
 		if (isset($result['error']) || (isset($result['finished']) && $result['finished'])) {
 			$this->config->setUserValue($userId, Application::APP_ID, 'importing_photos', '0');
 			$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_photos', '0');
@@ -337,7 +337,7 @@ class GoogleAPIService {
 			if (isset($result['finished']) && $result['finished']) {
 				$this->sendNCNotification($userId, 'import_photos_finished', [
 					'nbImported' => $result['total'],
-					'targetPath' => 'GooglePhotos',
+					'targetPath' => 'Google Photos import',
 				]);
 			}
 		} else {
@@ -357,7 +357,7 @@ class GoogleAPIService {
 	 * @param string $targetPath
 	 * @return array
 	 */
-	public function importPhotos(string $accessToken, string $userId, string $targetPath = 'GooglePhotos', ?int $maxDownloadNumber = null): array {
+	public function importPhotos(string $accessToken, string $userId, string $targetPath = 'Google Photos import', ?int $maxDownloadNumber = null): array {
 		// create root folder
 		$userFolder = $this->root->getUserFolder($userId);
 		if (!$userFolder->nodeExists($targetPath)) {

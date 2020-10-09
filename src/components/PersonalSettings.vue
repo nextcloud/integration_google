@@ -35,8 +35,9 @@
 					</label>
 					<button id="google-import-contacts" @click="onImportContacts">
 						<span class="icon icon-contacts-dark" />
-						{{ t('integration_google', 'Import Google contacts in Nextcloud') }}
+						{{ t('integration_google', 'Import Google Contacts in Nextcloud') }}
 					</button>
+					<br>
 					<select v-if="showAddressBooks"
 						v-model.number="selectedAddressBook">
 						<option :value="-1">
@@ -52,6 +53,7 @@
 					<input v-if="showAddressBooks && selectedAddressBook === 0"
 						v-model="newAddressBookName"
 						type="text"
+						class="contact-input"
 						:placeholder="t('integration_google', 'address book name')">
 					<button v-if="showAddressBooks && selectedAddressBook > -1 && (selectedAddressBook > 0 || newAddressBookName)"
 						id="google-import-contacts-in-book"
@@ -168,8 +170,8 @@ export default {
 			addressbooks: [],
 			nbContacts: 0,
 			showAddressBooks: false,
-			selectedAddressBook: -1,
-			newAddressBookName: 'Google-contacts',
+			selectedAddressBook: 0,
+			newAddressBookName: 'Google Contacts import',
 			importingContacts: false,
 			// photos
 			nbPhotos: 0,
@@ -452,7 +454,7 @@ export default {
 				})
 		},
 		onImportContacts() {
-			this.selectedAddressBook = -1
+			this.selectedAddressBook = 0
 			this.showAddressBooks = !this.showAddressBooks
 		},
 		onFinalImportContacts() {
@@ -703,6 +705,10 @@ body.theme--dark .icon-google-settings {
 		span {
 			margin-bottom: -2px;
 		}
+	}
+
+	.contact-input {
+		width: 200px;
 	}
 }
 ::v-deep .app-navigation-entry__icon-bullet {

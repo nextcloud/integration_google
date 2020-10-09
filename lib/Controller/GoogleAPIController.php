@@ -175,7 +175,7 @@ class GoogleAPIController extends Controller {
 	 * @param string $targetPath
 	 * @return DataResponse
 	 */
-	public function importPhotos(string $targetPath = 'GooglePhotos'): DataResponse {
+	public function importPhotos(string $targetPath = 'Google Photos import'): DataResponse {
 		if ($this->accessToken === '') {
 			return new DataResponse(null, 400);
 		}
@@ -194,7 +194,7 @@ class GoogleAPIController extends Controller {
 	 * @param string $targetPath
 	 * @return DataResponse
 	 */
-	public function importDrive(string $targetPath = 'GoogleDrive'): DataResponse {
+	public function importDrive(string $targetPath = 'Google Drive import'): DataResponse {
 		if ($this->accessToken === '') {
 			return new DataResponse(null, 400);
 		}
