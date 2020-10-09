@@ -172,14 +172,13 @@ class GoogleAPIController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 *
-	 * @param string $targetPath
 	 * @return DataResponse
 	 */
-	public function importPhotos(string $targetPath = 'Google Photos import'): DataResponse {
+	public function importPhotos(): DataResponse {
 		if ($this->accessToken === '') {
 			return new DataResponse(null, 400);
 		}
-		$result = $this->googleAPIService->startImportPhotos($this->accessToken, $this->userId, $targetPath);
+		$result = $this->googleAPIService->startImportPhotos($this->accessToken, $this->userId);
 		if (isset($result['error'])) {
 			$response = new DataResponse($result['error'], 401);
 		} else {
@@ -191,14 +190,13 @@ class GoogleAPIController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 *
-	 * @param string $targetPath
 	 * @return DataResponse
 	 */
-	public function importDrive(string $targetPath = 'Google Drive import'): DataResponse {
+	public function importDrive(): DataResponse {
 		if ($this->accessToken === '') {
 			return new DataResponse(null, 400);
 		}
-		$result = $this->googleAPIService->startImportDrive($this->accessToken, $this->userId, $targetPath);
+		$result = $this->googleAPIService->startImportDrive($this->accessToken, $this->userId);
 		if (isset($result['error'])) {
 			$response = new DataResponse($result['error'], 401);
 		} else {

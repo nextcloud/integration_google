@@ -517,7 +517,6 @@ export default {
 		onImportPhotos() {
 			const req = {
 				params: {
-					path: null,
 				},
 			}
 			const url = generateUrl('/apps/integration_google/import-photos')
@@ -581,7 +580,6 @@ export default {
 		onImportDrive() {
 			const req = {
 				params: {
-					path: null,
 				},
 			}
 			const url = generateUrl('/apps/integration_google/import-files')
