@@ -791,10 +791,10 @@ class GoogleAPIService {
 	 */
 	public function importCalendar(string $accessToken, string $userId, string $calId, string $calName, ?string $color = null): array {
 		$calSuffix = 0;
-		$newCalName = $calName;
+		$newCalName = trim($calName) . ' (' . $this->l10n->t('Google Calendar import') .')';
 		while ($this->calendarExists($userId, $newCalName)) {
 			$calSuffix++;
-			$newCalName = $calName . '-' . $calSuffix;
+			$newCalName = trim($calName) . '-' . $calSuffix . ' (' . $this->l10n->t('Google Calendar import') .')';
 		}
 		$params = [];
 		if ($color) {
