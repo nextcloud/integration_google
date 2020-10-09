@@ -105,14 +105,15 @@ class GoogleAPIService {
 		$accessToken = $this->config->getUserValue($userId, Application::APP_ID, 'token', '');
 		// import batch of files
 		$targetPath = $this->l10n->t('Google Drive import');
-		$result = $this->importFiles($accessToken, $userId, $targetPath, 50);
+		// import by batch of 500 Mo
+		$result = $this->importFiles($accessToken, $userId, $targetPath, 500000000);
 		if (isset($result['error']) || (isset($result['finished']) && $result['finished'])) {
 			$this->config->setUserValue($userId, Application::APP_ID, 'importing_drive', '0');
 			$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_files', '0');
 			$this->config->setUserValue($userId, Application::APP_ID, 'last_drive_import_timestamp', '0');
 			if (isset($result['finished']) && $result['finished']) {
 				$this->sendNCNotification($userId, 'import_drive_finished', [
-					'nbImported' => $result['total'],
+					'nbImported' => $result['totalSeen'],
 					'targetPath' => $targetPath,
 				]);
 			}
@@ -134,7 +135,7 @@ class GoogleAPIService {
 	 * @param ?int $maxDownloadNumber
 	 * @return array
 	 */
-	public function importFiles(string $accessToken, string $userId, string $targetPath, ?int $maxDownloadNumber = null): array {
+	public function importFiles(string $accessToken, string $userId, string $targetPath, ?int $maxDownloadSize = null): array {
 		// create root folder
 		$userFolder = $this->root->getUserFolder($userId);
 		if (!$userFolder->nodeExists($targetPath)) {
@@ -181,8 +182,14 @@ class GoogleAPIService {
 		}
 
 		// get files
+		$info = $this->getDriveSize($accessToken, $userId);
+		if (isset($result['error'])) {
+			return $result;
+		}
+		$nbFilesOnDrive = $info['nbFiles'];
+		$downloadedSize = 0;
 		$nbDownloaded = 0;
-		$totalNumber = 0;
+		$totalSeenNumber = 0;
 
 		$params = [
 			'pageSize' => 1000,
@@ -194,13 +201,18 @@ class GoogleAPIService {
 			return $result;
 		}
 		foreach ($result['files'] as $fileItem) {
-			$totalNumber++;
-			if ($this->getFile($accessToken, $userId, $fileItem, $directoriesById, $folder)) {
+			$totalSeenNumber++;
+			$size = $this->getFile($accessToken, $userId, $fileItem, $directoriesById, $folder);
+			if (!is_null($size)) {
 				$nbDownloaded++;
-				if ($maxDownloadNumber && $nbDownloaded === $maxDownloadNumber) {
+				$downloadedSize += $size;
+				//if ($maxDownloadNumber && $nbDownloaded === $maxDownloadNumber) {
+				if ($maxDownloadSize && $downloadedSize > $maxDownloadSize) {
 					return [
 						'nbDownloaded' => $nbDownloaded,
 						'targetPath' => $targetPath,
+						'finished' => ($totalSeenNumber >= $nbFilesOnDrive),
+						'totalSeen' => $totalSeenNumber,
 					];
 				}
 			}
@@ -212,13 +224,17 @@ class GoogleAPIService {
 				return $result;
 			}
 			foreach ($result['files'] as $fileItem) {
-				$totalNumber++;
-				if ($this->getFile($accessToken, $userId, $fileItem, $directoriesById, $folder)) {
+				$totalSeenNumber++;
+				$size = $this->getFile($accessToken, $userId, $fileItem, $directoriesById, $folder);
+				if (!is_null($size)) {
 					$nbDownloaded++;
-					if ($maxDownloadNumber && $nbDownloaded === $maxDownloadNumber) {
+					$downloadedSize += $size;
+					if ($maxDownloadSize && $downloadedSize > $maxDownloadSize) {
 						return [
 							'nbDownloaded' => $nbDownloaded,
 							'targetPath' => $targetPath,
+							'finished' => ($totalSeenNumber >= $nbFilesOnDrive),
+							'totalSeen' => $totalSeenNumber,
 						];
 					}
 				}
@@ -229,7 +245,7 @@ class GoogleAPIService {
 			'nbDownloaded' => $nbDownloaded,
 			'targetPath' => $targetPath,
 			'finished' => true,
-			'total' => $totalNumber,
+			'totalSeen' => $totalSeenNumber,
 		];
 	}
 
@@ -273,9 +289,9 @@ class GoogleAPIService {
 	 * @param array $fileItem
 	 * @param array $directoriesById
 	 * @param Node $topFolder
-	 * @return bool success
+	 * @return ?int downloaded size, null if already existing
 	 */
-	private function getFile(string $accessToken, string $userId, array $fileItem, array $directoriesById, Node $topFolder): bool {
+	private function getFile(string $accessToken, string $userId, array $fileItem, array $directoriesById, Node $topFolder): ?int {
 		$fileName = $fileItem['name'];
 		if (isset($fileItem['parents']) && count($fileItem['parents']) > 0 && array_key_exists($fileItem['parents'][0], $directoriesById)) {
 			$saveFolder = $directoriesById[$fileItem['parents'][0]]['node'];
@@ -286,11 +302,11 @@ class GoogleAPIService {
 			$fileUrl = 'https://www.googleapis.com/drive/v3/files/' . $fileItem['id'] . '?alt=media';
 			$res = $this->simpleRequest($accessToken, $userId, $fileUrl);
 			if (!isset($res['error'])) {
-				$saveFolder->newFile($fileName, $res['content']);
-				return true;
+				$savedFile = $saveFolder->newFile($fileName, $res['content']);
+				return $savedFile->getSize();
 			}
 		}
-		return false;
+		return null;
 	}
 
 	/**
@@ -1010,23 +1026,25 @@ class GoogleAPIService {
 			$this->logger->warning('Google API error : '.$e->getMessage(), array('app' => $this->appName));
 			$response = $e->getResponse();
 			$body = (string) $response->getBody();
-			// always try to refresh token if it's invalid
-			$this->logger->warning('Trying to REFRESH the access token', array('app' => $this->appName));
-			$refreshToken = $this->config->getUserValue($userId, Application::APP_ID, 'refresh_token', '');
-			$clientID = $this->config->getAppValue(Application::APP_ID, 'client_id', '');
-			$clientSecret = $this->config->getAppValue(Application::APP_ID, 'client_secret', '');
-			$result = $this->requestOAuthAccessToken([
-				'client_id' => $clientID,
-				'client_secret' => $clientSecret,
-				'grant_type' => 'refresh_token',
-				'refresh_token' => $refreshToken,
-			], 'POST');
-			if (isset($result['access_token'])) {
-				$accessToken = $result['access_token'];
-				$this->config->setUserValue($userId, Application::APP_ID, 'token', $accessToken);
-				return $this->request(
-					$accessToken, $userId, $endPoint, $params, $method, $baseUrl
-				);
+			// try to refresh token if it's invalid
+			if ($response->getStatusCode() === 401) {
+				$this->logger->warning('Trying to REFRESH the access token', array('app' => $this->appName));
+				$refreshToken = $this->config->getUserValue($userId, Application::APP_ID, 'refresh_token', '');
+				$clientID = $this->config->getAppValue(Application::APP_ID, 'client_id', '');
+				$clientSecret = $this->config->getAppValue(Application::APP_ID, 'client_secret', '');
+				$result = $this->requestOAuthAccessToken([
+					'client_id' => $clientID,
+					'client_secret' => $clientSecret,
+					'grant_type' => 'refresh_token',
+					'refresh_token' => $refreshToken,
+				], 'POST');
+				if (isset($result['access_token'])) {
+					$accessToken = $result['access_token'];
+					$this->config->setUserValue($userId, Application::APP_ID, 'token', $accessToken);
+					return $this->request(
+						$accessToken, $userId, $endPoint, $params, $method, $baseUrl
+					);
+				}
 			}
 			return ['error' => $e->getMessage()];
 		}
@@ -1126,8 +1144,7 @@ class GoogleAPIService {
 		} catch (ClientException $e) {
 			$this->logger->warning('Google API error : '.$e->getMessage(), array('app' => $this->appName));
 			$response = $e->getResponse();
-			$body = (string) $response->getBody();
-			if (strpos($body, 'Request had invalid authentication credentials') !== false) {
+			if ($response->getStatusCode() === 401) {
 				// refresh token if it's invalid and we are using oauth
 				$this->logger->warning('Trying to REFRESH the access token', array('app' => $this->appName));
 				$refreshToken = $this->config->getUserValue($userId, Application::APP_ID, 'refresh_token', '');
