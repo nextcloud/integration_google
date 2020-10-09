@@ -6,6 +6,7 @@ OC.L10N.register(
     "Authentication" : "Autentisering",
     "Contacts" : "Kontakter",
     "Import calendar" : "Importer kalender",
-    "Photos" : "Bilder"
+    "Photos" : "Bilder",
+    "Drive" : "Kjøre"
 },
 "nplurals=2; plural=(n != 1);");

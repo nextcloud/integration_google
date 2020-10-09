@@ -11,6 +11,7 @@ OC.L10N.register(
     "Contacts" : "Contatos",
     "Calendars" : "Calendários",
     "Import calendar" : "Importar calendário",
-    "Photos" : "Fotos"
+    "Photos" : "Fotos",
+    "Drive" : "Dirigir"
 },
 "nplurals=2; plural=(n > 1);");

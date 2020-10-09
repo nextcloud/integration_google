@@ -6,6 +6,7 @@ OC.L10N.register(
     "Client secret" : "رمز مشتری",
     "Authentication" : "احراز هویت",
     "Contacts" : "مخاطبین",
-    "Photos" : "عکس ها"
+    "Photos" : "عکس ها",
+    "Drive" : "راندن"
 },
 "nplurals=2; plural=(n > 1);");

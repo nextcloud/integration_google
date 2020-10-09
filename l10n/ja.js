@@ -22,6 +22,7 @@ OC.L10N.register(
     "Import calendar" : "カレンダーのインポート",
     "Photos" : "写真",
     "Import Google photos" : "Google フォトをインポート",
+    "Drive" : "ドライブ",
     "Successfully connected to Google!" : "Google への接続に成功しました！"
 },
 "nplurals=1; plural=0;");

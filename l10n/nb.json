@@ -4,6 +4,7 @@
     "Authentication" : "Autentisering",
     "Contacts" : "Kontakter",
     "Import calendar" : "Importer kalender",
-    "Photos" : "Bilder"
+    "Photos" : "Bilder",
+    "Drive" : "Kjøre"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

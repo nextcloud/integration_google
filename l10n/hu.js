@@ -6,6 +6,7 @@ OC.L10N.register(
     "Authentication" : "Hitelesítés",
     "Contacts" : "Névjegyek",
     "Import calendar" : "Naptár importálása",
-    "Photos" : "Fényképek"
+    "Photos" : "Fényképek",
+    "Drive" : "Vezetés"
 },
 "nplurals=2; plural=(n != 1);");

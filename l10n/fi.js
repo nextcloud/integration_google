@@ -20,6 +20,7 @@ OC.L10N.register(
     "Import calendar" : "Tuo kalenteri",
     "Photos" : "Kuvat",
     "Import Google photos" : "Tuo Google-kuvat",
+    "Drive" : "Ajo",
     "Successfully connected to Google!" : "Yhdistetty Googleen!",
     "Google connection error:" : "Google-yhteysvirhe:",
     "Failed to save Google options" : "Google-valintojen tallentaminen epäonnistui."

@@ -18,6 +18,7 @@ OC.L10N.register(
     "New address book" : "Nieuw adresboek",
     "Calendars" : "Kalenders",
     "Import calendar" : "Importeer agenda",
-    "Photos" : "Foto's"
+    "Photos" : "Foto's",
+    "Drive" : "Rijdend"
 },
 "nplurals=2; plural=(n != 1);");

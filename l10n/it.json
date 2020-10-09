@@ -1,4 +1,5 @@
 { "translations": {
+    "Missing refresh token in Google response." : "Token di aggiornamento mancante nella risposta di Google.",
     "Error getting OAuth access token." : "Errore durante il recupero del token di accesso OAuth.",
     "Error during OAuth exchanges" : "Errore durante le negoziazioni OAuth",
     "Google" : "Google",
@@ -35,9 +36,10 @@
     "Calendars" : "Calendari",
     "Import calendar" : "Importa calendario",
     "Photos" : "Foto",
-    "{amount} Google photos (>{formSize})" : "{amount} foto di Google (>{formSize})",
     "Import Google photos" : "Importa foto Google",
+    "Your Google photo collection size is estimated to be bigger than your remaining space left ({formSpace})" : "Stimiamo che le dimensioni della tua raccolta di foto di Google siano maggiori dello spazio rimanente ({formSpace})",
     "Cancel photo import" : "Annulla l'importazione delle foto",
+    "Drive" : "Guidare",
     "Photo import process will begin soon" : "Il processo di importazione delle foto inizierà presto",
     "Successfully connected to Google!" : "Connesso correttamente a Google!",
     "Google connection error:" : "Errore di connessione a Google:",
@@ -50,6 +52,10 @@
     "Failed to get number of Google contacts" : "Impossibile ottenere il numero dei contatti di Google",
     "Failed to get address book list" : "Impossibile ottenere l'elenco delle rubriche",
     "Failed to import Google calendar" : "Importazione del calendario di Google non riuscita",
-    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number} evento importato correttamente in {name}","{number} eventi importati correttamente in {name}"]
+    "Starting importing photos in {targetPath} directory" : "Avvio dell'importazione foto nella cartella {targetPath}",
+    "Failed to start importing Google photos" : "Avvio dell'importazione foto di Google non riuscito",
+    "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} contatto importato correttamente in {name}","{number} contatti importati correttamente in {name}"],
+    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number} evento importato correttamente in {name}","{number} eventi importati correttamente in {name}"],
+    "Last photo import job at {date}" : "Ultima operazione di importazione foto il {date}"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

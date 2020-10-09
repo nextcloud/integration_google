@@ -12,6 +12,7 @@ OC.L10N.register(
     "Contacts" : "Kontaktuak",
     "Calendars" : "Egutegiak",
     "Import calendar" : "Inportatu egutegia",
-    "Photos" : "Argazkiak"
+    "Photos" : "Argazkiak",
+    "Drive" : "Gidatu"
 },
 "nplurals=2; plural=(n != 1);");

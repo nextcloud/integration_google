@@ -6,6 +6,7 @@ OC.L10N.register(
     "Authentication" : "Auðkenning",
     "Contacts" : "Tengiliðir",
     "Import calendar" : "Flytja inn dagatal",
-    "Photos" : "Ljósmyndir"
+    "Photos" : "Ljósmyndir",
+    "Drive" : "Keyra"
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");

@@ -31,6 +31,7 @@ OC.L10N.register(
     "Import calendar" : "Uvozi koledar",
     "Photos" : "Fotografije",
     "Import Google photos" : "Uvozi slike Google",
+    "Drive" : "Vožnja",
     "Google connection error:" : "Napaka povezave Google:",
     "Google options saved" : "Nastavitve Google so shranjene",
     "Incorrect access token" : "Neveljaven žeton za dostop"

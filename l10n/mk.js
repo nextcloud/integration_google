@@ -20,8 +20,8 @@ OC.L10N.register(
     "Calendars" : "Календари",
     "Import calendar" : "Увези календар",
     "Photos" : "Фотографии",
-    "{amount} Google photos (>{formSize})" : "{amount} Google фотографии (>{formSize})",
     "Import Google photos" : "Увези ги Google фотографиите",
+    "Drive" : "Возење",
     "Successfully connected to Google!" : "Успешно поврзување со Google!"
 },
 "nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;");
