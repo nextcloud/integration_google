@@ -672,10 +672,13 @@ class GoogleAPIService {
 			$familyName = null;
 			$firstName = null;
 			// we just take first name
+			if (!isset($c['names']) || !is_array($c['names'])) {
+				continue;
+			}
 			foreach ($c['names'] as $n) {
-				$displayName = $n['displayName'];
-				$familyName = $n['familyName'];
-				$firstName = $n['givenName'];
+				$displayName = $n['displayName'] ?? '';
+				$familyName = $n['familyName'] ?? '';
+				$firstName = $n['givenName'] ?? '';
 				if ($displayName) {
 					$prop = $vCard->createProperty('FN', $displayName);
 					$vCard->add($prop);
@@ -688,72 +691,88 @@ class GoogleAPIService {
 			}
 			// we don't want empty names
 			if (!$displayName && !$familyName && !$firstName) {
-				return true;
+				continue;
 			}
 
 			// address
-			foreach ($c['addresses'] as $address) {
-				$streetAddress = $address['streetAddress'];
-				$extendedAddress = $address['extendedAddress'];
-				$postalCode = $address['postalCode'];
-				$city = $address['city'];
-				$addrType = $address['type'];
-				$country = $address['country'];
-				$postOfficeBox = $address['poBox'];
+			if (isset($c['addresses']) && is_array($c['addresses'])) {
+				foreach ($c['addresses'] as $address) {
+					$streetAddress = $address['streetAddress'] ?? '';
+					$extendedAddress = $address['extendedAddress'] ?? '';
+					$postalCode = $address['postalCode'] ?? '';
+					$city = $address['city'] ?? '';
+					$addrType = $address['type'] ?? '';
+					$country = $address['country'] ?? '';
+					$postOfficeBox = $address['poBox'] ?? '';
 
-				$type = $addrType ? ['TYPE' => strtoupper($addrType)] : null;
-				$addrProp = $vCard->createProperty('ADR',
-					[0 => $postOfficeBox, 1 => $extendedAddress, 2 => $streetAddress, 3 => $city, 4 => '', 5 => $postalCode, 6 => $country, 'TYPE' => $addressType],
-					$type
-				);
-				$vCard->add($addrProp);
+					$type = $addrType ? ['TYPE' => strtoupper($addrType)] : null;
+					$addrProp = $vCard->createProperty('ADR',
+						[0 => $postOfficeBox, 1 => $extendedAddress, 2 => $streetAddress, 3 => $city, 4 => '', 5 => $postalCode, 6 => $country],
+						$type
+					);
+					$vCard->add($addrProp);
+				}
 			}
 
 			// birthday
-			foreach ($c['birthdays'] as $birthday) {
-				$date = new \Datetime($birthday['date']['year'] . '-' . $birthday['date']['month'] . '-' . $birthday['date']['day']);
-				$strDate = $date->format('Ymd');
+			if (isset($c['birthdays']) && is_array($c['birthdays'])) {
+				foreach ($c['birthdays'] as $birthday) {
+					if (isset($birthday['date'], $birthday['date']['year'], $birthday['date']['month'], $birthday['date']['day'])) {
+						$date = new \Datetime($birthday['date']['year'] . '-' . $birthday['date']['month'] . '-' . $birthday['date']['day']);
+						$strDate = $date->format('Ymd');
 
-				$type = ['VALUE' => 'DATE'];
-				$prop = $vCard->createProperty('BDAY', $strDate, $type);
-				$vCard->add($prop);
+						$type = ['VALUE' => 'DATE'];
+						$prop = $vCard->createProperty('BDAY', $strDate, $type);
+						$vCard->add($prop);
+					}
+				}
 			}
 
-			foreach ($c['nicknames'] as $nick) {
-				$prop = $vCard->createProperty('NICKNAME', $nick['value']);
-				$vCard->add($prop);
+			if (isset($c['nicknames']) && is_array($c['nicknames'])) {
+				foreach ($c['nicknames'] as $nick) {
+					if (isset($nick['value'])) {
+						$prop = $vCard->createProperty('NICKNAME', $nick['value']);
+						$vCard->add($prop);
+					}
+				}
 			}
 
-			foreach ($c['emailAddresses'] as $email) {
-				$addrType = $email['type'];
-				$type = $addrType ? ['TYPE' => strtoupper($addrType)] : null;
-				$prop = $vCard->createProperty('EMAIL', $email['value'], $type);
-				$vCard->add($prop);
+			if (isset($c['emailAddresses']) && is_array($c['emailAddresses'])) {
+				foreach ($c['emailAddresses'] as $email) {
+					$addrType = $email['type'] ?? '';
+					$type = $addrType ? ['TYPE' => strtoupper($addrType)] : null;
+					$prop = $vCard->createProperty('EMAIL', $email['value'], $type);
+					$vCard->add($prop);
+				}
 			}
 
-			foreach ($c['phoneNumbers'] as $ph) {
-				$numberType = str_replace('mobile', 'cell', $ph['type']);
-				$numberType = str_replace('main', '', $numberType);
-				$numberType = $numberType ? $numberType : 'home';
-				$type = ['TYPE' => strtoupper($numberType)];
-				$prop = $vCard->createProperty('TEL', $ph['value'], $type);
-				$vCard->add($prop);
+			if (isset($c['phoneNumbers']) && is_array($c['phoneNumbers'])) {
+				foreach ($c['phoneNumbers'] as $ph) {
+					$numberType = str_replace('mobile', 'cell', $ph['type']);
+					$numberType = str_replace('main', '', $numberType);
+					$numberType = $numberType ? $numberType : 'home';
+					$type = ['TYPE' => strtoupper($numberType)];
+					$prop = $vCard->createProperty('TEL', $ph['value'], $type);
+					$vCard->add($prop);
+				}
 			}
 
 			// we just take first org
-			foreach ($c['organizations'] as $org) {
-				$name = $org['name'];
-				if ($name) {
-					$prop = $vCard->createProperty('ORG', $name);
-					$vCard->add($prop);
-				}
+			if (isset($c['organizations']) && is_array($c['organizations'])) {
+				foreach ($c['organizations'] as $org) {
+					$name = $org['name'] ?? '';
+					if ($name) {
+						$prop = $vCard->createProperty('ORG', $name);
+						$vCard->add($prop);
+					}
 
-				$title = $org['title'];
-				if ($title) {
-					$prop = $vCard->createProperty('TITLE', $title);
-					$vCard->add($prop);
+					$title = $org['title'] ?? '';
+					if ($title) {
+						$prop = $vCard->createProperty('TITLE', $title);
+						$vCard->add($prop);
+					}
+					break;
 				}
-				break;
 			}
 
 			$this->cdBackend->createCard($key, 'goog' . $k, $vCard->serialize());
