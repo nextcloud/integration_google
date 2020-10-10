@@ -4,6 +4,7 @@
     "Error during OAuth exchanges" : "Erreur lors des échanges OAuth",
     "Google" : "Google",
     "_%s photo was imported from Google._::_%s photos were imported from Google._" : ["%s photo importée depuis Google.","%s photos importées depuis Google."],
+    "_%s file was imported from Google Drive._::_%s files were imported from Google Drive._" : ["%s fichier a été importé depuis Google Drive.","%s fichiers ont été importés depuis Google Drive."],
     "Bad credentials" : "Identifiants incorrects",
     "OAuth access token refused" : "Jeton d'accès OAuth refusé",
     "Connected accounts" : "Comptes connectés",
@@ -31,7 +32,6 @@
     "Disconnect from Google" : "Se déconnecter de Google",
     "Contacts" : "Contacts",
     "{amount} Google contacts" : "{amount} contacts Google",
-    "Import Google contacts in Nextcloud" : "Importer des contacts Google dans Nextcloud",
     "Choose where to import the contacts" : "Choisissez où importer les contacts",
     "New address book" : "Nouveau carnet d'adresses",
     "address book name" : "nom du carnet d'adresses",
@@ -42,6 +42,7 @@
     "Import Google photos" : "Importer les photos Google",
     "Cancel photo import" : "Annuler l'import de photos",
     "Drive" : "Trajet en voiture",
+    "Import Google Drive files" : "Importer les fichiers de Google Drive",
     "Successfully connected to Google!" : "Connexion à Google réussie !",
     "Google connection error:" : "Erreur de connexion à Google :",
     "Google options saved" : "Options Google enregistrées",
@@ -54,6 +55,7 @@
     "Failed to get address book list" : "Échec de l'obtention de la liste de carnets d'adresses",
     "Failed to import Google calendar" : "Échec de l'importation du calendrier Google",
     "Failed to start importing Google photos" : "Impossible de démarrer l'import des photos Google",
+    "_{amount} files imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} fichier importé ({progress}%)","{amount} fichiers importés ({progress}%)"],
     "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} contact importé avec succès dans {name}","{number} contacts importés avec succès dans {name}"],
     "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number} événement importé avec succès dans {name}","{number} événements importés avec succès dans {name}"]
 },"pluralForm" :"nplurals=2; plural=(n > 1);"

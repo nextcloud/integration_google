@@ -12,7 +12,6 @@ OC.L10N.register(
     "Disconnect from Google" : "Katkaise yhteys Googleen",
     "Contacts" : "Yhteystiedot",
     "{amount} Google contacts" : "{amount} Google-yhteystietoa",
-    "Import Google contacts in Nextcloud" : "Tuo Google-yhteystiedot Nextcloudiin",
     "Choose where to import the contacts" : "Valitse mihin yhteystiedot tuodaan",
     "New address book" : "Uusi osoitekirja",
     "address book name" : "osoitekirjan nimi",

@@ -33,7 +33,6 @@ OC.L10N.register(
     "Disconnect from Google" : "Odpojit od Google",
     "Contacts" : "Kontakty",
     "{amount} Google contacts" : "{amount} Google kontaktů",
-    "Import Google contacts in Nextcloud" : "Importovat Google kontakty do Nextcloud",
     "Choose where to import the contacts" : "Zvolte kam importovat kontakty",
     "New address book" : "Nový adresář kontaktů",
     "address book name" : "název adresáře kontaktů",

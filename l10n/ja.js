@@ -13,7 +13,6 @@ OC.L10N.register(
     "Connected as {user}" : "{user} を接続済み",
     "Disconnect from Google" : "Google から切断",
     "Contacts" : "連絡先",
-    "Import Google contacts in Nextcloud" : "Google の連絡先を Nextcloud にインポート",
     "Choose where to import the contacts" : "連絡先をインポートする場所を選択してください",
     "New address book" : "新しいアドレス帳",
     "address book name" : "アドレス帳の名前",
