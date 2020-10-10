@@ -128,7 +128,7 @@
 					</span>
 					<div v-else>
 						<br>
-						{{ n('integration_google', '{amount} files imported ({progress}%)', '{amount} files imported ({progress}%)', nbImportedFiles, { amount: nbImportedFiles, progress: driveImportProgress }) }}
+						{{ n('integration_google', '{amount} file imported ({progress}%)', '{amount} files imported ({progress}%)', nbImportedFiles, { amount: nbImportedFiles, progress: driveImportProgress }) }}
 						<br>
 						{{ lastDriveImportDate }}
 						<br>
