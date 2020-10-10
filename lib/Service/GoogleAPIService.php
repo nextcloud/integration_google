@@ -739,21 +739,25 @@ class GoogleAPIService {
 
 			if (isset($c['emailAddresses']) && is_array($c['emailAddresses'])) {
 				foreach ($c['emailAddresses'] as $email) {
-					$addrType = $email['type'] ?? '';
-					$type = $addrType ? ['TYPE' => strtoupper($addrType)] : null;
-					$prop = $vCard->createProperty('EMAIL', $email['value'], $type);
-					$vCard->add($prop);
+					if (isset($email['value'])) {
+						$addrType = $email['type'] ?? '';
+						$type = $addrType ? ['TYPE' => strtoupper($addrType)] : null;
+						$prop = $vCard->createProperty('EMAIL', $email['value'], $type);
+						$vCard->add($prop);
+					}
 				}
 			}
 
 			if (isset($c['phoneNumbers']) && is_array($c['phoneNumbers'])) {
 				foreach ($c['phoneNumbers'] as $ph) {
-					$numberType = str_replace('mobile', 'cell', $ph['type']);
-					$numberType = str_replace('main', '', $numberType);
-					$numberType = $numberType ? $numberType : 'home';
-					$type = ['TYPE' => strtoupper($numberType)];
-					$prop = $vCard->createProperty('TEL', $ph['value'], $type);
-					$vCard->add($prop);
+					if (isset($ph['value'])) {
+						$numberType = str_replace('mobile', 'cell', $ph['type'] ?? '');
+						$numberType = str_replace('main', '', $numberType);
+						$numberType = $numberType ?: 'home';
+						$type = ['TYPE' => strtoupper($numberType)];
+						$prop = $vCard->createProperty('TEL', $ph['value'], $type);
+						$vCard->add($prop);
+					}
 				}
 			}
 
