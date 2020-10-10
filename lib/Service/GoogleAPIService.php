@@ -847,54 +847,58 @@ class GoogleAPIService {
 				. 'BEGIN:VEVENT' . "\n";
 
 			$calData .= 'UID:' . $newCalId . '-' . $nbAdded . "\n";
-			$calData .= 'SUMMARY:' . $e['summary'] . "\n";
-			$calData .= 'SEQUENCE:' . $e['sequence'] . "\n";
-			$calData .= 'LOCATION:' . $e['location'] . "\n";
-			$calData .= 'DESCRIPTION:' . $e['description'] . "\n";
-			$calData .= 'STATUS:' . strtoupper($e['status']) . "\n";
+			$calData .= isset($e['summary']) ? ('SUMMARY:' . $e['summary'] . "\n") : '';
+			$calData .= isset($e['sequence']) ? ('SEQUENCE:' . $e['sequence'] . "\n") : '';
+			$calData .= isset($e['location']) ? ('LOCATION:' . $e['location'] . "\n") : '';
+			$calData .= isset($e['description']) ? ('DESCRIPTION:' . $e['description'] . "\n") : '';
+			$calData .= isset($e['status']) ? ('STATUS:' . strtoupper($e['status']) . "\n") : '';
 
-			$created = new \Datetime($e['created']);
-			$calData .= 'CREATED:' . $created->format('Ymd\THis\Z') . "\n";
+			if (isset($e['created'])) {
+				$created = new \Datetime($e['created']);
+				$calData .= 'CREATED:' . $created->format('Ymd\THis\Z') . "\n";
+			}
 
-			$updated = new \Datetime($e['updated']);
-			$calData .= 'LAST-MODIFIED:' . $created->format('Ymd\THis\Z') . "\n";
+			if (isset($e['updated'])) {
+				$updated = new \Datetime($e['updated']);
+				$calData .= 'LAST-MODIFIED:' . $created->format('Ymd\THis\Z') . "\n";
+			}
 
-			if (isset($e['reminders']) && $e['reminders']['useDefault']) {
-				// 30 min before
+			if (isset($e['reminders'], $e['reminders']['useDefault']) && $e['reminders']['useDefault']) {
+				// 15 min before, default alarm
 				$calData .= 'BEGIN:VALARM' . "\n"
 					. 'ACTION:DISPLAY' . "\n"
 					. 'TRIGGER;RELATED=START:-PT15M' . "\n"
 					. 'END:VALARM' . "\n";
 			}
-			if (isset($e['reminders']) && isset($e['reminders']['overrides'])) {
+			if (isset($e['reminders'], $e['reminders']['overrides'])) {
 				foreach ($e['reminders']['overrides'] as $o) {
 					$nbMin = 0;
 					if (isset($o['minutes'])) {
-						$nbMin += $o['minutes'];
+						$nbMin += (int) $o['minutes'];
 					}
 					if (isset($o['hours'])) {
-						$nbMin += $o['hours'] * 60;
+						$nbMin += ((int) $o['hours']) * 60;
 					}
 					if (isset($o['days'])) {
-						$nbMin += $o['days'] * 60 * 24;
+						$nbMin += ((int) $o['days']) * 60 * 24;
 					}
 					if (isset($o['weeks'])) {
-						$nbMin += $o['weeks'] * 60 * 24 * 7;
+						$nbMin += ((int) $o['weeks']) * 60 * 24 * 7;
 					}
 					$calData .= 'BEGIN:VALARM' . "\n"
 						. 'ACTION:DISPLAY' . "\n"
-						. 'TRIGGER;RELATED=START:-PT'.$nbMin.'M' . "\n"
+						. 'TRIGGER;RELATED=START:-PT' . $nbMin . 'M' . "\n"
 						. 'END:VALARM' . "\n";
 				}
 			}
 
-			if (isset($e['recurrence'])) {
+			if (isset($e['recurrence']) && is_array($e['recurrence'])) {
 				foreach ($e['recurrence'] as $r) {
 					$calData .= $r . "\n";
 				}
 			}
 
-			if (isset($e['start']['date']) && isset($e['end']['date'])) {
+			if (isset($e['start'], $e['start']['date'], $e['end'], $e['end']['date'])) {
 				// whole days
 				$start = new \Datetime($e['start']['date']);
 				$calData .= 'DTSTART;VALUE=DATE:' . $start->format('Ymd') . "\n";

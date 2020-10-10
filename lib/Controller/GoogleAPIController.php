@@ -215,7 +215,7 @@ class GoogleAPIController extends Controller {
 	 */
 	public function importCalendar(string $calId, string $calName, ?string $color = null): DataResponse {
 		if ($this->accessToken === '') {
-			return new DataResponse(null, 400);
+			return new DataResponse('', 400);
 		}
 		$result = $this->googleAPIService->importCalendar($this->accessToken, $this->userId, $calId, $calName, $color);
 		if (isset($result['error'])) {
