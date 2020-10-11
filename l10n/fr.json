@@ -55,7 +55,6 @@
     "Failed to get address book list" : "Échec de l'obtention de la liste de carnets d'adresses",
     "Failed to import Google calendar" : "Échec de l'importation du calendrier Google",
     "Failed to start importing Google photos" : "Impossible de démarrer l'import des photos Google",
-    "_{amount} files imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} fichier importé ({progress}%)","{amount} fichiers importés ({progress}%)"],
     "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} contact importé avec succès dans {name}","{number} contacts importés avec succès dans {name}"],
     "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number} événement importé avec succès dans {name}","{number} événements importés avec succès dans {name}"]
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
