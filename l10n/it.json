@@ -73,6 +73,7 @@
     "_{nbPhotos} Google photo (>{formSize})_::_{nbPhotos} Google photos (>{formSize})_" : [" {nbPhotos}foto di Google (>{formSize})","{nbPhotos} foto di Google (>{formSize})"],
     "_{amount} photo imported ({progress}%)_::_{amount} photos imported ({progress}%)_" : ["{amount} foto importata ({progress}%)","{amount} foto importate ({progress}%)"],
     "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["{nbFiles} file in Google Drive ({formSize})","{nbFiles} file in Google Drive ({formSize})"],
+    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} file importato ({progress}%)","{amount} file importati ({progress}%)"],
     "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} contatto importato correttamente in {name}","{number} contatti importati correttamente in {name}"],
     "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number} evento importato correttamente in {name}","{number} eventi importati correttamente in {name}"],
     "Last Google Drive import job at {date}" : "Ultima operazione di importazione da Google Drive il {date}",

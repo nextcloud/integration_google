@@ -38,7 +38,7 @@ OC.L10N.register(
     "Import calendar" : "Takvimi içe aktar",
     "Photos" : "Fotoğraflar",
     "Import Google photos" : "Google fotoğraflarını içe aktar",
-    "Drive" : "Sürüş",
+    "Drive" : "Drive",
     "Successfully connected to Google!" : "Google ile bağlantı kuruldu!",
     "Google connection error:" : "Google bağlantı sorunu:",
     "Google options saved" : "Google ayarları kaydedildi",

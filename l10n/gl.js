@@ -75,6 +75,7 @@ OC.L10N.register(
     "_{nbPhotos} Google photo (>{formSize})_::_{nbPhotos} Google photos (>{formSize})_" : ["{nbPhotos} foto de Google (>{formSize})","{nbPhotos} fotos de Google (>{formSize})"],
     "_{amount} photo imported ({progress}%)_::_{amount} photos imported ({progress}%)_" : ["{amount} foto importada ({progress}%)","{amount} fotos importadas ({progress}%)"],
     "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["{nbFiles} ficheiro no Google Drive ({formSize})","{nbFiles} ficheiros no Google Drive ({formSize})"],
+    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} ficheiro importado ({progress}%)","{amount} ficheiros importados ({progress}%)"],
     "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} contacto foi importado sactifactoriamente en {name}","{number} contactos foron importados sactifactoriamente en {name}"],
     "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number} evento foi importado sactifactoriamente en {name}","{number} eventos foron importados sactifactoriamente en {name}"],
     "Last Google Drive import job at {date}" : "Último traballo de importación de Google Drive o {date}",
