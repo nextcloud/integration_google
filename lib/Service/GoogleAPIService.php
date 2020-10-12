@@ -642,7 +642,16 @@ class GoogleAPIService {
 	 */
 	public function importContacts(string $accessToken, string $userId, ?string $uri, int $key, ?string $newAddrBookName): array {
 		if ($key === 0) {
-			$key = $this->cdBackend->createAddressBook('principals/users/' . $userId, $newAddrBookName, []);
+			$addressBooks = $this->contactsManager->getUserAddressBooks();
+			foreach ($addressBooks as $k => $ab) {
+				if ($ab->getDisplayName() === $newAddrBookName) {
+					$key = intval($ab->getKey());
+					break;
+				}
+			}
+			if ($key === 0) {
+				$key = $this->cdBackend->createAddressBook('principals/users/' . $userId, $newAddrBookName, []);
+			}
 		} else {
 			// existing address book
 			// check if it exists
