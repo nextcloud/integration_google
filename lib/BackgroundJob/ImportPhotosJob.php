@@ -15,7 +15,7 @@ namespace OCA\Google\BackgroundJob;
 use OCP\BackgroundJob\QueuedJob;
 use OCP\AppFramework\Utility\ITimeFactory;
 
-use OCA\Google\Service\GoogleAPIService;
+use OCA\Google\Service\GooglePhotosAPIService;
 
 class ImportPhotosJob extends QueuedJob {
 
@@ -26,7 +26,7 @@ class ImportPhotosJob extends QueuedJob {
 	 *
 	 */
 	public function __construct(ITimeFactory $timeFactory,
-								GoogleAPIService $service) {
+								GooglePhotosAPIService $service) {
 		parent::__construct($timeFactory);
 		$this->service = $service;
 	}
