@@ -807,7 +807,7 @@ class GoogleAPIService {
 		if ($displayName) {
 			$searchResult = $this->contactsManager->search($displayName, ['FN']);
 			foreach ($searchResult as $resContact) {
-				if ($resContact['FN'] === $displayName) {
+				if ($resContact['FN'] === $displayName && (int)$resContact['addressbook-key'] === $addressBookKey) {
 					return true;
 				}
 			}
