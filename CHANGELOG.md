@@ -6,6 +6,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## 0.0.4 – 2020-10-12
+### Added
+- photos import
+- drive import
+
+### Changed
+- cleaner code
+
+### Fixed
+- avoid empty migration settings when OAuth config is not set
+
 ## 0.0.3 – 2020-10-03
 ### Fixed
 - avoid crash when refresh_token is not given and be more explicit on this error
