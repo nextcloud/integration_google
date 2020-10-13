@@ -207,29 +207,7 @@ class GooglePhotosAPIService {
 				'pageSize' => 100,
 				'albumId' => $albumId,
 			];
-			$result = $this->googleApiService->request($accessToken, $userId, 'v1/mediaItems:search', $params, 'POST', 'https://photoslibrary.googleapis.com/');
-			if (isset($result['error'])) {
-				return $result;
-			}
-			foreach ($result['mediaItems'] as $photo) {
-				$seenIds[] = $photo['id'];
-				$totalSeenNumber++;
-				$size = $this->getPhoto($accessToken, $userId, $photo, $albumFolder);
-				if (!is_null($size)) {
-					$nbDownloaded++;
-					$downloadedSize += $size;
-					if ($maxDownloadSize && $downloadedSize > $maxDownloadSize) {
-						return [
-							'nbDownloaded' => $nbDownloaded,
-							'targetPath' => $targetPath,
-							'finished' => ($totalSeenNumber >= $nbPhotosOnGoogle),
-							'totalSeen' => $totalSeenNumber,
-						];
-					}
-				}
-			}
-			while (isset($result['nextPageToken'])) {
-				$params['pageToken'] = $result['nextPageToken'];
+			do {
 				$result = $this->googleApiService->request($accessToken, $userId, 'v1/mediaItems:search', $params, 'POST', 'https://photoslibrary.googleapis.com/');
 				if (isset($result['error'])) {
 					return $result;
@@ -251,7 +229,8 @@ class GooglePhotosAPIService {
 						}
 					}
 				}
-			}
+				$params['pageToken'] = $result['nextPageToken'] ?? '';
+			} while (isset($result['nextPageToken']));
 		}
 
 		// get photos that don't belong to an album
@@ -265,7 +244,6 @@ class GooglePhotosAPIService {
 			}
 			foreach ($result['mediaItems'] as $photo) {
 				if (!in_array($photo['id'], $seenIds)) {
-					error_log('indep photo : '.$photo['filename']);
 					$seenIds[] = $photo['id'];
 					$totalSeenNumber++;
 					$size = $this->getPhoto($accessToken, $userId, $photo, $folder);
@@ -283,7 +261,7 @@ class GooglePhotosAPIService {
 					}
 				}
 			}
-			$params['pageToken'] = $result['nextPageToken'];
+			$params['pageToken'] = $result['nextPageToken'] ?? '';
 		} while (isset($result['nextPageToken']));
 
 		return [
