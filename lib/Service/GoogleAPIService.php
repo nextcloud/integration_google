@@ -50,7 +50,7 @@ class GoogleAPIService {
 	 * @param string $params
 	 * @return void
 	 */
-	private function sendNCNotification(string $userId, string $subject, array $params): void {
+	public function sendNCNotification(string $userId, string $subject, array $params): void {
 		$manager = $this->notificationManager;
 		$notification = $manager->createNotification();
 

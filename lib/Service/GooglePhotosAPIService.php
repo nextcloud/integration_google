@@ -124,7 +124,7 @@ class GooglePhotosAPIService {
 			$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_photos', '0');
 			$this->config->setUserValue($userId, Application::APP_ID, 'last_import_timestamp', '0');
 			if (isset($result['finished']) && $result['finished']) {
-				$this->googleAPIService->sendNCNotification($userId, 'import_photos_finished', [
+				$this->googleApiService->sendNCNotification($userId, 'import_photos_finished', [
 					'nbImported' => $result['totalSeen'],
 					'targetPath' => $targetPath,
 				]);
@@ -190,6 +190,7 @@ class GooglePhotosAPIService {
 		$downloadedSize = 0;
 		$nbDownloaded = 0;
 		$totalSeenNumber = 0;
+		$seenIds = [];
 		foreach ($albums as $album) {
 			$albumId = $album['id'];
 			$albumName = $album['title'];
@@ -211,6 +212,7 @@ class GooglePhotosAPIService {
 				return $result;
 			}
 			foreach ($result['mediaItems'] as $photo) {
+				$seenIds[] = $photo['id'];
 				$totalSeenNumber++;
 				$size = $this->getPhoto($accessToken, $userId, $photo, $albumFolder);
 				if (!is_null($size)) {
@@ -233,6 +235,7 @@ class GooglePhotosAPIService {
 					return $result;
 				}
 				foreach ($result['mediaItems'] as $photo) {
+					$seenIds[] = $photo['id'];
 					$totalSeenNumber++;
 					$size = $this->getPhoto($accessToken, $userId, $photo, $albumFolder);
 					if (!is_null($size)) {
@@ -250,6 +253,39 @@ class GooglePhotosAPIService {
 				}
 			}
 		}
+
+		// get photos that don't belong to an album
+		$params = [
+			'pageSize' => 100,
+		];
+		do {
+			$result = $this->googleApiService->request($accessToken, $userId, 'v1/mediaItems', $params, 'GET', 'https://photoslibrary.googleapis.com/');
+			if (isset($result['error'])) {
+				return $result;
+			}
+			foreach ($result['mediaItems'] as $photo) {
+				if (!in_array($photo['id'], $seenIds)) {
+					error_log('indep photo : '.$photo['filename']);
+					$seenIds[] = $photo['id'];
+					$totalSeenNumber++;
+					$size = $this->getPhoto($accessToken, $userId, $photo, $folder);
+					if (!is_null($size)) {
+						$nbDownloaded++;
+						$downloadedSize += $size;
+						if ($maxDownloadSize && $downloadedSize > $maxDownloadSize) {
+							return [
+								'nbDownloaded' => $nbDownloaded,
+								'targetPath' => $targetPath,
+								'finished' => ($totalSeenNumber >= $nbPhotosOnGoogle),
+								'totalSeen' => $totalSeenNumber,
+							];
+						}
+					}
+				}
+			}
+			$params['pageToken'] = $result['nextPageToken'];
+		} while (isset($result['nextPageToken']));
+
 		return [
 			'nbDownloaded' => $nbDownloaded,
 			'targetPath' => $targetPath,
