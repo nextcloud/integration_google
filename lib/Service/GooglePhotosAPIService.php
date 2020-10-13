@@ -52,28 +52,27 @@ class GooglePhotosAPIService {
 	 * @return array
 	 */
 	public function getPhotoNumber(string $accessToken, string $userId): array {
-		$nbPhotos = 0;
 		$params = [
 			'pageSize' => 100,
 		];
-		$result = $this->googleApiService->request($accessToken, $userId, 'v1/mediaItems', $params, 'GET', 'https://photoslibrary.googleapis.com/');
-		if (isset($result['error'])) {
-			return $result;
-		}
-		$nbPhotos += count($result['mediaItems']);
-		while (isset($result['nextPageToken'])) {
-			$params['pageToken'] = $result['nextPageToken'];
+		$seenIds = [];
+		do {
 			$result = $this->googleApiService->request($accessToken, $userId, 'v1/mediaItems', $params, 'GET', 'https://photoslibrary.googleapis.com/');
 			if (isset($result['error'])) {
 				return $result;
 			}
-			$nbPhotos += count($result['mediaItems']);
-		}
+			foreach ($result['mediaItems'] as $photo) {
+				if (!in_array($photo['id'], $seenIds)) {
+					$seenIds[] = $photo['id'];
+				}
+			}
+			$params['pageToken'] = $result['nextPageToken'] ?? '';
+		} while (isset($result['nextPageToken']));
 		// get free space
 		$userFolder = $this->root->getUserFolder($userId);
 		$freeSpace = $userFolder->getStorage()->free_space('/');
 		return [
-			'nbPhotos' => $nbPhotos,
+			'nbPhotos' => count($seenIds),
 			'freeSpace' => $freeSpace,
 		];
 	}
@@ -109,7 +108,7 @@ class GooglePhotosAPIService {
 	 * @return array
 	 */
 	public function importPhotosJob(string $userId): void {
-		$this->logger->error('Importing photos for ' . $userId);
+		$this->logger->info('Importing photos for ' . $userId);
 		$importingPhotos = $this->config->getUserValue($userId, Application::APP_ID, 'importing_photos', '0') === '1';
 		if (!$importingPhotos) {
 			return;
