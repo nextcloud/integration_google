@@ -161,15 +161,7 @@ class GooglePhotosAPIService {
 		$params = [
 			'pageSize' => 50,
 		];
-		$result = $this->googleApiService->request($accessToken, $userId, 'v1/albums', $params, 'GET', 'https://photoslibrary.googleapis.com/');
-		if (isset($result['error'])) {
-			return $result;
-		}
-		foreach ($result['albums'] as $album) {
-			$albums[] = $album;
-		}
-		while (isset($result['nextPageToken'])) {
-			$params['pageToken'] = $result['nextPageToken'];
+		do {
 			$result = $this->googleApiService->request($accessToken, $userId, 'v1/albums', $params, 'GET', 'https://photoslibrary.googleapis.com/');
 			if (isset($result['error'])) {
 				return $result;
@@ -177,7 +169,8 @@ class GooglePhotosAPIService {
 			foreach ($result['albums'] as $album) {
 				$albums[] = $album;
 			}
-		}
+			$params['pageToken'] = $result['nextPageToken'] ?? '';
+		} while (isset($result['nextPageToken']));
 
 		// get the photos
 		$info = $this->getPhotoNumber($accessToken, $userId);
