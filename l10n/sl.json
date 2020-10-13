@@ -10,7 +10,6 @@
     "Data migration" : "Selitev podatkov",
     "Google integration" : "Podpora za račune Google",
     "Import Google data into Nextcloud" : "Uvažanje podatkov Google v oblak Nextcloud",
-    "Google integration allows you to automatically import your Google calendars and contacts into Nextcloud." : "Podpora za Google omogoča samodejno uvažanje koledarjev in stikov v okolje Nextcloud.",
     "If you want to allow your Nextcloud users to authenticate to Google, create an OAuth application in your Google settings." : "Za overitev okolja Google znotraj Nextcloud je treba  ustvariti program OAuth med nastavitvami Google.",
     "Google API settings" : "Nastavitve vmesnika Google API",
     "Client ID" : "ID Odjemalca",
