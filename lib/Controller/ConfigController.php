@@ -51,7 +51,7 @@ class ConfigController extends Controller {
                                 IL10N $l,
                                 LoggerInterface $logger,
                                 IContactManager $contactsManager,
-                                GoogleAPIService $googleAPIService,
+                                GoogleAPIService $googleApiService,
                                 $userId) {
         parent::__construct($AppName, $request);
         $this->l = $l;
@@ -64,7 +64,7 @@ class ConfigController extends Controller {
         $this->urlGenerator = $urlGenerator;
         $this->logger = $logger;
         $this->contactsManager = $contactsManager;
-        $this->googleAPIService = $googleAPIService;
+        $this->googleApiService = $googleApiService;
     }
 
     /**
@@ -148,7 +148,7 @@ class ConfigController extends Controller {
 
         if ($clientID && $clientSecret && $configState !== '' && $configState === $state) {
             $redirect_uri = $this->urlGenerator->linkToRouteAbsolute('integration_google.config.oauthRedirect');
-            $result = $this->googleAPIService->requestOAuthAccessToken([
+            $result = $this->googleApiService->requestOAuthAccessToken([
                 'client_id' => $clientID,
                 'client_secret' => $clientSecret,
                 'grant_type' => 'authorization_code',
@@ -186,7 +186,7 @@ class ConfigController extends Controller {
      * @return string
      */
     private function storeUserInfo(string $accessToken): string {
-		$info = $this->googleAPIService->request($accessToken, $this->userId, 'oauth2/v1/userinfo', ['alt' => 'json']);
+		$info = $this->googleApiService->request($accessToken, $this->userId, 'oauth2/v1/userinfo', ['alt' => 'json']);
         if (isset($info['name'], $info['id'])) {
             $this->config->setUserValue($this->userId, Application::APP_ID, 'user_id', $info['id']);
             $this->config->setUserValue($this->userId, Application::APP_ID, 'user_name', $info['name']);

@@ -132,7 +132,7 @@ class GoogleDriveAPIService {
 			$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_files', '0');
 			$this->config->setUserValue($userId, Application::APP_ID, 'last_drive_import_timestamp', '0');
 			if (isset($result['finished']) && $result['finished']) {
-				$this->googleAPIService->sendNCNotification($userId, 'import_drive_finished', [
+				$this->googleApiService->sendNCNotification($userId, 'import_drive_finished', [
 					'nbImported' => $result['totalSeen'],
 					'targetPath' => $targetPath,
 				]);
