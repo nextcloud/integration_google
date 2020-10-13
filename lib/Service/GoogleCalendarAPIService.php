@@ -180,15 +180,7 @@ class GoogleCalendarAPIService {
 		$params = [
 			'maxResults' => 100,
 		];
-		$result = $this->googleApiService->request($accessToken, $userId, 'calendar/v3/calendars/'.$calId.'/events', $params);
-		if (isset($result['error'])) {
-			return $result;
-		}
-		foreach ($result['items'] as $event) {
-			yield $event;
-		}
-		while (isset($result['nextPageToken'])) {
-			$params['pageToken'] = $result['nextPageToken'];
+		do {
 			$result = $this->googleApiService->request($accessToken, $userId, 'calendar/v3/calendars/'.$calId.'/events', $params);
 			if (isset($result['error'])) {
 				return $result;
@@ -196,7 +188,8 @@ class GoogleCalendarAPIService {
 			foreach ($result['items'] as $event) {
 				yield $event;
 			}
-		}
+			$params['pageToken'] = $result['nextPageToken'] ?? '';
+		} while (isset($result['nextPageToken']));
 		return [];
 	}
 }

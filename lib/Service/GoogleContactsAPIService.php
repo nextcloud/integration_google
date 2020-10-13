@@ -45,19 +45,14 @@ class GoogleContactsAPIService {
 			]),
 			'pageSize' => 100,
 		];
-		$result = $this->googleApiService->request($accessToken, $userId, 'v1/people/me/connections', $params, 'GET', 'https://people.googleapis.com/');
-		if (isset($result['error'])) {
-			return $result;
-		}
-		$nbContacts += count($result['connections']);
-		while (isset($result['nextPageToken'])) {
-			$params['pageToken'] = $result['nextPageToken'];
+		do {
 			$result = $this->googleApiService->request($accessToken, $userId, 'v1/people/me/connections', $params, 'GET', 'https://people.googleapis.com/');
 			if (isset($result['error'])) {
 				return $result;
 			}
 			$nbContacts += count($result['connections']);
-		}
+			$params['pageToken'] = $result['nextPageToken'] ?? '';
+		} while (isset($result['nextPageToken']));
 		return ['nbContacts' => $nbContacts];
 	}
 
@@ -84,15 +79,7 @@ class GoogleContactsAPIService {
 			]),
 			'pageSize' => 100,
 		];
-		$result = $this->googleApiService->request($accessToken, $userId, 'v1/people/me/connections', $params, 'GET', 'https://people.googleapis.com/');
-		if (isset($result['error'])) {
-			return $result;
-		}
-		foreach ($result['connections'] as $contact) {
-			yield $contact;
-		}
-		while (isset($result['nextPageToken'])) {
-			$params['pageToken'] = $result['nextPageToken'];
+		do {
 			$result = $this->googleApiService->request($accessToken, $userId, 'v1/people/me/connections', $params, 'GET', 'https://people.googleapis.com/');
 			if (isset($result['error'])) {
 				return $result;
@@ -100,7 +87,8 @@ class GoogleContactsAPIService {
 			foreach ($result['connections'] as $contact) {
 				yield $contact;
 			}
-		}
+			$params['pageToken'] = $result['nextPageToken'] ?? '';
+		} while (isset($result['nextPageToken']));
 		return [];
 	}
 
