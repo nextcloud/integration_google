@@ -16,21 +16,10 @@ use OCP\IConfig;
 use OCP\Http\Client\IClientService;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
-use OCP\Contacts\IManager as IContactManager;
-use Sabre\VObject\Component\VCard;
-use Sabre\VObject\Property\Text;
-use OCA\DAV\CardDAV\CardDavBackend;
-use OCA\DAV\CalDAV\CalDavBackend;
-use OCP\Files\IRootFolder;
-use OCP\Files\FileInfo;
-use OCP\Files\Node;
-use OCP\BackgroundJob\IJobList;
 use Psr\Log\LoggerInterface;
 use OCP\Notification\IManager as INotificationManager;
 
 use OCA\Google\AppInfo\Application;
-use OCA\Google\BackgroundJob\ImportPhotosJob;
-use OCA\Google\BackgroundJob\ImportDriveJob;
 
 class GoogleAPIService {
 
@@ -44,25 +33,14 @@ class GoogleAPIService {
 								LoggerInterface $logger,
 								IL10N $l10n,
 								IConfig $config,
-								IContactManager $contactsManager,
-								CardDavBackend $cdBackend,
-								CalDavBackend $caldavBackend,
-								IRootFolder $root,
-								IJobList $jobList,
 								INotificationManager $notificationManager,
 								IClientService $clientService) {
 		$this->appName = $appName;
 		$this->l10n = $l10n;
 		$this->config = $config;
 		$this->logger = $logger;
-		$this->jobList = $jobList;
-		$this->clientService = $clientService;
-		$this->contactsManager = $contactsManager;
-		$this->cdBackend = $cdBackend;
-		$this->caldavBackend = $caldavBackend;
-		$this->root = $root;
-		$this->jobList = $jobList;
 		$this->notificationManager = $notificationManager;
+		$this->clientService = $clientService;
 		$this->client = $clientService->newClient();
 	}
 
