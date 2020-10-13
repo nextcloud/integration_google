@@ -68,19 +68,14 @@ class GoogleDriveAPIService {
 			'pageSize' => 1000,
 			'q' => "mimeType!='application/vnd.google-apps.folder'",
 		];
-		$result = $this->googleApiService->request($accessToken, $userId, 'drive/v3/files', $params);
-		if (isset($result['error']) || !isset($result['files'])) {
-			return $result;
-		}
-		$nbFiles += count($result['files']);
-		while (isset($result['nextPageToken'])) {
-			$params['pageToken'] = $result['nextPageToken'];
+		do {
 			$result = $this->googleApiService->request($accessToken, $userId, 'drive/v3/files', $params);
 			if (isset($result['error']) || !isset($result['files'])) {
 				return $result;
 			}
 			$nbFiles += count($result['files']);
-		}
+			$params['pageToken'] = $result['nextPageToken'] ?? '';
+		} while (isset($result['nextPageToken']));
 		$info['nbFiles'] = $nbFiles;
 		return $info;
 	}
@@ -173,18 +168,7 @@ class GoogleDriveAPIService {
 			'fields' => '*',
 			'q' => "mimeType='application/vnd.google-apps.folder'",
 		];
-		$result = $this->googleApiService->request($accessToken, $userId, 'drive/v3/files', $params);
-		if (isset($result['error'])) {
-			return $result;
-		}
-		foreach ($result['files'] as $dir) {
-			$directoriesById[$dir['id']] = [
-				'name' => $dir['name'],
-				'parent' => (isset($dir['parents']) && count($dir['parents']) > 0) ? $dir['parents'][0] : null,
-			];
-		}
-		while (isset($result['nextPageToken'])) {
-			$params['pageToken'] = $result['nextPageToken'];
+		do {
 			$result = $this->googleApiService->request($accessToken, $userId, 'drive/v3/files', $params);
 			if (isset($result['error'])) {
 				return $result;
@@ -195,8 +179,10 @@ class GoogleDriveAPIService {
 					'parent' => (isset($dir['parents']) && count($dir['parents']) > 0) ? $dir['parents'][0] : null,
 				];
 			}
-		}
-		// create top dirs
+			$params['pageToken'] = $result['nextPageToken'] ?? '';
+		} while (isset($result['nextPageToken']));
+
+		// create directories (recursive powa)
 		if (!$this->createDirsUnder($directoriesById, $folder)) {
 			return ['error' => 'Impossible to create Drive directories'];
 		}
@@ -216,29 +202,7 @@ class GoogleDriveAPIService {
 			'fields' => '*',
 			'q' => "mimeType!='application/vnd.google-apps.folder'",
 		];
-		$result = $this->googleApiService->request($accessToken, $userId, 'drive/v3/files', $params);
-		if (isset($result['error'])) {
-			return $result;
-		}
-		foreach ($result['files'] as $fileItem) {
-			$totalSeenNumber++;
-			$size = $this->getFile($accessToken, $userId, $fileItem, $directoriesById, $folder);
-			if (!is_null($size)) {
-				$nbDownloaded++;
-				$downloadedSize += $size;
-				//if ($maxDownloadNumber && $nbDownloaded === $maxDownloadNumber) {
-				if ($maxDownloadSize && $downloadedSize > $maxDownloadSize) {
-					return [
-						'nbDownloaded' => $nbDownloaded,
-						'targetPath' => $targetPath,
-						'finished' => ($totalSeenNumber >= $nbFilesOnDrive),
-						'totalSeen' => $totalSeenNumber,
-					];
-				}
-			}
-		}
-		while (isset($result['nextPageToken'])) {
-			$params['pageToken'] = $result['nextPageToken'];
+		do {
 			$result = $this->googleApiService->request($accessToken, $userId, 'drive/v3/files', $params);
 			if (isset($result['error'])) {
 				return $result;
@@ -249,6 +213,7 @@ class GoogleDriveAPIService {
 				if (!is_null($size)) {
 					$nbDownloaded++;
 					$downloadedSize += $size;
+					//if ($maxDownloadNumber && $nbDownloaded === $maxDownloadNumber) {
 					if ($maxDownloadSize && $downloadedSize > $maxDownloadSize) {
 						return [
 							'nbDownloaded' => $nbDownloaded,
@@ -259,7 +224,8 @@ class GoogleDriveAPIService {
 					}
 				}
 			}
-		}
+			$params['pageToken'] = $result['nextPageToken'] ?? '';
+		} while (isset($result['nextPageToken']));
 
 		return [
 			'nbDownloaded' => $nbDownloaded,
