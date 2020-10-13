@@ -15,6 +15,7 @@ use OCP\IL10N;
 use OCP\IConfig;
 use OCP\Http\Client\IClientService;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
 use OCP\Contacts\IManager as IContactManager;
 use Sabre\VObject\Component\VCard;
 use Sabre\VObject\Property\Text;
@@ -132,7 +133,7 @@ class GoogleAPIService {
 			} else {
 				return json_decode($body, true);
 			}
-		} catch (ClientException $e) {
+		} catch (ServerException | ClientException $e) {
 			$response = $e->getResponse();
 			$body = (string) $response->getBody();
 			// try to refresh token if it's invalid
