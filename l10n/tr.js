@@ -16,6 +16,7 @@ OC.L10N.register(
     "Data migration" : "Veri aktarma",
     "Google integration" : "Google bütünleştirmesi",
     "Import Google data into Nextcloud" : "Google verilerini Nextcloud içine aktar",
+    "Google integration allows you to automatically import your Google calendars, contacts, photos and files into Nextcloud." : "Google bütünleştirmesi, Google takvimlerinizi, kişilerinizi, fotoğraflarınızı ve dosyalarınızı otomatik olarak Nextcloud içine aktarmanızı sağlar.",
     "If you want to allow your Nextcloud users to authenticate to Google, create an OAuth application in your Google settings." : "Nextcloud kullanıcılarınızın Google kimlik doğrulaması için OAuth uygulamasını kullanmak istiyorsanız, Google yönetici ayarlarınızdan bir uygulama oluşturun.",
     "Google API settings" : "Google API ayarları",
     "Go to \"APIs & Services\" => \"Credentials\" and click on \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\"." : "\"API`ler ve Hizmetler\" => \"Kimlik bilgileri\" bölümüne gidip \"+ KİMLİK BİLGİSİ OLUŞTUR\" -> \"OAuth istemci kimliği\" üzerine tıklayın.",
@@ -70,7 +71,14 @@ OC.L10N.register(
     "Starting importing photos in {targetPath} directory" : "{targetPath} klasöründeki fotoğrafların içe aktarılmasına başlanıyor",
     "Failed to start importing Google photos" : "Google fotoğraflarının içe aktarılmasına başlanamadı",
     "Starting importing files in {targetPath} directory" : "{targetPath} klasöründeki dosyaların içe aktarılmasına başlanıyor",
+    "Failed to start importing Google Drive" : "Google Drive dosyalarının içe aktarılmasına başlanamadı",
+    "_{nbPhotos} Google photo (>{formSize})_::_{nbPhotos} Google photos (>{formSize})_" : ["{nbPhotos} Google fotoğrafı (>{formSize})","{nbPhotos} Google fotoğrafları (>{formSize})"],
+    "_{amount} photo imported ({progress}%)_::_{amount} photos imported ({progress}%)_" : ["{amount} fotoğraf içe aktarıldı ({progress}%)","{amount} fotoğraf içe aktarıldı ({progress}%)"],
+    "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["{nbFiles} Google Drive dosyası ({formSize})","{nbFiles} Google Drive dosyası ({formSize})"],
+    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} dosya içe aktarıldı ({progress}%)","{amount} dosya içe aktarıldı ({progress}%)"],
     "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} kişi {name} içine aktarıldı","{number} kişi {name} içine aktarıldı"],
-    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number} etkinlik {name} içine aktarıldı","{number} etkinlik {name} içine aktarıldı"]
+    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number} etkinlik {name} içine aktarıldı","{number} etkinlik {name} içine aktarıldı"],
+    "Last Google Drive import job at {date}" : "Son Google Drive içe aktarımı {date}",
+    "Last photo import job at {date}" : "Son fotoğraf içe aktarımı {date}"
 },
 "nplurals=2; plural=(n > 1);");
