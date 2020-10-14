@@ -653,9 +653,11 @@ export default {
 .google-grid-form label {
 	line-height: 38px;
 }
+
 .google-grid-form input {
 	width: 100%;
 }
+
 .google-grid-form {
 	max-width: 600px;
 	display: grid;
@@ -664,13 +666,16 @@ export default {
 		margin-bottom: -1px;
 	}
 }
+
 #google_prefs .icon {
 	display: inline-block;
 	width: 32px;
 }
+
 #google_prefs .grid-form .icon {
 	margin-bottom: -3px;
 }
+
 .icon-google-settings {
 	background-image: url('./../../img/app-dark.svg');
 	background-size: 23px 23px;
@@ -681,6 +686,7 @@ export default {
 body.theme--dark .icon-google-settings {
 	background-image: url('./../../img/app.svg');
 }
+
 #google-content {
 	margin-left: 40px;
 
@@ -709,10 +715,12 @@ body.theme--dark .icon-google-settings {
 		width: 200px;
 	}
 }
+
 ::v-deep .app-navigation-entry__icon-bullet {
 	display: inline-block;
 	padding: 0;
 	height: 12px;
 	margin: 0 8px 0 10px;
 }
+
 </style>
