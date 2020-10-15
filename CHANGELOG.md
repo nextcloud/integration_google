@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## 0.0.5 – 2020-10-15
+### Changed
+- use webpack 5
+- split service in 5 ones
+- improve request error mamangement
+- refactor some loops
+
+### Fixed
+- stylelint error
+
 ## 0.0.4 – 2020-10-12
 ### Added
 - photos import
