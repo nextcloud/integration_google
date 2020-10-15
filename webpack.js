@@ -7,7 +7,7 @@ webpackConfig.devtool = isDev ? 'cheap-source-map' : 'source-map'
 
 webpackConfig.stats = {
     colors: true,
-    excludeModules: true,
+    modules: false,
 }
 
 webpackConfig.entry = {
