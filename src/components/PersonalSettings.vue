@@ -263,7 +263,7 @@ export default {
 			this.getNbGooglePhotos()
 			this.getPhotoImportValues(true)
 			this.getGoogleDriveInfo()
-			this.getDriveImportValues()
+			this.getDriveImportValues(true)
 		}
 	},
 
@@ -560,7 +560,7 @@ export default {
 				.then(() => {
 				})
 		},
-		getDriveImportValues() {
+		getDriveImportValues(launchLoop = false) {
 			const url = generateUrl('/apps/integration_google/import-files-info')
 			axios.get(url)
 				.then((response) => {
@@ -570,6 +570,9 @@ export default {
 						this.importingDrive = response.data.importing_drive
 						if (!this.importingDrive) {
 							clearInterval(this.driveImportLoop)
+						} else if (launchLoop) {
+							// launch loop if we are currently importing AND it's the first time we call getDriveImportValues
+							this.driveImportLoop = setInterval(() => this.getDriveImportValues(), 10000)
 						}
 					}
 				})
@@ -591,8 +594,7 @@ export default {
 					showSuccess(
 						t('integration_google', 'Starting importing files in {targetPath} directory', { targetPath })
 					)
-					this.getDriveImportValues()
-					this.driveImportLoop = setInterval(() => this.getDriveImportValues(), 10000)
+					this.getDriveImportValues(true)
 				})
 				.catch((error) => {
 					showError(

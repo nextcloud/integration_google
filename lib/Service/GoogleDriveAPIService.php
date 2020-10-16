@@ -121,7 +121,9 @@ class GoogleDriveAPIService {
 		// import batch of files
 		$targetPath = $this->l10n->t('Google Drive import');
 		// import by batch of 500 Mo
-		$result = $this->importFiles($accessToken, $userId, $targetPath, 500000000);
+		$alreadyImported = $this->config->getUserValue($userId, Application::APP_ID, 'nb_imported_files', '0');
+		$alreadyImported = (int) $alreadyImported;
+		$result = $this->importFiles($accessToken, $userId, $targetPath, 500000000, $alreadyImported);
 		if (isset($result['error']) || (isset($result['finished']) && $result['finished'])) {
 			$this->config->setUserValue($userId, Application::APP_ID, 'importing_drive', '0');
 			$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_files', '0');
@@ -135,10 +137,6 @@ class GoogleDriveAPIService {
 		} else {
 			$ts = (new \Datetime())->getTimestamp();
 			$this->config->setUserValue($userId, Application::APP_ID, 'last_drive_import_timestamp', $ts);
-			$alreadyImported = $this->config->getUserValue($userId, Application::APP_ID, 'nb_imported_files', '');
-			$alreadyImported = $alreadyImported ? (int) $alreadyImported : 0;
-			$newNbImported = $alreadyImported + $result['nbDownloaded'];
-			$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_files', $newNbImported);
 			$this->jobList->add(ImportDriveJob::class, ['user_id' => $userId]);
 		}
 	}
@@ -148,9 +146,11 @@ class GoogleDriveAPIService {
 	 * @param string $userId
 	 * @param string $targetPath
 	 * @param ?int $maxDownloadNumber
+	 * @param int $alreadyImported
 	 * @return array
 	 */
-	public function importFiles(string $accessToken, string $userId, string $targetPath, ?int $maxDownloadSize = null): array {
+	public function importFiles(string $accessToken, string $userId, string $targetPath,
+								?int $maxDownloadSize = null, int $alreadyImported): array {
 		// create root folder
 		$userFolder = $this->root->getUserFolder($userId);
 		if (!$userFolder->nodeExists($targetPath)) {
@@ -212,6 +212,7 @@ class GoogleDriveAPIService {
 				$size = $this->getFile($accessToken, $userId, $fileItem, $directoriesById, $folder);
 				if (!is_null($size)) {
 					$nbDownloaded++;
+					$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_files', $alreadyImported + $nbDownloaded);
 					$downloadedSize += $size;
 					//if ($maxDownloadNumber && $nbDownloaded === $maxDownloadNumber) {
 					if ($maxDownloadSize && $downloadedSize > $maxDownloadSize) {
