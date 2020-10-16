@@ -88,11 +88,11 @@ class GoogleCalendarAPIService {
 				. 'BEGIN:VEVENT' . "\n";
 
 			$calData .= 'UID:' . $newCalId . '-' . $nbAdded . "\n";
-			$calData .= isset($e['summary']) ? ('SUMMARY:' . $e['summary'] . "\n") : '';
+			$calData .= isset($e['summary']) ? ('SUMMARY:' . str_replace("\n", '\n', $e['summary']) . "\n") : '';
 			$calData .= isset($e['sequence']) ? ('SEQUENCE:' . $e['sequence'] . "\n") : '';
-			$calData .= isset($e['location']) ? ('LOCATION:' . $e['location'] . "\n") : '';
-			$calData .= isset($e['description']) ? ('DESCRIPTION:' . $e['description'] . "\n") : '';
-			$calData .= isset($e['status']) ? ('STATUS:' . strtoupper($e['status']) . "\n") : '';
+			$calData .= isset($e['location']) ? ('LOCATION:' . str_replace("\n", '\n', $e['location']) . "\n") : '';
+			$calData .= isset($e['description']) ? ('DESCRIPTION:' . str_replace("\n", '\n', $e['description']) . "\n") : '';
+			$calData .= isset($e['status']) ? ('STATUS:' . strtoupper(str_replace("\n", '\n', $e['status'])) . "\n") : '';
 
 			if (isset($e['created'])) {
 				$created = new \Datetime($e['created']);
