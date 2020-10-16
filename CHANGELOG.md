@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## 0.0.7 – 2020-10-16
+### Fixed
+- calendar import crashing for events with not dates
+[#11](https://github.com/nextcloud/integration_google/issues/11) @cairobraga
+
 ## 0.0.6 – 2020-10-16
 ### Changed
 - improve webpack config
