@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## 0.0.6 – 2020-10-16
+### Changed
+- improve webpack config
+- real time photo/drive import progress
+[#14](https://github.com/nextcloud/integration_google/issues/14) @sebvil
+
+### Fixed
+- crash when importing calendar with new lines in event description
+[#11](https://github.com/nextcloud/integration_google/issues/11) @slayerbrk @cairobraga @JimmyKater @aelethian
+
 ## 0.0.5 – 2020-10-15
 ### Changed
 - use webpack 5
