@@ -117,7 +117,9 @@ class GooglePhotosAPIService {
 		$accessToken = $this->config->getUserValue($userId, Application::APP_ID, 'token', '');
 		$targetPath = $this->l10n->t('Google Photos import');
 		// import photos by batch of 500 Mo
-		$result = $this->importPhotos($accessToken, $userId, $targetPath, 500000000);
+		$alreadyImported = $this->config->getUserValue($userId, Application::APP_ID, 'nb_imported_photos', '0');
+		$alreadyImported = (int) $alreadyImported;
+		$result = $this->importPhotos($accessToken, $userId, $targetPath, 500000000, $alreadyImported);
 		if (isset($result['error']) || (isset($result['finished']) && $result['finished'])) {
 			$this->config->setUserValue($userId, Application::APP_ID, 'importing_photos', '0');
 			$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_photos', '0');
@@ -131,10 +133,6 @@ class GooglePhotosAPIService {
 		} else {
 			$ts = (new \Datetime())->getTimestamp();
 			$this->config->setUserValue($userId, Application::APP_ID, 'last_import_timestamp', $ts);
-			$alreadyImported = $this->config->getUserValue($userId, Application::APP_ID, 'nb_imported_photos', '');
-			$alreadyImported = $alreadyImported ? (int) $alreadyImported : 0;
-			$newNbImported = $alreadyImported + $result['nbDownloaded'];
-			$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_photos', $newNbImported);
 			$this->jobList->add(ImportPhotosJob::class, ['user_id' => $userId]);
 		}
 	}
@@ -143,9 +141,12 @@ class GooglePhotosAPIService {
 	 * @param string $accessToken
 	 * @param string $userId
 	 * @param string $targetPath
+	 * @param ?int $maxDownloadSize
+	 * @param int $alreadyImported
 	 * @return array
 	 */
-	public function importPhotos(string $accessToken, string $userId, string $targetPath, ?int $maxDownloadSize = null): array {
+	public function importPhotos(string $accessToken, string $userId, string $targetPath,
+								?int $maxDownloadSize = null, int $alreadyImported): array {
 		// create root folder
 		$userFolder = $this->root->getUserFolder($userId);
 		if (!$userFolder->nodeExists($targetPath)) {
@@ -210,6 +211,7 @@ class GooglePhotosAPIService {
 					$size = $this->getPhoto($accessToken, $userId, $photo, $albumFolder);
 					if (!is_null($size)) {
 						$nbDownloaded++;
+						$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_photos', $alreadyImported + $nbDownloaded);
 						$downloadedSize += $size;
 						if ($maxDownloadSize && $downloadedSize > $maxDownloadSize) {
 							return [
@@ -241,6 +243,7 @@ class GooglePhotosAPIService {
 					$size = $this->getPhoto($accessToken, $userId, $photo, $folder);
 					if (!is_null($size)) {
 						$nbDownloaded++;
+						$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_photos', $alreadyImported + $nbDownloaded);
 						$downloadedSize += $size;
 						if ($maxDownloadSize && $downloadedSize > $maxDownloadSize) {
 							return [

@@ -261,7 +261,7 @@ export default {
 			this.getLocalAddressBooks()
 			this.getNbGoogleContacts()
 			this.getNbGooglePhotos()
-			this.getPhotoImportValues()
+			this.getPhotoImportValues(true)
 			this.getGoogleDriveInfo()
 			this.getDriveImportValues()
 		}
@@ -382,7 +382,7 @@ export default {
 				? cal.backgroundColor.replace('#', '')
 				: '0082c9'
 		},
-		getPhotoImportValues() {
+		getPhotoImportValues(launchLoop = false) {
 			const url = generateUrl('/apps/integration_google/import-photos-info')
 			axios.get(url)
 				.then((response) => {
@@ -392,6 +392,9 @@ export default {
 						this.importingPhotos = response.data.importing_photos
 						if (!this.importingPhotos) {
 							clearInterval(this.photoImportLoop)
+						} else if (launchLoop) {
+							// launch loop if we are currently importing AND it's the first time we call getPhotoImportValues
+							this.photoImportLoop = setInterval(() => this.getPhotoImportValues(), 10000)
 						}
 					}
 				})
@@ -526,8 +529,7 @@ export default {
 					showSuccess(
 						t('integration_google', 'Starting importing photos in {targetPath} directory', { targetPath })
 					)
-					this.getPhotoImportValues()
-					this.photoImportLoop = setInterval(() => this.getPhotoImportValues(), 10000)
+					this.getPhotoImportValues(true)
 				})
 				.catch((error) => {
 					showError(
