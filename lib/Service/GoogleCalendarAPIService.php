@@ -150,6 +150,9 @@ class GoogleCalendarAPIService {
 				$calData .= 'DTSTART;VALUE=DATE-TIME:' . $start->format('Ymd\THis\Z') . "\n";
 				$end = new \Datetime($e['end']['dateTime']);
 				$calData .= 'DTEND;VALUE=DATE-TIME:' . $end->format('Ymd\THis\Z') . "\n";
+			} else {
+				// skip entries without any date
+				continue;
 			}
 
 			$calData .= 'CLASS:PUBLIC' . "\n"
