@@ -163,6 +163,30 @@ class GoogleContactsAPIService {
 				continue;
 			}
 
+			// photo
+			if (isset($c['photos']) && is_array($c['photos'])) {
+				foreach ($c['photos'] as $photo) {
+					if (isset($photo['url'])) {
+						// determine photo type
+						$type = '';
+						if (preg_match('/\.jpg$/i', $photo['url']) || preg_match('/\.jpeg$/i', $photo['url'])) {
+							$type = 'JPEG';
+						} elseif (preg_match('/\.png$/i', $photo['url'])) {
+							$type = 'PNG';
+						}
+						if ($type !== '') {
+							$photoFile = $this->googleApiService->simpleRequest($accessToken, $userId, $photo['url']);
+							if (!isset($photoFile['error'])) {
+								$b64Photo = base64_encode($photoFile['content']);
+								$prop = $vCard->createProperty('PHOTO', $b64Photo, ['type' => $type, 'encoding' => 'b']);
+								$vCard->add($prop);
+								break;
+							}
+						}
+					}
+				}
+			}
+
 			// address
 			if (isset($c['addresses']) && is_array($c['addresses'])) {
 				foreach ($c['addresses'] as $address) {
