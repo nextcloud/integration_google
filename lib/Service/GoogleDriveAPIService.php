@@ -145,7 +145,7 @@ class GoogleDriveAPIService {
 	 * @param string $accessToken
 	 * @param string $userId
 	 * @param string $targetPath
-	 * @param ?int $maxDownloadNumber
+	 * @param ?int $maxDownloadSize
 	 * @param int $alreadyImported
 	 * @return array
 	 */
@@ -214,7 +214,6 @@ class GoogleDriveAPIService {
 					$nbDownloaded++;
 					$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_files', $alreadyImported + $nbDownloaded);
 					$downloadedSize += $size;
-					//if ($maxDownloadNumber && $nbDownloaded === $maxDownloadNumber) {
 					if ($maxDownloadSize && $downloadedSize > $maxDownloadSize) {
 						return [
 							'nbDownloaded' => $nbDownloaded,
