@@ -299,8 +299,6 @@ export default {
 				})
 		},
 		onOAuthClick() {
-			const redirectEndpoint = generateUrl('/apps/integration_google/oauth-redirect')
-			const redirectUri = window.location.protocol + '//' + window.location.host + redirectEndpoint
 			const oauthState = Math.random().toString(36).substring(3)
 			const scopes = [
 				'openid',
@@ -313,7 +311,7 @@ export default {
 			]
 			const requestUrl = 'https://accounts.google.com/o/oauth2/v2/auth?'
 				+ 'client_id=' + encodeURIComponent(this.state.client_id)
-				+ '&redirect_uri=' + encodeURIComponent(redirectUri)
+				+ '&redirect_uri=' + encodeURIComponent(this.state.redirect_uri)
 				+ '&response_type=code'
 				+ '&access_type=offline'
 				+ '&prompt=consent'

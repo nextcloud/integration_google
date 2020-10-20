@@ -19,14 +19,13 @@ class Personal implements ISettings {
     private $urlGenerator;
     private $l;
 
-    public function __construct(
-                        string $appName,
-                        IL10N $l,
-                        IRequest $request,
-                        IConfig $config,
-                        IURLGenerator $urlGenerator,
-                        IInitialStateService $initialStateService,
-                        $userId) {
+    public function __construct(string $appName,
+                                IL10N $l,
+                                IRequest $request,
+                                IConfig $config,
+                                IURLGenerator $urlGenerator,
+                                IInitialStateService $initialStateService,
+                                $userId) {
         $this->appName = $appName;
         $this->urlGenerator = $urlGenerator;
         $this->request = $request;
@@ -46,12 +45,14 @@ class Personal implements ISettings {
         // for OAuth
         $clientID = $this->config->getAppValue(Application::APP_ID, 'client_id', '');
         $clientSecret = $this->config->getAppValue(Application::APP_ID, 'client_secret', '') !== '';
+        $redirectUri = $this->urlGenerator->linkToRouteAbsolute('integration_google.config.oauthRedirect');
 
         $userConfig = [
             'token' => $token,
             'client_id' => $clientID,
             'client_secret' => $clientSecret,
             'user_name' => $userName,
+            'redirect_uri' => $redirectUri,
         ];
         $this->initialStateService->provideInitialState($this->appName, 'user-config', $userConfig);
         $response = new TemplateResponse(Application::APP_ID, 'personalSettings');

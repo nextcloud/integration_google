@@ -14,7 +14,7 @@
 			<br><br>
 			<span class="icon icon-details" />
 			{{ t('integration_google', 'Make sure you set one "Authorized redirect URI" to') }}
-			<b> {{ redirectUri }} </b>
+			<b> {{ state.redirect_uri }} </b>
 			<br><br>
 			{{ t('integration_google', 'Put the "Client ID" and "Client secret" below.') }}
 			<br>
@@ -73,10 +73,6 @@ export default {
 	},
 
 	computed: {
-		redirectUri() {
-			const redirectEndpoint = generateUrl('/apps/integration_google/oauth-redirect')
-			return window.location.protocol + '//' + window.location.host + redirectEndpoint
-		},
 	},
 
 	methods: {
