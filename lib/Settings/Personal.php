@@ -45,14 +45,12 @@ class Personal implements ISettings {
         // for OAuth
         $clientID = $this->config->getAppValue(Application::APP_ID, 'client_id', '');
         $clientSecret = $this->config->getAppValue(Application::APP_ID, 'client_secret', '') !== '';
-        $redirectUri = $this->urlGenerator->linkToRouteAbsolute('integration_google.config.oauthRedirect');
 
         $userConfig = [
             'token' => $token,
             'client_id' => $clientID,
             'client_secret' => $clientSecret,
             'user_name' => $userName,
-            'redirect_uri' => $redirectUri,
         ];
         $this->initialStateService->provideInitialState($this->appName, 'user-config', $userConfig);
         $response = new TemplateResponse(Application::APP_ID, 'personalSettings');

@@ -14,7 +14,7 @@
 			<br><br>
 			<span class="icon icon-details" />
 			{{ t('integration_google', 'Make sure you set one "Authorized redirect URI" to') }}
-			<b> {{ state.redirect_uri }} </b>
+			<b> {{ redirect_uri }} </b>
 			<br><br>
 			{{ t('integration_google', 'Put the "Client ID" and "Client secret" below.') }}
 			<br>
@@ -69,6 +69,7 @@ export default {
 			state: loadState('integration_google', 'admin-config'),
 			// to prevent some browsers to fill fields with remembered passwords
 			readonly: true,
+			redirect_uri: window.location.protocol + '//' + window.location.host + generateUrl('/apps/integration_google/oauth-redirect'),
 		}
 	},
 

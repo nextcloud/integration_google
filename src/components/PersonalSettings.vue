@@ -163,6 +163,7 @@ export default {
 	data() {
 		return {
 			state: loadState('integration_google', 'user-config'),
+			redirect_uri: window.location.protocol + '//' + window.location.host + generateUrl('/apps/integration_google/oauth-redirect'),
 			// calendars
 			calendars: [],
 			importingCalendar: {},
@@ -311,7 +312,7 @@ export default {
 			]
 			const requestUrl = 'https://accounts.google.com/o/oauth2/v2/auth?'
 				+ 'client_id=' + encodeURIComponent(this.state.client_id)
-				+ '&redirect_uri=' + encodeURIComponent(this.state.redirect_uri)
+				+ '&redirect_uri=' + encodeURIComponent(this.redirect_uri)
 				+ '&response_type=code'
 				+ '&access_type=offline'
 				+ '&prompt=consent'
@@ -321,6 +322,7 @@ export default {
 			const req = {
 				values: {
 					oauth_state: oauthState,
+					redirect_uri: this.redirect_uri,
 				},
 			}
 			const url = generateUrl('/apps/integration_google/config')

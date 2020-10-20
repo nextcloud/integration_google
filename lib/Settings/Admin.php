@@ -41,12 +41,10 @@ class Admin implements ISettings {
     public function getForm(): TemplateResponse {
         $clientID = $this->config->getAppValue(Application::APP_ID, 'client_id', '');
         $clientSecret = $this->config->getAppValue(Application::APP_ID, 'client_secret', '');
-        $redirectUri = $this->urlGenerator->linkToRouteAbsolute('integration_google.config.oauthRedirect');
 
         $adminConfig = [
             'client_id' => $clientID,
             'client_secret' => $clientSecret,
-            'redirect_uri' => $redirectUri,
         ];
         $this->initialStateService->provideInitialState($this->appName, 'admin-config', $adminConfig);
         return new TemplateResponse(Application::APP_ID, 'adminSettings');

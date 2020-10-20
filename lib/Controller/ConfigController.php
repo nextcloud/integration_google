@@ -147,7 +147,7 @@ class ConfigController extends Controller {
         $this->config->setUserValue($this->userId, Application::APP_ID, 'oauth_state', '');
 
         if ($clientID && $clientSecret && $configState !== '' && $configState === $state) {
-            $redirect_uri = $this->urlGenerator->linkToRouteAbsolute('integration_google.config.oauthRedirect');
+            $redirect_uri = $this->config->getUserValue($this->userId, Application::APP_ID, 'redirect_uri', '');
             $result = $this->googleApiService->requestOAuthAccessToken([
                 'client_id' => $clientID,
                 'client_secret' => $clientSecret,
