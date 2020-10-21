@@ -62,8 +62,8 @@
 						<span class="icon icon-download" />
 						{{ t('integration_google', 'Import in {name} address book', { name: selectedAddressBookName }) }}
 					</button>
+					<br>
 				</div>
-				<br>
 				<div v-if="calendars.length > 0"
 					id="google-calendars">
 					<h3>{{ t('integration_google', 'Calendars') }}</h3>
@@ -79,8 +79,8 @@
 							{{ t('integration_google', 'Import calendar') }}
 						</button>
 					</div>
+					<br>
 				</div>
-				<br>
 				<div v-if="nbPhotos > 0"
 					id="google-photos">
 					<h3>{{ t('integration_google', 'Photos') }}</h3>
@@ -108,8 +108,8 @@
 							{{ t('integration_google', 'Cancel photo import') }}
 						</button>
 					</div>
+					<br><br>
 				</div>
-				<br>
 				<div v-if="nbFiles > 0"
 					id="google-drive">
 					<h3>{{ t('integration_google', 'Drive') }}</h3>
@@ -219,7 +219,8 @@ export default {
 		lastPhotoImportDate() {
 			return this.lastPhotoImportTimestamp !== 0
 				? t('integration_google', 'Last photo import job at {date}', { date: moment.unix(this.lastPhotoImportTimestamp).format('LLL') })
-				: t('integration_google', 'Photo import process will begin soon')
+				: t('integration_google', 'Photo import background process will begin soon.') + ' '
+					+ t('integration_google', 'You can close this page. You will notified when it finishes.')
 		},
 		photoImportProgress() {
 			return this.nbPhotos > 0 && this.nbImportedPhotos > 0
@@ -232,7 +233,8 @@ export default {
 		lastDriveImportDate() {
 			return this.lastDriveImportTimestamp !== 0
 				? t('integration_google', 'Last Google Drive import job at {date}', { date: moment.unix(this.lastDriveImportTimestamp).format('LLL') })
-				: t('integration_google', 'Google Drive import process will begin soon')
+				: t('integration_google', 'Google Drive background import process will begin soon.') + ' '
+					+ t('integration_google', 'You can close this page. You will notified when it finishes.')
 		},
 		driveImportProgress() {
 			return this.driveSize > 0 && this.nbImportedFiles > 0
