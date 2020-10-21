@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## 0.0.9 – 2020-10-21
+### Fixed
+- get free space independently from photo service
+
 ## 0.0.8 – 2020-10-21
 ### Changed
 - import contact photos
