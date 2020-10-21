@@ -20,7 +20,8 @@ OC.L10N.register(
     "Import calendar" : "Увези календар",
     "Photos" : "Фотографии",
     "Import Google photos" : "Увези ги Google фотографиите",
-    "Drive" : "Возење",
+    "Drive" : "Драјв",
+    "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Вашиот Google Драјв е поголем одколку што имате слободно место  ({formSpace})",
     "Successfully connected to Google!" : "Успешно поврзување со Google!"
 },
 "nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;");
