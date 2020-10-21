@@ -86,7 +86,7 @@
 					<h3>{{ t('integration_google', 'Photos') }}</h3>
 					<label>
 						<span class="icon icon-toggle-pictures" />
-						{{ n('integration_google', '{nbPhotos} Google photo (>{formSize})', '{nbPhotos} Google photos (>{formSize})', nbPhotos, { nbPhotos, formSize: humanFileSize(estimatedPhotoCollectionSize, true) }) }}
+						{{ n('integration_google', '{nbPhotos} Google photo (>{formSize})', '{nbPhotos} Google photos (>{formSize})', nbPhotos, { nbPhotos, formSize: myHumanFileSize(estimatedPhotoCollectionSize, true) }) }}
 					</label>
 					<button v-if="enoughSpaceForPhotos && !importingPhotos"
 						id="google-import-photos"
@@ -95,7 +95,7 @@
 						{{ t('integration_google', 'Import Google photos') }}
 					</button>
 					<span v-else-if="!enoughSpaceForPhotos">
-						{{ t('integration_google', 'Your Google photo collection size is estimated to be bigger than your remaining space left ({formSpace})', { formSpace: humanFileSize(state.free_space) }) }}
+						{{ t('integration_google', 'Your Google photo collection size is estimated to be bigger than your remaining space left ({formSpace})', { formSpace: myHumanFileSize(state.free_space) }) }}
 					</span>
 					<div v-else>
 						<br>
@@ -115,7 +115,7 @@
 					<h3>{{ t('integration_google', 'Drive') }}</h3>
 					<label>
 						<span class="icon icon-folder" />
-						{{ n('integration_google', '{nbFiles} file in Google Drive ({formSize})', '{nbFiles} files in Google Drive ({formSize})', nbFiles, { nbFiles, formSize: humanFileSize(driveSize, true) }) }}
+						{{ n('integration_google', '{nbFiles} file in Google Drive ({formSize})', '{nbFiles} files in Google Drive ({formSize})', nbFiles, { nbFiles, formSize: myHumanFileSize(driveSize, true) }) }}
 					</label>
 					<button v-if="enoughSpaceForDrive && !importingDrive"
 						id="google-import-files"
@@ -124,7 +124,7 @@
 						{{ t('integration_google', 'Import Google Drive files') }}
 					</button>
 					<span v-else-if="!enoughSpaceForDrive">
-						{{ t('integration_google', 'Your Google Drive is bigger than your remaining space left ({formSpace})', { formSpace: humanFileSize(state.free_space) }) }}
+						{{ t('integration_google', 'Your Google Drive is bigger than your remaining space left ({formSpace})', { formSpace: myHumanFileSize(state.free_space) }) }}
 					</span>
 					<div v-else>
 						<br>
@@ -150,6 +150,7 @@ import axios from '@nextcloud/axios'
 import moment from '@nextcloud/moment'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import AppNavigationIconBullet from '@nextcloud/vue/dist/Components/AppNavigationIconBullet'
+import { humanFileSize } from '../utils'
 
 export default {
 	name: 'PersonalSettings',
@@ -622,29 +623,8 @@ export default {
 				.then(() => {
 				})
 		},
-		humanFileSize(bytes, approx = false, si = false, dp = 1) {
-			const thresh = si ? 1000 : 1024
-
-			if (Math.abs(bytes) < thresh) {
-				return bytes + ' B'
-			}
-
-			const units = si
-				? ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-				: ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB']
-			let u = -1
-			const r = 10 ** dp
-
-			do {
-				bytes /= thresh
-				++u
-			} while (Math.round(Math.abs(bytes) * r) / r >= thresh && u < units.length - 1)
-
-			if (approx) {
-				return Math.floor(bytes) + ' ' + units[u]
-			} else {
-				return bytes.toFixed(dp) + ' ' + units[u]
-			}
+		myHumanFileSize(bytes, approx = false, si = false, dp = 1) {
+			return humanFileSize(bytes, approx, si, dp)
 		},
 	},
 }
