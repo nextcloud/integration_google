@@ -95,7 +95,7 @@
 						{{ t('integration_google', 'Import Google photos') }}
 					</button>
 					<span v-else-if="!enoughSpaceForPhotos">
-						{{ t('integration_google', 'Your Google photo collection size is estimated to be bigger than your remaining space left ({formSpace})', { formSpace: humanFileSize(freeSpace) }) }}
+						{{ t('integration_google', 'Your Google photo collection size is estimated to be bigger than your remaining space left ({formSpace})', { formSpace: humanFileSize(state.free_space) }) }}
 					</span>
 					<div v-else>
 						<br>
@@ -124,7 +124,7 @@
 						{{ t('integration_google', 'Import Google Drive files') }}
 					</button>
 					<span v-else-if="!enoughSpaceForDrive">
-						{{ t('integration_google', 'Your Google Drive is bigger than your remaining space left ({formSpace})', { formSpace: humanFileSize(freeSpace) }) }}
+						{{ t('integration_google', 'Your Google Drive is bigger than your remaining space left ({formSpace})', { formSpace: humanFileSize(state.free_space) }) }}
 					</span>
 					<div v-else>
 						<br>
@@ -187,8 +187,6 @@ export default {
 			lastDriveImportTimestamp: 0,
 			nbImportedFiles: 0,
 			driveImportLoop: null,
-			// local
-			freeSpace: 0,
 		}
 	},
 
@@ -215,7 +213,7 @@ export default {
 			return this.nbPhotos * 1000000
 		},
 		enoughSpaceForPhotos() {
-			return this.nbPhotos === 0 || this.estimatedPhotoCollectionSize < this.freeSpace
+			return this.nbPhotos === 0 || this.estimatedPhotoCollectionSize < this.state.free_space
 		},
 		lastPhotoImportDate() {
 			return this.lastPhotoImportTimestamp !== 0
@@ -228,7 +226,7 @@ export default {
 				: 0
 		},
 		enoughSpaceForDrive() {
-			return this.driveSize === 0 || this.driveSize < this.freeSpace
+			return this.driveSize === 0 || this.driveSize < this.state.free_space
 		},
 		lastDriveImportDate() {
 			return this.lastDriveImportTimestamp !== 0
@@ -293,7 +291,7 @@ export default {
 				.catch((error) => {
 					showError(
 						t('integration_google', 'Failed to save Google options')
-						+ ': ' + error.response.request.responseText
+						+ ': ' + error.response?.request?.responseText
 					)
 				})
 				.then(() => {
@@ -333,7 +331,7 @@ export default {
 				.catch((error) => {
 					showError(
 						t('integration_google', 'Failed to save Google OAuth state')
-						+ ': ' + error.response.request.responseText
+						+ ': ' + error.response?.request?.responseText
 					)
 				})
 				.then(() => {
@@ -351,7 +349,7 @@ export default {
 				.catch((error) => {
 					showError(
 						t('integration_google', 'Failed to get Google Drive information')
-						+ ': ' + error.response.request.responseText
+						+ ': ' + error.response?.request?.responseText
 					)
 				})
 				.then(() => {
@@ -368,7 +366,7 @@ export default {
 				.catch((error) => {
 					showError(
 						t('integration_google', 'Failed to get calendar list')
-						+ ': ' + error.response.request.responseText
+						+ ': ' + error.response?.request?.responseText
 					)
 				})
 				.then(() => {
@@ -410,13 +408,12 @@ export default {
 				.then((response) => {
 					if (response.data && Object.keys(response.data).length > 0) {
 						this.nbPhotos = response.data.nbPhotos
-						this.freeSpace = response.data.freeSpace
 					}
 				})
 				.catch((error) => {
 					showError(
 						t('integration_google', 'Failed to get number of Google photos')
-						+ ': ' + error.response.request.responseText
+						+ ': ' + error.response?.request?.responseText
 					)
 				})
 				.then(() => {
@@ -433,7 +430,7 @@ export default {
 				.catch((error) => {
 					showError(
 						t('integration_google', 'Failed to get number of Google contacts')
-						+ ': ' + error.response.request.responseText
+						+ ': ' + error.response?.request?.responseText
 					)
 				})
 				.then(() => {
@@ -450,7 +447,7 @@ export default {
 				.catch((error) => {
 					showError(
 						t('integration_google', 'Failed to get address book list')
-						+ ': ' + error.response.request.responseText
+						+ ': ' + error.response?.request?.responseText
 					)
 				})
 				.then(() => {
@@ -481,7 +478,7 @@ export default {
 				.catch((error) => {
 					showError(
 						t('integration_google', 'Failed to get address book list')
-						+ ': ' + error.response.request.responseText
+						+ ': ' + error.response?.request?.responseText
 					)
 				})
 				.then(() => {
@@ -510,7 +507,7 @@ export default {
 				.catch((error) => {
 					showError(
 						t('integration_google', 'Failed to import Google calendar')
-						+ ': ' + error.response.request.responseText
+						+ ': ' + error.response?.request?.responseText
 					)
 				})
 				.then(() => {
@@ -534,7 +531,7 @@ export default {
 				.catch((error) => {
 					showError(
 						t('integration_google', 'Failed to start importing Google photos')
-						+ ': ' + error.response.request.responseText
+						+ ': ' + error.response?.request?.responseText
 					)
 				})
 				.then(() => {
@@ -599,7 +596,7 @@ export default {
 				.catch((error) => {
 					showError(
 						t('integration_google', 'Failed to start importing Google Drive')
-						+ ': ' + error.response.request.responseText
+						+ ': ' + error.response?.request?.responseText
 					)
 				})
 				.then(() => {

@@ -68,12 +68,8 @@ class GooglePhotosAPIService {
 			}
 			$params['pageToken'] = $result['nextPageToken'] ?? '';
 		} while (isset($result['nextPageToken']));
-		// get free space
-		$userFolder = $this->root->getUserFolder($userId);
-		$freeSpace = $userFolder->getStorage()->free_space('/');
 		return [
 			'nbPhotos' => count($seenIds),
-			'freeSpace' => $freeSpace,
 		];
 	}
 
