@@ -28,7 +28,6 @@ OC.L10N.register(
     "Import Google photos" : "Εισαγωγή φωτογραφιών Google",
     "Cancel photo import" : "Ακύρωση εισαγωγής φωτογραφιών",
     "Drive" : "Οδήγηση",
-    "Photo import process will begin soon" : "Η διαδικασία εισαγωγής φωτογραφιών θα ξεκινήσει σύντομα",
     "Successfully connected to Google!" : "Επιτυχημένη σύνδεση στο Google!",
     "Google connection error:" : "Σφάλμα σύνδεσης Google:",
     "Google options saved" : "Αποθηκεύτηκαν οι επιλογές Google",

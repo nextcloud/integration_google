@@ -54,8 +54,8 @@ OC.L10N.register(
     "Import Google Drive files" : "Importovat Google Drive soubory",
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Velikost vašeho Google Drive je větší, než volné místo ({formSpace}), které vám zbývá",
     "Cancel Google Drive import" : "Zrušit Google Drive import",
-    "Photo import process will begin soon" : "Proces importu fotek brzy začne",
-    "Google Drive import process will begin soon" : "Proces importu Google Drive brzy začne",
+    "Last photo import job at {date}" : "Minulá úloha importu fotek v {date}",
+    "Last Google Drive import job at {date}" : "Poslední import Google Drive proběhl {date}",
     "Successfully connected to Google!" : "Úspěšně spojeno s Google!",
     "Google connection error:" : "Chyba připojení ke Google:",
     "Google options saved" : "Předvolby pro Google uloženy",
@@ -77,8 +77,6 @@ OC.L10N.register(
     "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["{nbFiles} soubor na Google Drive ({formSize})","{nbFiles} soubory na Google Drive ({formSize})","{nbFiles} souborů na Google Drive ({formSize})","{nbFiles} souborů na Google Drive ({formSize})"],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} soubor importován ({progress}%)","{amount} soubory importovány ({progress}%)","{amount} souborů importováno ({progress}%)","{amount} souborů importováno ({progress}%)"],
     "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} kontakt úspěšně naimportován v {name}","{number} kontakty úspěšně naimportovány v {name}","{number} kontaktů úspěšně naimportováno v {name}","{number} kontakty úspěšně naimportovány v {name}"],
-    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number} událost úspěšně naimportována v {name}","{number} události úspěšně naimportovány v {name}","{number} událostí úspěšně naimportováno v {name}","{number} události úspěšně naimportovány v {name}"],
-    "Last Google Drive import job at {date}" : "Poslední import Google Drive proběhl {date}",
-    "Last photo import job at {date}" : "Minulá úloha importu fotek v {date}"
+    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number} událost úspěšně naimportována v {name}","{number} události úspěšně naimportovány v {name}","{number} událostí úspěšně naimportováno v {name}","{number} události úspěšně naimportovány v {name}"]
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;");

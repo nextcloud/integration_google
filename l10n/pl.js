@@ -54,8 +54,8 @@ OC.L10N.register(
     "Import Google Drive files" : "Import plików Dysku Google",
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Twój Dysk Google jest większy niż pozostałe wolne miejsce ({formSpace})",
     "Cancel Google Drive import" : "Anuluj importowanie Dysku Google",
-    "Photo import process will begin soon" : "Wkrótce rozpocznie się proces importowania zdjęć",
-    "Google Drive import process will begin soon" : "Wkrótce rozpocznie się proces importowania Dysku Google",
+    "Last photo import job at {date}" : "Ostatnie importowanie zdjęć w {date}",
+    "Last Google Drive import job at {date}" : "Ostatnie importowanie Dysku Google w {date}",
     "Successfully connected to Google!" : "Pomyślnie połączono z Google!",
     "Google connection error:" : "Błąd połączenia z Google:",
     "Google options saved" : "Opcje Google zostały zapisane",
@@ -77,8 +77,6 @@ OC.L10N.register(
     "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["{nbFiles} plik na Dysku Google ({formSize})","{nbFiles} pliki na Dysku Google ({formSize})","{nbFiles} plików na Dysku Google ({formSize})","{nbFiles} plików na Dysku Google ({formSize})"],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["Zaimportowano {amount} plik ({progress}%)","Zaimportowano {amount} pliki ({progress}%)","Zaimportowano {amount} plików ({progress}%)","Zaimportowano {amount} plików ({progress}%)"],
     "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["Pomyślnie zaimportowano {number} kontakt do {name}","Pomyślnie zaimportowano {number} kontakty do {name}","Pomyślnie zaimportowano {number} kontaktów do {name}","Pomyślnie zaimportowano {number} kontaktów do {name}"],
-    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["Pomyślnie zaimportowano {number} wydarzenie do {name}","Pomyślnie zaimportowano {number} wydarzenia do {name}","Pomyślnie zaimportowano {number} wydarzeń do {name}","Pomyślnie zaimportowano {number} wydarzeń do {name}"],
-    "Last Google Drive import job at {date}" : "Ostatnie importowanie Dysku Google w {date}",
-    "Last photo import job at {date}" : "Ostatnie importowanie zdjęć w {date}"
+    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["Pomyślnie zaimportowano {number} wydarzenie do {name}","Pomyślnie zaimportowano {number} wydarzenia do {name}","Pomyślnie zaimportowano {number} wydarzeń do {name}","Pomyślnie zaimportowano {number} wydarzeń do {name}"]
 },
 "nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);");

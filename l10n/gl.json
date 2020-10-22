@@ -52,8 +52,8 @@
     "Import Google Drive files" : "Importar os ficheiros de Google Drive",
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "O seu Google Drive é máis grande que o espazo que lle queda libre ({formSpace})",
     "Cancel Google Drive import" : "Cancelar a importación de Google Drive",
-    "Photo import process will begin soon" : "O proceso de importación de fotos comezará en breve",
-    "Google Drive import process will begin soon" : "O proceso de importación de Google Drive comezará en breve",
+    "Last photo import job at {date}" : "Último traballo de importación de fotos o {date}",
+    "Last Google Drive import job at {date}" : "Último traballo de importación de Google Drive o {date}",
     "Successfully connected to Google!" : "Conectou satisfactoriamente con Google.",
     "Google connection error:" : "Produciuse un erro na conexión co Google:",
     "Google options saved" : "Gardáronse as opcións de Google",
@@ -75,8 +75,6 @@
     "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["{nbFiles} ficheiro no Google Drive ({formSize})","{nbFiles} ficheiros no Google Drive ({formSize})"],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} ficheiro importado ({progress}%)","{amount} ficheiros importados ({progress}%)"],
     "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} contacto foi importado sactifactoriamente en {name}","{number} contactos foron importados sactifactoriamente en {name}"],
-    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number} evento foi importado sactifactoriamente en {name}","{number} eventos foron importados sactifactoriamente en {name}"],
-    "Last Google Drive import job at {date}" : "Último traballo de importación de Google Drive o {date}",
-    "Last photo import job at {date}" : "Último traballo de importación de fotos o {date}"
+    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number} evento foi importado sactifactoriamente en {name}","{number} eventos foron importados sactifactoriamente en {name}"]
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

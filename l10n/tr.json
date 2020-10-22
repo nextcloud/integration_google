@@ -52,8 +52,8 @@
     "Import Google Drive files" : "Google Drive dosyalarını içe aktar",
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Google Drive boyutunuz kalan boş alanınızdan daha büyük gibi görünüyor ({formSpace})",
     "Cancel Google Drive import" : "Google Drive içe aktarmayı iptal et",
-    "Photo import process will begin soon" : "Birazdan fotoğrafların içe aktarılmasına başlanacak",
-    "Google Drive import process will begin soon" : "Birazdan Google Drive içe aktarılmasına başlanacak",
+    "Last photo import job at {date}" : "Son fotoğraf içe aktarımı {date}",
+    "Last Google Drive import job at {date}" : "Son Google Drive içe aktarımı {date}",
     "Successfully connected to Google!" : "Google ile bağlantı kuruldu!",
     "Google connection error:" : "Google bağlantı sorunu:",
     "Google options saved" : "Google ayarları kaydedildi",
@@ -75,8 +75,6 @@
     "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["{nbFiles} Google Drive dosyası ({formSize})","{nbFiles} Google Drive dosyası ({formSize})"],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} dosya içe aktarıldı ({progress}%)","{amount} dosya içe aktarıldı ({progress}%)"],
     "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} kişi {name} içine aktarıldı","{number} kişi {name} içine aktarıldı"],
-    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number} etkinlik {name} içine aktarıldı","{number} etkinlik {name} içine aktarıldı"],
-    "Last Google Drive import job at {date}" : "Son Google Drive içe aktarımı {date}",
-    "Last photo import job at {date}" : "Son fotoğraf içe aktarımı {date}"
+    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number} etkinlik {name} içine aktarıldı","{number} etkinlik {name} içine aktarıldı"]
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }

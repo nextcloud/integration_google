@@ -52,8 +52,8 @@
     "Import Google Drive files" : "Importar archivos de Google Drive",
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Tu Google Drive es mayor que tu espacio disponible ({formSpace})",
     "Cancel Google Drive import" : "Detener importación de Google Drive",
-    "Photo import process will begin soon" : "El proceso de importación de fotos comenzará en breve",
-    "Google Drive import process will begin soon" : "El proceso de importación de Google Drive comenzará pronto",
+    "Last photo import job at {date}" : "Última tarea de importación de fotos a las {date}",
+    "Last Google Drive import job at {date}" : "El último trabajo de importación de Google Drive fue el {date}",
     "Successfully connected to Google!" : "¡Conectado a Google con éxito!",
     "Google connection error:" : "Error de conexión con Google:",
     "Google options saved" : "Opciones de Google guardadas",
@@ -75,8 +75,6 @@
     "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["{nbFiles} archivo en Google Drive ({formSize})","{nbFiles} archivos en Google Drive ({formSize})"],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} archivo importado ({progress}%)","{amount} archivos importados ({progress}%)"],
     "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} contacto importado con éxito en {name}","{number} contactos importados con éxito en {name}"],
-    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number} evento importado con éxito en {name}","{number} eventos importados con éxito en {name}"],
-    "Last Google Drive import job at {date}" : "El último trabajo de importación de Google Drive fue el {date}",
-    "Last photo import job at {date}" : "Última tarea de importación de fotos a las {date}"
+    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number} evento importado con éxito en {name}","{number} eventos importados con éxito en {name}"]
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

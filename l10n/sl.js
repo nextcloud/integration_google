@@ -45,8 +45,6 @@ OC.L10N.register(
     "Import Google Drive files" : "Uvozi datoteke z oblaka Google Drive",
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Velikost datotek v oblaku Google Drive je večja od preostalega prostora ({formSpace})",
     "Cancel Google Drive import" : "Prekliči uvoz datotek Google Drive",
-    "Photo import process will begin soon" : "Opravilo uvoza slik z oblaka Drive bo kmalu začeta",
-    "Google Drive import process will begin soon" : "Uvažanje datotek Google Drive bo kmalu začeto",
     "Successfully connected to Google!" : "Povezava z Google je uspešno vzpostavljena!",
     "Google connection error:" : "Napaka povezave Google:",
     "Google options saved" : "Nastavitve Google so shranjene",

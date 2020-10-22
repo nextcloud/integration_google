@@ -51,8 +51,8 @@
     "Import Google Drive files" : "Inportatu Google Drive fitxategiak",
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Zure Google Drive handiagoa da daukazun leku librea baino ({formSpace})",
     "Cancel Google Drive import" : "Ezeztatu Google Drive inportatzea",
-    "Photo import process will begin soon" : "Argazkiak inportatzeko prozesua laster hasiko da",
-    "Google Drive import process will begin soon" : "Google Drive inportatzeko prozesua laster hasiko da",
+    "Last photo import job at {date}" : "Azken argazki inportatzea {date}-an egina",
+    "Last Google Drive import job at {date}" : "Azken Google Drive inportatzea {date}-an egina",
     "Successfully connected to Google!" : "Google-rekin konektatzea ondo egin da!",
     "Google connection error:" : "Google konexio errorea:",
     "Google options saved" : "Google aukerak ondo gorde dira",
@@ -73,8 +73,6 @@
     "_{amount} photo imported ({progress}%)_::_{amount} photos imported ({progress}%)_" : ["Argazki {amount} inportatu da ({progress}%)","{amount} argazki inportatu dira ({progress}%)"],
     "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["Fitxategi {nbFiles} dago Google Driven ({formSize})","{nbFiles} fitxategi daude Google Driven ({formSize})"],
     "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["Kontaktu {number} ondo inportatu da {name}-ra","{number} kontaktu ondo inportatu dira {name}-ra"],
-    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["Gertaera {number} ondo inportatu da {name}-ra","{number} gertaera ondo inportatu dira {name}-ra"],
-    "Last Google Drive import job at {date}" : "Azken Google Drive inportatzea {date}-an egina",
-    "Last photo import job at {date}" : "Azken argazki inportatzea {date}-an egina"
+    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["Gertaera {number} ondo inportatu da {name}-ra","{number} gertaera ondo inportatu dira {name}-ra"]
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

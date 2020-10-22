@@ -52,8 +52,8 @@
     "Import Google Drive files" : "Google Drive-Dateien importieren",
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Dein Google Drive ist größer als der verbleibende Speicherplatz ({formSpace})",
     "Cancel Google Drive import" : "Google Drive-Import abbrechen",
-    "Photo import process will begin soon" : "Prozess des Fotoimports wird bald beginnen",
-    "Google Drive import process will begin soon" : "Prozess der Google Drive-Importierung wird bald beginnen",
+    "Last photo import job at {date}" : "Letzter Fotoimport-Auftrag am {date}",
+    "Last Google Drive import job at {date}" : "Letzter Google-Drive-Import am {date} ",
     "Successfully connected to Google!" : "Erfolgreich mit Google verbunden!",
     "Google connection error:" : "Google Verbindungsfehler:",
     "Google options saved" : "Google-Einstellungen gespeichert",
@@ -75,8 +75,6 @@
     "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["{nbFiles} Datei in Google Drive ({formSize})","{nbFiles} Dateien in Google Drive ({formSize})"],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} Datei importiert ({progress}%)","{amount} Dateien importiert ({progress}%)"],
     "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} Kontakt erfolgreich importiert nach {name}","{number} Kontakte erfolgreich importiert nach {name}"],
-    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number} Termin erfolgreich importiert nach {name}","{number} Termine erfolgreich importiert nach {name}"],
-    "Last Google Drive import job at {date}" : "Letzter Google-Drive-Import am {date} ",
-    "Last photo import job at {date}" : "Letzter Fotoimport-Auftrag am {date}"
+    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number} Termin erfolgreich importiert nach {name}","{number} Termine erfolgreich importiert nach {name}"]
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
