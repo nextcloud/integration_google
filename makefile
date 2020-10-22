@@ -81,6 +81,8 @@ appstore: clean
 	--exclude=src \
 	--exclude=translationfiles \
 	--exclude=webpack.* \
+	--exclude=stylelint.config.js \
+	--exclude=.github \
 	--exclude=.gitlab-ci.yml \
 	--exclude=crowdin.yml \
 	--exclude=tools \
@@ -111,5 +113,5 @@ appstore: clean
 		-C $(sign_dir) $(app_name)
 	@if [ -f $(cert_dir)/$(app_name).key ]; then \
 		echo NEXTCLOUD------------------------------------------ ;\
-		openssl dgst -sha512 -sign $(cert_dir)/$(app_name).key $(build_dir)/$(app_name)-$(app_version).tar.gz | openssl base64 ;\
+		openssl dgst -sha512 -sign $(cert_dir)/$(app_name).key $(build_dir)/$(app_name)-$(app_version).tar.gz | openssl base64 | tee $(build_dir)/sign.txt ;\
 	fi
