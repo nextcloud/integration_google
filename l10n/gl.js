@@ -54,7 +54,7 @@ OC.L10N.register(
     "Import Google Drive files" : "Importar os ficheiros de Google Drive",
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "O seu Google Drive é máis grande que o espazo que lle queda libre ({formSpace})",
     "Cancel Google Drive import" : "Cancelar a importación de Google Drive",
-    "Photo import background process will begin soon." : "O proceso de importación de foto en segundo plano logo vai comezar.",
+    "Photo import background process will begin soon." : "O proceso de importación da foto en segundo plano logo vai comezar.",
     "Last photo import job at {date}" : "Último traballo de importación de fotos o {date}",
     "You can close this page. You will notified when it finishes." : "Pode pechar esta páxina. Xa se lle notificará cando finalice.",
     "Google Drive background import process will begin soon." : "O proceso de importación de Google Drive en segundo plano logo vai comezar.",
