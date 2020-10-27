@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Error getting OAuth access token." : "Fout bij ophalen OAuth access token",
     "Error during OAuth exchanges" : "Fout tijdens OAuth uitwisselingen",
+    "Google" : "Google",
     "Bad credentials" : "Foute inloggegevens",
     "OAuth access token refused" : "OAuth access token geweigerd",
     "Connected accounts" : "Verbonden accounts",
