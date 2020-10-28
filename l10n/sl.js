@@ -57,6 +57,10 @@ OC.L10N.register(
     "Failed to get number of Google contacts" : "Pridobivanje podatka o številu stikov je spodletelo",
     "Failed to get address book list" : "Pridobivanje seznama imenika je spodletelo",
     "Failed to import Google calendar" : "Uvažanje koledarja Google je spodletelo",
-    "_{nbPhotos} Google photo (>{formSize})_::_{nbPhotos} Google photos (>{formSize})_" : ["{nbPhotos} slika v programu Google Photos (>{formSize})","{nbPhotos} sliki v programu Google Photos (>{formSize})","{nbPhotos} slike v programu Google Photos (>{formSize})","{nbPhotos} slik v programu Google Photos (>{formSize})"]
+    "Failed to start importing Google Drive" : "Uvažanje vsebine Google Drive je spodletelo",
+    "_{nbPhotos} Google photo (>{formSize})_::_{nbPhotos} Google photos (>{formSize})_" : ["{nbPhotos} slika v programu Google Photos (>{formSize})","{nbPhotos} sliki v programu Google Photos (>{formSize})","{nbPhotos} slike v programu Google Photos (>{formSize})","{nbPhotos} slik v programu Google Photos (>{formSize})"],
+    "_{amount} photo imported ({progress}%)_::_{amount} photos imported ({progress}%)_" : ["{amount} uvožena slika ({progress}%)","{amount} uvoženi sliki ({progress}%)","{amount} uvožene slike ({progress}%)","{amount} uvoženih slik ({progress}%)"],
+    "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["{nbFiles} datoteka v programu Google Drive ({formSize})","{nbFiles} datoteki v programu Google Drive ({formSize})","{nbFiles} datoteke v programu Google Drive ({formSize})","{nbFiles} datotek v programu Google Drive ({formSize})"],
+    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} uvožena datoteka ({progress}%)","{amount} uvoženi datoteki ({progress}%)","{amount} uvožene datoteke ({progress}%)","{amount} uvoženih datotek ({progress}%)"]
 },
 "nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);");
