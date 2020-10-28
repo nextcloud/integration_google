@@ -79,6 +79,7 @@ class GoogleCalendarAPIService {
 		$newCalId = $this->caldavBackend->createCalendar('principals/users/' . $userId, $newCalName, $params);
 
 		date_default_timezone_set('UTC');
+		$utcTimezone = new \DateTimeZone('-0000');
 		$events = $this->getCalendarEvents($accessToken, $userId, $calId);
 		$nbAdded = 0;
 		foreach ($events as $e) {
@@ -96,11 +97,13 @@ class GoogleCalendarAPIService {
 
 			if (isset($e['created'])) {
 				$created = new \Datetime($e['created']);
+				$created->setTimezone($utcTimezone);
 				$calData .= 'CREATED:' . $created->format('Ymd\THis\Z') . "\n";
 			}
 
 			if (isset($e['updated'])) {
 				$updated = new \Datetime($e['updated']);
+				$updated->setTimezone($utcTimezone);
 				$calData .= 'LAST-MODIFIED:' . $created->format('Ymd\THis\Z') . "\n";
 			}
 
@@ -147,8 +150,10 @@ class GoogleCalendarAPIService {
 				$calData .= 'DTEND;VALUE=DATE:' . $end->format('Ymd') . "\n";
 			} elseif (isset($e['start']['dateTime']) && isset($e['end']['dateTime'])) {
 				$start = new \Datetime($e['start']['dateTime']);
+				$start->setTimezone($utcTimezone);
 				$calData .= 'DTSTART;VALUE=DATE-TIME:' . $start->format('Ymd\THis\Z') . "\n";
 				$end = new \Datetime($e['end']['dateTime']);
+				$end->setTimezone($utcTimezone);
 				$calData .= 'DTEND;VALUE=DATE-TIME:' . $end->format('Ymd\THis\Z') . "\n";
 			} else {
 				// skip entries without any date
