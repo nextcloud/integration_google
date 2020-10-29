@@ -7,6 +7,8 @@ name: Publish release
 jobs:
   build:
     name: Build, upload and release in the appstore
+    env:
+      APP_ID: integration_google
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -24,10 +26,11 @@ jobs:
         if: ${{ startsWith( steps.tag.outputs.currenttag , 'v' ) }}
         id: build_release
         run: |
+          echo "##[set-output name=app_id;]$APP_ID"
           echo "###### copy certificate"
           mkdir -p ~/.nextcloud/certificates
-          echo "$APP_CRT" > ~/.nextcloud/certificates/integration_google.crt
-          echo "$APP_KEY" > ~/.nextcloud/certificates/integration_google.key
+          echo "$APP_CRT" > ~/.nextcloud/certificates/${APP_ID}.crt
+          echo "$APP_KEY" > ~/.nextcloud/certificates/${APP_ID}.key
           echo "###### install dependencies"
           export DEBIAN_FRONTEND=noninteractive
           sudo apt-get update -yqq
@@ -36,11 +39,11 @@ jobs:
           mkdir ~/html
           git clone https://github.com/nextcloud/server.git --recursive --depth 1 -b stable20 ~/html/nextcloud
           sed -i $'s|if (substr($fullPath, 0, strlen($root) + 1) === $root . \'/\')|if (is_string($root) and substr($fullPath, 0, strlen($root) + 1) === $root . \'/\')|g' ~/html/nextcloud/lib/autoloader.php
-          cp -r $GITHUB_WORKSPACE ~/html/nextcloud/apps/integration_google
+          cp -r $GITHUB_WORKSPACE ~/html/nextcloud/apps/${APP_ID}
           php ~/html/nextcloud/occ maintenance:install --database "sqlite" --admin-user "admin" --admin-pass "password"
-          php ~/html/nextcloud/occ app:enable integration_google
+          php ~/html/nextcloud/occ app:enable ${APP_ID}
           php ~/html/nextcloud/occ maintenance:mode --off
-          cd ~/html/nextcloud/apps/integration_google
+          cd ~/html/nextcloud/apps/${APP_ID}
           echo "###### npm install"
           npm install
           echo "###### npm run build"
@@ -74,8 +77,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: /tmp/build/integration_google-${{ steps.build_release.outputs.version }}.tar.gz
-          asset_name: integration_google-${{ steps.build_release.outputs.version }}.tar.gz
+          asset_path: /tmp/build/${{ steps.build_release.outputs.app_id }}-${{ steps.build_release.outputs.version }}.tar.gz
+          asset_name: ${{ steps.build_release.outputs.app_id }}-${{ steps.build_release.outputs.version }}.tar.gz
           asset_content_type: application/gzip
 
       - name: Publish to appstore
@@ -84,7 +87,7 @@ jobs:
         run: |
           SIGNATURE=$(cat /tmp/build/sign.txt | tr -d '\n')
           VERSION=${{ steps.build_release.outputs.version }}
-          DOWNLOAD_URL=https://github.com/nextcloud/integration_google/releases/download/v${VERSION}/integration_google-${VERSION}.tar.gz
+          DOWNLOAD_URL=https://github.com/${{ github.repository }}/releases/download/v${VERSION}/${APP_ID}-${VERSION}.tar.gz
           curl -X POST -H "Authorization: Token $APPSTORE_TOKEN" https://apps.nextcloud.com/api/v1/apps/releases -H "Content-Type: application/json" -d '{"download":"'${DOWNLOAD_URL}'", "signature": "'${SIGNATURE}'"}'
         env:
           APPSTORE_TOKEN: ${{ secrets.APPSTORE_TOKEN }}
