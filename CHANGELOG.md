@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## 0.0.10 – 2020-10-29
+### Changed
+- bump all js libs
+
+### Fixed
+- timestamp of calendar events
+[#17](https://github.com/nextcloud/integration_google/issues/17) @duckunix
+
 ## 0.0.9 – 2020-10-21
 ### Fixed
 - get free space independently from photo service
