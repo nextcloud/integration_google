@@ -175,7 +175,7 @@ class GoogleDriveAPIService {
 			}
 			foreach ($result['files'] as $dir) {
 				$directoriesById[$dir['id']] = [
-					'name' => $dir['name'],
+					'name' => preg_replace('/\//', '-slash-', $dir['name']),
 					'parent' => (isset($dir['parents']) && count($dir['parents']) > 0) ? $dir['parents'][0] : null,
 				];
 			}
@@ -278,7 +278,7 @@ class GoogleDriveAPIService {
 	 * @return ?int downloaded size, null if already existing
 	 */
 	private function getFile(string $accessToken, string $userId, array $fileItem, array $directoriesById, Node $topFolder): ?int {
-		$fileName = $fileItem['name'];
+		$fileName = preg_replace('/\//', '-slash-', $fileItem['name']);
 		if (isset($fileItem['parents']) && count($fileItem['parents']) > 0 && array_key_exists($fileItem['parents'][0], $directoriesById)) {
 			$saveFolder = $directoriesById[$fileItem['parents'][0]]['node'];
 		} else {
