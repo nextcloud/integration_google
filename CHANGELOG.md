@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## 0.0.11 – 2020-10-31
+### Fixed
+- get rid of slashes in file/folder names
+[#19](https://github.com/nextcloud/integration_google/issues/19) @oncletom
+
 ## 0.0.10 – 2020-10-29
 ### Changed
 - bump all js libs
