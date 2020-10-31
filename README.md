@@ -2,12 +2,12 @@
 
 🇬 Google integration allows you to automatically import your Google calendars, contacts, photos and files into Nextcloud.
 
-## 🔧 Configuration
+## 🚀 Installation
 
-### User settings
+In your Nextcloud, simply enable the Google Integration app through the Apps management.
+The Google Integration app is available for Nextcloud >= 22.
 
-The account configuration and data migration happens in the "Data migration" user settings section.
+## 🔧 Setup
 
-### Admin settings
-
-There also is a "Connected accounts" **admin** settings section that you must visit to configure a Google OAuth app to allow your Nextcloud users to authenticate to Google.
+The app needs some setup in the Google API Console in order to work.
+To do this, go to Settings > Administration > Connected accounts and follow the instructions under "Google integration".
