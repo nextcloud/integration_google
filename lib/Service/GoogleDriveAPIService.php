@@ -287,16 +287,54 @@ class GoogleDriveAPIService {
 		} else {
 			$saveFolder = $topFolder;
 		}
-		if (!$saveFolder->nodeExists($fileName)) {
-			$fileUrl = 'https://www.googleapis.com/drive/v3/files/' . $fileItem['id'] . '?alt=media';
-			$tmpFilePath = $this->tempManager->getTemporaryFile();
-			$res = $this->googleApiService->simpleDownload($accessToken, $userId, $fileUrl, $tmpFilePath);
-			if (!isset($res['error'])) {
-				$savedFile = $saveFolder->newFile($fileName);
-				$resource = $savedFile->fopen('w');
-				$copied = $this->googleApiService->chunkedCopy($tmpFilePath, $resource);
-				$savedFile->touch();
-				return $copied;
+		// classic file
+		if (isset($fileItem['webContentLink'])) {
+			if (!$saveFolder->nodeExists($fileName)) {
+				$fileUrl = 'https://www.googleapis.com/drive/v3/files/' . $fileItem['id'] . '?alt=media';
+				$tmpFilePath = $this->tempManager->getTemporaryFile();
+				$res = $this->googleApiService->simpleDownload($accessToken, $userId, $fileUrl, $tmpFilePath);
+				if (!isset($res['error'])) {
+					$savedFile = $saveFolder->newFile($fileName);
+					$resource = $savedFile->fopen('w');
+					$copied = $this->googleApiService->chunkedCopy($tmpFilePath, $resource);
+					$savedFile->touch();
+					return $copied;
+				}
+			}
+		} else {
+			// potentially a doc
+			if ($fileItem['mimeType'] === 'application/vnd.google-apps.document') {
+				$fileName .= '.odt';
+				$mimeType = 'application/vnd.oasis.opendocument.text';
+				//$fileName .= '.docx';
+				//$mimeType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+			} elseif ($fileItem['mimeType'] === 'application/vnd.google-apps.spreadsheet') {
+				$fileName .= '.ods';
+				$mimeType = 'application/vnd.oasis.opendocument.spreadsheet';
+				//$fileName .= '.xlsx';
+				//$mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+			} elseif ($fileItem['mimeType'] === 'application/vnd.google-apps.presentation') {
+				$fileName .= '.odp';
+				$mimeType = 'application/vnd.oasis.opendocument.presentation';
+				//$fileName .= '.pptx';
+				//$mimeType = 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
+			} else {
+				return null;
+			}
+			if (!$saveFolder->nodeExists($fileName)) {
+				$params = [
+					'mimeType' => $mimeType,
+				];
+				$fileUrl = 'https://www.googleapis.com/drive/v3/files/' . $fileItem['id'] . '/export';
+				$tmpFilePath = $this->tempManager->getTemporaryFile();
+				$res = $this->googleApiService->simpleDownload($accessToken, $userId, $fileUrl, $tmpFilePath, $params);
+				if (!isset($res['error'])) {
+					$savedFile = $saveFolder->newFile($fileName);
+					$resource = $savedFile->fopen('w');
+					$copied = $this->googleApiService->chunkedCopy($tmpFilePath, $resource);
+					$savedFile->touch();
+					return $copied;
+				}
 			}
 		}
 		return null;
