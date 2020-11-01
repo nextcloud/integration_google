@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - export google docs to files instead of just ignoring them
 [#21](https://github.com/nextcloud/integration_google/issues/21) @oncletom
-- void loading entire downloaded files in memory, use temp file and chunk copy
+- avoid loading entire downloaded files in memory, use temp file and chunk copy
 [#22](https://github.com/nextcloud/integration_google/issues/22) @oncletom
 
 ## 0.0.11 – 2020-10-31
