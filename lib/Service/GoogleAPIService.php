@@ -332,7 +332,7 @@ class GoogleAPIService {
 
 	public function chunkedCopy(string $fromPath, $outResource): int {
 		if (!is_resource($outResource)) {
-			throw new InvalidArgumentException(
+			throw new \InvalidArgumentException(
 				sprintf(
 					'Argument must be a valid resource type. %s given.',
 					gettype($resource)

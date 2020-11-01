@@ -297,8 +297,6 @@ class GoogleDriveAPIService {
 				$copied = $this->googleApiService->chunkedCopy($tmpFilePath, $resource);
 				$savedFile->touch();
 				return $copied;
-			} else {
-				error_log('ERROR file '.$fileName);
 			}
 		}
 		return null;
