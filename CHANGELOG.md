@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## 0.0.12 – 2020-11-01
+### Fixed
+- export google docs to files instead of just ignoring them
+[#21](https://github.com/nextcloud/integration_google/issues/21) @oncletom
+- void loading entire downloaded files in memory, use temp file and chunk copy
+[#22](https://github.com/nextcloud/integration_google/issues/22) @oncletom
+
 ## 0.0.11 – 2020-10-31
 ### Fixed
 - get rid of slashes in file/folder names
