@@ -256,4 +256,98 @@ class GoogleAPIService {
 			return ['error' => $e->getMessage()];
 		}
 	}
+
+	/**
+	 * Make a simple authenticated HTTP request to download a file
+	 * @param string $accessToken
+	 * @param string $userId the user from which the request is coming
+	 * @param string $url The path to reach
+	 * @param string $tmpFilePath
+	 * @param array $params Query parameters (key/val pairs)
+	 * @param string $method HTTP query method
+	 * @return array
+	 */
+	public function simpleDownload(string $accessToken, string $userId, string $url, string $tmpFilePath, array $params = [], string $method = 'GET'): array {
+		try {
+			$options = [
+				'save_to' => $tmpFilePath,
+				'headers' => [
+					'Authorization' => 'Bearer ' . $accessToken,
+					'User-Agent' => 'Nextcloud Google integration'
+				],
+			];
+
+			if (count($params) > 0) {
+				if ($method === 'GET') {
+					$paramsContent = http_build_query($params);
+					$url .= '?' . $paramsContent;
+				} else {
+					$options['body'] = json_encode($params);
+				}
+			}
+
+			if ($method === 'GET') {
+				$response = $this->client->get($url, $options);
+			} else if ($method === 'POST') {
+				$response = $this->client->post($url, $options);
+			} else if ($method === 'PUT') {
+				$response = $this->client->put($url, $options);
+			} else if ($method === 'DELETE') {
+				$response = $this->client->delete($url, $options);
+			}
+			//$body = $response->getBody();
+			$respCode = $response->getStatusCode();
+
+			if ($respCode >= 400) {
+				return ['error' => $this->l10n->t('Bad credentials')];
+			} else {
+				return ['success' => true];
+			}
+		} catch (ClientException $e) {
+			$response = $e->getResponse();
+			if ($response->getStatusCode() === 401) {
+				// refresh token if it's invalid and we are using oauth
+				$this->logger->info('Trying to REFRESH the access token', ['app' => $this->appName]);
+				$refreshToken = $this->config->getUserValue($userId, Application::APP_ID, 'refresh_token', '');
+				$clientID = $this->config->getAppValue(Application::APP_ID, 'client_id', '');
+				$clientSecret = $this->config->getAppValue(Application::APP_ID, 'client_secret', '');
+				$result = $this->requestOAuthAccessToken([
+					'client_id' => $clientID,
+					'client_secret' => $clientSecret,
+					'grant_type' => 'refresh_token',
+					'refresh_token' => $refreshToken,
+				], 'POST');
+				if (isset($result['access_token'])) {
+					$accessToken = $result['access_token'];
+					$this->config->setUserValue($userId, Application::APP_ID, 'token', $accessToken);
+					return $this->simpleDownload(
+						$accessToken, $userId, $url, $tmpFilePath, $params, $method
+					);
+				}
+			}
+			$this->logger->warning('Google API error : '.$e->getMessage(), ['app' => $this->appName]);
+			return ['error' => $e->getMessage()];
+		}
+	}
+
+	public function chunkedCopy(string $fromPath, $outResource): int {
+		if (!is_resource($outResource)) {
+			throw new InvalidArgumentException(
+				sprintf(
+					'Argument must be a valid resource type. %s given.',
+					gettype($resource)
+				)
+			);
+		}
+		// 10 Mo at a time
+		$buffer_size = 10000000;
+		$ret = 0;
+		$fin = fopen($fromPath, 'rb');
+		while(!feof($fin)) {
+			$ret += fwrite($outResource, fread($fin, $buffer_size));
+		}
+		fclose($fin);
+		fclose($outResource);
+		return $ret;
+	}
 }

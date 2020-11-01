@@ -18,6 +18,7 @@ use OCP\Files\FileInfo;
 use OCP\Files\Node;
 use OCP\BackgroundJob\IJobList;
 use Psr\Log\LoggerInterface;
+use OCP\ITempManager;
 
 use OCA\Google\AppInfo\Application;
 use OCA\Google\BackgroundJob\ImportDriveJob;
@@ -36,6 +37,7 @@ class GoogleDriveAPIService {
 								IConfig $config,
 								IRootFolder $root,
 								IJobList $jobList,
+								ITempManager $tempManager,
 								GoogleAPIService $googleApiService) {
 		$this->appName = $appName;
 		$this->l10n = $l10n;
@@ -43,6 +45,7 @@ class GoogleDriveAPIService {
 		$this->logger = $logger;
 		$this->jobList = $jobList;
 		$this->root = $root;
+		$this->tempManager = $tempManager;
 		$this->googleApiService = $googleApiService;
 	}
 
@@ -286,10 +289,16 @@ class GoogleDriveAPIService {
 		}
 		if (!$saveFolder->nodeExists($fileName)) {
 			$fileUrl = 'https://www.googleapis.com/drive/v3/files/' . $fileItem['id'] . '?alt=media';
-			$res = $this->googleApiService->simpleRequest($accessToken, $userId, $fileUrl);
+			$tmpFilePath = $this->tempManager->getTemporaryFile();
+			$res = $this->googleApiService->simpleDownload($accessToken, $userId, $fileUrl, $tmpFilePath);
 			if (!isset($res['error'])) {
-				$savedFile = $saveFolder->newFile($fileName, $res['content']);
-				return $savedFile->getSize();
+				$savedFile = $saveFolder->newFile($fileName);
+				$resource = $savedFile->fopen('w');
+				$copied = $this->googleApiService->chunkedCopy($tmpFilePath, $resource);
+				$savedFile->touch();
+				return $copied;
+			} else {
+				error_log('ERROR file '.$fileName);
 			}
 		}
 		return null;
