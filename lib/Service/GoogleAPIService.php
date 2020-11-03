@@ -16,6 +16,7 @@ use OCP\IConfig;
 use OCP\Http\Client\IClientService;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
+use GuzzleHttp\Exception\ConnectException;
 use Psr\Log\LoggerInterface;
 use OCP\Notification\IManager as INotificationManager;
 
@@ -79,6 +80,7 @@ class GoogleAPIService {
 			$url = $baseUrl ? $baseUrl : 'https://www.googleapis.com/';
 			$url = $url . $endPoint;
 			$options = [
+				'timeout' => 0,
 				'headers' => [
 					'Authorization' => 'Bearer ' . $accessToken,
 					'User-Agent' => 'Nextcloud Google integration'
@@ -135,6 +137,8 @@ class GoogleAPIService {
 				}
 			}
 			$this->logger->warning('Google API error : '.$e->getMessage(), ['app' => $this->appName]);
+			return ['error' => $e->getMessage()];
+		} catch (ConnectException $e) {
 			return ['error' => $e->getMessage()];
 		}
 	}
@@ -198,6 +202,7 @@ class GoogleAPIService {
 	public function simpleRequest(string $accessToken, string $userId, string $url, array $params = [], string $method = 'GET'): array {
 		try {
 			$options = [
+				'timeout' => 0,
 				'headers' => [
 					'Authorization' => 'Bearer ' . $accessToken,
 					'User-Agent' => 'Nextcloud Google integration'
@@ -230,7 +235,7 @@ class GoogleAPIService {
 			} else {
 				return ['content' => $body];
 			}
-		} catch (ClientException $e) {
+		} catch (ServerException | ClientException $e) {
 			$response = $e->getResponse();
 			if ($response->getStatusCode() === 401) {
 				// refresh token if it's invalid and we are using oauth
@@ -254,6 +259,9 @@ class GoogleAPIService {
 			}
 			$this->logger->warning('Google API error : '.$e->getMessage(), ['app' => $this->appName]);
 			return ['error' => $e->getMessage()];
+		} catch (ConnectException $e) {
+			$this->logger->error('Google API request connection error: ' . $e->getMessage(), ['app' => $this->appName]);
+			return ['error' => $e->getMessage()];
 		}
 	}
 
@@ -271,6 +279,7 @@ class GoogleAPIService {
 		try {
 			$options = [
 				'save_to' => $tmpFilePath,
+				'timeout' => 0,
 				'headers' => [
 					'Authorization' => 'Bearer ' . $accessToken,
 					'User-Agent' => 'Nextcloud Google integration'
@@ -303,7 +312,7 @@ class GoogleAPIService {
 			} else {
 				return ['success' => true];
 			}
-		} catch (ClientException $e) {
+		} catch (ServerException | ClientException $e) {
 			$response = $e->getResponse();
 			if ($response->getStatusCode() === 401) {
 				// refresh token if it's invalid and we are using oauth
@@ -326,6 +335,9 @@ class GoogleAPIService {
 				}
 			}
 			$this->logger->warning('Google API error : '.$e->getMessage(), ['app' => $this->appName]);
+			return ['error' => $e->getMessage()];
+		} catch (ConnectException $e) {
+			$this->logger->error('Google API request connection error: ' . $e->getMessage(), ['app' => $this->appName]);
 			return ['error' => $e->getMessage()];
 		}
 	}
