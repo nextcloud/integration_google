@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## 0.0.13 – 2020-11-03
+### Fixed
+- set client timeout to 0 to allow big file download
+
 ## 0.0.12 – 2020-11-01
 ### Fixed
 - export google docs to files instead of just ignoring them
