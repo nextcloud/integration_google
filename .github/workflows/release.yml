@@ -33,7 +33,7 @@ jobs:
           echo "$APP_KEY" > ~/.nextcloud/certificates/${APP_ID}.key
           echo "###### install dependencies"
           # remove repo answering 402
-          sudo rm -f /etc/apt/sources.list.d/github_git-lfs.list
+          #sudo rm -f /etc/apt/sources.list.d/github_git-lfs.list
           export DEBIAN_FRONTEND=noninteractive
           sudo apt-get update -yqq
           sudo apt-get install php7.4-mbstring php7.4-sqlite3 npm make openssl -yqq > /dev/null 2>&1

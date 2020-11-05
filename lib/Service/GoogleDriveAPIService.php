@@ -305,7 +305,9 @@ class GoogleDriveAPIService {
 					unlink($tmpFilePath);
 					return $copied;
 				}
-				unlink($tmpFilePath);
+				if (file_exists($tmpFilePath)) {
+					unlink($tmpFilePath);
+				}
 			}
 		} else {
 			// potentially a doc
@@ -342,7 +344,9 @@ class GoogleDriveAPIService {
 					unlink($tmpFilePath);
 					return $copied;
 				}
-				unlink($tmpFilePath);
+				if (file_exists($tmpFilePath)) {
+					unlink($tmpFilePath);
+				}
 			}
 		}
 		return null;

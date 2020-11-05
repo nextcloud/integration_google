@@ -284,7 +284,11 @@ class GooglePhotosAPIService {
 				$resource = $savedFile->fopen('w');
 				$copied = $this->googleApiService->chunkedCopy($tmpFilePath, $resource);
 				$savedFile->touch();
+				unlink($tmpFilePath);
 				return $copied;
+			}
+			if (file_exists($tmpFilePath)) {
+				unlink($tmpFilePath);
 			}
 		}
 		return null;
