@@ -118,7 +118,7 @@ class GoogleDriveAPIService {
 	 * @return array
 	 */
 	public function importDriveJob(string $userId): void {
-		$this->logger->error('Importing drive files for ' . $userId);
+		$this->logger->info('Importing drive files for ' . $userId);
 		$importingDrive = $this->config->getUserValue($userId, Application::APP_ID, 'importing_drive', '0') === '1';
 		if (!$importingDrive) {
 			return;
@@ -304,9 +304,11 @@ class GoogleDriveAPIService {
 					$savedFile->touch();
 					unlink($tmpFilePath);
 					return $copied;
-				}
-				if (file_exists($tmpFilePath)) {
-					unlink($tmpFilePath);
+				} else {
+					$this->logger->warning('Google Drive error downloading file ' . $fileItem['name'] . ' : ' . $res['error'], ['app' => $this->appName]);
+					if (file_exists($tmpFilePath)) {
+						unlink($tmpFilePath);
+					}
 				}
 			}
 		} else {

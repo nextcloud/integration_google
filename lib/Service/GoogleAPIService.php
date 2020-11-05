@@ -339,6 +339,10 @@ class GoogleAPIService {
 		} catch (ConnectException $e) {
 			$this->logger->error('Google API request connection error: ' . $e->getMessage(), ['app' => $this->appName]);
 			return ['error' => $e->getMessage()];
+		} catch (\Throwable $e) {
+			return ['error' => $e->getMessage()];
+		} catch (\Exception $e) {
+			return ['error' => $e->getMessage()];
 		}
 	}
 
