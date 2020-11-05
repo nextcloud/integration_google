@@ -298,8 +298,10 @@ class GoogleDriveAPIService {
 					$resource = $savedFile->fopen('w');
 					$copied = $this->googleApiService->chunkedCopy($tmpFilePath, $resource);
 					$savedFile->touch();
+					unlink($tmpFilePath);
 					return $copied;
 				}
+				unlink($tmpFilePath);
 			}
 		} else {
 			// potentially a doc
@@ -333,8 +335,10 @@ class GoogleDriveAPIService {
 					$resource = $savedFile->fopen('w');
 					$copied = $this->googleApiService->chunkedCopy($tmpFilePath, $resource);
 					$savedFile->touch();
+					unlink($tmpFilePath);
 					return $copied;
 				}
+				unlink($tmpFilePath);
 			}
 		}
 		return null;
