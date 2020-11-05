@@ -6,9 +6,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## 0.0.14 – 2020-11-05
+### Fixed
+- delete tmp file after having copied it
+[#24](https://github.com/nextcloud/integration_google/issues/24) @oncletom
+
 ## 0.0.13 – 2020-11-03
 ### Fixed
 - set client timeout to 0 to allow big file download
+[#24](https://github.com/nextcloud/integration_google/issues/24) @oncletom
 
 ## 0.0.12 – 2020-11-01
 ### Fixed
