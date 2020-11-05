@@ -91,6 +91,10 @@ class GoogleDriveAPIService {
 	 */
 	public function startImportDrive(string $accessToken, string $userId): array {
 		$targetPath = $this->l10n->t('Google Drive import');
+		$alreadyImporting = $this->config->getUserValue($userId, Application::APP_ID, 'importing_drive', '0') === '1';
+		if ($alreadyImporting) {
+			return ['targetPath' => $targetPath];
+		}
 		// create root folder
 		$userFolder = $this->root->getUserFolder($userId);
 		if (!$userFolder->nodeExists($targetPath)) {
