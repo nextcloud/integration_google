@@ -286,9 +286,11 @@ class GooglePhotosAPIService {
 				$savedFile->touch();
 				unlink($tmpFilePath);
 				return $copied;
-			}
-			if (file_exists($tmpFilePath)) {
-				unlink($tmpFilePath);
+			} else {
+				$this->logger->warning('Google Drive error downloading photo ' . $photoName . ' : ' . $res['error'], ['app' => $this->appName]);
+				if (file_exists($tmpFilePath)) {
+					unlink($tmpFilePath);
+				}
 			}
 		}
 		return null;
