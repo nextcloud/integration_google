@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## 0.0.15 – 2020-11-05
+### Changed
+- more logs, try not to crash on download problems
+
+### Fixed
+- delete photo temp file after having copied it
+
 ## 0.0.14 – 2020-11-05
 ### Fixed
 - delete tmp file after having copied it
