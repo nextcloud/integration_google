@@ -13,6 +13,7 @@ namespace OCA\Google\Service;
 
 use OCP\IL10N;
 use OCA\DAV\CalDAV\CalDavBackend;
+use Psr\Log\LoggerInterface;
 
 use OCA\Google\AppInfo\Application;
 
@@ -24,11 +25,13 @@ class GoogleCalendarAPIService {
 	 * Service to make requests to Google v3 (JSON) API
 	 */
 	public function __construct (string $appName,
+								LoggerInterface $logger,
 								IL10N $l10n,
 								CalDavBackend $caldavBackend,
 								GoogleAPIService $googleApiService) {
 		$this->appName = $appName;
 		$this->l10n = $l10n;
+		$this->logger = $logger;
 		$this->caldavBackend = $caldavBackend;
 		$this->googleApiService = $googleApiService;
 	}
@@ -164,8 +167,14 @@ class GoogleCalendarAPIService {
 				. 'END:VEVENT' . "\n"
 				. 'END:VCALENDAR';
 
-			$this->caldavBackend->createCalendarObject($newCalId, $nbAdded, $calData);
-			$nbAdded++;
+			try {
+				$this->caldavBackend->createCalendarObject($newCalId, $nbAdded, $calData);
+				$nbAdded++;
+			} catch (\Exception $e) {
+				$this->logger->warning('Error when creating calendar event "' . ($e['summary'] ?? 'no title') . '" ' . json_encode($e), ['app' => $this->appName]);
+			} catch (\Throwable $e) {
+				$this->logger->warning('Error when creating calendar event "' . ($e['summary'] ?? 'no title') . '" ' . json_encode($e), ['app' => $this->appName]);
+			}
 		}
 
 		$eventGeneratorReturn = $events->getReturn();

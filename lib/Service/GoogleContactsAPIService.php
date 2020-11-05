@@ -14,6 +14,7 @@ namespace OCA\Google\Service;
 use OCP\Contacts\IManager as IContactManager;
 use Sabre\VObject\Component\VCard;
 use OCA\DAV\CardDAV\CardDavBackend;
+use Psr\Log\LoggerInterface;
 
 use OCA\Google\AppInfo\Application;
 
@@ -23,10 +24,12 @@ class GoogleContactsAPIService {
 	 * Service to make requests to Google v3 (JSON) API
 	 */
 	public function __construct (string $appName,
+								LoggerInterface $logger,
 								IContactManager $contactsManager,
 								CardDavBackend $cdBackend,
 								GoogleAPIService $googleApiService) {
 		$this->appName = $appName;
+		$this->logger = $logger;
 		$this->contactsManager = $contactsManager;
 		$this->cdBackend = $cdBackend;
 		$this->googleApiService = $googleApiService;
@@ -272,8 +275,14 @@ class GoogleContactsAPIService {
 				}
 			}
 
-			$this->cdBackend->createCard($key, 'goog' . $k, $vCard->serialize());
-			$nbAdded++;
+			try {
+				$this->cdBackend->createCard($key, 'goog' . $k, $vCard->serialize());
+				$nbAdded++;
+			} catch (\Exception $e) {
+				$this->logger->warning('Error when creating contact "' . ($displayName ?? 'no name') . '" ' . json_encode($c), ['app' => $this->appName]);
+			} catch (\Throwable $e) {
+				$this->logger->warning('Error when creating contact "' . ($displayName ?? 'no name') . '" ' . json_encode($c), ['app' => $this->appName]);
+			}
 		}
 		$contactGeneratorReturn = $contacts->getReturn();
 		if (isset($contactGeneratorReturn['error'])) {
