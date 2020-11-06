@@ -55,6 +55,7 @@ class GoogleDriveAPIService {
 	 * @return array
 	 */
 	public function getDriveSize(string $accessToken, string $userId): array {
+		$considerSharedFiles = $this->config->getUserValue($userId, Application::APP_ID, 'consider_shared_files', '0') === '1';
 		$params = [
 			'fields' => '*',
 		];
@@ -67,19 +68,38 @@ class GoogleDriveAPIService {
 		];
 		// count files
 		$nbFiles = 0;
+		$sharedWithMeSize = 0;
 		$params = [
+			'fields' => 'files/name,files/ownedByMe',
 			'pageSize' => 1000,
 			'q' => "mimeType!='application/vnd.google-apps.folder'",
 		];
+		if ($considerSharedFiles) {
+			$params['fields'] = 'files/name,files/ownedByMe,files/size';
+		}
 		do {
 			$result = $this->googleApiService->request($accessToken, $userId, 'drive/v3/files', $params);
 			if (isset($result['error']) || !isset($result['files'])) {
 				return $result;
 			}
-			$nbFiles += count($result['files']);
+			if ($considerSharedFiles) {
+				foreach ($result['files'] as $file) {
+					if (!$file['ownedByMe']) {
+						$sharedWithMeSize += $file['size'];
+					}
+				}
+				$nbFiles += count($result['files']);
+			} else {
+				foreach ($result['files'] as $file) {
+					if ($file['ownedByMe']) {
+						$nbFiles++;
+					}
+				}
+			}
 			$params['pageToken'] = $result['nextPageToken'] ?? '';
 		} while (isset($result['nextPageToken']));
 		$info['nbFiles'] = $nbFiles;
+		$info['sharedWithMeSize'] = $sharedWithMeSize;
 		return $info;
 	}
 
@@ -158,6 +178,7 @@ class GoogleDriveAPIService {
 	 */
 	public function importFiles(string $accessToken, string $userId, string $targetPath,
 								?int $maxDownloadSize = null, int $alreadyImported): array {
+		$considerSharedFiles = $this->config->getUserValue($userId, Application::APP_ID, 'consider_shared_files', '0') === '1';
 		// create root folder
 		$userFolder = $this->root->getUserFolder($userId);
 		if (!$userFolder->nodeExists($targetPath)) {
@@ -181,6 +202,10 @@ class GoogleDriveAPIService {
 				return $result;
 			}
 			foreach ($result['files'] as $dir) {
+				// ignore shared files
+				if (!$considerSharedFiles && !$dir['ownedByMe']) {
+					continue;
+				}
 				$directoriesById[$dir['id']] = [
 					'name' => preg_replace('/\//', '-slash-', $dir['name']),
 					'parent' => (isset($dir['parents']) && count($dir['parents']) > 0) ? $dir['parents'][0] : null,
@@ -206,7 +231,14 @@ class GoogleDriveAPIService {
 
 		$params = [
 			'pageSize' => 1000,
-			'fields' => '*',
+			'fields' => implode(',', [
+				'files/id',
+				'files/name',
+				'files/parents',
+				'files/mimeType',
+				'files/ownedByMe',
+				'files/webContentLink',
+			]),
 			'q' => "mimeType!='application/vnd.google-apps.folder'",
 		];
 		do {
@@ -215,6 +247,10 @@ class GoogleDriveAPIService {
 				return $result;
 			}
 			foreach ($result['files'] as $fileItem) {
+				// ignore shared files
+				if (!$considerSharedFiles && !$fileItem['ownedByMe']) {
+					continue;
+				}
 				$totalSeenNumber++;
 				$size = $this->getFile($accessToken, $userId, $fileItem, $directoriesById, $folder);
 				if (!is_null($size)) {

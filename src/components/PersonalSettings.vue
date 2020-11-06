@@ -113,9 +113,30 @@
 				<div v-if="nbFiles > 0"
 					id="google-drive">
 					<h3>{{ t('integration_google', 'Drive') }}</h3>
+					<div v-if="!importingDrive">
+						<input
+							id="consider-shared-files"
+							type="checkbox"
+							class="checkbox"
+							:checked="!state.consider_shared_files"
+							@input="onDriveConsiderSharedChange">
+						<label for="consider-shared-files">{{ t('integration_google', 'Ignore shared files') }}</label>
+						<br><br>
+					</div>
 					<label>
 						<span class="icon icon-folder" />
-						{{ n('integration_google', '{nbFiles} file in Google Drive ({formSize})', '{nbFiles} files in Google Drive ({formSize})', nbFiles, { nbFiles, formSize: myHumanFileSize(driveSize, true) }) }}
+						<span v-if="state.consider_shared_files && sharedWithMeSize > 0">
+							{{ n('integration_google',
+								'{nbFiles} file in Google Drive ({formSize} + {formSharedSize} shared with you)',
+								'{nbFiles} files in Google Drive ({formSize} + {formSharedSize} shared with you)',
+								nbFiles,
+								{ nbFiles, formSize: myHumanFileSize(driveSize, true), formSharedSize: myHumanFileSize(sharedWithMeSize, true) }
+							)
+							}}
+						</span>
+						<span v-else>
+							{{ n('integration_google', '{nbFiles} file in Google Drive ({formSize})', '{nbFiles} files in Google Drive ({formSize})', nbFiles, { nbFiles, formSize: myHumanFileSize(driveSize, true) }) }}
+						</span>
 					</label>
 					<button v-if="enoughSpaceForDrive && !importingDrive"
 						id="google-import-files"
@@ -184,6 +205,7 @@ export default {
 			// drive
 			nbFiles: 0,
 			driveSize: 0,
+			sharedWithMeSize: 0,
 			importingDrive: false,
 			lastDriveImportTimestamp: 0,
 			nbImportedFiles: 0,
@@ -272,13 +294,11 @@ export default {
 	methods: {
 		onLogoutClick() {
 			this.state.token = ''
-			this.saveOptions()
+			this.saveOptions({ token: this.state.token })
 		},
-		saveOptions() {
+		saveOptions(values, callback = null) {
 			const req = {
-				values: {
-					token: this.state.token,
-				},
+				values,
 			}
 			const url = generateUrl('/apps/integration_google/config')
 			axios.put(url, req)
@@ -289,6 +309,10 @@ export default {
 						if (this.state.token && response.data.user_name === '') {
 							showError(t('integration_google', 'Incorrect access token'))
 						}
+					}
+					// callback
+					if (callback) {
+						callback()
 					}
 				})
 				.catch((error) => {
@@ -347,6 +371,7 @@ export default {
 					if (response.data && response.data.usageInDrive && response.data.nbFiles) {
 						this.driveSize = response.data.usageInDrive
 						this.nbFiles = response.data.nbFiles
+						this.sharedWithMeSize = response.data.sharedWithMeSize
 					}
 				})
 				.catch((error) => {
@@ -627,6 +652,10 @@ export default {
 		},
 		myHumanFileSize(bytes, approx = false, si = false, dp = 1) {
 			return humanFileSize(bytes, approx, si, dp)
+		},
+		onDriveConsiderSharedChange(e) {
+			this.state.consider_shared_files = !e.target.checked
+			this.saveOptions({ consider_shared_files: this.state.consider_shared_files ? '1' : '0' }, this.getGoogleDriveInfo)
 		},
 	},
 }
