@@ -13,6 +13,7 @@ namespace OCA\Google\Service;
 
 use OCP\IL10N;
 use OCA\DAV\CalDAV\CalDavBackend;
+use Sabre\DAV\Exception\BadRequest;
 use Psr\Log\LoggerInterface;
 
 use OCA\Google\AppInfo\Application;
@@ -53,11 +54,13 @@ class GoogleCalendarAPIService {
 	/**
 	 * @param string $userId
 	 * @param string $uri
-	 * @return bool
+	 * @return ?int the calendar ID
 	 */
-	private function calendarExists(string $userId, string $uri): bool {
+	private function calendarExists(string $userId, string $uri): ?int {
 		$res = $this->caldavBackend->getCalendarByUri('principals/users/' . $userId, $uri);
-		return !is_null($res);
+		return is_null($res)
+			? null
+			: $res['id'];
 	}
 
 	/**
@@ -69,17 +72,16 @@ class GoogleCalendarAPIService {
 	 * @return array
 	 */
 	public function importCalendar(string $accessToken, string $userId, string $calId, string $calName, ?string $color = null): array {
-		$calSuffix = 0;
-		$newCalName = trim($calName) . ' (' . $this->l10n->t('Google Calendar import') .')';
-		while ($this->calendarExists($userId, $newCalName)) {
-			$calSuffix++;
-			$newCalName = trim($calName) . '-' . $calSuffix . ' (' . $this->l10n->t('Google Calendar import') .')';
-		}
 		$params = [];
 		if ($color) {
 			$params['{http://apple.com/ns/ical/}calendar-color'] = $color;
 		}
-		$newCalId = $this->caldavBackend->createCalendar('principals/users/' . $userId, $newCalName, $params);
+
+		$newCalName = trim($calName) . ' (' . $this->l10n->t('Google Calendar import') .')';
+		$ncCalId = $this->calendarExists($userId, $newCalName);
+		if (is_null($ncCalId)) {
+			$ncCalId = $this->caldavBackend->createCalendar('principals/users/' . $userId, $newCalName, $params);
+		}
 
 		date_default_timezone_set('UTC');
 		$utcTimezone = new \DateTimeZone('-0000');
@@ -91,7 +93,8 @@ class GoogleCalendarAPIService {
 				. 'PRODID:NextCloud Calendar' . "\n"
 				. 'BEGIN:VEVENT' . "\n";
 
-			$calData .= 'UID:' . $newCalId . '-' . $nbAdded . "\n";
+			$objectUri = $e['id'] . '-' . $e['etag'];
+			$calData .= 'UID:' . $ncCalId . '-' . $objectUri . "\n";
 			$calData .= isset($e['summary']) ? ('SUMMARY:' . str_replace("\n", '\n', $e['summary']) . "\n") : '';
 			$calData .= isset($e['sequence']) ? ('SEQUENCE:' . $e['sequence'] . "\n") : '';
 			$calData .= isset($e['location']) ? ('LOCATION:' . str_replace("\n", '\n', $e['location']) . "\n") : '';
@@ -168,12 +171,16 @@ class GoogleCalendarAPIService {
 				. 'END:VCALENDAR';
 
 			try {
-				$this->caldavBackend->createCalendarObject($newCalId, $nbAdded, $calData);
+				$this->caldavBackend->createCalendarObject($ncCalId, $objectUri, $calData);
 				$nbAdded++;
-			} catch (\Exception $e) {
-				$this->logger->warning('Error when creating calendar event "' . ($e['summary'] ?? 'no title') . '" ' . json_encode($e), ['app' => $this->appName]);
-			} catch (\Throwable $e) {
-				$this->logger->warning('Error when creating calendar event "' . ($e['summary'] ?? 'no title') . '" ' . json_encode($e), ['app' => $this->appName]);
+			} catch (BadRequest $ex) {
+				if (strpos($ex->getMessage(), 'uid already exists') !== false) {
+					$this->logger->info('Skip existing event "' . ($e['summary'] ?? 'no title') . '"', ['app' => $this->appName]);
+				} else {
+					$this->logger->warning('Error when creating calendar event "' . ($e['summary'] ?? 'no title') . '" ' . $ex->getMessage(), ['app' => $this->appName]);
+				}
+			} catch (\Exception | \Throwable $ex) {
+				$this->logger->warning('Error when creating calendar event "' . ($e['summary'] ?? 'no title') . '" ' . $ex->getMessage(), ['app' => $this->appName]);
 			}
 		}
 
