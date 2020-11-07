@@ -181,8 +181,12 @@ class GoogleContactsAPIService {
 							$photoFile = $this->googleApiService->simpleRequest($accessToken, $userId, $photo['url']);
 							if (!isset($photoFile['error'])) {
 								$b64Photo = base64_encode($photoFile['content']);
-								$prop = $vCard->createProperty('PHOTO', $b64Photo, ['type' => $type, 'encoding' => 'b']);
-								$vCard->add($prop);
+								try {
+									$prop = $vCard->createProperty('PHOTO', $b64Photo, ['type' => $type, 'encoding' => 'b']);
+									$vCard->add($prop);
+								} catch (\Exception | \Throwable $ex) {
+									$this->logger->warning('Error when setting contact photo "' . ($displayName ?? 'no name') . '" ' . $ex->getMessage(), ['app' => $this->appName]);
+								}
 								break;
 							}
 						}
@@ -278,9 +282,7 @@ class GoogleContactsAPIService {
 			try {
 				$this->cdBackend->createCard($key, 'goog' . $k, $vCard->serialize());
 				$nbAdded++;
-			} catch (\Exception $e) {
-				$this->logger->warning('Error when creating contact "' . ($displayName ?? 'no name') . '" ' . json_encode($c), ['app' => $this->appName]);
-			} catch (\Throwable $e) {
+			} catch (\Throwable | \Exception $e) {
 				$this->logger->warning('Error when creating contact "' . ($displayName ?? 'no name') . '" ' . json_encode($c), ['app' => $this->appName]);
 			}
 		}
