@@ -71,6 +71,45 @@ class GooglePhotosAPIService {
 			}
 			$params['pageToken'] = $result['nextPageToken'] ?? '';
 		} while (isset($result['nextPageToken']));
+
+		// shared albums
+		$considerSharedAlbums = $this->config->getUserValue($userId, Application::APP_ID, 'consider_shared_albums', '0') === '1';
+		if ($considerSharedAlbums) {
+			$sharedAlbums = [];
+			$params = [
+				'pageSize' => 50,
+			];
+			do {
+				$result = $this->googleApiService->request($accessToken, $userId, 'v1/sharedAlbums', $params, 'GET', 'https://photoslibrary.googleapis.com/');
+				if (isset($result['error'])) {
+					return $result;
+				}
+				foreach ($result['sharedAlbums'] as $album) {
+					$sharedAlbums[] = $album;
+				}
+				$params['pageToken'] = $result['nextPageToken'] ?? '';
+			} while (isset($result['nextPageToken']));
+			// get photos of each shared album
+			foreach ($sharedAlbums as $album) {
+				$albumId = $album['id'];
+				$params = [
+					'pageSize' => 100,
+					'albumId' => $albumId,
+				];
+				do {
+					$result = $this->googleApiService->request($accessToken, $userId, 'v1/mediaItems:search', $params, 'POST', 'https://photoslibrary.googleapis.com/');
+					if (isset($result['error'])) {
+						return $result;
+					}
+					foreach ($result['mediaItems'] as $photo) {
+						if (!in_array($photo['id'], $seenIds)) {
+							$seenIds[] = $photo['id'];
+						}
+					}
+					$params['pageToken'] = $result['nextPageToken'] ?? '';
+				} while (isset($result['nextPageToken']));
+			}
+		}
 		return [
 			'nbPhotos' => count($seenIds),
 		];
@@ -171,6 +210,24 @@ class GooglePhotosAPIService {
 			}
 			$params['pageToken'] = $result['nextPageToken'] ?? '';
 		} while (isset($result['nextPageToken']));
+
+		// shared albums
+		$considerSharedAlbums = $this->config->getUserValue($userId, Application::APP_ID, 'consider_shared_albums', '0') === '1';
+		if ($considerSharedAlbums) {
+			$params = [
+				'pageSize' => 50,
+			];
+			do {
+				$result = $this->googleApiService->request($accessToken, $userId, 'v1/sharedAlbums', $params, 'GET', 'https://photoslibrary.googleapis.com/');
+				if (isset($result['error'])) {
+					return $result;
+				}
+				foreach ($result['sharedAlbums'] as $album) {
+					$albums[] = $album;
+				}
+				$params['pageToken'] = $result['nextPageToken'] ?? '';
+			} while (isset($result['nextPageToken']));
+		}
 
 		// get the photos
 		$info = $this->getPhotoNumber($accessToken, $userId);

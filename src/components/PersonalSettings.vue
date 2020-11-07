@@ -84,6 +84,16 @@
 				<div v-if="nbPhotos > 0"
 					id="google-photos">
 					<h3>{{ t('integration_google', 'Photos') }}</h3>
+					<div v-if="!importingPhotos">
+						<input
+							id="consider-shared-albums"
+							type="checkbox"
+							class="checkbox"
+							:checked="!state.consider_shared_albums"
+							@input="onPhotoConsiderSharedChange">
+						<label for="consider-shared-albums">{{ t('integration_google', 'Ignore shared albums') }}</label>
+						<br><br>
+					</div>
 					<label>
 						<span class="icon icon-toggle-pictures" />
 						{{ n('integration_google', '{nbPhotos} Google photo (>{formSize})', '{nbPhotos} Google photos (>{formSize})', nbPhotos, { nbPhotos, formSize: myHumanFileSize(estimatedPhotoCollectionSize, true) }) }}
@@ -649,6 +659,10 @@ export default {
 		onDriveConsiderSharedChange(e) {
 			this.state.consider_shared_files = !e.target.checked
 			this.saveOptions({ consider_shared_files: this.state.consider_shared_files ? '1' : '0' }, this.getGoogleDriveInfo)
+		},
+		onPhotoConsiderSharedChange(e) {
+			this.state.consider_shared_albums = !e.target.checked
+			this.saveOptions({ consider_shared_albums: this.state.consider_shared_albums ? '1' : '0' }, this.getNbGooglePhotos)
 		},
 	},
 }
