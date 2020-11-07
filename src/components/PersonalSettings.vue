@@ -739,7 +739,11 @@ body.theme--dark .icon-google-settings {
 	#google-photos button,
 	#google-contacts > button {
 		width: 300px;
-		height: 34px;
+
+		&#google-import-photos,
+		&#google-import-files {
+			height: 34px;
+		}
 	}
 
 	#google-drive label,
