@@ -95,10 +95,16 @@ class GoogleCalendarAPIService {
 
 			$objectUri = $e['id'] . '-' . $e['etag'];
 			$calData .= 'UID:' . $ncCalId . '-' . $objectUri . "\n";
-			$calData .= isset($e['summary']) ? ('SUMMARY:' . str_replace("\n", '\n', $e['summary']) . "\n") : '';
+			$calData .= isset($e['summary'])
+				? ('SUMMARY:' . substr(str_replace("\n", '\n', $e['summary']), 0, 250) . "\n")
+				: '';
 			$calData .= isset($e['sequence']) ? ('SEQUENCE:' . $e['sequence'] . "\n") : '';
-			$calData .= isset($e['location']) ? ('LOCATION:' . str_replace("\n", '\n', $e['location']) . "\n") : '';
-			$calData .= isset($e['description']) ? ('DESCRIPTION:' . str_replace("\n", '\n', $e['description']) . "\n") : '';
+			$calData .= isset($e['location'])
+				? ('LOCATION:' . substr(str_replace("\n", '\n', $e['location']), 0, 250) . "\n")
+				: '';
+			$calData .= isset($e['description'])
+				? ('DESCRIPTION:' . substr(str_replace("\n", '\n', $e['description']), 0, 250) . "\n")
+				: '';
 			$calData .= isset($e['status']) ? ('STATUS:' . strtoupper(str_replace("\n", '\n', $e['status'])) . "\n") : '';
 
 			if (isset($e['created'])) {
