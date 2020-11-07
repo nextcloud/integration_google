@@ -116,7 +116,7 @@ class GoogleCalendarAPIService {
 			if (isset($e['updated'])) {
 				$updated = new \Datetime($e['updated']);
 				$updated->setTimezone($utcTimezone);
-				$calData .= 'LAST-MODIFIED:' . $created->format('Ymd\THis\Z') . "\n";
+				$calData .= 'LAST-MODIFIED:' . $updated->format('Ymd\THis\Z') . "\n";
 			}
 
 			if (isset($e['reminders'], $e['reminders']['useDefault']) && $e['reminders']['useDefault']) {
