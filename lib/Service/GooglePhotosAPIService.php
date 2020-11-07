@@ -334,20 +334,18 @@ class GooglePhotosAPIService {
 		$photoName = $photo['filename'];
 		if (!$albumFolder->nodeExists($photoName)) {
 			$photoUrl = $photo['baseUrl'];
-			$tmpFilePath = $this->tempManager->getTemporaryFile();
-			$res = $this->googleApiService->simpleDownload($accessToken, $userId, $photoUrl, $tmpFilePath);
+			$savedFile = $albumFolder->newFile($photoName);
+			$resource = $savedFile->fopen('w');
+			$res = $this->googleApiService->simpleDownload($accessToken, $userId, $photoUrl, $resource);
 			if (!isset($res['error'])) {
-				$savedFile = $albumFolder->newFile($photoName);
-				$resource = $savedFile->fopen('w');
-				$copied = $this->googleApiService->chunkedCopy($tmpFilePath, $resource);
+				fclose($resource);
 				$savedFile->touch();
-				unlink($tmpFilePath);
-				return $copied;
+				$stat = $savedFile->stat();
+				return $stat['size'] ?? 0;
 			} else {
 				$this->logger->warning('Google Drive error downloading photo ' . $photoName . ' : ' . $res['error'], ['app' => $this->appName]);
-				if (file_exists($tmpFilePath)) {
-					unlink($tmpFilePath);
-				}
+				fclose($resource);
+				$savedFile->delete();
 			}
 		}
 		return null;

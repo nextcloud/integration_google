@@ -331,20 +331,18 @@ class GoogleDriveAPIService {
 		if (isset($fileItem['webContentLink'])) {
 			if (!$saveFolder->nodeExists($fileName)) {
 				$fileUrl = 'https://www.googleapis.com/drive/v3/files/' . $fileItem['id'] . '?alt=media';
-				$tmpFilePath = $this->tempManager->getTemporaryFile();
-				$res = $this->googleApiService->simpleDownload($accessToken, $userId, $fileUrl, $tmpFilePath);
+				$savedFile = $saveFolder->newFile($fileName);
+				$resource = $savedFile->fopen('w');
+				$res = $this->googleApiService->simpleDownload($accessToken, $userId, $fileUrl, $resource);
 				if (!isset($res['error'])) {
-					$savedFile = $saveFolder->newFile($fileName);
-					$resource = $savedFile->fopen('w');
-					$copied = $this->googleApiService->chunkedCopy($tmpFilePath, $resource);
+					fclose($resource);
 					$savedFile->touch();
-					unlink($tmpFilePath);
-					return $copied;
+					$stat = $savedFile->stat();
+					return $stat['size'] ?? 0;
 				} else {
 					$this->logger->warning('Google Drive error downloading file ' . $fileItem['name'] . ' : ' . $res['error'], ['app' => $this->appName]);
-					if (file_exists($tmpFilePath)) {
-						unlink($tmpFilePath);
-					}
+					fclose($resource);
+					$savedFile->delete();
 				}
 			}
 		} else {
@@ -372,20 +370,18 @@ class GoogleDriveAPIService {
 					'mimeType' => $mimeType,
 				];
 				$fileUrl = 'https://www.googleapis.com/drive/v3/files/' . $fileItem['id'] . '/export';
-				$tmpFilePath = $this->tempManager->getTemporaryFile();
-				$res = $this->googleApiService->simpleDownload($accessToken, $userId, $fileUrl, $tmpFilePath, $params);
+				$savedFile = $saveFolder->newFile($fileName);
+				$resource = $savedFile->fopen('w');
+				$res = $this->googleApiService->simpleDownload($accessToken, $userId, $fileUrl, $resource, $params);
 				if (!isset($res['error'])) {
-					$savedFile = $saveFolder->newFile($fileName);
-					$resource = $savedFile->fopen('w');
-					$copied = $this->googleApiService->chunkedCopy($tmpFilePath, $resource);
+					fclose($resource);
 					$savedFile->touch();
-					unlink($tmpFilePath);
-					return $copied;
+					$stat = $savedFile->stat();
+					return $stat['size'] ?? 0;
 				} else {
 					$this->logger->warning('Google Drive error downloading file ' . $fileItem['name'] . ' : ' . $res['error'], ['app' => $this->appName]);
-					if (file_exists($tmpFilePath)) {
-						unlink($tmpFilePath);
-					}
+					fclose($resource);
+					$savedFile->delete();
 				}
 			}
 		}

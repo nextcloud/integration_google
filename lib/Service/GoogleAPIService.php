@@ -271,15 +271,15 @@ class GoogleAPIService {
 	 * @param string $accessToken
 	 * @param string $userId the user from which the request is coming
 	 * @param string $url The path to reach
-	 * @param string $tmpFilePath
+	 * @param resource $resource
 	 * @param array $params Query parameters (key/val pairs)
 	 * @param string $method HTTP query method
 	 * @return array
 	 */
-	public function simpleDownload(string $accessToken, string $userId, string $url, string $tmpFilePath, array $params = [], string $method = 'GET'): array {
+	public function simpleDownload(string $accessToken, string $userId, string $url, $resource, array $params = [], string $method = 'GET'): array {
 		try {
 			$options = [
-				'save_to' => $tmpFilePath,
+				'sink' => $resource,
 				'timeout' => 0,
 				'headers' => [
 					'Authorization' => 'Bearer ' . $accessToken,
@@ -345,26 +345,5 @@ class GoogleAPIService {
 		} catch (\Exception $e) {
 			return ['error' => $e->getMessage()];
 		}
-	}
-
-	public function chunkedCopy(string $fromPath, $outResource): int {
-		if (!is_resource($outResource)) {
-			throw new \InvalidArgumentException(
-				sprintf(
-					'Argument must be a valid resource type. %s given.',
-					gettype($resource)
-				)
-			);
-		}
-		// 10 Mo at a time
-		$buffer_size = 10000000;
-		$ret = 0;
-		$fin = fopen($fromPath, 'rb');
-		while(!feof($fin)) {
-			$ret += fwrite($outResource, fread($fin, $buffer_size));
-		}
-		fclose($fin);
-		fclose($outResource);
-		return $ret;
 	}
 }
