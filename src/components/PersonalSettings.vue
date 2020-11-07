@@ -100,6 +100,8 @@
 					</label>
 					<button v-if="enoughSpaceForPhotos && !importingPhotos"
 						id="google-import-photos"
+						:disabled="gettingPhotoInfo"
+						:class="{ loading: gettingPhotoInfo }"
 						@click="onImportPhotos">
 						<span class="icon icon-picture" />
 						{{ t('integration_google', 'Import Google photos') }}
@@ -150,6 +152,8 @@
 					</label>
 					<button v-if="enoughSpaceForDrive && !importingDrive"
 						id="google-import-files"
+						:disabled="gettingDriveInfo"
+						:class="{ loading: gettingDriveInfo }"
 						@click="onImportDrive">
 						<span class="icon icon-files-dark" />
 						{{ t('integration_google', 'Import Google Drive files') }}
@@ -208,6 +212,7 @@ export default {
 			importingContacts: false,
 			// photos
 			nbPhotos: 0,
+			gettingPhotoInfo: false,
 			importingPhotos: false,
 			lastPhotoImportTimestamp: 0,
 			nbImportedPhotos: 0,
@@ -215,6 +220,7 @@ export default {
 			// drive
 			nbFiles: 0,
 			driveSize: 0,
+			gettingDriveInfo: false,
 			sharedWithMeSize: 0,
 			importingDrive: false,
 			lastDriveImportTimestamp: 0,
@@ -368,6 +374,7 @@ export default {
 				})
 		},
 		getGoogleDriveInfo() {
+			this.gettingDriveInfo = true
 			const url = generateUrl('/apps/integration_google/drive-size')
 			axios.get(url)
 				.then((response) => {
@@ -384,6 +391,7 @@ export default {
 					)
 				})
 				.then(() => {
+					this.gettingDriveInfo = false
 				})
 		},
 		getGoogleCalendarList() {
@@ -434,6 +442,7 @@ export default {
 				})
 		},
 		getNbGooglePhotos() {
+			this.gettingPhotoInfo = true
 			const url = generateUrl('/apps/integration_google/photo-number')
 			axios.get(url)
 				.then((response) => {
@@ -448,6 +457,7 @@ export default {
 					)
 				})
 				.then(() => {
+					this.gettingPhotoInfo = false
 				})
 		},
 		getNbGoogleContacts() {
