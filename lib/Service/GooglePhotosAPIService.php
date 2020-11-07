@@ -61,10 +61,14 @@ class GooglePhotosAPIService {
 			if (isset($result['error'])) {
 				return $result;
 			}
-			foreach ($result['mediaItems'] as $photo) {
-				if (!in_array($photo['id'], $seenIds)) {
-					$seenIds[] = $photo['id'];
+			if (isset($result['mediaItems']) && is_array($result['mediaItems'])) {
+				foreach ($result['mediaItems'] as $photo) {
+					if (!in_array($photo['id'], $seenIds)) {
+						$seenIds[] = $photo['id'];
+					}
 				}
+			} else {
+				$this->logger->warning('Google API error getting photo list, no "mediaItems" key in ' . json_encode($result), ['app' => $this->appName]);
 			}
 			$params['pageToken'] = $result['nextPageToken'] ?? '';
 		} while (isset($result['nextPageToken']));
@@ -81,8 +85,12 @@ class GooglePhotosAPIService {
 				if (isset($result['error'])) {
 					return $result;
 				}
-				foreach ($result['sharedAlbums'] as $album) {
-					$sharedAlbums[] = $album;
+				if (isset($result['sharedAlbums']) && is_array($result['sharedAlbums'])) {
+					foreach ($result['sharedAlbums'] as $album) {
+						$sharedAlbums[] = $album;
+					}
+				} else {
+					$this->logger->warning('Google API error getting shared albums list, no "sharedAlbums" key in ' . json_encode($result), ['app' => $this->appName]);
 				}
 				$params['pageToken'] = $result['nextPageToken'] ?? '';
 			} while (isset($result['nextPageToken']));
@@ -98,10 +106,14 @@ class GooglePhotosAPIService {
 					if (isset($result['error'])) {
 						return $result;
 					}
-					foreach ($result['mediaItems'] as $photo) {
-						if (!in_array($photo['id'], $seenIds)) {
-							$seenIds[] = $photo['id'];
+					if (isset($result['mediaItems']) && is_array($result['mediaItems'])) {
+						foreach ($result['mediaItems'] as $photo) {
+							if (!in_array($photo['id'], $seenIds)) {
+								$seenIds[] = $photo['id'];
+							}
 						}
+					} else {
+						$this->logger->warning('Google API error getting shared album photo list, no "mediaItems" key in ' . json_encode($result), ['app' => $this->appName]);
 					}
 					$params['pageToken'] = $result['nextPageToken'] ?? '';
 				} while (isset($result['nextPageToken']));
@@ -340,7 +352,7 @@ class GooglePhotosAPIService {
 				$stat = $savedFile->stat();
 				return $stat['size'] ?? 0;
 			} else {
-				$this->logger->warning('Google Drive error downloading photo ' . $photoName . ' : ' . $res['error'], ['app' => $this->appName]);
+				$this->logger->warning('Google API error downloading photo ' . $photoName . ' : ' . $res['error'], ['app' => $this->appName]);
 				fclose($resource);
 				$savedFile->delete();
 			}
