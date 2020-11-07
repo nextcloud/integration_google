@@ -84,7 +84,7 @@
 				<div v-if="nbPhotos > 0"
 					id="google-photos">
 					<h3>{{ t('integration_google', 'Photos') }}</h3>
-					<div v-if="!importingPhotos">
+					<div v-if="!importingPhotos" class="checkOption">
 						<input
 							id="consider-shared-albums"
 							type="checkbox"
@@ -94,22 +94,24 @@
 						<label for="consider-shared-albums">{{ t('integration_google', 'Ignore shared albums') }}</label>
 						<br><br>
 					</div>
-					<label>
-						<span class="icon icon-toggle-pictures" />
-						{{ n('integration_google', '{nbPhotos} Google photo (>{formSize})', '{nbPhotos} Google photos (>{formSize})', nbPhotos, { nbPhotos, formSize: myHumanFileSize(estimatedPhotoCollectionSize, true) }) }}
-					</label>
-					<button v-if="enoughSpaceForPhotos && !importingPhotos"
-						id="google-import-photos"
-						:disabled="gettingPhotoInfo"
-						:class="{ loading: gettingPhotoInfo }"
-						@click="onImportPhotos">
-						<span class="icon icon-picture" />
-						{{ t('integration_google', 'Import Google photos') }}
-					</button>
-					<span v-else-if="!enoughSpaceForPhotos">
-						{{ t('integration_google', 'Your Google photo collection size is estimated to be bigger than your remaining space left ({formSpace})', { formSpace: myHumanFileSize(state.free_space) }) }}
-					</span>
-					<div v-else>
+					<div class="line">
+						<label>
+							<span class="icon icon-toggle-pictures" />
+							{{ n('integration_google', '{nbPhotos} Google photo (>{formSize})', '{nbPhotos} Google photos (>{formSize})', nbPhotos, { nbPhotos, formSize: myHumanFileSize(estimatedPhotoCollectionSize, true) }) }}
+						</label>
+						<button v-if="enoughSpaceForPhotos && !importingPhotos"
+							id="google-import-photos"
+							:disabled="gettingPhotoInfo"
+							:class="{ loading: gettingPhotoInfo }"
+							@click="onImportPhotos">
+							<span class="icon icon-picture" />
+							{{ t('integration_google', 'Import Google photos') }}
+						</button>
+						<span v-else-if="!enoughSpaceForPhotos">
+							{{ t('integration_google', 'Your Google photo collection size is estimated to be bigger than your remaining space left ({formSpace})', { formSpace: myHumanFileSize(state.free_space) }) }}
+						</span>
+					</div>
+					<div v-if="importingPhotos">
 						<br>
 						{{ n('integration_google', '{amount} photo imported ({progress}%)', '{amount} photos imported ({progress}%)', nbImportedPhotos, { amount: nbImportedPhotos, progress: photoImportProgress }) }}
 						<br>
@@ -125,7 +127,7 @@
 				<div v-if="nbFiles > 0"
 					id="google-drive">
 					<h3>{{ t('integration_google', 'Drive') }}</h3>
-					<div v-if="!importingDrive">
+					<div v-if="!importingDrive" class="checkOption">
 						<input
 							id="consider-shared-files"
 							type="checkbox"
@@ -135,9 +137,9 @@
 						<label for="consider-shared-files">{{ t('integration_google', 'Ignore shared files') }}</label>
 						<br><br>
 					</div>
-					<label>
-						<span class="icon icon-folder" />
-						<span v-if="state.consider_shared_files && sharedWithMeSize > 0">
+					<div class="line">
+						<label v-if="state.consider_shared_files && sharedWithMeSize > 0">
+							<span class="icon icon-folder" />
 							{{ n('integration_google',
 								'{nbFiles} file in Google Drive ({formSize} + {formSharedSize} shared with you)',
 								'{nbFiles} files in Google Drive ({formSize} + {formSharedSize} shared with you)',
@@ -145,23 +147,24 @@
 								{ nbFiles, formSize: myHumanFileSize(driveSize, true), formSharedSize: myHumanFileSize(sharedWithMeSize, true) }
 							)
 							}}
-						</span>
-						<span v-else>
+						</label>
+						<label v-else>
+							<span class="icon icon-folder" />
 							{{ n('integration_google', '{nbFiles} file in Google Drive ({formSize})', '{nbFiles} files in Google Drive ({formSize})', nbFiles, { nbFiles, formSize: myHumanFileSize(driveSize, true) }) }}
+						</label>
+						<button v-if="enoughSpaceForDrive && !importingDrive"
+							id="google-import-files"
+							:disabled="gettingDriveInfo"
+							:class="{ loading: gettingDriveInfo }"
+							@click="onImportDrive">
+							<span class="icon icon-files-dark" />
+							{{ t('integration_google', 'Import Google Drive files') }}
+						</button>
+						<span v-else-if="!enoughSpaceForDrive">
+							{{ t('integration_google', 'Your Google Drive is bigger than your remaining space left ({formSpace})', { formSpace: myHumanFileSize(state.free_space) }) }}
 						</span>
-					</label>
-					<button v-if="enoughSpaceForDrive && !importingDrive"
-						id="google-import-files"
-						:disabled="gettingDriveInfo"
-						:class="{ loading: gettingDriveInfo }"
-						@click="onImportDrive">
-						<span class="icon icon-files-dark" />
-						{{ t('integration_google', 'Import Google Drive files') }}
-					</button>
-					<span v-else-if="!enoughSpaceForDrive">
-						{{ t('integration_google', 'Your Google Drive is bigger than your remaining space left ({formSpace})', { formSpace: myHumanFileSize(state.free_space) }) }}
-					</span>
-					<div v-else>
+					</div>
+					<div v-if="importingDrive">
 						<br>
 						{{ n('integration_google', '{amount} file imported ({progress}%)', '{amount} files imported ({progress}%)', nbImportedFiles, { amount: nbImportedFiles, progress: driveImportProgress }) }}
 						<br>
@@ -723,14 +726,24 @@ body.theme--dark .icon-google-settings {
 		font-weight: bold;
 	}
 
-	#google-drive > button,
-	#google-photos > button,
-	#google-contacts > button {
-		width: 300px;
+	.line {
+		display: flex;
+
+		label {
+			margin-top: auto;
+			margin-bottom: auto;
+		}
 	}
 
-	#google-drive > label,
-	#google-photos > label,
+	#google-drive button,
+	#google-photos button,
+	#google-contacts > button {
+		width: 300px;
+		height: 34px;
+	}
+
+	#google-drive label,
+	#google-photos label,
 	#google-contacts > label {
 		width: 300px;
 		display: inline-block;
@@ -742,6 +755,10 @@ body.theme--dark .icon-google-settings {
 
 	.contact-input {
 		width: 200px;
+	}
+
+	.checkOption {
+		margin-left: 5px;
 	}
 }
 
