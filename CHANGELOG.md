@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## 0.0.18 – 2020-11-07
+### Fixed
+- make less requests when getting photo number
+[#29](https://github.com/nextcloud/integration_google/issues/29) @jessechahal
+
 ## 0.0.17 – 2020-11-07
 ### Changed
 - try to make contact photo import safer
