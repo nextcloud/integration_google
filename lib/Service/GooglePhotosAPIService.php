@@ -13,7 +13,6 @@ namespace OCA\Google\Service;
 
 use OCP\IL10N;
 use OCP\IConfig;
-use OCP\ITempManager;
 use OCP\Files\IRootFolder;
 use OCP\Files\FileInfo;
 use OCP\Files\Node;
@@ -37,7 +36,6 @@ class GooglePhotosAPIService {
 								IConfig $config,
 								IRootFolder $root,
 								IJobList $jobList,
-								ITempManager $tempManager,
 								GoogleAPIService $googleApiService) {
 		$this->appName = $appName;
 		$this->l10n = $l10n;
@@ -45,7 +43,6 @@ class GooglePhotosAPIService {
 		$this->logger = $logger;
 		$this->jobList = $jobList;
 		$this->root = $root;
-		$this->tempManager = $tempManager;
 		$this->googleApiService = $googleApiService;
 	}
 

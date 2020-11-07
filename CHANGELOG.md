@@ -6,6 +6,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## 0.0.16 – 2020-11-07
+### Added
+- optionally import shared photo albums and shared drive files/folders
+
+### Changed
+- import in existing calendar if there is one
+- improve personal settings style, don't expose token
+- directly download to target file (with resource) instead of using temporary files
+
+### Fixed
+- log instead of crash on event import error
+
 ## 0.0.15 – 2020-11-05
 ### Changed
 - more logs, try not to crash on download problems

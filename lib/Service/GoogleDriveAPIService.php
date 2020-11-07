@@ -18,7 +18,6 @@ use OCP\Files\FileInfo;
 use OCP\Files\Node;
 use OCP\BackgroundJob\IJobList;
 use Psr\Log\LoggerInterface;
-use OCP\ITempManager;
 
 use OCA\Google\AppInfo\Application;
 use OCA\Google\BackgroundJob\ImportDriveJob;
@@ -37,7 +36,6 @@ class GoogleDriveAPIService {
 								IConfig $config,
 								IRootFolder $root,
 								IJobList $jobList,
-								ITempManager $tempManager,
 								GoogleAPIService $googleApiService) {
 		$this->appName = $appName;
 		$this->l10n = $l10n;
@@ -45,7 +43,6 @@ class GoogleDriveAPIService {
 		$this->logger = $logger;
 		$this->jobList = $jobList;
 		$this->root = $root;
-		$this->tempManager = $tempManager;
 		$this->googleApiService = $googleApiService;
 	}
 
