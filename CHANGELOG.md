@@ -6,6 +6,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## 0.0.17 – 2020-11-07
+### Changed
+- try to make contact photo import safer
+[#29](https://github.com/nextcloud/integration_google/issues/29) @jessechahal
+- be more defensive when getting photo number
+[#29](https://github.com/nextcloud/integration_google/issues/29) @jessechahal
+
+### Fixed
+- truncate calendar string values because db field is varchar(255)
+[#29](https://github.com/nextcloud/integration_google/issues/29) @jessechahal
+- mistake leading to crash when "updated" calendar event prop was found
+[#29](https://github.com/nextcloud/integration_google/issues/29) @jessechahal
+
 ## 0.0.16 – 2020-11-07
 ### Added
 - optionally import shared photo albums and shared drive files/folders
