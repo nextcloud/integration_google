@@ -11,7 +11,6 @@ OC.L10N.register(
     "Connected as {user}" : "[user]로 연결됨",
     "Contacts" : "연락처",
     "Import calendar" : "달력 가져오기",
-    "Photos" : "사진",
-    "Incorrect access token" : "잘못된 액세스 토큰"
+    "Photos" : "사진"
 },
 "nplurals=1; plural=0;");

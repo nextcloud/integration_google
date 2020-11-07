@@ -56,7 +56,6 @@
     "Successfully connected to Google!" : "Google-rekin konektatzea ondo egin da!",
     "Google connection error:" : "Google konexio errorea:",
     "Google options saved" : "Google aukerak ondo gorde dira",
-    "Incorrect access token" : "Sarbide token okerra",
     "Failed to save Google options" : "Google aukerak gordetzeak huts egin du",
     "Failed to save Google OAuth state" : "Google OAuth egoera gordetzeak huts egin du",
     "Failed to get Google Drive information" : "Google Drive informazioa lortzeak huts egin du",

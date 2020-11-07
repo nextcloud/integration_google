@@ -62,7 +62,6 @@ OC.L10N.register(
     "Successfully connected to Google!" : "Google ile bağlantı kuruldu!",
     "Google connection error:" : "Google bağlantı sorunu:",
     "Google options saved" : "Google ayarları kaydedildi",
-    "Incorrect access token" : "Erişim kodu geçersiz",
     "Failed to save Google options" : "Google ayarları kaydedilemedi",
     "Failed to save Google OAuth state" : "Google OAuth durumu kaydedilemedi",
     "Failed to get Google Drive information" : "Google Drive bilgileri alınamadı",

@@ -51,7 +51,6 @@ OC.L10N.register(
     "Successfully connected to Google!" : "Povezava z računom Google je uspešno vzpostavljena!",
     "Google connection error:" : "Napaka povezave Google:",
     "Google options saved" : "Nastavitve Google so shranjene",
-    "Incorrect access token" : "Neveljaven žeton za dostop",
     "Failed to save Google options" : "Shranjevanje nastavitev Google je spodletelo",
     "Failed to save Google OAuth state" : "Shranjevanje stanja Google OAuth je spodletelo",
     "Failed to get Google Drive information" : "Pridobivanje podrobnosti datotek Google Drive je spodletelo",

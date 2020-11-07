@@ -1,9 +1,0 @@
-OC.L10N.register(
-    "integration_google",
-    {
-    "Client ID" : "Müştəri İD-s",
-    "Client secret" : "Müxtəri sirri",
-    "Contacts" : "Əlaqələr",
-    "Photos" : "Photos"
-},
-"nplurals=2; plural=(n != 1);");

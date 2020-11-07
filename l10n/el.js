@@ -31,7 +31,6 @@ OC.L10N.register(
     "Successfully connected to Google!" : "Επιτυχημένη σύνδεση στο Google!",
     "Google connection error:" : "Σφάλμα σύνδεσης Google:",
     "Google options saved" : "Αποθηκεύτηκαν οι επιλογές Google",
-    "Incorrect access token" : "Λανθασμένο διακριτικό πρόσβασης",
     "Failed to save Google options" : "Αποτυχία αποθήκευσης των επιλογών Google",
     "Failed to save Google OAuth state" : "Αποτυχία αποθήκευσης της κατάστασης του Google OAuth",
     "Failed to get calendar list" : "Αποτυχία λήψης λίστας ημερολογίου",

@@ -62,7 +62,6 @@ OC.L10N.register(
     "Successfully connected to Google!" : "Pomyślnie połączono z Google!",
     "Google connection error:" : "Błąd połączenia z Google:",
     "Google options saved" : "Opcje Google zostały zapisane",
-    "Incorrect access token" : "Nieprawidłowy token dostępu",
     "Failed to save Google options" : "Nie udało się zapisać opcji Google",
     "Failed to save Google OAuth state" : "Nie udało się zapisać statusu OAuth Google",
     "Failed to get Google Drive information" : "Nie udało się pobrać informacji Dysku Google",

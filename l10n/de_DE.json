@@ -60,7 +60,6 @@
     "Successfully connected to Google!" : "Erfolgreich mit Google verbunden!",
     "Google connection error:" : "Google Verbindungsfehler:",
     "Google options saved" : "Google-Einstellungen gespeichert",
-    "Incorrect access token" : "Zugriffstoken nicht korrekt",
     "Failed to save Google options" : "Fehler beim Speichern der Google-Einstellungen",
     "Failed to save Google OAuth state" : "Fehler beim Speichern des Google-OAuth-Status",
     "Failed to get Google Drive information" : "Fehler beim Abrufen der Google Drive-Informationen",

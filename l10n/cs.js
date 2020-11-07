@@ -62,7 +62,6 @@ OC.L10N.register(
     "Successfully connected to Google!" : "Úspěšně spojeno s Google!",
     "Google connection error:" : "Chyba připojení ke Google:",
     "Google options saved" : "Předvolby pro Google uloženy",
-    "Incorrect access token" : "Nesprávný přístupový token",
     "Failed to save Google options" : "Nepodařilo se uložit předvolby pro Google",
     "Failed to save Google OAuth state" : "Nepodařilo se uložit stav Google OAuth",
     "Failed to get Google Drive information" : "Selhalo zjištění informací o Google Drive",

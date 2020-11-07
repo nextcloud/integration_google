@@ -41,7 +41,6 @@
     "Drive" : "Conduir",
     "Successfully connected to Google!" : "S'ha connectat correctament a Google!",
     "Google connection error:" : "Error de connexió de Google:",
-    "Incorrect access token" : "Testimoni d'accés incorrecte",
     "Failed to save Google options" : "No s'han pogut desar les opcions de Google",
     "Failed to save Google OAuth state" : "No s'ha pogut desar l'estat de Google OAuth",
     "Failed to get calendar list" : "No s'ha pogut obtenir la llista de calendaris",

@@ -18,7 +18,6 @@ OC.L10N.register(
     "Contacts" : "联系人",
     "Import calendar" : "导入日历",
     "Photos" : "照片",
-    "Drive" : "驾驶",
-    "Incorrect access token" : "访问令牌不正确"
+    "Drive" : "驾驶"
 },
 "nplurals=1; plural=0;");
