@@ -61,7 +61,7 @@ class GoogleDriveAPIService {
 			return $result;
 		}
 		$info = [
-			'usageInDrive' => $result['storageQuota']['usageInDrive']
+			'usageInDrive' => $result['storageQuota']['usageInDrive'] ?? 0,
 		];
 		// count files
 		$nbFiles = 0;
@@ -77,7 +77,7 @@ class GoogleDriveAPIService {
 		do {
 			$result = $this->googleApiService->request($accessToken, $userId, 'drive/v3/files', $params);
 			if (isset($result['error']) || !isset($result['files'])) {
-				return $result;
+				return ['error' => $result['error'] ?? 'no files found'];
 			}
 			if ($considerSharedFiles) {
 				foreach ($result['files'] as $file) {

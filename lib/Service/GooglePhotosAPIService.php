@@ -270,23 +270,27 @@ class GooglePhotosAPIService {
 				if (isset($result['error'])) {
 					return $result;
 				}
-				foreach ($result['mediaItems'] as $photo) {
-					$seenIds[] = $photo['id'];
-					$totalSeenNumber++;
-					$size = $this->getPhoto($accessToken, $userId, $photo, $albumFolder);
-					if (!is_null($size)) {
-						$nbDownloaded++;
-						$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_photos', $alreadyImported + $nbDownloaded);
-						$downloadedSize += $size;
-						if ($maxDownloadSize && $downloadedSize > $maxDownloadSize) {
-							return [
-								'nbDownloaded' => $nbDownloaded,
-								'targetPath' => $targetPath,
-								'finished' => ($totalSeenNumber >= $nbPhotosOnGoogle),
-								'totalSeen' => $totalSeenNumber,
-							];
+				if (isset($result['mediaItems']) && is_array($result['mediaItems'])) {
+					foreach ($result['mediaItems'] as $photo) {
+						$seenIds[] = $photo['id'];
+						$totalSeenNumber++;
+						$size = $this->getPhoto($accessToken, $userId, $photo, $albumFolder);
+						if (!is_null($size)) {
+							$nbDownloaded++;
+							$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_photos', $alreadyImported + $nbDownloaded);
+							$downloadedSize += $size;
+							if ($maxDownloadSize && $downloadedSize > $maxDownloadSize) {
+								return [
+									'nbDownloaded' => $nbDownloaded,
+									'targetPath' => $targetPath,
+									'finished' => ($totalSeenNumber >= $nbPhotosOnGoogle),
+									'totalSeen' => $totalSeenNumber,
+								];
+							}
 						}
 					}
+				} else {
+					$this->logger->warning('Google API error getting photo list, no "mediaItems" key in ' . json_encode($result), ['app' => $this->appName]);
 				}
 				$params['pageToken'] = $result['nextPageToken'] ?? '';
 			} while (isset($result['nextPageToken']));
@@ -301,25 +305,29 @@ class GooglePhotosAPIService {
 			if (isset($result['error'])) {
 				return $result;
 			}
-			foreach ($result['mediaItems'] as $photo) {
-				if (!in_array($photo['id'], $seenIds)) {
-					$seenIds[] = $photo['id'];
-					$totalSeenNumber++;
-					$size = $this->getPhoto($accessToken, $userId, $photo, $folder);
-					if (!is_null($size)) {
-						$nbDownloaded++;
-						$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_photos', $alreadyImported + $nbDownloaded);
-						$downloadedSize += $size;
-						if ($maxDownloadSize && $downloadedSize > $maxDownloadSize) {
-							return [
-								'nbDownloaded' => $nbDownloaded,
-								'targetPath' => $targetPath,
-								'finished' => ($totalSeenNumber >= $nbPhotosOnGoogle),
-								'totalSeen' => $totalSeenNumber,
-							];
+			if (isset($result['mediaItems']) && is_array($result['mediaItems'])) {
+				foreach ($result['mediaItems'] as $photo) {
+					if (!in_array($photo['id'], $seenIds)) {
+						$seenIds[] = $photo['id'];
+						$totalSeenNumber++;
+						$size = $this->getPhoto($accessToken, $userId, $photo, $folder);
+						if (!is_null($size)) {
+							$nbDownloaded++;
+							$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_photos', $alreadyImported + $nbDownloaded);
+							$downloadedSize += $size;
+							if ($maxDownloadSize && $downloadedSize > $maxDownloadSize) {
+								return [
+									'nbDownloaded' => $nbDownloaded,
+									'targetPath' => $targetPath,
+									'finished' => ($totalSeenNumber >= $nbPhotosOnGoogle),
+									'totalSeen' => $totalSeenNumber,
+								];
+							}
 						}
 					}
 				}
+			} else {
+				$this->logger->warning('Google API error getting photo list, no "mediaItems" key in ' . json_encode($result), ['app' => $this->appName]);
 			}
 			$params['pageToken'] = $result['nextPageToken'] ?? '';
 		} while (isset($result['nextPageToken']));
