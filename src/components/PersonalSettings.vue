@@ -218,8 +218,7 @@ export default {
 			return this.state.client_id && this.state.client_secret
 		},
 		connected() {
-			return this.state.token && this.state.token !== ''
-				&& this.state.user_name && this.state.user_name !== ''
+			return this.state.user_name && this.state.user_name !== ''
 		},
 		selectedAddressBookName() {
 			return this.selectedAddressBook === 0
@@ -293,8 +292,8 @@ export default {
 
 	methods: {
 		onLogoutClick() {
-			this.state.token = ''
-			this.saveOptions({ token: this.state.token })
+			this.state.user_name = ''
+			this.saveOptions({ user_name: this.state.user_name })
 		},
 		saveOptions(values, callback = null) {
 			const req = {
@@ -304,12 +303,6 @@ export default {
 			axios.put(url, req)
 				.then((response) => {
 					showSuccess(t('integration_google', 'Google options saved'))
-					if (response.data.user_name !== undefined) {
-						this.state.user_name = response.data.user_name
-						if (this.state.token && response.data.user_name === '') {
-							showError(t('integration_google', 'Incorrect access token'))
-						}
-					}
 					// callback
 					if (callback) {
 						callback()

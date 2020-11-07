@@ -80,16 +80,12 @@ class ConfigController extends Controller {
         }
         $result = [];
 
-        if (isset($values['token'])) {
-            if ($values['token'] && $values['token'] !== '') {
-                $userName = $this->storeUserInfo($values['token']);
-                $result['user_name'] = $userName;
-            } else {
-                $this->config->setUserValue($this->userId, Application::APP_ID, 'user_id', '');
-                $this->config->setUserValue($this->userId, Application::APP_ID, 'user_name', '');
-                $this->config->setUserValue($this->userId, Application::APP_ID, 'refresh_token', '');
-                $result['user_name'] = '';
-            }
+        if (isset($values['user_name']) && $values['user_name'] === '') {
+            $this->config->deleteUserValue($this->userId, Application::APP_ID, 'user_id');
+            $this->config->deleteUserValue($this->userId, Application::APP_ID, 'user_name');
+            $this->config->deleteUserValue($this->userId, Application::APP_ID, 'refresh_token');
+            $this->config->deleteUserValue($this->userId, Application::APP_ID, 'token');
+            $result['user_name'] = '';
         }
         return new DataResponse($result);
     }

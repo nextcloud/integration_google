@@ -42,7 +42,6 @@ class Personal implements ISettings {
 	 * @return TemplateResponse
 	 */
 	public function getForm(): TemplateResponse {
-		$token = $this->config->getUserValue($this->userId, Application::APP_ID, 'token', '');
 		$userName = $this->config->getUserValue($this->userId, Application::APP_ID, 'user_name', '');
 		$considerSharedFiles = $this->config->getUserValue($this->userId, Application::APP_ID, 'consider_shared_files', '0') === '1';
 
@@ -55,7 +54,6 @@ class Personal implements ISettings {
 		$freeSpace = $userFolder->getStorage()->free_space('/');
 
 		$userConfig = [
-			'token' => $token,
 			'client_id' => $clientID,
 			'client_secret' => $clientSecret,
 			'user_name' => $userName,
