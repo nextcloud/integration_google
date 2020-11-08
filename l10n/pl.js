@@ -74,7 +74,6 @@ OC.L10N.register(
     "Failed to start importing Google photos" : "Nie udało się rozpocząć importowania zdjęć Google",
     "Starting importing files in {targetPath} directory" : "Rozpoczynam importowanie plików w katalogu {targetPath}",
     "Failed to start importing Google Drive" : "Nie udało się rozpocząć importowania Dysku Google",
-    "_{nbPhotos} Google photo (>{formSize})_::_{nbPhotos} Google photos (>{formSize})_" : ["{nbPhotos} zdjęcie Google (>{formSize})","{nbPhotos} zdjęcia Google (>{formSize})","{nbPhotos} zdjęć Google (>{formSize})","{nbPhotos} zdjęć Google (>{formSize})"],
     "_{amount} photo imported ({progress}%)_::_{amount} photos imported ({progress}%)_" : ["Zaimportowano {amount} zdjęcie ({progress}%)","Zaimportowano {amount} zdjęcia ({progress}%)","Zaimportowano {amount} zdjęć ({progress}%)","Zaimportowano {amount} zdjęć ({progress}%)"],
     "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["{nbFiles} plik na Dysku Google ({formSize})","{nbFiles} pliki na Dysku Google ({formSize})","{nbFiles} plików na Dysku Google ({formSize})","{nbFiles} plików na Dysku Google ({formSize})"],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["Zaimportowano {amount} plik ({progress}%)","Zaimportowano {amount} pliki ({progress}%)","Zaimportowano {amount} plików ({progress}%)","Zaimportowano {amount} plików ({progress}%)"],

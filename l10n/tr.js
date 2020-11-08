@@ -74,7 +74,6 @@ OC.L10N.register(
     "Failed to start importing Google photos" : "Google fotoğraflarının içe aktarılmasına başlanamadı",
     "Starting importing files in {targetPath} directory" : "{targetPath} klasöründeki dosyaların içe aktarılmasına başlanıyor",
     "Failed to start importing Google Drive" : "Google Drive dosyalarının içe aktarılmasına başlanamadı",
-    "_{nbPhotos} Google photo (>{formSize})_::_{nbPhotos} Google photos (>{formSize})_" : ["{nbPhotos} Google fotoğrafı (>{formSize})","{nbPhotos} Google fotoğrafları (>{formSize})"],
     "_{amount} photo imported ({progress}%)_::_{amount} photos imported ({progress}%)_" : ["{amount} fotoğraf içe aktarıldı ({progress}%)","{amount} fotoğraf içe aktarıldı ({progress}%)"],
     "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["{nbFiles} Google Drive dosyası ({formSize})","{nbFiles} Google Drive dosyası ({formSize})"],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} dosya içe aktarıldı ({progress}%)","{amount} dosya içe aktarıldı ({progress}%)"],

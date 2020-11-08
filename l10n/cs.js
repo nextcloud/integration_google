@@ -74,7 +74,6 @@ OC.L10N.register(
     "Failed to start importing Google photos" : "Nepodařilo se zahájit import fotek z Google",
     "Starting importing files in {targetPath} directory" : "Zahajuje se import souborů do složky {targetPath}",
     "Failed to start importing Google Drive" : "Selhalo spuštění importu Google Drive",
-    "_{nbPhotos} Google photo (>{formSize})_::_{nbPhotos} Google photos (>{formSize})_" : ["{nbPhotos} Google fotka (>{formSize})","{nbPhotos} Google fotky (>{formSize})","{nbPhotos} Google fotek (>{formSize})","{nbPhotos} Google fotek (>{formSize})"],
     "_{amount} photo imported ({progress}%)_::_{amount} photos imported ({progress}%)_" : ["{amount} fotografie importována ({progress}%)","{amount} fotografie importovány ({progress}%)","{amount} fotografií importováno ({progress}%)","{amount} fotografií importováno ({progress}%)"],
     "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["{nbFiles} soubor na Google Drive ({formSize})","{nbFiles} soubory na Google Drive ({formSize})","{nbFiles} souborů na Google Drive ({formSize})","{nbFiles} souborů na Google Drive ({formSize})"],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} soubor importován ({progress}%)","{amount} soubory importovány ({progress}%)","{amount} souborů importováno ({progress}%)","{amount} souborů importováno ({progress}%)"],

@@ -74,7 +74,6 @@ OC.L10N.register(
     "Failed to start importing Google photos" : "Неуспешен почеток на увоз на Google фотографии",
     "Starting importing files in {targetPath} directory" : "Почеток на увоз на датотеки во папката {targetPath}",
     "Failed to start importing Google Drive" : "Неуспешен почеток на увоз на Google драјв",
-    "_{nbPhotos} Google photo (>{formSize})_::_{nbPhotos} Google photos (>{formSize})_" : ["{nbPhotos} Google фотографија (>{formSize})","{nbPhotos} Google фотографии (>{formSize})"],
     "_{amount} photo imported ({progress}%)_::_{amount} photos imported ({progress}%)_" : ["{amount} фотографија е увезена ({progress}%)","{amount} фотографии се увезени ({progress}%)"],
     "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["{nbFiles} датотека во Google драјв ({formSize})","{nbFiles} датотеки во Google драјв ({formSize})"],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} датотека е увезена ({progress}%)","{amount} датотеки се увезени ({progress}%)"],
