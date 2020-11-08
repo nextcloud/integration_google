@@ -338,7 +338,9 @@ class GoogleDriveAPIService {
 					return $stat['size'] ?? 0;
 				} else {
 					$this->logger->warning('Google Drive error downloading file ' . $fileItem['name'] . ' : ' . $res['error'], ['app' => $this->appName]);
-					fclose($resource);
+					if (!is_null($resource)) {
+						fclose($resource);
+					}
 					$savedFile->delete();
 				}
 			}
@@ -377,7 +379,9 @@ class GoogleDriveAPIService {
 					return $stat['size'] ?? 0;
 				} else {
 					$this->logger->warning('Google Drive error downloading file ' . $fileItem['name'] . ' : ' . $res['error'], ['app' => $this->appName]);
-					fclose($resource);
+					if (!is_null($resource)) {
+						fclose($resource);
+					}
 					$savedFile->delete();
 				}
 			}

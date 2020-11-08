@@ -337,7 +337,9 @@ class GooglePhotosAPIService {
 				return $stat['size'] ?? 0;
 			} else {
 				$this->logger->warning('Google API error downloading photo ' . $photoName . ' : ' . $res['error'], ['app' => $this->appName]);
-				fclose($resource);
+				if (!is_null($resource)) {
+					fclose($resource);
+				}
 				$savedFile->delete();
 			}
 		}
