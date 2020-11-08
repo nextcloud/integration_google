@@ -82,7 +82,7 @@ class GoogleDriveAPIService {
 			if ($considerSharedFiles) {
 				foreach ($result['files'] as $file) {
 					if (!$file['ownedByMe']) {
-						$sharedWithMeSize += $file['size'];
+						$sharedWithMeSize += $file['size'] ?? 0;
 					}
 				}
 				$nbFiles += count($result['files']);
