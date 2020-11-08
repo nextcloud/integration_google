@@ -265,7 +265,7 @@ export default {
 			return this.lastPhotoImportTimestamp !== 0
 				? t('integration_google', 'Last photo import job at {date}', { date: moment.unix(this.lastPhotoImportTimestamp).format('LLL') })
 				: t('integration_google', 'Photo import background process will begin soon.') + ' '
-					+ t('integration_google', 'You can close this page. You will notified when it finishes.')
+					+ t('integration_google', 'You can close this page. You will be notified when it finishes.')
 		},
 		photoImportProgress() {
 			return this.nbPhotos > 0 && this.nbImportedPhotos > 0
