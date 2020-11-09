@@ -1,6 +1,7 @@
 OC.L10N.register(
     "integration_google",
     {
+    "Google" : "Google",
     "Bad credentials" : "Virheelliset kirjautumistiedot",
     "Connected accounts" : "Yhdistetyt tilit",
     "Google integration" : "Google-integraatio",
@@ -12,6 +13,7 @@ OC.L10N.register(
     "Disconnect from Google" : "Katkaise yhteys Googleen",
     "Contacts" : "Yhteystiedot",
     "{amount} Google contacts" : "{amount} Google-yhteystietoa",
+    "Import Google Contacts in Nextcloud" : "Tuo Google-yhteystiedot Nextcloudiin",
     "Choose where to import the contacts" : "Valitse mihin yhteystiedot tuodaan",
     "New address book" : "Uusi osoitekirja",
     "address book name" : "osoitekirjan nimi",
@@ -19,7 +21,9 @@ OC.L10N.register(
     "Import calendar" : "Tuo kalenteri",
     "Photos" : "Kuvat",
     "Import Google photos" : "Tuo Google-kuvat",
-    "Drive" : "Ajo",
+    "Drive" : "Drive",
+    "Ignore shared files" : "Ohita jaetut tiedostot",
+    "Import Google Drive files" : "Tuo Google Drive -tiedostot",
     "Successfully connected to Google!" : "Yhdistetty Googleen!",
     "Google connection error:" : "Google-yhteysvirhe:",
     "Failed to save Google options" : "Google-valintojen tallentaminen epäonnistui."
