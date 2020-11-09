@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## 0.0.20 – 2020-11-09
+### Fixed
+- don't close resource that is already closed
+- fallback title for private calendar events
+- don't display photo percent progress as we don't know the exact photo number
+
 ## 0.0.19 – 2020-11-09
 ### Fixed
 - be more defensive when getting shared files size
