@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## 0.0.19 – 2020-11-09
+### Fixed
+- be more defensive when getting shared files size
+[#29](https://github.com/nextcloud/integration_google/issues/29) @jessechahal
+- safer resource closing on download error
+- typo
+
 ## 0.0.18 – 2020-11-07
 ### Fixed
 - make less requests when getting photo number
