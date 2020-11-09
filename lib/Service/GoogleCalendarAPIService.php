@@ -97,7 +97,9 @@ class GoogleCalendarAPIService {
 			$calData .= 'UID:' . $ncCalId . '-' . $objectUri . "\n";
 			$calData .= isset($e['summary'])
 				? ('SUMMARY:' . substr(str_replace("\n", '\n', $e['summary']), 0, 250) . "\n")
-				: '';
+				: ($e['visibility'] ?? '' === 'private'
+					? ('SUMMARY:' . $this->l10n->t('Private event') . "\n")
+					: '');
 			$calData .= isset($e['sequence']) ? ('SEQUENCE:' . $e['sequence'] . "\n") : '';
 			$calData .= isset($e['location'])
 				? ('LOCATION:' . substr(str_replace("\n", '\n', $e['location']), 0, 250) . "\n")
