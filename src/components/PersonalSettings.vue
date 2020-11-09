@@ -118,7 +118,7 @@
 					</div>
 					<div v-if="importingPhotos">
 						<br>
-						{{ n('integration_google', '{amount} photo imported ({progress}%)', '{amount} photos imported ({progress}%)', nbImportedPhotos, { amount: nbImportedPhotos, progress: photoImportProgress }) }}
+						{{ n('integration_google', '{amount} photo imported', '{amount} photos imported', nbImportedPhotos, { amount: nbImportedPhotos }) }}
 						<br>
 						{{ lastPhotoImportDate }}
 						<br>
