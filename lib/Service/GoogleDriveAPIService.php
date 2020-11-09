@@ -332,16 +332,14 @@ class GoogleDriveAPIService {
 				$resource = $savedFile->fopen('w');
 				$res = $this->googleApiService->simpleDownload($accessToken, $userId, $fileUrl, $resource);
 				if (!isset($res['error'])) {
-					fclose($resource);
 					$savedFile->touch();
 					$stat = $savedFile->stat();
 					return $stat['size'] ?? 0;
 				} else {
 					$this->logger->warning('Google Drive error downloading file ' . $fileItem['name'] . ' : ' . $res['error'], ['app' => $this->appName]);
-					if (!is_null($resource)) {
-						fclose($resource);
+					if ($savedFile->isDeletable()) {
+						$savedFile->delete();
 					}
-					$savedFile->delete();
 				}
 			}
 		} else {
@@ -373,16 +371,14 @@ class GoogleDriveAPIService {
 				$resource = $savedFile->fopen('w');
 				$res = $this->googleApiService->simpleDownload($accessToken, $userId, $fileUrl, $resource, $params);
 				if (!isset($res['error'])) {
-					fclose($resource);
 					$savedFile->touch();
 					$stat = $savedFile->stat();
 					return $stat['size'] ?? 0;
 				} else {
 					$this->logger->warning('Google Drive error downloading file ' . $fileItem['name'] . ' : ' . $res['error'], ['app' => $this->appName]);
-					if (!is_null($resource)) {
-						fclose($resource);
+					if ($savedFile->isDeletable()) {
+						$savedFile->delete();
 					}
-					$savedFile->delete();
 				}
 			}
 		}

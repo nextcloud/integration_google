@@ -279,7 +279,7 @@ export default {
 			return this.lastDriveImportTimestamp !== 0
 				? t('integration_google', 'Last Google Drive import job at {date}', { date: moment.unix(this.lastDriveImportTimestamp).format('LLL') })
 				: t('integration_google', 'Google Drive background import process will begin soon.') + ' '
-					+ t('integration_google', 'You can close this page. You will notified when it finishes.')
+					+ t('integration_google', 'You can close this page. You will be notified when it finishes.')
 		},
 		driveImportProgress() {
 			return this.driveSize > 0 && this.nbImportedFiles > 0

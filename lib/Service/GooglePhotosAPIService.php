@@ -331,16 +331,14 @@ class GooglePhotosAPIService {
 			$resource = $savedFile->fopen('w');
 			$res = $this->googleApiService->simpleDownload($accessToken, $userId, $photoUrl, $resource);
 			if (!isset($res['error'])) {
-				fclose($resource);
 				$savedFile->touch();
 				$stat = $savedFile->stat();
 				return $stat['size'] ?? 0;
 			} else {
 				$this->logger->warning('Google API error downloading photo ' . $photoName . ' : ' . $res['error'], ['app' => $this->appName]);
-				if (!is_null($resource)) {
-					fclose($resource);
+				if ($savedFile->isDeletable()) {
+					$savedFile->delete();
 				}
-				$savedFile->delete();
 			}
 		}
 		return null;
