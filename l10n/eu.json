@@ -68,7 +68,6 @@
     "Failed to start importing Google photos" : "Google argazkiak inportatzen hasteak huts egin du",
     "Starting importing files in {targetPath} directory" : "Fitxategiak {targetPath} direktoriora inportatzea abiatzen",
     "Failed to start importing Google Drive" : "Google Drive inportatzen hasteak huts egin du",
-    "_{amount} photo imported ({progress}%)_::_{amount} photos imported ({progress}%)_" : ["Argazki {amount} inportatu da ({progress}%)","{amount} argazki inportatu dira ({progress}%)"],
     "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["Fitxategi {nbFiles} dago Google Driven ({formSize})","{nbFiles} fitxategi daude Google Driven ({formSize})"],
     "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["Kontaktu {number} ondo inportatu da {name}-ra","{number} kontaktu ondo inportatu dira {name}-ra"],
     "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["Gertaera {number} ondo inportatu da {name}-ra","{number} gertaera ondo inportatu dira {name}-ra"]

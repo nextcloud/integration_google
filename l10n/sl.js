@@ -53,7 +53,6 @@ OC.L10N.register(
     "Last photo import job at {date}" : "Zadnji uvoz slik je bil izveden {date}",
     "Google Drive background import process will begin soon." : "Uvažanje datotek z računa Google Drive bo kmalu začeto.",
     "Last Google Drive import job at {date}" : "Zadnji uvoz datotek z računa Goggle Drive je bil izveden {date}",
-    "You can close this page. You will notified when it finishes." : "To stran lahko zaprete. Ob koncu opravila boste obveščeni.",
     "Successfully connected to Google!" : "Povezava z računom Google je uspešno vzpostavljena!",
     "Google connection error:" : "Napaka povezave Google:",
     "Google options saved" : "Nastavitve Google so shranjene",
@@ -69,7 +68,6 @@ OC.L10N.register(
     "Failed to start importing Google photos" : "Uvažanje slik z računa Google Photos je spodletelo",
     "Starting importing files in {targetPath} directory" : "Začeto je uvažanje datotek v mapo {targetPath}.",
     "Failed to start importing Google Drive" : "Uvažanje vsebine Google Drive je spodletelo",
-    "_{amount} photo imported ({progress}%)_::_{amount} photos imported ({progress}%)_" : ["{amount} uvožena slika ({progress}%)","{amount} uvoženi sliki ({progress}%)","{amount} uvožene slike ({progress}%)","{amount} uvoženih slik ({progress}%)"],
     "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["{nbFiles} datoteka v programu Google Drive ({formSize})","{nbFiles} datoteki v programu Google Drive ({formSize})","{nbFiles} datoteke v programu Google Drive ({formSize})","{nbFiles} datotek v programu Google Drive ({formSize})"],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} uvožena datoteka ({progress}%)","{amount} uvoženi datoteki ({progress}%)","{amount} uvožene datoteke ({progress}%)","{amount} uvoženih datotek ({progress}%)"]
 },
