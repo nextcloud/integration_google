@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## 0.0.21 – 2020-11-10
+### Fixed
+- be more defensive when checking if a contact already exists
+[#27](https://github.com/nextcloud/integration_google/issues/27) @Bergum
+
 ## 0.0.20 – 2020-11-09
 ### Fixed
 - don't close resource that is already closed
