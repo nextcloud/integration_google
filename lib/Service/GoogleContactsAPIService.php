@@ -303,9 +303,9 @@ class GoogleContactsAPIService {
 		$familyName = null;
 		$firstName = null;
 		foreach ($contact['names'] as $n) {
-			$displayName = $n['displayName'];
-			$familyName = $n['familyName'];
-			$firstName = $n['givenName'];
+			$displayName = $n['displayName'] ?? '';
+			$familyName = $n['familyName'] ?? '';
+			$firstName = $n['givenName'] ?? '';
 			break;
 		}
 		if ($displayName) {
