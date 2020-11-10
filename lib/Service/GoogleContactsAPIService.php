@@ -302,17 +302,19 @@ class GoogleContactsAPIService {
 		$displayName = null;
 		$familyName = null;
 		$firstName = null;
-		foreach ($contact['names'] as $n) {
-			$displayName = $n['displayName'] ?? '';
-			$familyName = $n['familyName'] ?? '';
-			$firstName = $n['givenName'] ?? '';
-			break;
-		}
-		if ($displayName) {
-			$searchResult = $this->contactsManager->search($displayName, ['FN']);
-			foreach ($searchResult as $resContact) {
-				if ($resContact['FN'] === $displayName && (int)$resContact['addressbook-key'] === $addressBookKey) {
-					return true;
+		if (isset($contact['names']) && is_array($contact['names'])) {
+			foreach ($contact['names'] as $n) {
+				$displayName = $n['displayName'] ?? '';
+				$familyName = $n['familyName'] ?? '';
+				$firstName = $n['givenName'] ?? '';
+				break;
+			}
+			if ($displayName) {
+				$searchResult = $this->contactsManager->search($displayName, ['FN']);
+				foreach ($searchResult as $resContact) {
+					if ($resContact['FN'] === $displayName && (int)$resContact['addressbook-key'] === $addressBookKey) {
+						return true;
+					}
 				}
 			}
 		}
