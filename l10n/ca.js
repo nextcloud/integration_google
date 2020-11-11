@@ -26,6 +26,7 @@ OC.L10N.register(
     "Client ID" : "ID de Client",
     "Client secret" : "Secret del client",
     "Failed to save Google admin options" : "No s'han pogut desar les opcions d'administració de Google",
+    "Google data migration" : "Migració de dades de Google",
     "Authentication" : "Autenticació",
     "Connect to Google" : "Connectar-se a Google",
     "Connected as {user}" : "S'ha connectat com a {usuari}",
