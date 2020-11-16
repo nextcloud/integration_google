@@ -53,7 +53,7 @@ class GoogleContactsAPIService {
 			if (isset($result['error'])) {
 				return $result;
 			}
-			$nbContacts += count($result['connections']);
+			$nbContacts += count($result['connections'] ?? []);
 			$params['pageToken'] = $result['nextPageToken'] ?? '';
 		} while (isset($result['nextPageToken']));
 		return ['nbContacts' => $nbContacts];
@@ -87,8 +87,10 @@ class GoogleContactsAPIService {
 			if (isset($result['error'])) {
 				return $result;
 			}
-			foreach ($result['connections'] as $contact) {
-				yield $contact;
+			if (isset($result['connections']) && is_array($result['connections'])) {
+				foreach ($result['connections'] as $contact) {
+					yield $contact;
+				}
 			}
 			$params['pageToken'] = $result['nextPageToken'] ?? '';
 		} while (isset($result['nextPageToken']));
