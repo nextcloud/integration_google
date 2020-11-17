@@ -326,7 +326,10 @@ class GooglePhotosAPIService {
 	private function getPhoto(string $accessToken, string $userId, array $photo, Node $albumFolder): ?int {
 		$photoName = $photo['filename'];
 		if (!$albumFolder->nodeExists($photoName)) {
-			$photoUrl = $photo['baseUrl'];
+			$photoUrl = $photo['baseUrl']
+				. '=w' . ($photo['mediaMetadata']['width'] ?? 10000)
+				. '-h' . ($photo['mediaMetadata']['height'] ?? 10000)
+				. '-d';
 			$savedFile = $albumFolder->newFile($photoName);
 			$resource = $savedFile->fopen('w');
 			$res = $this->googleApiService->simpleDownload($accessToken, $userId, $photoUrl, $resource);
