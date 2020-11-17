@@ -326,10 +326,16 @@ class GooglePhotosAPIService {
 	private function getPhoto(string $accessToken, string $userId, array $photo, Node $albumFolder): ?int {
 		$photoName = $photo['filename'];
 		if (!$albumFolder->nodeExists($photoName)) {
-			$photoUrl = $photo['baseUrl']
-				. '=w' . ($photo['mediaMetadata']['width'] ?? 10000)
-				. '-h' . ($photo['mediaMetadata']['height'] ?? 10000)
-				. '-d';
+			if (isset($photo['mediaMetadata']['photo'])) {
+				$photoUrl = $photo['baseUrl']
+					. '=w' . ($photo['mediaMetadata']['width'] ?? 10000)
+					. '-h' . ($photo['mediaMetadata']['height'] ?? 10000)
+					. '-d';
+			} elseif (isset($photo['mediaMetadata']['video'])) {
+				$photoUrl = $photo['baseUrl'] . '=dv';
+			} else {
+				return null;
+			}
 			$savedFile = $albumFolder->newFile($photoName);
 			$resource = $savedFile->fopen('w');
 			$res = $this->googleApiService->simpleDownload($accessToken, $userId, $photoUrl, $resource);
