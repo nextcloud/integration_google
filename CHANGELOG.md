@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## 0.0.23 – 2020-11-18
+### Fixed
+- get full resolution photos and hq videos
+[#32](https://github.com/nextcloud/integration_google/issues/32) @Ruzken
+
 ## 0.0.22 – 2020-11-16
 ### Fixed
 - be more defensive when getting contacts
