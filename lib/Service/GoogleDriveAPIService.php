@@ -18,6 +18,7 @@ use OCP\Files\FileInfo;
 use OCP\Files\Node;
 use OCP\BackgroundJob\IJobList;
 use Psr\Log\LoggerInterface;
+use OCP\Files\NotFoundException;
 
 use OCA\Google\AppInfo\Application;
 use OCA\Google\BackgroundJob\ImportDriveJob;
@@ -318,7 +319,7 @@ class GoogleDriveAPIService {
 	 * @return ?int downloaded size, null if already existing
 	 */
 	private function getFile(string $accessToken, string $userId, array $fileItem, array $directoriesById, Node $topFolder): ?int {
-		$fileName = preg_replace('/\//', '-slash-', $fileItem['name']);
+		$fileName = preg_replace('/\//', '-slash-', $fileItem['name'] ?? 'Untitled');
 		if (isset($fileItem['parents']) && count($fileItem['parents']) > 0 && array_key_exists($fileItem['parents'][0], $directoriesById)) {
 			$saveFolder = $directoriesById[$fileItem['parents'][0]]['node'];
 		} else {
@@ -328,7 +329,15 @@ class GoogleDriveAPIService {
 		if (isset($fileItem['webContentLink'])) {
 			if (!$saveFolder->nodeExists($fileName)) {
 				$fileUrl = 'https://www.googleapis.com/drive/v3/files/' . $fileItem['id'] . '?alt=media';
-				$savedFile = $saveFolder->newFile($fileName);
+				try {
+					$savedFile = $saveFolder->newFile($fileName);
+				} catch (NotFoundException $e) {
+					$this->logger->warning(
+						'Google Drive error, can\'t create file "' . $fileName . '" in "' . $saveFolder->getPath() . '"',
+						['app' => $this->appName]
+					);
+					return null;
+				}
 				$resource = $savedFile->fopen('w');
 				$res = $this->googleApiService->simpleDownload($accessToken, $userId, $fileUrl, $resource);
 				if (!isset($res['error'])) {
@@ -368,6 +377,15 @@ class GoogleDriveAPIService {
 				];
 				$fileUrl = 'https://www.googleapis.com/drive/v3/files/' . $fileItem['id'] . '/export';
 				$savedFile = $saveFolder->newFile($fileName);
+				try {
+					$savedFile = $saveFolder->newFile($fileName);
+				} catch (NotFoundException $e) {
+					$this->logger->warning(
+						'Google Drive error, can\'t create document file "' . $fileName . '" in "' . $saveFolder->getPath() . '"',
+						['app' => $this->appName]
+					);
+					return null;
+				}
 				$resource = $savedFile->fopen('w');
 				$res = $this->googleApiService->simpleDownload($accessToken, $userId, $fileUrl, $resource, $params);
 				if (!isset($res['error'])) {
