@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## 0.0.24 – 2020-11-18
+### Fixed
+- be resistant to missing photo file name
+- don't crash when drive target file is impossible to create in NC
+
 ## 0.0.23 – 2020-11-18
 ### Fixed
 - get full resolution photos and hq videos
