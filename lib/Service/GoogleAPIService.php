@@ -132,10 +132,11 @@ class GoogleAPIService {
 			$response = $e->getResponse();
 			$body = (string) $response->getBody();
 			$this->logger->info(
-				'Google API request FAILURE, method '.$method.', URL: ' . $url . ' , body: ' . $body,
+				'Google API request FAILURE, method '.$method . ', URL: ' . $url
+					. ' , body: ' . $body . ' status code: ' . $response->getStatusCode(),
 				['app' => $this->appName]
 			);
-			// try to refresh token if it's invalid
+			// try to refresh the token if it's invalid
 			if ($response->getStatusCode() === 401) {
 				$this->logger->info('Trying to REFRESH the access token', ['app' => $this->appName]);
 				$refreshToken = $this->config->getUserValue($userId, Application::APP_ID, 'refresh_token', '');
@@ -154,11 +155,20 @@ class GoogleAPIService {
 						$accessToken, $userId, $endPoint, $params, $method, $baseUrl
 					);
 				}
-				$this->logger->warning('Google API error, impossible to refresh token', ['app' => $this->appName]);
-				return ['error' => 'Impossible to refresh token'];
+				$this->logger->warning('Google API error, impossible to refresh the token', ['app' => $this->appName]);
+				return ['error' => 'Impossible to refresh the token'];
 			}
-			$this->logger->warning('Google API ServerException|ClientException error : '.$e->getMessage(), ['app' => $this->appName]);
-			return ['error' => 'ServerException|ClientException, message:' . $e->getMessage()];
+			$this->logger->warning(
+				'Google API ServerException|ClientException error : '.$e->getMessage()
+					. ' status code: ' .$response->getStatusCode()
+					. ' body: ' . $body,
+				['app' => $this->appName]
+			);
+			return [
+				'error' => 'ServerException|ClientException, message:'
+					. $e->getMessage()
+					. ' status code: ' . $response->getStatusCode()
+			];
 		} catch (ConnectException $e) {
 			$this->logger->warning('Google API error : '.$e->getMessage(), ['app' => $this->appName]);
 			return ['error' => 'Connection error: ' . $e->getMessage()];
@@ -260,7 +270,7 @@ class GoogleAPIService {
 		} catch (ServerException | ClientException $e) {
 			$response = $e->getResponse();
 			if ($response->getStatusCode() === 401) {
-				// refresh token if it's invalid and we are using oauth
+				// refresh the token if it's invalid and we are using oauth
 				$this->logger->info('Trying to REFRESH the access token', ['app' => $this->appName]);
 				$refreshToken = $this->config->getUserValue($userId, Application::APP_ID, 'refresh_token', '');
 				$clientID = $this->config->getAppValue(Application::APP_ID, 'client_id', '');
@@ -337,7 +347,7 @@ class GoogleAPIService {
 		} catch (ServerException | ClientException $e) {
 			$response = $e->getResponse();
 			if ($response->getStatusCode() === 401) {
-				// refresh token if it's invalid and we are using oauth
+				// refresh the token if it's invalid and we are using oauth
 				$this->logger->info('Trying to REFRESH the access token', ['app' => $this->appName]);
 				$refreshToken = $this->config->getUserValue($userId, Application::APP_ID, 'refresh_token', '');
 				$clientID = $this->config->getAppValue(Application::APP_ID, 'client_id', '');
