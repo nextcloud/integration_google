@@ -251,7 +251,7 @@ class GooglePhotosAPIService {
 		$seenIds = [];
 		foreach ($albums as $album) {
 			$albumId = $album['id'];
-			$albumName = $album['title'];
+			$albumName = $album['title'] ?? 'Untitled';
 			if (!$folder->nodeExists($albumName)) {
 				$albumFolder = $folder->newFolder($albumName);
 			} else {
