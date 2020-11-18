@@ -184,7 +184,14 @@ class GoogleContactsAPIService {
 							if (!isset($photoFile['error'])) {
 								$b64Photo = base64_encode($photoFile['content']);
 								try {
-									$prop = $vCard->createProperty('PHOTO', $b64Photo, ['type' => $type, 'encoding' => 'b']);
+									$prop = $vCard->createProperty(
+										'PHOTO',
+										$b64Photo,
+										[
+											'type' => $type,
+											// 'encoding' => 'b',
+										]
+									);
 									$vCard->add($prop);
 								} catch (\Exception | \Throwable $ex) {
 									$this->logger->warning('Error when setting contact photo "' . ($displayName ?? 'no name') . '" ' . $ex->getMessage(), ['app' => $this->appName]);
