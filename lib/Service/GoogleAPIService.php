@@ -96,6 +96,12 @@ class GoogleAPIService {
 				}
 			}
 
+			$this->logger->info(
+				'REQUESTING Google API, method '.$method.', URL: ' . $url . ' , params: ' . json_encode($params)
+					. 'token length: ' . strlen($accessToken),
+				['app' => $this->appName]
+			);
+
 			if ($method === 'GET') {
 				$response = $this->client->get($url, $options);
 			} else if ($method === 'POST') {
@@ -109,13 +115,26 @@ class GoogleAPIService {
 			$respCode = $response->getStatusCode();
 
 			if ($respCode >= 400) {
-				return ['error' => $this->l10n->t('Bad credentials')];
+				$this->logger->info(
+					'Google API request 400 FAILURE, method '.$method.', URL: ' . $url . ' , body: ' . $body,
+					['app' => $this->appName]
+				);
+				return ['error' => 'Bad credentials'];
 			} else {
+				$this->logger->info(
+					'Google API request SUCCESS: , method ' . $method . ', URL: ' . $url
+						. ' , body:' . substr($body, 0, 30) . '...',
+					['app' => $this->appName]
+				);
 				return json_decode($body, true);
 			}
 		} catch (ServerException | ClientException $e) {
 			$response = $e->getResponse();
 			$body = (string) $response->getBody();
+			$this->logger->info(
+				'Google API request FAILURE, method '.$method.', URL: ' . $url . ' , body: ' . $body,
+				['app' => $this->appName]
+			);
 			// try to refresh token if it's invalid
 			if ($response->getStatusCode() === 401) {
 				$this->logger->info('Trying to REFRESH the access token', ['app' => $this->appName]);
@@ -135,12 +154,14 @@ class GoogleAPIService {
 						$accessToken, $userId, $endPoint, $params, $method, $baseUrl
 					);
 				}
+				$this->logger->warning('Google API error, impossible to refresh token', ['app' => $this->appName]);
+				return ['error' => 'Impossible to refresh token'];
 			}
-			$this->logger->warning('Google API error : '.$e->getMessage(), ['app' => $this->appName]);
-			return ['error' => $e->getMessage()];
+			$this->logger->warning('Google API ServerException|ClientException error : '.$e->getMessage(), ['app' => $this->appName]);
+			return ['error' => 'ServerException|ClientException, message:' . $e->getMessage()];
 		} catch (ConnectException $e) {
 			$this->logger->warning('Google API error : '.$e->getMessage(), ['app' => $this->appName]);
-			return ['error' => $e->getMessage()];
+			return ['error' => 'Connection error: ' . $e->getMessage()];
 		}
 	}
 
@@ -262,7 +283,7 @@ class GoogleAPIService {
 			return ['error' => $e->getMessage()];
 		} catch (ConnectException $e) {
 			$this->logger->error('Google API request connection error: ' . $e->getMessage(), ['app' => $this->appName]);
-			return ['error' => $e->getMessage()];
+			return ['error' => 'Connection error: ' . $e->getMessage()];
 		}
 	}
 
@@ -339,11 +360,9 @@ class GoogleAPIService {
 			return ['error' => $e->getMessage()];
 		} catch (ConnectException $e) {
 			$this->logger->error('Google API request connection error: ' . $e->getMessage(), ['app' => $this->appName]);
-			return ['error' => $e->getMessage()];
-		} catch (\Throwable $e) {
-			return ['error' => $e->getMessage()];
-		} catch (\Exception $e) {
-			return ['error' => $e->getMessage()];
+			return ['error' => 'Connection error: ' . $e->getMessage()];
+		} catch (\Throwable | \Exception $e) {
+			return ['error' => 'Unknown error: ' . $e->getMessage()];
 		}
 	}
 }

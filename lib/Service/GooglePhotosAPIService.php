@@ -57,6 +57,10 @@ class GooglePhotosAPIService {
 			'pageSize' => 50,
 		];
 		do {
+			$this->logger->info(
+				'Photos service::getPhotoNumber LAUNCHING ALBUM LIST REQUEST, userid: "' . $userId . '", token length: ' . strlen($accessToken),
+				['app' => $this->appName]
+			);
 			$result = $this->googleApiService->request($accessToken, $userId, 'v1/albums', $params, 'GET', 'https://photoslibrary.googleapis.com/');
 			if (isset($result['error'])) {
 				return $result;
@@ -66,7 +70,11 @@ class GooglePhotosAPIService {
 					$nbPhotos += $album['mediaItemsCount'] ?? 0;
 				}
 			} else {
-				$this->logger->warning('Google API error getting album list, no "albums" key in ' . json_encode($result), ['app' => $this->appName]);
+				$this->logger->warning(
+					'Google API error getting album list to get photo number, no "albums" key in '
+						. json_encode($result),
+					['app' => $this->appName]
+				);
 			}
 			$params['pageToken'] = $result['nextPageToken'] ?? '';
 		} while (isset($result['nextPageToken']));
@@ -88,7 +96,11 @@ class GooglePhotosAPIService {
 						$nbPhotos += $album['mediaItemsCount'] ?? 0;
 					}
 				} else {
-					$this->logger->warning('Google API error getting shared albums list, no "sharedAlbums" key in ' . json_encode($result), ['app' => $this->appName]);
+					$this->logger->warning(
+						'Google API error getting shared albums list to get photo number, no "sharedAlbums" key in '
+							. json_encode($result),
+						['app' => $this->appName]
+					);
 				}
 				$params['pageToken'] = $result['nextPageToken'] ?? '';
 			} while (isset($result['nextPageToken']));
@@ -184,6 +196,10 @@ class GooglePhotosAPIService {
 			'pageSize' => 50,
 		];
 		do {
+			$this->logger->info(
+				'Photos service::importPhotos LAUNCHING ALBUM LIST REQUEST, userid: "' . $userId . '", token length: ' . strlen($accessToken),
+				['app' => $this->appName]
+			);
 			$result = $this->googleApiService->request($accessToken, $userId, 'v1/albums', $params, 'GET', 'https://photoslibrary.googleapis.com/');
 			if (isset($result['error'])) {
 				return $result;
@@ -193,7 +209,11 @@ class GooglePhotosAPIService {
 					$albums[] = $album;
 				}
 			} else {
-				$this->logger->warning('Google API error getting album list, no "albums" key in ' . json_encode($result), ['app' => $this->appName]);
+				$this->logger->warning(
+					'Google API error getting album list when importing, no "albums" key in '
+						. json_encode($result),
+					['app' => $this->appName]
+				);
 			}
 			$params['pageToken'] = $result['nextPageToken'] ?? '';
 		} while (isset($result['nextPageToken']));
@@ -221,6 +241,10 @@ class GooglePhotosAPIService {
 		}
 
 		// get the photos
+		$this->logger->info(
+			'Photos service::importPhotos GETTING PHOTOS, nb albums: "' . count($albums) . '"',
+			['app' => $this->appName]
+		);
 		$downloadedSize = 0;
 		$nbDownloaded = 0;
 		$totalSeenNumber = 0;
