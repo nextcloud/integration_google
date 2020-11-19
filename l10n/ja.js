@@ -2,8 +2,8 @@ OC.L10N.register(
     "integration_google",
     {
     "Error during OAuth exchanges" : "OAuth通信中のエラー",
-    "Bad credentials" : "不正な資格情報",
     "OAuth access token refused" : "OAuthアクセストークンが拒否されました",
+    "Bad credentials" : "不正な資格情報",
     "Connected accounts" : "接続済みアカウント",
     "Google API settings" : "Google API 設定",
     "Client ID" : "クライアント ID",

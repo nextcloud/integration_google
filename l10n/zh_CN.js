@@ -3,8 +3,8 @@ OC.L10N.register(
     {
     "Error during OAuth exchanges" : "交换 OAuth 时出错",
     "Google" : "谷歌",
-    "Bad credentials" : "不好的证书",
     "OAuth access token refused" : "OAuth 访问令牌拒绝",
+    "Bad credentials" : "不好的证书",
     "Google Calendar import" : "导入 Google 日历",
     "Google Drive import" : "导入 Google Drive",
     "Google Photos import" : "导入 Google 相簿",
