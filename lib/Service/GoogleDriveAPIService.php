@@ -369,6 +369,11 @@ class GoogleDriveAPIService {
 				//$fileName .= '.pptx';
 				//$mimeType = 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
 			} else {
+				$this->logger->warning(
+					'Google Drive error downloading file, no webContentLink, unknown mime type: ' . $saveFolder->getInternalPath() . '/' . ($fileItem['name'] ?? 'Untitled') . ' : '
+						. json_encode($fileItem),
+					['app' => $this->appName]
+				);
 				return null;
 			}
 			if (!$saveFolder->nodeExists($fileName)) {

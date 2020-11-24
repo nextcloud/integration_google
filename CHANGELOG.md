@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## 0.0.25 – 2020-11-24
+### Changed
+- add log when drive file can't be directly downloaded and it's not a 'document'
+
 ## 0.0.24 – 2020-11-18
 ### Fixed
 - be resistant to missing photo file name
