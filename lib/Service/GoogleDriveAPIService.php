@@ -108,7 +108,7 @@ class GoogleDriveAPIService {
 	 * @return array
 	 */
 	public function startImportDrive(string $accessToken, string $userId): array {
-		$targetPath = $this->l10n->t('Google Drive import');
+		$targetPath = 'Google Drive';
 		$alreadyImporting = $this->config->getUserValue($userId, Application::APP_ID, 'importing_drive', '0') === '1';
 		if ($alreadyImporting) {
 			return ['targetPath' => $targetPath];
@@ -144,7 +144,7 @@ class GoogleDriveAPIService {
 
 		$accessToken = $this->config->getUserValue($userId, Application::APP_ID, 'token', '');
 		// import batch of files
-		$targetPath = $this->l10n->t('Google Drive import');
+		$targetPath = 'Google Drive';
 		// import by batch of 500 Mo
 		$alreadyImported = $this->config->getUserValue($userId, Application::APP_ID, 'nb_imported_files', '0');
 		$alreadyImported = (int) $alreadyImported;
