@@ -11,8 +11,6 @@ OC.L10N.register(
     "Bad credentials" : "Kimlik doğrulama bilgileri hatalı",
     "Google Calendar import" : "Google Takvim içe aktarma",
     "Private event" : "Özel etkinlik",
-    "Google Drive import" : "Google Drive içe aktarma",
-    "Google Photos import" : "Google Fotoğraflar içe aktarma",
     "Connected accounts" : "Bağlı hesaplar",
     "Data migration" : "Veri aktarma",
     "Google integration" : "Google bütünleştirmesi",

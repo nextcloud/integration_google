@@ -1,6 +1,7 @@
 OC.L10N.register(
     "integration_google",
     {
+    "Missing refresh token in Google response." : "V odzivu strežnika Google manjka žeton za osvežitev.",
     "Error getting OAuth access token." : " Napaka med pridobivanjem žetona OAuth za dostop",
     "Error during OAuth exchanges" : " Napaka med izmenjavo podatkov OAuth",
     "Google" : "Google",
@@ -9,8 +10,7 @@ OC.L10N.register(
     "OAuth access token refused" : "Žeton OAuth za dostop je bil zavrnjen",
     "Bad credentials" : "Neustrezna poverila",
     "Google Calendar import" : "Uvoz koledarja Google",
-    "Google Drive import" : "Uvoz Google Drive",
-    "Google Photos import" : "Uvoz slik Google Photos",
+    "Private event" : "Zasebni dogodek",
     "Connected accounts" : "Povezani računi",
     "Data migration" : "Selitev podatkov",
     "Google integration" : "Podpora za račune Google",
@@ -18,6 +18,8 @@ OC.L10N.register(
     "Google integration allows you to automatically import your Google calendars, contacts, photos and files into Nextcloud." : "Podpora za Google omogoča samodejno uvažanje koledarjev, stikov, slik in datotek v okolje Nextcloud.",
     "If you want to allow your Nextcloud users to authenticate to Google, create an OAuth application in your Google settings." : "Za overitev okolja Google znotraj Nextcloud je treba  ustvariti program OAuth med nastavitvami Google.",
     "Google API settings" : "Nastavitve vmesnika Google API",
+    "Make sure you set one \"Authorized redirect URI\" to" : "Poskrbite, da bo »preusmeritveni naslov URI« nastavljen na",
+    "Put the \"Client ID\" and \"Client secret\" below." : "Spodaj vpišite »ID programa« in »Geslo programa«.",
     "Your Nextcloud users will then see a \"Connect to Google\" button in their personal settings." : "Uporabniki Nextcloud bodo med nastavitvami videli gumb »Poveži z računom Google«",
     "Client ID" : "ID Odjemalca",
     "Client ID of your Google application" : "ID Odjemalca Google",
@@ -50,7 +52,9 @@ OC.L10N.register(
     "Import Google Drive files" : "Uvozi datoteke z oblaka Google Drive",
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Velikost datotek v oblaku Google Drive je večja od preostalega prostora ({formSpace})",
     "Cancel Google Drive import" : "Prekliči uvoz datotek Google Drive",
+    "Photo import background process will begin soon." : "Uvoz slik bo kmalu začet v ozadju.",
     "Last photo import job at {date}" : "Zadnji uvoz slik je bil izveden {date}",
+    "You can close this page. You will be notified when it finishes." : "To stran lahko zaprete. Ob koncu opravila boste obveščeni, ko se to zaključi.",
     "Google Drive background import process will begin soon." : "Uvažanje datotek z računa Google Drive bo kmalu začeto.",
     "Last Google Drive import job at {date}" : "Zadnji uvoz datotek z računa Goggle Drive je bil izveden {date}",
     "Successfully connected to Google!" : "Povezava z računom Google je uspešno vzpostavljena!",
@@ -68,7 +72,10 @@ OC.L10N.register(
     "Failed to start importing Google photos" : "Uvažanje slik z računa Google Photos je spodletelo",
     "Starting importing files in {targetPath} directory" : "Začeto je uvažanje datotek v mapo {targetPath}.",
     "Failed to start importing Google Drive" : "Uvažanje vsebine Google Drive je spodletelo",
+    "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} uvožena slika","{amount} uvoženi sliki","{amount} uvožene slike","{amount} uvoženih slik"],
     "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["{nbFiles} datoteka v programu Google Drive ({formSize})","{nbFiles} datoteki v programu Google Drive ({formSize})","{nbFiles} datoteke v programu Google Drive ({formSize})","{nbFiles} datotek v programu Google Drive ({formSize})"],
-    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} uvožena datoteka ({progress}%)","{amount} uvoženi datoteki ({progress}%)","{amount} uvožene datoteke ({progress}%)","{amount} uvoženih datotek ({progress}%)"]
+    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} uvožena datoteka ({progress}%)","{amount} uvoženi datoteki ({progress}%)","{amount} uvožene datoteke ({progress}%)","{amount} uvoženih datotek ({progress}%)"],
+    "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} stik je uspešno uvožen v {name}","{number} stika sta uspešno uvožena v {name}","{number} stiki so uspešno uvoženi v {name}","{number} stikov je uspešno uvoženih v {name}"],
+    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number} dogodek je uspešno uvožen v {name}","{number} dogodka sta uspešno uvožena v {name}","{number} dogodki so uspešno uvoženi v {name}","{number} dogodkov je uspešno uvoženih v {name}"]
 },
 "nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);");

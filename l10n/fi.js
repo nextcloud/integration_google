@@ -7,8 +7,6 @@ OC.L10N.register(
     "_%s file was imported from Google Drive._::_%s files were imported from Google Drive._" : ["%s tiedosto tuotiin Google Drivesta.","%s tiedostoa tuotiin Google Drivesta."],
     "Bad credentials" : "Virheelliset kirjautumistiedot",
     "Google Calendar import" : "Google-kalenterin tuonti",
-    "Google Drive import" : "Google Driven tuonti",
-    "Google Photos import" : "Google-kuvien tuonti",
     "Connected accounts" : "Yhdistetyt tilit",
     "Data migration" : "Tietojen migraatio",
     "Google integration" : "Google-integraatio",

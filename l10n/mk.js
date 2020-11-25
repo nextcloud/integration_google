@@ -11,8 +11,6 @@ OC.L10N.register(
     "Bad credentials" : "Неточни акредитиви",
     "Google Calendar import" : "Увоз на Google календар",
     "Private event" : "Приватен настан",
-    "Google Drive import" : "Увоз на Google драјв",
-    "Google Photos import" : "Увоз на Google фотогравии",
     "Connected accounts" : "Поврзани сметки",
     "Data migration" : "Мигрирање на податоци",
     "Google integration" : "Google интеграција",

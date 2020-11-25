@@ -10,8 +10,6 @@ OC.L10N.register(
     "OAuth access token refused" : "Token de acesso OAuth recusado",
     "Bad credentials" : "Credenciais erradas",
     "Google Calendar import" : "Importação do Google Agenda",
-    "Google Drive import" : "Importação do Google Drive",
-    "Google Photos import" : "Importação do Google Fotos",
     "Connected accounts" : "Contas conectadas",
     "Data migration" : "Migração de dados",
     "Google integration" : "Integração Google",

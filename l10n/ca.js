@@ -11,8 +11,6 @@ OC.L10N.register(
     "Bad credentials" : "Credencials dolentes",
     "Google Calendar import" : "Importació de Google Calendar",
     "Private event" : "Esdeveniment privat",
-    "Google Drive import" : "Importació de Google Drive",
-    "Google Photos import" : "Importació de Google Photos",
     "Connected accounts" : "Comptes connectades",
     "Data migration" : "Migració de dades",
     "Google integration" : "Integració de Google",

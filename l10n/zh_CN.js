@@ -6,8 +6,6 @@ OC.L10N.register(
     "OAuth access token refused" : "OAuth 访问令牌拒绝",
     "Bad credentials" : "不好的证书",
     "Google Calendar import" : "导入 Google 日历",
-    "Google Drive import" : "导入 Google Drive",
-    "Google Photos import" : "导入 Google 相簿",
     "Connected accounts" : "关联账号",
     "Import Google data into Nextcloud" : "将 Google 数据导入 Nextcloud",
     "Google API settings" : "Google API 设置",
