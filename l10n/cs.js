@@ -10,6 +10,7 @@ OC.L10N.register(
     "OAuth access token refused" : "OAuth přístupový token odmítnut",
     "Bad credentials" : "Nesprávné přihlašovací údaje",
     "Google Calendar import" : "Import Google Kalendáře",
+    "Private event" : "Soukromá událost",
     "Connected accounts" : "Propojené účty",
     "Data migration" : "Migrace dat",
     "Google integration" : "Napojení na Google",
