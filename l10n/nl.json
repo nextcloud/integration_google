@@ -5,6 +5,7 @@
     "OAuth access token refused" : "OAuth access token geweigerd",
     "Bad credentials" : "Foute inloggegevens",
     "Connected accounts" : "Verbonden accounts",
+    "Data migration" : "Gegevensmigratie",
     "Google integration" : "Google integratie",
     "If you want to allow your Nextcloud users to authenticate to Google, create an OAuth application in your Google settings." : "Als je wilt dat je Nextcloud-gebruikers bij Google kunnen authentiseren, maak dan een OAuth-applicatie aan in je Google-instellingen.",
     "Google API settings" : "Google API instellingen",
@@ -12,9 +13,12 @@
     "Set the \"Application type\" to \"Web application\" and give a name to the application." : "Zet het \"Application type\" in op \"Web application\" en geef de applicatie een naam.",
     "Make sure you set one \"Authorized redirect URI\" to" : "Zorg ervoor dat je de  \"Authorized redirect URI\" instelt op",
     "Put the \"Client ID\" and \"Client secret\" below." : "Zet de \"Client ID\" en \"Client secret\" hieronder.",
+    "Finally, go to \"APIs & Services\" => \"Library\" and add the following APIs: \"Google Drive API\", \"Google Calendar API\", \"People API\" and \"Photos Library API\"." : "Ga daarna naar \"APIs & Services\" => \"Library\" en voeg de volgende API's toe: \"Google Drive API\", \"Google Calendar API\", \"People API\" en \"Photos Library API\".",
     "Your Nextcloud users will then see a \"Connect to Google\" button in their personal settings." : "Je Nextcloud gebruikers zien dan een \"Verbinden met Google\" knop in hun persoonlijke instellingen.",
     "Client ID" : "Client ID",
     "Client secret" : "Client secret",
+    "Failed to save Google admin options" : "Kon Google admin-opties niet opslaan",
+    "Google data migration" : "Google gegevensmigratie",
     "Authentication" : "Authenticatie",
     "Connect to Google" : "Verbinden met Google",
     "Connected as {user}" : "Verbonden als {user}",
@@ -31,6 +35,12 @@
     "Import Google photos" : "Importeren Google foto's",
     "Drive" : "Rijdend",
     "Successfully connected to Google!" : "Succesvol verbonden met Google!",
-    "Google connection error:" : "Google verbindingsfout:"
+    "Google connection error:" : "Google verbindingsfout:",
+    "Failed to save Google options" : "Kon Google-opties niet opslaan",
+    "Failed to save Google OAuth state" : "Kan Google OAuth-status niet bewaren",
+    "Failed to get number of Google photos" : "Kon aantal Google foto's niet ophalen",
+    "Failed to get number of Google contacts" : "Kon aantal Google contactpersonen niet ophalen",
+    "Failed to import Google calendar" : "Kon Google agenda niet ophalen",
+    "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["{nbFiles} bestand in Google Drive ({formSize})","{nbFiles} bestanden in Google Drive ({formSize})"]
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
