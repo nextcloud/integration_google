@@ -45,6 +45,10 @@ class Personal implements ISettings {
 		$userName = $this->config->getUserValue($this->userId, Application::APP_ID, 'user_name', '');
 		$considerSharedFiles = $this->config->getUserValue($this->userId, Application::APP_ID, 'consider_shared_files', '0') === '1';
 		$considerSharedAlbums = $this->config->getUserValue($this->userId, Application::APP_ID, 'consider_shared_albums', '0') === '1';
+		$documentFormat = $this->config->getUserValue($this->userId, Application::APP_ID, 'document_format', 'openxml');
+		if (!in_array($documentFormat, ['openxml', 'opendoc'])) {
+			$documentFormat = 'openxml';
+		}
 
 		// for OAuth
 		$clientID = $this->config->getAppValue(Application::APP_ID, 'client_id', '');
@@ -61,6 +65,7 @@ class Personal implements ISettings {
 			'free_space' => $freeSpace,
 			'consider_shared_files' => $considerSharedFiles,
 			'consider_shared_albums' => $considerSharedAlbums,
+			'document_format' => $documentFormat,
 		];
 		$this->initialStateService->provideInitialState($this->appName, 'user-config', $userConfig);
 		$response = new TemplateResponse(Application::APP_ID, 'personalSettings');

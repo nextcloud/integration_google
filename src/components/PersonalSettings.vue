@@ -140,6 +140,23 @@
 							:checked="!state.consider_shared_files"
 							@input="onDriveConsiderSharedChange">
 						<label for="consider-shared-files">{{ t('integration_google', 'Ignore shared files') }}</label>
+						<br>
+					</div>
+					<div v-if="!importingDrive" class="selectOption">
+						<label for="document-format">
+							<span class="icon icon-category-office" />
+							{{ t('integration_google', 'Google documents import format') }}
+						</label>
+						<select id="document-format"
+							v-model="state.document_format"
+							@change="onDocumentFormatChange">
+							<option value="openxml">
+								OpenXML (docx, xlsx, pptx)
+							</option>
+							<option value="opendoc">
+								OpenDocument (odt, ods, odp)
+							</option>
+						</select>
 						<br><br>
 					</div>
 					<div class="line">
@@ -682,6 +699,9 @@ export default {
 			this.state.consider_shared_albums = !e.target.checked
 			this.saveOptions({ consider_shared_albums: this.state.consider_shared_albums ? '1' : '0' }, this.getNbGooglePhotos)
 		},
+		onDocumentFormatChange(e) {
+			this.saveOptions({ document_format: this.state.document_format })
+		},
 	},
 }
 </script>
@@ -741,6 +761,7 @@ body.theme--dark .icon-google-settings {
 	}
 
 	#google-drive button,
+	#google-drive select,
 	#google-photos button,
 	#google-contacts > button {
 		width: 300px;

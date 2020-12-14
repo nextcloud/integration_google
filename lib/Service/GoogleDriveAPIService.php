@@ -352,22 +352,26 @@ class GoogleDriveAPIService {
 				}
 			}
 		} else {
+			$documentFormat = $this->config->getUserValue($userId, Application::APP_ID, 'document_format', 'openxml');
+			if (!in_array($documentFormat, ['openxml', 'opendoc'])) {
+				$documentFormat = 'openxml';
+			}
 			// potentially a doc
 			if ($fileItem['mimeType'] === 'application/vnd.google-apps.document') {
-				$fileName .= '.odt';
-				$mimeType = 'application/vnd.oasis.opendocument.text';
-				//$fileName .= '.docx';
-				//$mimeType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+				$fileName .= $documentFormat === 'openxml' ? '.docx' : '.odt';
+				$mimeType = $documentFormat === 'openxml'
+					? 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+					: 'application/vnd.oasis.opendocument.text';
 			} elseif ($fileItem['mimeType'] === 'application/vnd.google-apps.spreadsheet') {
-				$fileName .= '.ods';
-				$mimeType = 'application/vnd.oasis.opendocument.spreadsheet';
-				//$fileName .= '.xlsx';
-				//$mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+				$fileName .= $documentFormat === 'openxml' ? '.xlsx' : '.ods';
+				$mimeType = $documentFormat === 'openxml'
+					? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+					: 'application/vnd.oasis.opendocument.spreadsheet';
 			} elseif ($fileItem['mimeType'] === 'application/vnd.google-apps.presentation') {
-				$fileName .= '.odp';
-				$mimeType = 'application/vnd.oasis.opendocument.presentation';
-				//$fileName .= '.pptx';
-				//$mimeType = 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
+				$fileName .= $documentFormat === 'openxml' ? '.pptx' : '.odp';
+				$mimeType = $documentFormat === 'openxml'
+					? 'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+					:'application/vnd.oasis.opendocument.presentation';
 			} else {
 				$this->logger->warning(
 					'Google Drive error downloading file, no webContentLink, unknown mime type: ' . $saveFolder->getInternalPath() . '/' . ($fileItem['name'] ?? 'Untitled') . ' : '
