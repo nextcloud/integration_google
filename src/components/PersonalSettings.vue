@@ -94,6 +94,10 @@
 						<label for="consider-shared-albums">{{ t('integration_google', 'Ignore shared albums') }}</label>
 						<br><br>
 					</div>
+					<p v-if="!importingPhotos" class="settings-hint">
+						<span class="icon icon-details" />
+						{{ t('integration_google', 'Warning, Google does not provide location data in imported photos.') }}
+					</p>
 					<div class="line">
 						<label>
 							<span class="icon icon-toggle-pictures" />
