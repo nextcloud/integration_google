@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## 0.1.0 – 2020-12-15
+### Added
+- option to choose google docs import format (OpenXML or OpenDocument)
+
+### Changed
+- add hint about photo api not providing location data
+- bump js libs
+
 ## 0.0.25 – 2020-11-24
 ### Changed
 - add log when drive file can't be directly downloaded and it's not a 'document'
