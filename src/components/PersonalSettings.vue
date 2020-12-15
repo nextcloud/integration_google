@@ -96,7 +96,7 @@
 					</div>
 					<p v-if="!importingPhotos" class="settings-hint">
 						<span class="icon icon-details" />
-						{{ t('integration_google', 'Warning, Google does not provide location data in imported photos.') }}
+						{{ t('integration_google', 'Warning: Google does not provide location data in imported photos.') }}
 					</p>
 					<div class="line">
 						<label>
