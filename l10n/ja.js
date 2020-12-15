@@ -2,8 +2,8 @@ OC.L10N.register(
     "integration_google",
     {
     "Error during OAuth exchanges" : "OAuth通信中のエラー",
-    "Bad credentials" : "不正な資格情報",
     "OAuth access token refused" : "OAuthアクセストークンが拒否されました",
+    "Bad credentials" : "不正な資格情報",
     "Connected accounts" : "接続済みアカウント",
     "Google API settings" : "Google API 設定",
     "Client ID" : "クライアント ID",
@@ -13,7 +13,6 @@ OC.L10N.register(
     "Connected as {user}" : "{user} を接続済み",
     "Disconnect from Google" : "Google から切断",
     "Contacts" : "連絡先",
-    "Import Google contacts in Nextcloud" : "Google の連絡先を Nextcloud にインポート",
     "Choose where to import the contacts" : "連絡先をインポートする場所を選択してください",
     "New address book" : "新しいアドレス帳",
     "address book name" : "アドレス帳の名前",

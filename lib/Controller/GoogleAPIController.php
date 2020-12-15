@@ -30,7 +30,10 @@ use OCP\IRequest;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Controller;
 
-use OCA\Google\Service\GoogleAPIService;
+use OCA\Google\Service\GooglePhotosAPIService;
+use OCA\Google\Service\GoogleContactsAPIService;
+use OCA\Google\Service\GoogleDriveAPIService;
+use OCA\Google\Service\GoogleCalendarAPIService;
 use OCA\Google\AppInfo\Application;
 
 class GoogleAPIController extends Controller {
@@ -49,7 +52,10 @@ class GoogleAPIController extends Controller {
 								IAppManager $appManager,
 								IAppData $appData,
 								LoggerInterface $logger,
-								GoogleAPIService $googleAPIService,
+								GooglePhotosAPIService $googlePhotosAPIService,
+								GoogleContactsAPIService $googleContactsAPIService,
+								GoogleDriveAPIService $googleDriveAPIService,
+								GoogleCalendarAPIService $googleCalendarAPIService,
 								$userId) {
 		parent::__construct($AppName, $request);
 		$this->userId = $userId;
@@ -59,7 +65,10 @@ class GoogleAPIController extends Controller {
 		$this->serverContainer = $serverContainer;
 		$this->config = $config;
 		$this->logger = $logger;
-		$this->googleAPIService = $googleAPIService;
+		$this->googlePhotosAPIService = $googlePhotosAPIService;
+		$this->googleContactsAPIService = $googleContactsAPIService;
+		$this->googleDriveAPIService = $googleDriveAPIService;
+		$this->googleCalendarAPIService = $googleCalendarAPIService;
 		$this->accessToken = $this->config->getUserValue($this->userId, Application::APP_ID, 'token', '');
 	}
 
@@ -106,7 +115,7 @@ class GoogleAPIController extends Controller {
 		if ($this->accessToken === '') {
 			return new DataResponse(null, 400);
 		}
-		$result = $this->googleAPIService->getPhotoNumber($this->accessToken, $this->userId);
+		$result = $this->googlePhotosAPIService->getPhotoNumber($this->accessToken, $this->userId);
 		if (isset($result['error'])) {
 			$response = new DataResponse($result['error'], 401);
 		} else {
@@ -124,7 +133,7 @@ class GoogleAPIController extends Controller {
 		if ($this->accessToken === '') {
 			return new DataResponse(null, 400);
 		}
-		$result = $this->googleAPIService->getContactNumber($this->accessToken, $this->userId);
+		$result = $this->googleContactsAPIService->getContactNumber($this->accessToken, $this->userId);
 		if (isset($result['error'])) {
 			$response = new DataResponse($result['error'], 401);
 		} else {
@@ -142,7 +151,7 @@ class GoogleAPIController extends Controller {
 		if ($this->accessToken === '') {
 			return new DataResponse(null, 400);
 		}
-		$result = $this->googleAPIService->getCalendarList($this->accessToken, $this->userId);
+		$result = $this->googleCalendarAPIService->getCalendarList($this->accessToken, $this->userId);
 		if (isset($result['error'])) {
 			$response = new DataResponse($result['error'], 401);
 		} else {
@@ -160,7 +169,7 @@ class GoogleAPIController extends Controller {
 		if ($this->accessToken === '') {
 			return new DataResponse(null, 400);
 		}
-		$result = $this->googleAPIService->getDriveSize($this->accessToken, $this->userId);
+		$result = $this->googleDriveAPIService->getDriveSize($this->accessToken, $this->userId);
 		if (isset($result['error'])) {
 			$response = new DataResponse($result['error'], 401);
 		} else {
@@ -172,14 +181,13 @@ class GoogleAPIController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 *
-	 * @param string $targetPath
 	 * @return DataResponse
 	 */
-	public function importPhotos(string $targetPath = 'GooglePhotos'): DataResponse {
+	public function importPhotos(): DataResponse {
 		if ($this->accessToken === '') {
 			return new DataResponse(null, 400);
 		}
-		$result = $this->googleAPIService->startImportPhotos($this->accessToken, $this->userId, $targetPath);
+		$result = $this->googlePhotosAPIService->startImportPhotos($this->accessToken, $this->userId);
 		if (isset($result['error'])) {
 			$response = new DataResponse($result['error'], 401);
 		} else {
@@ -191,14 +199,13 @@ class GoogleAPIController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 *
-	 * @param string $targetPath
 	 * @return DataResponse
 	 */
-	public function importDrive(string $targetPath = 'GoogleDrive'): DataResponse {
+	public function importDrive(): DataResponse {
 		if ($this->accessToken === '') {
 			return new DataResponse(null, 400);
 		}
-		$result = $this->googleAPIService->startImportDrive($this->accessToken, $this->userId, $targetPath);
+		$result = $this->googleDriveAPIService->startImportDrive($this->accessToken, $this->userId);
 		if (isset($result['error'])) {
 			$response = new DataResponse($result['error'], 401);
 		} else {
@@ -217,9 +224,9 @@ class GoogleAPIController extends Controller {
 	 */
 	public function importCalendar(string $calId, string $calName, ?string $color = null): DataResponse {
 		if ($this->accessToken === '') {
-			return new DataResponse(null, 400);
+			return new DataResponse('', 400);
 		}
-		$result = $this->googleAPIService->importCalendar($this->accessToken, $this->userId, $calId, $calName, $color);
+		$result = $this->googleCalendarAPIService->importCalendar($this->accessToken, $this->userId, $calId, $calName, $color);
 		if (isset($result['error'])) {
 			$response = new DataResponse($result['error'], 401);
 		} else {
@@ -231,16 +238,16 @@ class GoogleAPIController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 *
-	 * @param string $uri
+	 * @param ?string $uri
 	 * @param int $key
-	 * @param string $newAddressBookName
+	 * @param ?string $newAddressBookName
 	 * @return DataResponse
 	 */
-	public function importContacts(string $uri = '', int $key, string $newAddressBookName = ''): DataResponse {
+	public function importContacts(?string $uri = '', int $key, ?string $newAddressBookName = ''): DataResponse {
 		if ($this->accessToken === '') {
 			return new DataResponse(null, 400);
 		}
-		$result = $this->googleAPIService->importContacts($this->accessToken, $this->userId, $uri, $key, $newAddressBookName);
+		$result = $this->googleContactsAPIService->importContacts($this->accessToken, $this->userId, $uri, $key, $newAddressBookName);
 		if (isset($result['error'])) {
 			$response = new DataResponse($result['error'], 401);
 		} else {

@@ -1,17 +1,18 @@
-const { merge } = require('webpack-merge')
 const path = require('path')
-const webpack = require('webpack')
 const webpackConfig = require('@nextcloud/webpack-vue-config')
 
-if (webpackConfig.entry && webpackConfig.entry.main) {
-		delete webpackConfig.entry.main
+const buildMode = process.env.NODE_ENV
+const isDev = buildMode === 'development'
+webpackConfig.devtool = isDev ? 'cheap-source-map' : 'source-map'
+
+webpackConfig.stats = {
+    colors: true,
+    modules: false,
 }
 
-const config = {
-		entry: {
-			personalSettings: path.join(__dirname, 'src', 'personalSettings.js'),
-			adminSettings: path.join(__dirname, 'src', 'adminSettings.js'),
-		},
+webpackConfig.entry = {
+    personalSettings: { import: path.join(__dirname, 'src', 'personalSettings.js'), filename: 'integration_google-personalSettings.js' },
+    adminSettings: { import: path.join(__dirname, 'src', 'adminSettings.js'), filename: 'integration_google-adminSettings.js' },
 }
 
-module.exports = merge(config, webpackConfig)
+module.exports = webpackConfig

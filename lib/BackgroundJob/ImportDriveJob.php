@@ -15,7 +15,7 @@ namespace OCA\Google\BackgroundJob;
 use OCP\BackgroundJob\QueuedJob;
 use OCP\AppFramework\Utility\ITimeFactory;
 
-use OCA\Google\Service\GoogleAPIService;
+use OCA\Google\Service\GoogleDriveAPIService;
 
 class ImportDriveJob extends QueuedJob {
 
@@ -26,7 +26,7 @@ class ImportDriveJob extends QueuedJob {
 	 *
 	 */
 	public function __construct(ITimeFactory $timeFactory,
-								GoogleAPIService $service) {
+								GoogleDriveAPIService $service) {
 		parent::__construct($timeFactory);
 		$this->service = $service;
 	}

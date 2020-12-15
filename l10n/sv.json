@@ -4,6 +4,7 @@
     "Authentication" : "Autentisering",
     "Contacts" : "Kontakter",
     "Import calendar" : "Importera kalender",
-    "Photos" : "Bilder"
+    "Photos" : "Bilder",
+    "Photo import background process will begin soon." : "Fotoimportbakgrundsprocessen börjar snart."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

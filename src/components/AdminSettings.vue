@@ -14,7 +14,7 @@
 			<br><br>
 			<span class="icon icon-details" />
 			{{ t('integration_google', 'Make sure you set one "Authorized redirect URI" to') }}
-			<b> {{ redirectUri }} </b>
+			<b> {{ redirect_uri }} </b>
 			<br><br>
 			{{ t('integration_google', 'Put the "Client ID" and "Client secret" below.') }}
 			<br>
@@ -69,14 +69,11 @@ export default {
 			state: loadState('integration_google', 'admin-config'),
 			// to prevent some browsers to fill fields with remembered passwords
 			readonly: true,
+			redirect_uri: window.location.protocol + '//' + window.location.host + generateUrl('/apps/integration_google/oauth-redirect'),
 		}
 	},
 
 	computed: {
-		redirectUri() {
-			const redirectEndpoint = generateUrl('/apps/integration_google/oauth-redirect')
-			return window.location.protocol + '//' + window.location.host + redirectEndpoint
-		},
 	},
 
 	methods: {
@@ -115,29 +112,36 @@ export default {
 .grid-form label {
 	line-height: 38px;
 }
+
 .grid-form input {
 	width: 100%;
 }
+
 .grid-form {
 	max-width: 500px;
 	display: grid;
 	grid-template: 1fr / 1fr 1fr;
 	margin-left: 30px;
 }
+
 #google_prefs .icon {
 	display: inline-block;
 	width: 32px;
 }
+
 #google_prefs .grid-form .icon {
 	margin-bottom: -3px;
 }
+
 .icon-google {
 	background-image: url(./../../img/app-dark.svg);
 	background-size: 23px 23px;
 	height: 23px;
 	margin-bottom: -4px;
 }
+
 body.theme--dark .icon-google {
 	background-image: url(./../../img/app.svg);
 }
+
 </style>
