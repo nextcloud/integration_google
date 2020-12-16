@@ -11,6 +11,12 @@ jobs:
       APP_ID: integration_google
     runs-on: ubuntu-latest
     steps:
+      - name: Setup PHP with pecl extension
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          extensions: imagick, swoole
+
       - name: Checkout code
         uses: actions/checkout@v2
 

@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
-## 0.1.1 – 2020-12-16
+## 0.1.2 – 2020-12-16
 ### Fixed
 - issue with unlimited quota, now properly detected
 [#38](https://github.com/nextcloud/integration_google/issues/38) @dommtardif
