@@ -104,6 +104,7 @@ class ConfigController extends Controller {
     }
 
     /**
+     * @NoAdminRequired
      * Get local address book list
      *
      * @return DataResponse
