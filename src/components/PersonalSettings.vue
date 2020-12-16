@@ -280,7 +280,7 @@ export default {
 			return this.nbPhotos * 1000000
 		},
 		enoughSpaceForPhotos() {
-			return this.nbPhotos === 0 || this.estimatedPhotoCollectionSize < this.state.free_space
+			return this.nbPhotos === 0 || this.state.user_quota === 'none' || this.estimatedPhotoCollectionSize < this.state.free_space
 		},
 		lastPhotoImportDate() {
 			return this.lastPhotoImportTimestamp !== 0
@@ -294,7 +294,7 @@ export default {
 				: 0
 		},
 		enoughSpaceForDrive() {
-			return this.driveSize === 0 || this.driveSize < this.state.free_space
+			return this.driveSize === 0 || this.state.user_quota === 'none' || this.driveSize < this.state.free_space
 		},
 		lastDriveImportDate() {
 			return this.lastDriveImportTimestamp !== 0

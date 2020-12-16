@@ -7,6 +7,7 @@ use OCP\IL10N;
 use OCP\IConfig;
 use OCP\Settings\ISettings;
 use OCP\Util;
+use OCP\IUserManager;
 use OCP\IURLGenerator;
 use OCP\IInitialStateService;
 use OCP\Files\IRootFolder;
@@ -26,6 +27,7 @@ class Personal implements ISettings {
 								IConfig $config,
 								IURLGenerator $urlGenerator,
 								IRootFolder $root,
+								IUserManager $userManager,
 								IInitialStateService $initialStateService,
 								$userId) {
 		$this->appName = $appName;
@@ -34,6 +36,7 @@ class Personal implements ISettings {
 		$this->l = $l;
 		$this->config = $config;
 		$this->root = $root;
+		$this->userManager = $userManager;
 		$this->initialStateService = $initialStateService;
 		$this->userId = $userId;
 	}
@@ -57,12 +60,14 @@ class Personal implements ISettings {
 		// get free space
 		$userFolder = $this->root->getUserFolder($this->userId);
 		$freeSpace = $userFolder->getStorage()->free_space('/');
+		$user = $this->userManager->get($this->userId);
 
 		$userConfig = [
 			'client_id' => $clientID,
 			'client_secret' => $clientSecret,
 			'user_name' => $userName,
 			'free_space' => $freeSpace,
+			'user_quota' => $user->getQuota(),
 			'consider_shared_files' => $considerSharedFiles,
 			'consider_shared_albums' => $considerSharedAlbums,
 			'document_format' => $documentFormat,
