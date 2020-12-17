@@ -50,7 +50,7 @@ OC.L10N.register(
     "Import Google photos" : "Importovat Google fotky",
     "Your Google photo collection size is estimated to be bigger than your remaining space left ({formSpace})" : "Velikost sbírky Google fotek se zdá vyšší, než aktuálně dostupné volné místo ({formSpace})",
     "Cancel photo import" : "Zrušit import fotek",
-    "Drive" : "Řídit",
+    "Drive" : "Disk",
     "Ignore shared files" : "Ignorovat sdílené soubory",
     "Import Google Drive files" : "Importovat Google Drive soubory",
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Velikost vašeho Google Drive je větší, než volné místo ({formSpace}), které vám zbývá",
