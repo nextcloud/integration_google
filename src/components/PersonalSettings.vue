@@ -84,7 +84,7 @@
 				<div v-if="nbPhotos > 0"
 					id="google-photos">
 					<h3>{{ t('integration_google', 'Photos') }}</h3>
-					<div v-if="!importingPhotos" class="checkOption">
+					<div v-if="!importingPhotos" class="check-option">
 						<input
 							id="consider-shared-albums"
 							type="checkbox"
@@ -98,6 +98,20 @@
 						<span class="icon icon-details" />
 						{{ t('integration_google', 'Warning, Google does not provide location data in imported photos.') }}
 					</p>
+					<div v-if="!importingPhotos" class="output-selection">
+						<label for="photo-output">
+							<span class="icon icon-folder" />
+							{{ t('integration_google', 'Import directory') }}
+						</label>
+						<input id="photo-output"
+							:readonly="true"
+							:value="state.photo_output_dir">
+						<button
+							@click="onPhotoOutputChange">
+							<span class="icon-rename" />
+						</button>
+						<br><br>
+					</div>
 					<div class="line">
 						<label>
 							<span class="icon icon-toggle-pictures" />
@@ -136,7 +150,7 @@
 				<div v-if="nbFiles > 0"
 					id="google-drive">
 					<h3>{{ t('integration_google', 'Drive') }}</h3>
-					<div v-if="!importingDrive" class="checkOption">
+					<div v-if="!importingDrive" class="check-option">
 						<input
 							id="consider-shared-files"
 							type="checkbox"
@@ -161,6 +175,20 @@
 								OpenDocument (odt, ods, odp)
 							</option>
 						</select>
+						<br>
+					</div>
+					<div v-if="!importingDrive" class="output-selection">
+						<label for="drive-output">
+							<span class="icon icon-folder" />
+							{{ t('integration_google', 'Import directory') }}
+						</label>
+						<input id="drive-output"
+							:readonly="true"
+							:value="state.drive_output_dir">
+						<button
+							@click="onDriveOutputChange">
+							<span class="icon-rename" />
+						</button>
 						<br><br>
 					</div>
 					<div class="line">
@@ -706,6 +734,36 @@ export default {
 		onDocumentFormatChange(e) {
 			this.saveOptions({ document_format: this.state.document_format })
 		},
+		onDriveOutputChange() {
+			OC.dialogs.filepicker(
+				t('integration_google', 'Choose where to write imported files'),
+				(targetPath) => {
+					if (targetPath === '') {
+						targetPath = '/'
+					}
+					this.state.drive_output_dir = targetPath
+					this.saveOptions({ drive_output_dir: this.state.drive_output_dir })
+				},
+				false,
+				'httpd/unix-directory',
+				true
+			)
+		},
+		onPhotoOutputChange() {
+			OC.dialogs.filepicker(
+				t('integration_google', 'Choose where to write imported photos'),
+				(targetPath) => {
+					if (targetPath === '') {
+						targetPath = '/'
+					}
+					this.state.photo_output_dir = targetPath
+					this.saveOptions({ photo_output_dir: this.state.photo_output_dir })
+				},
+				false,
+				'httpd/unix-directory',
+				true
+			)
+		},
 	},
 }
 </script>
@@ -791,8 +849,17 @@ body.theme--dark .icon-google-settings {
 		width: 200px;
 	}
 
-	.checkOption {
+	.check-option {
 		margin-left: 5px;
+	}
+
+	.output-selection {
+		input {
+			width: 300px;
+		}
+		button {
+			width: 44px !important;
+		}
 	}
 }
 

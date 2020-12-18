@@ -117,7 +117,8 @@ class GooglePhotosAPIService {
 	 * @return array
 	 */
 	public function startImportPhotos(string $accessToken, string $userId): array {
-		$targetPath = 'Google Photos';
+		$targetPath = $this->config->getUserValue($userId, Application::APP_ID, 'photo_output_dir', '/Google Photos');
+		$targetPath = $targetPath ?: '/Google Photos';
 		// create root folder
 		$userFolder = $this->root->getUserFolder($userId);
 		if (!$userFolder->nodeExists($targetPath)) {
@@ -148,7 +149,8 @@ class GooglePhotosAPIService {
 		}
 
 		$accessToken = $this->config->getUserValue($userId, Application::APP_ID, 'token', '');
-		$targetPath = 'Google Photos';
+		$targetPath = $this->config->getUserValue($userId, Application::APP_ID, 'photo_output_dir', '/Google Photos');
+		$targetPath = $targetPath ?: '/Google Photos';
 		// import photos by batch of 500 Mo
 		$alreadyImported = $this->config->getUserValue($userId, Application::APP_ID, 'nb_imported_photos', '0');
 		$alreadyImported = (int) $alreadyImported;
