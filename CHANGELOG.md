@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+- configurable output dir for drive and photos import
+
+### Changed
+- bump js libs
+
 ## 0.1.2 – 2020-12-16
 ### Fixed
 - issue with unlimited quota, now properly detected
