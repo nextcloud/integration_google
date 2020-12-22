@@ -39,6 +39,8 @@
     "Import calendar" : "Importuoti kalendorių",
     "Photos" : "Nuotraukos",
     "Ignore shared albums" : "Nepaisyti bendrinamų albumų",
+    "Warning, Google does not provide location data in imported photos." : "Įspėjimas, importuotose nuotraukose „Google“ neteikia duomenų apie vietą.",
+    "Import directory" : "Importuoti katalogą",
     "Import Google photos" : "Importuoti „Google“ nuotraukas",
     "Your Google photo collection size is estimated to be bigger than your remaining space left ({formSpace})" : "Apskaičiuotas „Google“ nuotraukų kolekcijos dydis yra didesnis, nei jums yra likę laisvos vietos ({formSpace})",
     "Cancel photo import" : "Atsisakyti nuotraukų importavimo",
