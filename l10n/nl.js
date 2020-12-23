@@ -35,6 +35,7 @@ OC.L10N.register(
     "Import calendar" : "Importeer agenda",
     "Photos" : "Foto's",
     "Import Google photos" : "Importeren Google foto's",
+    "Cancel photo import" : "Annuleer foto import",
     "Drive" : "Rijdend",
     "Successfully connected to Google!" : "Succesvol verbonden met Google!",
     "Google connection error:" : "Google verbindingsfout:",
