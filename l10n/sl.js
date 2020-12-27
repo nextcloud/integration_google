@@ -44,6 +44,7 @@ OC.L10N.register(
     "Import calendar" : "Uvozi koledar",
     "Photos" : "Fotografije",
     "Ignore shared albums" : "Prezri albume v souporabi",
+    "Import directory" : "Uvozi mapo",
     "Import Google photos" : "Uvozi slike Google",
     "Your Google photo collection size is estimated to be bigger than your remaining space left ({formSpace})" : "Velikost zbirke slik je večja od preostalega prostora ({formSpace})",
     "Cancel photo import" : "Prekliči uvoz slik z oblaka",
