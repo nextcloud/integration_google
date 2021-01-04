@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - bump js libs
 
+### Fixed
+- photo in imported contacts
+[#44](https://github.com/nextcloud/integration_google/issues/44) @hegocre
+
 ## 0.1.2 – 2020-12-16
 ### Fixed
 - issue with unlimited quota, now properly detected
