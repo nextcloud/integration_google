@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## 0.1.4 – 2021-01-04
 ### Added
 - configurable output dir for drive and photos import
 
