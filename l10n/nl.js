@@ -9,7 +9,7 @@ OC.L10N.register(
     "_%s file was imported from Google Drive._::_%s files were imported from Google Drive._" : ["%s bestand geïmporteerd vanuit Google Drive","%s bestanden geïmporteerd vanuit Google Drive"],
     "OAuth access token refused" : "OAuth access token geweigerd",
     "Bad credentials" : "Foute inloggegevens",
-    "Google Calendar import" : "Google Kalender import",
+    "Google Calendar import" : "Google Agenda-import",
     "Private event" : "Privé-afspraak",
     "Connected accounts" : "Verbonden accounts",
     "Data migration" : "Gegevensmigratie",
