@@ -340,6 +340,8 @@ class GoogleDriveAPIService {
 					);
 					return null;
 				}
+				$savedFile->unlock(\OCP\Lock\ILockingProvider::LOCK_SHARED);
+				$savedFile->unlock(\OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE);
 				$resource = $savedFile->fopen('w');
 				$res = $this->googleApiService->simpleDownload($accessToken, $userId, $fileUrl, $resource);
 				if (!isset($res['error'])) {
@@ -397,6 +399,8 @@ class GoogleDriveAPIService {
 					);
 					return null;
 				}
+				$savedFile->unlock(\OCP\Lock\ILockingProvider::LOCK_SHARED);
+				$savedFile->unlock(\OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE);
 				$resource = $savedFile->fopen('w');
 				$res = $this->googleApiService->simpleDownload($accessToken, $userId, $fileUrl, $resource, $params);
 				if (!isset($res['error'])) {

@@ -363,6 +363,8 @@ class GooglePhotosAPIService {
 				return null;
 			}
 			$savedFile = $albumFolder->newFile($photoName);
+			$savedFile->unlock(\OCP\Lock\ILockingProvider::LOCK_SHARED);
+			$savedFile->unlock(\OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE);
 			$resource = $savedFile->fopen('w');
 			$res = $this->googleApiService->simpleDownload($accessToken, $userId, $photoUrl, $resource);
 			if (!isset($res['error'])) {
