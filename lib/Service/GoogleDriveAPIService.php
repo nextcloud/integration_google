@@ -340,9 +340,21 @@ class GoogleDriveAPIService {
 					);
 					return null;
 				}
-				$savedFile->unlock(\OCP\Lock\ILockingProvider::LOCK_SHARED);
-				$savedFile->unlock(\OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE);
-				$resource = $savedFile->fopen('w');
+				try {
+					try {
+						$resource = $savedFile->fopen('w');
+					} catch (\OCP\Lock\LockedException $e) {
+						$savedFile->unlock(\OCP\Lock\ILockingProvider::LOCK_SHARED);
+						$savedFile->unlock(\OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE);
+						$resource = $savedFile->fopen('w');
+					}
+				} catch (\OCP\Lock\LockedException $e) {
+					$this->logger->warning('Google Drive error downloading file ' . $fileItem['name'] . ' : Impossible to unlock file', ['app' => $this->appName]);
+					if ($savedFile->isDeletable()) {
+						$savedFile->delete();
+					}
+					return null;
+				}
 				$res = $this->googleApiService->simpleDownload($accessToken, $userId, $fileUrl, $resource);
 				if (!isset($res['error'])) {
 					$savedFile->touch();
@@ -399,9 +411,21 @@ class GoogleDriveAPIService {
 					);
 					return null;
 				}
-				$savedFile->unlock(\OCP\Lock\ILockingProvider::LOCK_SHARED);
-				$savedFile->unlock(\OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE);
-				$resource = $savedFile->fopen('w');
+				try {
+					try {
+						$resource = $savedFile->fopen('w');
+					} catch (\OCP\Lock\LockedException $e) {
+						$savedFile->unlock(\OCP\Lock\ILockingProvider::LOCK_SHARED);
+						$savedFile->unlock(\OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE);
+						$resource = $savedFile->fopen('w');
+					}
+				} catch (\OCP\Lock\LockedException $e) {
+					$this->logger->warning('Google Drive error downloading file ' . $fileItem['name'] . ' : Impossible to unlock file', ['app' => $this->appName]);
+					if ($savedFile->isDeletable()) {
+						$savedFile->delete();
+					}
+					return null;
+				}
 				$res = $this->googleApiService->simpleDownload($accessToken, $userId, $fileUrl, $resource, $params);
 				if (!isset($res['error'])) {
 					$savedFile->touch();
