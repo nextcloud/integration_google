@@ -233,6 +233,16 @@ class GoogleContactsAPIService {
 						$type = ['VALUE' => 'DATE'];
 						$prop = $vCard->createProperty('BDAY', $strDate, $type);
 						$vCard->add($prop);
+					} elseif (isset($birthday['date'], $birthday['date']['month'], $birthday['date']['day'])) {
+						$type = ['VALUE' => 'DATE'];
+						$month = $birthday['date']['month'];
+						$month = strlen($month) === 2 ? $month : '0' . $month;
+						$day = $birthday['date']['day'];
+						$day = strlen($day) === 2 ? $day : '0' . $day;
+						if (strlen($month) === 2 && strlen($day) === 2) {
+							$prop = $vCard->createProperty('BDAY', '--' . $month . $day, $type);
+							$vCard->add($prop);
+						}
 					} elseif (isset($birthday['text']) && is_string($birthday['text'])) {
 						$type = ['VALUE' => 'text'];
 						$prop = $vCard->createProperty('BDAY', $birthday['text'], $type);
