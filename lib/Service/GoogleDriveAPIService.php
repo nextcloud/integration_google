@@ -354,6 +354,9 @@ class GoogleDriveAPIService {
 				}
 				$res = $this->googleApiService->simpleDownload($accessToken, $userId, $fileUrl, $resource);
 				if (!isset($res['error'])) {
+					if (is_resource($resource)) {
+						fclose($resource);
+					}
 					$savedFile->touch();
 					$stat = $savedFile->stat();
 					return $stat['size'] ?? 0;
@@ -422,6 +425,9 @@ class GoogleDriveAPIService {
 				}
 				$res = $this->googleApiService->simpleDownload($accessToken, $userId, $fileUrl, $resource, $params);
 				if (!isset($res['error'])) {
+					if (is_resource($resource)) {
+						fclose($resource);
+					}
 					$savedFile->touch();
 					$stat = $savedFile->stat();
 					return $stat['size'] ?? 0;

@@ -377,6 +377,9 @@ class GooglePhotosAPIService {
 			}
 			$res = $this->googleApiService->simpleDownload($accessToken, $userId, $photoUrl, $resource);
 			if (!isset($res['error'])) {
+				if (is_resource($resource)) {
+					fclose($resource);
+				}
 				$savedFile->touch();
 				$stat = $savedFile->stat();
 				return $stat['size'] ?? 0;
