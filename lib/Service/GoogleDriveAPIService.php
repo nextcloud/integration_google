@@ -350,9 +350,6 @@ class GoogleDriveAPIService {
 					}
 				} catch (\OCP\Lock\LockedException $e) {
 					$this->logger->warning('Google Drive error downloading file ' . $fileItem['name'] . ' : Impossible to unlock file', ['app' => $this->appName]);
-					if ($savedFile->isDeletable()) {
-						$savedFile->delete();
-					}
 					return null;
 				}
 				$res = $this->googleApiService->simpleDownload($accessToken, $userId, $fileUrl, $resource);
@@ -421,9 +418,6 @@ class GoogleDriveAPIService {
 					}
 				} catch (\OCP\Lock\LockedException $e) {
 					$this->logger->warning('Google Drive error downloading file ' . $fileItem['name'] . ' : Impossible to unlock file', ['app' => $this->appName]);
-					if ($savedFile->isDeletable()) {
-						$savedFile->delete();
-					}
 					return null;
 				}
 				$res = $this->googleApiService->simpleDownload($accessToken, $userId, $fileUrl, $resource, $params);

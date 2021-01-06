@@ -373,9 +373,6 @@ class GooglePhotosAPIService {
 				}
 			} catch (\OCP\Lock\LockedException $e) {
 				$this->logger->warning('Google API error downloading photo ' . $photoName . ' : Impossible to unlock file', ['app' => $this->appName]);
-				if ($savedFile->isDeletable()) {
-					$savedFile->delete();
-				}
 				return null;
 			}
 			$res = $this->googleApiService->simpleDownload($accessToken, $userId, $photoUrl, $resource);
