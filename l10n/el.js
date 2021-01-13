@@ -2,9 +2,11 @@ OC.L10N.register(
     "integration_google",
     {
     "Missing refresh token in Google response." : "Λείπει διακριτικό ανανέωσης στην απόκριση Google.",
-    "Error getting OAuth access token." : "Σφάλμα κατά τη λήψη διακριτικού πρόσβασης OAuth.",
+    "Error getting OAuth access token." : "Σφάλμα κατά τη λήψη αναγνωριστικού OAuth.",
     "Error during OAuth exchanges" : "Σφάλμα κατά την ανταλλαγή OAuth",
     "Google" : "Google",
+    "_%s photo was imported from Google._::_%s photos were imported from Google._" : ["Θα εισαχθεί από τη Google %s φωτογραφία.","Θα εισαχθούν από τη Google %s φωτογραφίες."],
+    "_%s file was imported from Google Drive._::_%s files were imported from Google Drive._" : ["Θα εισαχθεί από το Google Drive %s αρχείο.","Θα εισαχθούν από το Google Drive %s αρχεία."],
     "OAuth access token refused" : "Το διακριτικό πρόσβασης OAuth απορρίφθηκε",
     "Bad credentials" : "Εσφαλμένα διαπιστευτήρια",
     "Google Calendar import" : "Εισαγωγή ημερολογίου Google",
@@ -77,6 +79,13 @@ OC.L10N.register(
     "Starting importing files in {targetPath} directory" : "Έναρξη εισαγωγής αρχείων στον κατάλογο {targetPath}",
     "Failed to start importing Google Drive" : "Αποτυχία έναρξης εισαγωγής του Google Drive",
     "Choose where to write imported files" : "Επιλέξτε πού να γράψετε τα εισαγόμενα αρχεία",
-    "Choose where to write imported photos" : "Επιλέξτε πού θα γράψετε τις εισαγόμενες φωτογραφίες"
+    "Choose where to write imported photos" : "Επιλέξτε πού θα γράψετε τις εισαγόμενες φωτογραφίες",
+    "_~{nbPhotos} Google photo (~{formSize})_::_~{nbPhotos} Google photos (~{formSize})_" : ["~{nbPhotos} φωτογραφία Google (~{formSize})","~{nbPhotos} φωτογραφίες Google (~{formSize})"],
+    "_{amount} photo imported_::_{amount} photos imported_" : ["Προστέθηκε {amount} φωτογραφία","Προστέθηκαν {amount} φωτογραφίες"],
+    "_{nbFiles} file in Google Drive ({formSize} + {formSharedSize} shared with you)_::_{nbFiles} files in Google Drive ({formSize} + {formSharedSize} shared with you)_" : ["{nbFiles} αρχείο στο Google Drive ({formSize} + {formSharedSize} διαμοιράστηκε μαζί σας)","{nbFiles} αρχεία στο Google Drive ({formSize} + {formSharedSize} διαμοιράστηκαν μαζί σας)"],
+    "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["{nbFiles} αρχείο στο Google Drive ({formSize})","{nbFiles} αρχεία στο Google Drive ({formSize})"],
+    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["Προστέθηκε {amount} αρχείο ({progress}%)","Προστέθηκαν {amount} αρχεία ({progress}%)"],
+    "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["Προστέθηκε επιτυχώς {number} επαφή σε {name}","Προστέθηκαν επιτυχώς {number} επαφές σε {name}"],
+    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["Προστέθηκε επιτυχώς {number} γεγονός σε {name}","Προστέθηκαν επιτυχώς {number} γεγονός σε {name}"]
 },
 "nplurals=2; plural=(n != 1);");
