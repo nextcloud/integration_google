@@ -19,6 +19,7 @@ use OCP\Files\Node;
 use OCP\BackgroundJob\IJobList;
 use Psr\Log\LoggerInterface;
 use OCP\Files\NotFoundException;
+use OCP\Lock\LockedException;
 
 use OCA\Google\AppInfo\Application;
 use OCA\Google\BackgroundJob\ImportDriveJob;
@@ -238,6 +239,7 @@ class GoogleDriveAPIService {
 				'files/mimeType',
 				'files/ownedByMe',
 				'files/webContentLink',
+				'files/modifiedTime',
 			]),
 			'q' => "mimeType!='application/vnd.google-apps.folder'",
 		];
@@ -343,12 +345,12 @@ class GoogleDriveAPIService {
 				try {
 					try {
 						$resource = $savedFile->fopen('w');
-					} catch (\OCP\Lock\LockedException $e) {
+					} catch (LockedException $e) {
 						$savedFile->unlock(\OCP\Lock\ILockingProvider::LOCK_SHARED);
 						$savedFile->unlock(\OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE);
 						$resource = $savedFile->fopen('w');
 					}
-				} catch (\OCP\Lock\LockedException $e) {
+				} catch (LockedException $e) {
 					$this->logger->warning('Google Drive error downloading file ' . $fileItem['name'] . ' : Impossible to unlock file', ['app' => $this->appName]);
 					return null;
 				}
@@ -357,7 +359,13 @@ class GoogleDriveAPIService {
 					if (is_resource($resource)) {
 						fclose($resource);
 					}
-					$savedFile->touch();
+					if (isset($fileItem['modifiedTime'])) {
+						$d = new \Datetime($fileItem['modifiedTime']);
+						$ts = $d->getTimestamp();
+						$savedFile->touch($ts);
+					} else {
+						$savedFile->touch();
+					}
 					$stat = $savedFile->stat();
 					return $stat['size'] ?? 0;
 				} else {
@@ -414,12 +422,12 @@ class GoogleDriveAPIService {
 				try {
 					try {
 						$resource = $savedFile->fopen('w');
-					} catch (\OCP\Lock\LockedException $e) {
+					} catch (LockedException $e) {
 						$savedFile->unlock(\OCP\Lock\ILockingProvider::LOCK_SHARED);
 						$savedFile->unlock(\OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE);
 						$resource = $savedFile->fopen('w');
 					}
-				} catch (\OCP\Lock\LockedException $e) {
+				} catch (LockedException $e) {
 					$this->logger->warning('Google Drive error downloading file ' . $fileItem['name'] . ' : Impossible to unlock file', ['app' => $this->appName]);
 					return null;
 				}
@@ -428,7 +436,13 @@ class GoogleDriveAPIService {
 					if (is_resource($resource)) {
 						fclose($resource);
 					}
-					$savedFile->touch();
+					if (isset($fileItem['modifiedTime'])) {
+						$d = new \Datetime($fileItem['modifiedTime']);
+						$ts = $d->getTimestamp();
+						$savedFile->touch($ts);
+					} else {
+						$savedFile->touch();
+					}
 					$stat = $savedFile->stat();
 					return $stat['size'] ?? 0;
 				} else {

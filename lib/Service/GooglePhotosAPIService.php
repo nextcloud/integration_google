@@ -16,6 +16,7 @@ use OCP\IConfig;
 use OCP\Files\IRootFolder;
 use OCP\Files\FileInfo;
 use OCP\Files\Node;
+use OCP\Lock\LockedException;
 use OCP\BackgroundJob\IJobList;
 use Psr\Log\LoggerInterface;
 
@@ -366,12 +367,12 @@ class GooglePhotosAPIService {
 			try {
 				try {
 					$resource = $savedFile->fopen('w');
-				} catch (\OCP\Lock\LockedException $e) {
+				} catch (LockedException $e) {
 					$savedFile->unlock(\OCP\Lock\ILockingProvider::LOCK_SHARED);
 					$savedFile->unlock(\OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE);
 					$resource = $savedFile->fopen('w');
 				}
-			} catch (\OCP\Lock\LockedException $e) {
+			} catch (LockedException $e) {
 				$this->logger->warning('Google API error downloading photo ' . $photoName . ' : Impossible to unlock file', ['app' => $this->appName]);
 				return null;
 			}
@@ -380,7 +381,13 @@ class GooglePhotosAPIService {
 				if (is_resource($resource)) {
 					fclose($resource);
 				}
-				$savedFile->touch();
+				if (isset($photo['mediaMetadata']['creationTime'])) {
+					$d = new \Datetime($photo['mediaMetadata']['creationTime']);
+					$ts = $d->getTimestamp();
+					$savedFile->touch($ts);
+				} else {
+					$savedFile->touch();
+				}
 				$stat = $savedFile->stat();
 				return $stat['size'] ?? 0;
 			} else {
