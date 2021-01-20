@@ -6,6 +6,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## 0.1.5 – 2021-01-20
+### Changed
+- use contact incomplete birthday
+[#45](https://github.com/nextcloud/integration_google/issues/45) @PhysicsFabi
+- preserve files 'last modified date' and photos 'date taken'
+[#42](https://github.com/nextcloud/integration_google/issues/42) @dommtardif @jrial
+[#46](https://github.com/nextcloud/integration_google/issues/46) @dommtardif @jrial
+
+### Fixed
+- try to deal with locked files issue
+[#43](https://github.com/nextcloud/integration_google/issues/43) @kusma @sarunaskas
+
 ## 0.1.4 – 2021-01-04
 ### Added
 - configurable output dir for drive and photos import
