@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## 0.1.7 – 2021-01-27
+### Fixed
+- incorrect exclusions in makefile leading to missing Php libs in release
+
 ## 0.1.6 – 2021-01-27
 ### Changed
 - import calendar event colors
