@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## 0.1.6 – 2021-01-27
+### Changed
+- import calendar event colors
+[#49](https://github.com/nextcloud/integration_google/issues/49) @burnhard93
+- bump js libs
+
 ## 0.1.5 – 2021-01-20
 ### Changed
 - use contact incomplete birthday
