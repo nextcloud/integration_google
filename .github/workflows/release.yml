@@ -38,7 +38,7 @@ jobs:
           export DEBIAN_FRONTEND=noninteractive
           sudo apt update -y
           sudo apt upgrade -y
-          sudo apt install php-mbstring php-sqlite3 npm make openssl -y
+          sudo apt install composer php-mbstring php-sqlite3 npm make openssl -y
           echo "###### installing nextcloud"
           mkdir ~/html
           git clone https://github.com/nextcloud/server.git --recursive --depth 1 -b master ~/html/nextcloud
@@ -50,6 +50,7 @@ jobs:
           cd ~/html/nextcloud/apps/${APP_ID}
           echo "###### npm install"
           npm ci
+          composer install --prefer-dist
           echo "###### npm run build"
           npm run build
           echo "###### make appstore"

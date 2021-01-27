@@ -18,6 +18,10 @@ use Psr\Log\LoggerInterface;
 
 use OCA\Google\AppInfo\Application;
 
+require_once __DIR__ . '/../../vendor/autoload.php';
+use Ortic\ColorConverter\Color;
+use Ortic\ColorConverter\Colors\Named;
+
 class GoogleCalendarAPIService {
 
 	private $l10n;
@@ -64,6 +68,53 @@ class GoogleCalendarAPIService {
 	}
 
 	/**
+	 * @param string $hexColor
+	 * @return string closest CSS color name
+	 */
+	private function getClosestCssColor(string $hexColor): string {
+		$color = Color::fromString($hexColor);
+		$rbgColor = [
+			'r' => $color->getRed(),
+			'g' => $color->getGreen(),
+			'b' => $color->getBlue(),
+		];
+		// init
+		$closestColor = 'black';
+		$black = Color::fromString(Named::CSS_COLORS['black']);
+		$rgbBlack = [
+			'r' => $black->getRed(),
+			'g' => $black->getGreen(),
+			'b' => $black->getBlue(),
+		];
+		$closestDiff = $this->colorDiff($rbgColor, $rgbBlack);
+
+		foreach (Named::CSS_COLORS as $name => $hex) {
+			$c = Color::fromString($hex);
+			$rgb = [
+				'r' => $c->getRed(),
+				'g' => $c->getGreen(),
+				'b' => $c->getBlue(),
+			];
+			$diff = $this->colorDiff($rbgColor, $rgb);
+			if ($diff < $closestDiff) {
+				$closestDiff = $diff;
+				$closestColor = $name;
+			}
+		}
+
+		return $closestColor;
+	}
+
+	/**
+	 * @param array $rgb1 first color
+	 * @param array $rgb2 second color
+	 * @return int the distance between colors
+	 */
+	private function colorDiff(array $rgb1, array $rgb2): int {
+		return abs($rgb1['r'] - $rgb2['r']) + abs($rgb1['g'] - $rgb2['g']) + abs($rgb1['b'] - $rgb2['b']);
+	}
+
+	/**
 	 * @param string $accessToken
 	 * @param string $userId
 	 * @param string $calId
@@ -83,6 +134,13 @@ class GoogleCalendarAPIService {
 			$ncCalId = $this->caldavBackend->createCalendar('principals/users/' . $userId, $newCalName, $params);
 		}
 
+		// get color list
+		$eventColors = [];
+		$colors = $this->googleApiService->request($accessToken, $userId, 'calendar/v3/colors');
+		if (!isset($colors['error']) && isset($colors['event'])) {
+			$eventColors = $colors['event'];
+		}
+
 		date_default_timezone_set('UTC');
 		$utcTimezone = new \DateTimeZone('-0000');
 		$events = $this->getCalendarEvents($accessToken, $userId, $calId);
@@ -95,6 +153,10 @@ class GoogleCalendarAPIService {
 
 			$objectUri = $e['id'] . '-' . $e['etag'];
 			$calData .= 'UID:' . $ncCalId . '-' . $objectUri . "\n";
+			if (isset($e['colorId'], $eventColors[$e['colorId']], $eventColors[$e['colorId']]['background'])) {
+				$closestCssColor = $this->getClosestCssColor($eventColors[$e['colorId']]['background']);
+				$calData .= 'COLOR:' . $closestCssColor . "\n";
+			}
 			$calData .= isset($e['summary'])
 				? ('SUMMARY:' . substr(str_replace("\n", '\n', $e['summary']), 0, 250) . "\n")
 				: ($e['visibility'] ?? '' === 'private'

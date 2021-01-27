@@ -1,0 +1,5 @@
+{
+    "require": {
+        "ortic/color-converter": "^0.1.0"
+    }
+}
