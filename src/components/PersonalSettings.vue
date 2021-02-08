@@ -70,7 +70,7 @@
 					<div v-for="cal in calendars" :key="cal.id" class="google-grid-form">
 						<label>
 							<AppNavigationIconBullet slot="icon" :color="getCalendarColor(cal)" />
-							{{ getCalendarLabel(cal) }}
+							<span>{{ getCalendarLabel(cal) }}</span>
 						</label>
 						<button
 							:class="{ loading: importingCalendar[cal.id] }"
@@ -771,6 +771,10 @@ export default {
 <style scoped lang="scss">
 .google-grid-form label {
 	line-height: 38px;
+	.app-navigation-entry__icon-bullet {
+		padding: 0;
+		display: inline-block;
+	}
 }
 
 .google-grid-form input {
