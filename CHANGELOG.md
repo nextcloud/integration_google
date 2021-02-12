@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## 0.1.8 – 2021-02-12
+### Changed
+- bump js libs
+- bump max NC version
+
+### Fixed
+- import nc dialog style
+
 ## 0.1.7 – 2021-01-27
 ### Fixed
 - incorrect exclusions in makefile leading to missing Php libs in release
