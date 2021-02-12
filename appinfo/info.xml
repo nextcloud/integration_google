@@ -4,7 +4,7 @@
     <name>Google integration</name>
     <summary>Import Google data into Nextcloud</summary>
     <description><![CDATA[Google integration allows you to automatically import your Google calendars, contacts, photos and files into Nextcloud.]]></description>
-    <version>0.1.8</version>
+    <version>0.1.9</version>
     <licence>agpl</licence>
     <author>Julien Veyssier</author>
     <namespace>Google</namespace>
@@ -19,7 +19,7 @@
         <database min-version="9.4">pgsql</database>
         <database>sqlite</database>
         <database min-version="5.5">mysql</database>
-        <nextcloud min-version="20" max-version="21"/>
+        <nextcloud min-version="20" max-version="22"/>
     </dependencies>
     <settings>
         <admin>OCA\Google\Settings\Admin</admin>
