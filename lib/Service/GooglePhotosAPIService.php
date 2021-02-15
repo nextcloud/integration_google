@@ -166,6 +166,9 @@ class GooglePhotosAPIService {
 					'targetPath' => $targetPath,
 				]);
 			}
+			if (isset($result['error'])) {
+				$this->logger->error('Google Photo import error: ' . $result['error'], ['app' => $this->appName]);
+			}
 		} else {
 			$ts = (new \Datetime())->getTimestamp();
 			$this->config->setUserValue($userId, Application::APP_ID, 'last_import_timestamp', $ts);

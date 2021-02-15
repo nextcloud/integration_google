@@ -128,6 +128,7 @@ class GoogleDriveAPIService {
 		$this->config->setUserValue($userId, Application::APP_ID, 'importing_drive', '1');
 		$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_files', '0');
 		$this->config->setUserValue($userId, Application::APP_ID, 'last_drive_import_timestamp', '0');
+		$this->config->deleteUserValue($userId, Application::APP_ID, 'directory_progress');
 
 		$this->jobList->add(ImportDriveJob::class, ['user_id' => $userId]);
 		return ['targetPath' => $targetPath];
@@ -148,21 +149,32 @@ class GoogleDriveAPIService {
 		// import batch of files
 		$targetPath = $this->config->getUserValue($userId, Application::APP_ID, 'drive_output_dir', '/Google Drive');
 		$targetPath = $targetPath ?: '/Google Drive';
+		// get progress
+		$directoryProgressStr = $this->config->getUserValue($userId, Application::APP_ID, 'directory_progress', '[]');
+		$directoryProgress = ($directoryProgressStr === '' || $directoryProgressStr === '[]')
+			? []
+			: json_decode($directoryProgressStr, true);
 		// import by batch of 500 Mo
 		$alreadyImported = $this->config->getUserValue($userId, Application::APP_ID, 'nb_imported_files', '0');
 		$alreadyImported = (int) $alreadyImported;
-		$result = $this->importFiles($accessToken, $userId, $targetPath, 500000000, $alreadyImported);
+		$result = $this->importFiles($accessToken, $userId, $targetPath, 500000000, $alreadyImported, $directoryProgress);
 		if (isset($result['error']) || (isset($result['finished']) && $result['finished'])) {
-			$this->config->setUserValue($userId, Application::APP_ID, 'importing_drive', '0');
-			$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_files', '0');
-			$this->config->setUserValue($userId, Application::APP_ID, 'last_drive_import_timestamp', '0');
 			if (isset($result['finished']) && $result['finished']) {
+				$nbImported = (int) $this->config->getUserValue($userId, Application::APP_ID, 'nb_imported_files', '0');
 				$this->googleApiService->sendNCNotification($userId, 'import_drive_finished', [
-					'nbImported' => $result['totalSeen'],
+					'nbImported' => $nbImported,
 					'targetPath' => $targetPath,
 				]);
 			}
+			if (isset($result['error'])) {
+				$this->logger->error('Google Drive import error: ' . $result['error'], ['app' => $this->appName]);
+			}
+			$this->config->setUserValue($userId, Application::APP_ID, 'importing_drive', '0');
+			$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_files', '0');
+			$this->config->setUserValue($userId, Application::APP_ID, 'last_drive_import_timestamp', '0');
+			$this->config->deleteUserValue($userId, Application::APP_ID, 'directory_progress');
 		} else {
+			$this->config->setUserValue($userId, Application::APP_ID, 'directory_progress', json_encode($directoryProgress));
 			$ts = (new \Datetime())->getTimestamp();
 			$this->config->setUserValue($userId, Application::APP_ID, 'last_drive_import_timestamp', $ts);
 			$this->jobList->add(ImportDriveJob::class, ['user_id' => $userId]);
@@ -178,7 +190,7 @@ class GoogleDriveAPIService {
 	 * @return array
 	 */
 	public function importFiles(string $accessToken, string $userId, string $targetPath,
-								?int $maxDownloadSize = null, int $alreadyImported): array {
+								?int $maxDownloadSize = null, int $alreadyImported, array &$directoryProgress): array {
 		$considerSharedFiles = $this->config->getUserValue($userId, Application::APP_ID, 'consider_shared_files', '0') === '1';
 		// create root folder
 		$userFolder = $this->root->getUserFolder($userId);
@@ -192,6 +204,7 @@ class GoogleDriveAPIService {
 		}
 
 		$directoriesById = [];
+		$directoryIdsToExplore = [];
 		$params = [
 			'pageSize' => 1000,
 			'fields' => '*',
@@ -211,9 +224,18 @@ class GoogleDriveAPIService {
 					'name' => preg_replace('/\//', '-slash-', $dir['name']),
 					'parent' => (isset($dir['parents']) && count($dir['parents']) > 0) ? $dir['parents'][0] : null,
 				];
+				// what we should explore
+				if (!array_key_exists($dir['id'], $directoryProgress)) {
+					$directoryIdsToExplore[] = $dir['id'];
+				}
 			}
 			$params['pageToken'] = $result['nextPageToken'] ?? '';
 		} while (isset($result['nextPageToken']));
+
+		// add root if it has not been imported yet
+		if (!array_key_exists('root', $directoryProgress)) {
+			$directoryIdsToExplore[] = 'root';
+		}
 
 		// create directories (recursive powa)
 		if (!$this->createDirsUnder($directoriesById, $folder)) {
@@ -228,55 +250,55 @@ class GoogleDriveAPIService {
 		$nbFilesOnDrive = $info['nbFiles'];
 		$downloadedSize = 0;
 		$nbDownloaded = 0;
-		$totalSeenNumber = 0;
 
-		$params = [
-			'pageSize' => 1000,
-			'fields' => implode(',', [
-				'files/id',
-				'files/name',
-				'files/parents',
-				'files/mimeType',
-				'files/ownedByMe',
-				'files/webContentLink',
-				'files/modifiedTime',
-			]),
-			'q' => "mimeType!='application/vnd.google-apps.folder'",
-		];
-		do {
-			$result = $this->googleApiService->request($accessToken, $userId, 'drive/v3/files', $params);
-			if (isset($result['error'])) {
-				return $result;
-			}
-			foreach ($result['files'] as $fileItem) {
-				// ignore shared files
-				if (!$considerSharedFiles && !$fileItem['ownedByMe']) {
-					continue;
+		foreach ($directoryIdsToExplore as $dirId) {
+			$params = [
+				'pageSize' => 1000,
+				'fields' => implode(',', [
+					'files/id',
+					'files/name',
+					'files/parents',
+					'files/mimeType',
+					'files/ownedByMe',
+					'files/webContentLink',
+					'files/modifiedTime',
+				]),
+				'q' => "mimeType!='application/vnd.google-apps.folder' and '" . $dirId . "' in parents",
+			];
+			do {
+				$result = $this->googleApiService->request($accessToken, $userId, 'drive/v3/files', $params);
+				if (isset($result['error'])) {
+					return $result;
 				}
-				$totalSeenNumber++;
-				$size = $this->getFile($accessToken, $userId, $fileItem, $directoriesById, $folder);
-				if (!is_null($size)) {
-					$nbDownloaded++;
-					$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_files', $alreadyImported + $nbDownloaded);
-					$downloadedSize += $size;
-					if ($maxDownloadSize && $downloadedSize > $maxDownloadSize) {
-						return [
-							'nbDownloaded' => $nbDownloaded,
-							'targetPath' => $targetPath,
-							'finished' => ($totalSeenNumber >= $nbFilesOnDrive),
-							'totalSeen' => $totalSeenNumber,
-						];
+				foreach ($result['files'] as $fileItem) {
+					// ignore shared files
+					if (!$considerSharedFiles && !$fileItem['ownedByMe']) {
+						continue;
+					}
+					$size = $this->getFile($accessToken, $userId, $fileItem, $directoriesById, $folder);
+					if (!is_null($size)) {
+						$nbDownloaded++;
+						$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_files', $alreadyImported + $nbDownloaded);
+						$downloadedSize += $size;
+						if ($maxDownloadSize && $downloadedSize > $maxDownloadSize) {
+							return [
+								'nbDownloaded' => $nbDownloaded,
+								'targetPath' => $targetPath,
+								'finished' => false,
+							];
+						}
 					}
 				}
-			}
-			$params['pageToken'] = $result['nextPageToken'] ?? '';
-		} while (isset($result['nextPageToken']));
+				$params['pageToken'] = $result['nextPageToken'] ?? '';
+			} while (isset($result['nextPageToken']));
+			// this dir was fully imported
+			$directoryProgress[$dirId] = 1;
+		}
 
 		return [
 			'nbDownloaded' => $nbDownloaded,
 			'targetPath' => $targetPath,
 			'finished' => true,
-			'totalSeen' => $totalSeenNumber,
 		];
 	}
 
