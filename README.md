@@ -6,9 +6,7 @@
 
 ### User settings
 
-The account configuration happens in the "Data migration" user settings section.
-
-A link to the "Data migration" user settings section will be displayed in the widget for users who didn't configure a Google account.
+The account configuration and data migration happens in the "Data migration" user settings section.
 
 ### Admin settings
 
