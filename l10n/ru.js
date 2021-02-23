@@ -1,9 +1,14 @@
 OC.L10N.register(
     "integration_google",
     {
+    "Error during OAuth exchanges" : "Ошибка во время обмена данными OAuth",
+    "OAuth access token refused" : "Токен доступа OAuth отклонён",
+    "Bad credentials" : "Неверные учётные данные",
+    "Connected accounts" : "Подключённые учётные записи",
     "Client ID" : "ID клиента",
     "Client secret" : "Клиентский ключ ",
     "Authentication" : "Аутентификация",
+    "Connected as {user}" : "Подключено под именем {user}",
     "Contacts" : "Контакты",
     "{amount} Google contacts" : "Количество контактов: {amount} ",
     "New address book" : "Создать адресную книгу",

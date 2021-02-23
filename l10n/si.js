@@ -10,6 +10,7 @@ OC.L10N.register(
     "Authentication" : "සත්‍යාපනය",
     "Connect to Google" : "ගූගල් වෙත සම්බන්ධ වන්න",
     "Disconnect from Google" : "ගූගල් වෙතින් විසන්ධි කරන්න",
-    "New address book" : "නව ලිපින පොත"
+    "New address book" : "නව ලිපින පොත",
+    "Photos" : "ඡායාරූප"
 },
 "nplurals=2; plural=(n != 1);");
