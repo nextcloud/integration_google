@@ -31,7 +31,7 @@ OC.L10N.register(
     "Google admin options saved" : "已儲存 Google 管理員選項",
     "Failed to save Google admin options" : "儲存 Google 管理員選項失敗",
     "Google data migration" : "Google 數據遷移",
-    "No Google OAuth app configured. Ask your Nextcloud administrator to configure Google connected accounts admin section." : "未配置Google OAuth應用程式。 要求您的Nextcloud管理員配置Google關聯帳戶管理部分。",
+    "No Google OAuth app configured. Ask your Nextcloud administrator to configure Google connected accounts admin section." : "未配置Google OAuth應用程式。 要求您的Nextcloud管理員配置Google關聯賬戶管理部分。",
     "Authentication" : "驗證",
     "Connect to Google" : "連線至 Google",
     "Connected as {user}" : "以 {user} 身份連線",
