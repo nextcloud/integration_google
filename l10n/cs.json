@@ -55,7 +55,7 @@
     "Google documents import format" : "Formát importu Google dokumentů",
     "Import Google Drive files" : "Importovat Google Drive soubory",
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Velikost vašeho Google Drive je větší, než volné místo ({formSpace}), které vám zbývá",
-    "Cancel Google Drive import" : "Zrušit Google Drive import",
+    "Cancel Google Drive import" : "Zrušit import z Google disku",
     "Photo import background process will begin soon." : "Proces importu Google fotek brzy na pozadí začne.",
     "Last photo import job at {date}" : "Minulá úloha importu fotek v {date}",
     "You can close this page. You will be notified when it finishes." : "Tuto stránku můžete zavřít. Až bude dokončeno, budete upozorněni.",
