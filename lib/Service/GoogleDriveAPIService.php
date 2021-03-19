@@ -365,15 +365,9 @@ class GoogleDriveAPIService {
 					return null;
 				}
 				try {
-					try {
-						$resource = $savedFile->fopen('w');
-					} catch (LockedException $e) {
-						$savedFile->unlock(\OCP\Lock\ILockingProvider::LOCK_SHARED);
-						$savedFile->unlock(\OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE);
-						$resource = $savedFile->fopen('w');
-					}
+					$resource = $savedFile->fopen('w');
 				} catch (LockedException $e) {
-					$this->logger->warning('Google Drive error downloading file ' . $fileItem['name'] . ' : Impossible to unlock file', ['app' => $this->appName]);
+					$this->logger->warning('Google Drive error opening target file ' . $savedFile->getPath() . ' : file is locked', ['app' => $this->appName]);
 					return null;
 				}
 				$res = $this->googleApiService->simpleDownload($accessToken, $userId, $fileUrl, $resource);
@@ -442,15 +436,9 @@ class GoogleDriveAPIService {
 					return null;
 				}
 				try {
-					try {
-						$resource = $savedFile->fopen('w');
-					} catch (LockedException $e) {
-						$savedFile->unlock(\OCP\Lock\ILockingProvider::LOCK_SHARED);
-						$savedFile->unlock(\OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE);
-						$resource = $savedFile->fopen('w');
-					}
+					$resource = $savedFile->fopen('w');
 				} catch (LockedException $e) {
-					$this->logger->warning('Google Drive error downloading file ' . $fileItem['name'] . ' : Impossible to unlock file', ['app' => $this->appName]);
+					$this->logger->warning('Google Drive error opening target file ' . $savedFile->getPath() . ' : file is locked', ['app' => $this->appName]);
 					return null;
 				}
 				$res = $this->googleApiService->simpleDownload($accessToken, $userId, $fileUrl, $resource, $params);

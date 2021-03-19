@@ -368,15 +368,9 @@ class GooglePhotosAPIService {
 			}
 			$savedFile = $albumFolder->newFile($photoName);
 			try {
-				try {
-					$resource = $savedFile->fopen('w');
-				} catch (LockedException $e) {
-					$savedFile->unlock(\OCP\Lock\ILockingProvider::LOCK_SHARED);
-					$savedFile->unlock(\OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE);
-					$resource = $savedFile->fopen('w');
-				}
+				$resource = $savedFile->fopen('w');
 			} catch (LockedException $e) {
-				$this->logger->warning('Google API error downloading photo ' . $photoName . ' : Impossible to unlock file', ['app' => $this->appName]);
+				$this->logger->warning('Google Photo, error opening target file ' . $savedFile->getPath() . ' : file is locked', ['app' => $this->appName]);
 				return null;
 			}
 			$res = $this->googleApiService->simpleDownload($accessToken, $userId, $photoUrl, $resource);
