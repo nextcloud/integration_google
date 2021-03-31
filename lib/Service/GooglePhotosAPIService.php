@@ -145,9 +145,11 @@ class GooglePhotosAPIService {
 	public function importPhotosJob(string $userId): void {
 		$this->logger->info('Importing photos for ' . $userId);
 		$importingPhotos = $this->config->getUserValue($userId, Application::APP_ID, 'importing_photos', '0') === '1';
-		if (!$importingPhotos) {
+		$jobRunning = $this->config->getUserValue($userId, Application::APP_ID, 'photo_import_running', '0') === '1';
+		if (!$importingPhotos || $jobRunning) {
 			return;
 		}
+		$this->config->setUserValue($userId, Application::APP_ID, 'photo_import_running', '1');
 
 		$accessToken = $this->config->getUserValue($userId, Application::APP_ID, 'token', '');
 		$targetPath = $this->config->getUserValue($userId, Application::APP_ID, 'photo_output_dir', '/Google Photos');
@@ -174,6 +176,7 @@ class GooglePhotosAPIService {
 			$this->config->setUserValue($userId, Application::APP_ID, 'last_import_timestamp', $ts);
 			$this->jobList->add(ImportPhotosJob::class, ['user_id' => $userId]);
 		}
+		$this->config->setUserValue($userId, Application::APP_ID, 'photo_import_running', '0');
 	}
 
 	/**

@@ -141,9 +141,11 @@ class GoogleDriveAPIService {
 	public function importDriveJob(string $userId): void {
 		$this->logger->info('Importing drive files for ' . $userId);
 		$importingDrive = $this->config->getUserValue($userId, Application::APP_ID, 'importing_drive', '0') === '1';
-		if (!$importingDrive) {
+		$jobRunning = $this->config->getUserValue($userId, Application::APP_ID, 'drive_import_running', '0') === '1';
+		if (!$importingDrive || $jobRunning) {
 			return;
 		}
+		$this->config->setUserValue($userId, Application::APP_ID, 'drive_import_running', '1');
 
 		$accessToken = $this->config->getUserValue($userId, Application::APP_ID, 'token', '');
 		// import batch of files
@@ -179,6 +181,7 @@ class GoogleDriveAPIService {
 			$this->config->setUserValue($userId, Application::APP_ID, 'last_drive_import_timestamp', $ts);
 			$this->jobList->add(ImportDriveJob::class, ['user_id' => $userId]);
 		}
+		$this->config->setUserValue($userId, Application::APP_ID, 'drive_import_running', '0');
 	}
 
 	/**
