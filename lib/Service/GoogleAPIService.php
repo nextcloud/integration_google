@@ -362,7 +362,7 @@ class GoogleAPIService {
 					$accessToken = $result['access_token'];
 					$this->config->setUserValue($userId, Application::APP_ID, 'token', $accessToken);
 					return $this->simpleDownload(
-						$accessToken, $userId, $url, $tmpFilePath, $params, $method
+						$accessToken, $userId, $url, $resource, $params, $method
 					);
 				}
 			}
