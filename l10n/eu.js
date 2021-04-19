@@ -44,6 +44,7 @@ OC.L10N.register(
     "Calendars" : "Egutegiak",
     "Import calendar" : "Inportatu egutegia",
     "Photos" : "Argazkiak",
+    "Import directory" : "Inportatu direktorioa",
     "Import Google photos" : "Inportatu Google argazkiak",
     "Your Google photo collection size is estimated to be bigger than your remaining space left ({formSpace})" : "Badirudi zure Google argazki bildumaren tamaina handiagoa dela daukazun leku librea baino ({formSpace})",
     "Cancel photo import" : "Ezeztatu argazkien inportatzea",
