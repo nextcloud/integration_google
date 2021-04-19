@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## 1.0.1 – 2021-04-19
+### Changed
+- bump js libs
+
+### Fixed
+- concurrent import jobs
+[#51](https://github.com/nextcloud/integration_google/issues/51) @seanodea
+
 ## 1.0.0 – 2021-03-19
 ### Changed
 - bump js libs
