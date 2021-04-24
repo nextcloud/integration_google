@@ -10,6 +10,7 @@ OC.L10N.register(
     "OAuth access token refused" : "OAuth sarbide tokena ukatua izan da",
     "Bad credentials" : "Kredentzial okerrak",
     "Google Calendar import" : "Google Calendar inportatzea",
+    "Private event" : "Gertaera pribatua",
     "Connected accounts" : "Konektatutako kontuak",
     "Data migration" : "Datu migrazioa",
     "Google integration" : "Google integrazioa",
