@@ -16,7 +16,7 @@ OC.L10N.register(
     "Google integration" : "Združevalnik Google",
     "Import Google data into Nextcloud" : "Uvažanje podatkov Google v oblak Nextcloud",
     "Google integration allows you to automatically import your Google calendars, contacts, photos and files into Nextcloud." : "Podpora za Google omogoča samodejno uvažanje koledarjev, stikov, slik in datotek v okolje Nextcloud.",
-    "If you want to allow your Nextcloud users to authenticate to Google, create an OAuth application in your Google settings." : "Za overitev okolja Google znotraj Nextcloud je treba  ustvariti program OAuth med nastavitvami Google.",
+    "If you want to allow your Nextcloud users to authenticate to Google, create an OAuth application in your Google settings." : "Za overitev okolja Google znotraj Nextcloud je treba ustvariti program OAuth med nastavitvami Google.",
     "Google API settings" : "Nastavitve vmesnika Google API",
     "Make sure you set one \"Authorized redirect URI\" to" : "Poskrbite, da bo »preusmeritveni naslov URI« nastavljen na",
     "Put the \"Client ID\" and \"Client secret\" below." : "Spodaj vpišite »ID programa« in »Geslo programa«.",
