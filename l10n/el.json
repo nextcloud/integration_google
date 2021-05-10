@@ -45,7 +45,6 @@
     "Import calendar" : "Εισαγωγή ημερολογίου",
     "Photos" : "Φωτογραφίες",
     "Ignore shared albums" : "Παράβλεψη κοινόχρηστων άλμπουμ",
-    "Warning, Google does not provide location data in imported photos." : "Προειδοποίηση, η Google δεν παρέχει δεδομένα τοποθεσίας σε εισαγόμενες φωτογραφίες.",
     "Import directory" : "Εισαγωγή καταλόγου",
     "Import Google photos" : "Εισαγωγή φωτογραφιών Google",
     "Your Google photo collection size is estimated to be bigger than your remaining space left ({formSpace})" : "Το μέγεθος της συλλογής φωτογραφιών σας Google εκτιμάται ότι είναι μεγαλύτερο από τον εναπομένοντα χώρο σας ({formSpace})",

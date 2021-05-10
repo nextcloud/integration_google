@@ -45,7 +45,6 @@
     "Import calendar" : "Importuj kalendarz",
     "Photos" : "Zdjęcia",
     "Ignore shared albums" : "Ignoruj udostępnione albumy",
-    "Warning, Google does not provide location data in imported photos." : "Ostrzeżenie: Google nie dostarcza danych o lokalizacji w importowanych zdjęciach.",
     "Import directory" : "Importuj katalog",
     "Import Google photos" : "Importuj zdjęcia Google",
     "Your Google photo collection size is estimated to be bigger than your remaining space left ({formSpace})" : "Szacuje się, że rozmiar Twojej kolekcji zdjęć Google jest większy niż pozostałe wolne miejsce ({formSpace})",

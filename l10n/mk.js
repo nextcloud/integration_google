@@ -47,7 +47,6 @@ OC.L10N.register(
     "Import calendar" : "Увези календар",
     "Photos" : "Фотографии",
     "Ignore shared albums" : "Игнорирај ги споделените албуми",
-    "Warning, Google does not provide location data in imported photos." : "Предупредување, Google не обезбедува податоци за локација на увезени фотографии.",
     "Import directory" : "Увези папка",
     "Import Google photos" : "Увези ги Google фотографиите",
     "Your Google photo collection size is estimated to be bigger than your remaining space left ({formSpace})" : "Вашите Google фотографии се поголеми одколку што имате слободно место  ({formSpace})",

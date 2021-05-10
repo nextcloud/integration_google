@@ -45,7 +45,6 @@
     "Import calendar" : "匯入日曆",
     "Photos" : "Photos",
     "Ignore shared albums" : "略過共享的相薄",
-    "Warning, Google does not provide location data in imported photos." : "警告，Google不會在匯入的照片中提供位置數據。",
     "Import directory" : "匯入資料夾",
     "Import Google photos" : "匯入 Google Photos",
     "Your Google photo collection size is estimated to be bigger than your remaining space left ({formSpace})" : "您Google照片集的大小估計大於剩餘空間（{formSpace}）",

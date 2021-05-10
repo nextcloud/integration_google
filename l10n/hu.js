@@ -47,7 +47,6 @@ OC.L10N.register(
     "Import calendar" : "Naptár importálása",
     "Photos" : "Fényképek",
     "Ignore shared albums" : "A megosztott albumok mellőzése",
-    "Warning, Google does not provide location data in imported photos." : "Figyelem! A Google nem ad meg helyadatokat az importált fényképeken.",
     "Import directory" : "Mappa importálása",
     "Import Google photos" : "A Google Photos importálása a Nextcloudba",
     "Your Google photo collection size is estimated to be bigger than your remaining space left ({formSpace})" : "Becslése szerint Google fotógyűjteményének mérete nagyobb, mint a fenmaradó szabad hely: ({formSpace})",
