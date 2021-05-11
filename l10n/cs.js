@@ -47,6 +47,7 @@ OC.L10N.register(
     "Import calendar" : "Importovat kalendář",
     "Photos" : "Fotky",
     "Ignore shared albums" : "Ignorovat sdílená alba",
+    "Warning: Google does not provide location data in imported photos." : "Varování: Google v importovaných fotkách neposkytuje údaje o poloze.",
     "Import directory" : "Importovat adresář",
     "Import Google photos" : "Importovat Google fotky",
     "Your Google photo collection size is estimated to be bigger than your remaining space left ({formSpace})" : "Velikost sbírky Google fotek se zdá vyšší, než aktuálně dostupné volné místo ({formSpace})",
