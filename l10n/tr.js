@@ -47,6 +47,7 @@ OC.L10N.register(
     "Import calendar" : "Takvimi içe aktar",
     "Photos" : "Fotoğraflar",
     "Ignore shared albums" : "Paylaşılmış albümler yok sayılsın",
+    "Warning: Google does not provide location data in imported photos." : "Uyarı: Google içe aktarılan fotoğraflar için konum bilgisini vermiyor.",
     "Import directory" : "İçe klasör aktar",
     "Import Google photos" : "Google fotoğraflarını içe aktar",
     "Your Google photo collection size is estimated to be bigger than your remaining space left ({formSpace})" : "Google fotoğraf albümünüzün boyutu kalan boş alanınızdan daha büyük gibi görünüyor ({formSpace})",
