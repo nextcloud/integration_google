@@ -45,6 +45,7 @@
     "Import calendar" : "Inportatu egutegia",
     "Photos" : "Argazkiak",
     "Ignore shared albums" : "Baztertu partekatako albumak",
+    "Warning: Google does not provide location data in imported photos." : "Kontuz: Google-k ez ditu kokapen datuak ematen inportatutako argazkietan.",
     "Import directory" : "Inportatu direktorioa",
     "Import Google photos" : "Inportatu Google argazkiak",
     "Your Google photo collection size is estimated to be bigger than your remaining space left ({formSpace})" : "Badirudi zure Google argazki bildumaren tamaina handiagoa dela daukazun leku librea baino ({formSpace})",
