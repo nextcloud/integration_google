@@ -42,7 +42,7 @@ OC.L10N.register(
     "Choose where to import the contacts" : "選擇匯入聯絡人的通訊錄",
     "New address book" : "新通訊錄",
     "address book name" : "通訊錄名稱",
-    "Import in {name} address book" : "匯入 {name} 通訊錄",
+    "Import in {name} address book" : "導入 {name} 通訊錄",
     "Calendars" : "日曆",
     "Import calendar" : "匯入日曆",
     "Photos" : "Photos",
