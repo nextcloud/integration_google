@@ -11,20 +11,41 @@
 
 namespace OCA\Google\Service;
 
+use Datetime;
+use DateTimeZone;
+use Exception;
+use Generator;
 use OCP\IL10N;
 use OCA\DAV\CalDAV\CalDavBackend;
 use Sabre\DAV\Exception\BadRequest;
 use Psr\Log\LoggerInterface;
 
-use OCA\Google\AppInfo\Application;
-
 require_once __DIR__ . '/../../vendor/autoload.php';
 use Ortic\ColorConverter\Color;
 use Ortic\ColorConverter\Colors\Named;
+use Throwable;
 
 class GoogleCalendarAPIService {
-
+	/**
+	 * @var string
+	 */
+	private $appName;
+	/**
+	 * @var LoggerInterface
+	 */
+	private $logger;
+	/**
+	 * @var IL10N
+	 */
 	private $l10n;
+	/**
+	 * @var CalDavBackend
+	 */
+	private $caldavBackend;
+	/**
+	 * @var GoogleAPIService
+	 */
+	private $googleApiService;
 
 	/**
 	 * Service to make requests to Google v3 (JSON) API
@@ -35,8 +56,8 @@ class GoogleCalendarAPIService {
 								CalDavBackend $caldavBackend,
 								GoogleAPIService $googleApiService) {
 		$this->appName = $appName;
-		$this->l10n = $l10n;
 		$this->logger = $logger;
+		$this->l10n = $l10n;
 		$this->caldavBackend = $caldavBackend;
 		$this->googleApiService = $googleApiService;
 	}
@@ -47,7 +68,6 @@ class GoogleCalendarAPIService {
 	 * @return array
 	 */
 	public function getCalendarList(string $accessToken, string $userId): array {
-		$params = [];
 		$result = $this->googleApiService->request($accessToken, $userId, 'calendar/v3/users/me/calendarList');
 		if (isset($result['error']) || !isset($result['items'])) {
 			return $result;
@@ -142,7 +162,7 @@ class GoogleCalendarAPIService {
 		}
 
 		date_default_timezone_set('UTC');
-		$utcTimezone = new \DateTimeZone('-0000');
+		$utcTimezone = new DateTimeZone('-0000');
 		$events = $this->getCalendarEvents($accessToken, $userId, $calId);
 		$nbAdded = 0;
 		foreach ($events as $e) {
@@ -172,13 +192,13 @@ class GoogleCalendarAPIService {
 			$calData .= isset($e['status']) ? ('STATUS:' . strtoupper(str_replace("\n", '\n', $e['status'])) . "\n") : '';
 
 			if (isset($e['created'])) {
-				$created = new \Datetime($e['created']);
+				$created = new Datetime($e['created']);
 				$created->setTimezone($utcTimezone);
 				$calData .= 'CREATED:' . $created->format('Ymd\THis\Z') . "\n";
 			}
 
 			if (isset($e['updated'])) {
-				$updated = new \Datetime($e['updated']);
+				$updated = new Datetime($e['updated']);
 				$updated->setTimezone($utcTimezone);
 				$calData .= 'LAST-MODIFIED:' . $updated->format('Ymd\THis\Z') . "\n";
 			}
@@ -220,15 +240,15 @@ class GoogleCalendarAPIService {
 
 			if (isset($e['start'], $e['start']['date'], $e['end'], $e['end']['date'])) {
 				// whole days
-				$start = new \Datetime($e['start']['date']);
+				$start = new Datetime($e['start']['date']);
 				$calData .= 'DTSTART;VALUE=DATE:' . $start->format('Ymd') . "\n";
-				$end = new \Datetime($e['end']['date']);
+				$end = new Datetime($e['end']['date']);
 				$calData .= 'DTEND;VALUE=DATE:' . $end->format('Ymd') . "\n";
 			} elseif (isset($e['start']['dateTime']) && isset($e['end']['dateTime'])) {
-				$start = new \Datetime($e['start']['dateTime']);
+				$start = new Datetime($e['start']['dateTime']);
 				$start->setTimezone($utcTimezone);
 				$calData .= 'DTSTART;VALUE=DATE-TIME:' . $start->format('Ymd\THis\Z') . "\n";
-				$end = new \Datetime($e['end']['dateTime']);
+				$end = new Datetime($e['end']['dateTime']);
 				$end->setTimezone($utcTimezone);
 				$calData .= 'DTEND;VALUE=DATE-TIME:' . $end->format('Ymd\THis\Z') . "\n";
 			} else {
@@ -249,7 +269,7 @@ class GoogleCalendarAPIService {
 				} else {
 					$this->logger->warning('Error when creating calendar event "' . ($e['summary'] ?? 'no title') . '" ' . $ex->getMessage(), ['app' => $this->appName]);
 				}
-			} catch (\Exception | \Throwable $ex) {
+			} catch (Exception | Throwable $ex) {
 				$this->logger->warning('Error when creating calendar event "' . ($e['summary'] ?? 'no title') . '" ' . $ex->getMessage(), ['app' => $this->appName]);
 			}
 		}
@@ -268,9 +288,9 @@ class GoogleCalendarAPIService {
 	 * @param string $accessToken
 	 * @param string $userId
 	 * @param string $calId
-	 * @return \Generator
+	 * @return Generator
 	 */
-	private function getCalendarEvents(string $accessToken, string $userId, string $calId): \Generator {
+	private function getCalendarEvents(string $accessToken, string $userId, string $calId): Generator {
 		$params = [
 			'maxResults' => 100,
 		];

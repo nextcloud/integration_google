@@ -18,8 +18,10 @@ use OCP\AppFramework\Utility\ITimeFactory;
 use OCA\Google\Service\GooglePhotosAPIService;
 
 class ImportPhotosJob extends QueuedJob {
-
-	private $jobList;
+	/**
+	 * @var GooglePhotosAPIService
+	 */
+	private $service;
 
 	/**
 	 * A QueuedJob to partially import google photos and launch following job

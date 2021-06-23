@@ -11,7 +11,8 @@
 
 namespace OCA\Google\Service;
 
-use OCP\IL10N;
+use Datetime;
+use OCP\Files\Folder;
 use OCP\IConfig;
 use OCP\Files\IRootFolder;
 use OCP\Files\FileInfo;
@@ -24,26 +25,45 @@ use OCA\Google\AppInfo\Application;
 use OCA\Google\BackgroundJob\ImportPhotosJob;
 
 class GooglePhotosAPIService {
-
-	private $l10n;
+	/**
+	 * @var string
+	 */
+	private $appName;
+	/**
+	 * @var LoggerInterface
+	 */
 	private $logger;
+	/**
+	 * @var IConfig
+	 */
+	private $config;
+	/**
+	 * @var IRootFolder
+	 */
+	private $root;
+	/**
+	 * @var IJobList
+	 */
+	private $jobList;
+	/**
+	 * @var GoogleAPIService
+	 */
+	private $googleApiService;
 
 	/**
 	 * Service to make requests to Google v3 (JSON) API
 	 */
 	public function __construct (string $appName,
 								LoggerInterface $logger,
-								IL10N $l10n,
 								IConfig $config,
 								IRootFolder $root,
 								IJobList $jobList,
 								GoogleAPIService $googleApiService) {
 		$this->appName = $appName;
-		$this->l10n = $l10n;
-		$this->config = $config;
 		$this->logger = $logger;
-		$this->jobList = $jobList;
+		$this->config = $config;
 		$this->root = $root;
+		$this->jobList = $jobList;
 		$this->googleApiService = $googleApiService;
 	}
 
@@ -83,7 +103,6 @@ class GooglePhotosAPIService {
 		// shared albums
 		$considerSharedAlbums = $this->config->getUserValue($userId, Application::APP_ID, 'consider_shared_albums', '0') === '1';
 		if ($considerSharedAlbums) {
-			$sharedAlbums = [];
 			$params = [
 				'pageSize' => 50,
 			];
@@ -112,18 +131,16 @@ class GooglePhotosAPIService {
 	}
 
 	/**
-	 * @param string $accessToken
 	 * @param string $userId
-	 * @param string $targetPath
 	 * @return array
 	 */
-	public function startImportPhotos(string $accessToken, string $userId): array {
+	public function startImportPhotos(string $userId): array {
 		$targetPath = $this->config->getUserValue($userId, Application::APP_ID, 'photo_output_dir', '/Google Photos');
 		$targetPath = $targetPath ?: '/Google Photos';
 		// create root folder
 		$userFolder = $this->root->getUserFolder($userId);
 		if (!$userFolder->nodeExists($targetPath)) {
-			$folder = $userFolder->newFolder($targetPath);
+			$userFolder->newFolder($targetPath);
 		} else {
 			$folder = $userFolder->get($targetPath);
 			if ($folder->getType() !== FileInfo::TYPE_FOLDER) {
@@ -140,7 +157,7 @@ class GooglePhotosAPIService {
 
 	/**
 	 * @param string $userId
-	 * @return array
+	 * @return void
 	 */
 	public function importPhotosJob(string $userId): void {
 		$this->logger->info('Importing photos for ' . $userId);
@@ -151,7 +168,7 @@ class GooglePhotosAPIService {
 		}
 		$this->config->setUserValue($userId, Application::APP_ID, 'photo_import_running', '1');
 
-		$accessToken = $this->config->getUserValue($userId, Application::APP_ID, 'token', '');
+		$accessToken = $this->config->getUserValue($userId, Application::APP_ID, 'token');
 		$targetPath = $this->config->getUserValue($userId, Application::APP_ID, 'photo_output_dir', '/Google Photos');
 		$targetPath = $targetPath ?: '/Google Photos';
 		// import photos by batch of 500 Mo
@@ -172,7 +189,7 @@ class GooglePhotosAPIService {
 				$this->logger->error('Google Photo import error: ' . $result['error'], ['app' => $this->appName]);
 			}
 		} else {
-			$ts = (new \Datetime())->getTimestamp();
+			$ts = (new Datetime())->getTimestamp();
 			$this->config->setUserValue($userId, Application::APP_ID, 'last_import_timestamp', $ts);
 			$this->jobList->add(ImportPhotosJob::class, ['user_id' => $userId]);
 		}
@@ -188,7 +205,7 @@ class GooglePhotosAPIService {
 	 * @return array
 	 */
 	public function importPhotos(string $accessToken, string $userId, string $targetPath,
-								?int $maxDownloadSize = null, int $alreadyImported): array {
+								?int $maxDownloadSize = null, int $alreadyImported = 0): array {
 		// create root folder
 		$userFolder = $this->root->getUserFolder($userId);
 		if (!$userFolder->nodeExists($targetPath)) {
@@ -353,10 +370,13 @@ class GooglePhotosAPIService {
 	 * @param string $accessToken
 	 * @param string $userId
 	 * @param array $photo
-	 * @param Node $albumFolder
+	 * @param Folder $albumFolder
 	 * @return ?int downloaded size, null if already existing
+	 * @throws \OCP\Files\InvalidPathException
+	 * @throws \OCP\Files\NotFoundException
+	 * @throws \OCP\Files\NotPermittedException
 	 */
-	private function getPhoto(string $accessToken, string $userId, array $photo, Node $albumFolder): ?int {
+	private function getPhoto(string $accessToken, string $userId, array $photo, Folder $albumFolder): ?int {
 		$photoName = $photo['filename'];
 		if (!$albumFolder->nodeExists($photoName)) {
 			if (isset($photo['mediaMetadata']['photo'])) {
@@ -382,7 +402,7 @@ class GooglePhotosAPIService {
 					fclose($resource);
 				}
 				if (isset($photo['mediaMetadata']['creationTime'])) {
-					$d = new \Datetime($photo['mediaMetadata']['creationTime']);
+					$d = new Datetime($photo['mediaMetadata']['creationTime']);
 					$ts = $d->getTimestamp();
 					$savedFile->touch($ts);
 				} else {

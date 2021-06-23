@@ -18,8 +18,10 @@ use OCP\AppFramework\Utility\ITimeFactory;
 use OCA\Google\Service\GoogleDriveAPIService;
 
 class ImportDriveJob extends QueuedJob {
-
-	private $jobList;
+	/**
+	 * @var GoogleDriveAPIService
+	 */
+	private $service;
 
 	/**
 	 * A QueuedJob to partially import google drive files and launch following job

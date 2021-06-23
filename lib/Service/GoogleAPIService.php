@@ -11,6 +11,8 @@
 
 namespace OCA\Google\Service;
 
+use DateTime;
+use Exception;
 use OCP\IL10N;
 use OCP\IConfig;
 use OCP\Http\Client\IClientService;
@@ -21,11 +23,33 @@ use Psr\Log\LoggerInterface;
 use OCP\Notification\IManager as INotificationManager;
 
 use OCA\Google\AppInfo\Application;
+use Throwable;
 
 class GoogleAPIService {
-
-	private $l10n;
+	/**
+	 * @var string
+	 */
+	private $appName;
+	/**
+	 * @var LoggerInterface
+	 */
 	private $logger;
+	/**
+	 * @var IL10N
+	 */
+	private $l10n;
+	/**
+	 * @var IConfig
+	 */
+	private $config;
+	/**
+	 * @var INotificationManager
+	 */
+	private $notificationManager;
+	/**
+	 * @var \OCP\Http\Client\IClient
+	 */
+	private $client;
 
 	/**
 	 * Service to make requests to Google v3 (JSON) API
@@ -37,18 +61,17 @@ class GoogleAPIService {
 								INotificationManager $notificationManager,
 								IClientService $clientService) {
 		$this->appName = $appName;
+		$this->logger = $logger;
 		$this->l10n = $l10n;
 		$this->config = $config;
-		$this->logger = $logger;
 		$this->notificationManager = $notificationManager;
-		$this->clientService = $clientService;
 		$this->client = $clientService->newClient();
 	}
 
 	/**
 	 * @param string $userId
 	 * @param string $subject
-	 * @param string $params
+	 * @param array $params
 	 * @return void
 	 */
 	public function sendNCNotification(string $userId, string $subject, array $params): void {
@@ -57,7 +80,7 @@ class GoogleAPIService {
 
 		$notification->setApp(Application::APP_ID)
 			->setUser($userId)
-			->setDateTime(new \DateTime())
+			->setDateTime(new DateTime())
 			->setObject('dum', 'dum')
 			->setSubject($subject, $params);
 
@@ -77,7 +100,7 @@ class GoogleAPIService {
 	public function request(string $accessToken, string $userId,
 							string $endPoint, array $params = [], string $method = 'GET', ?string $baseUrl = null): array {
 		try {
-			$url = $baseUrl ? $baseUrl : 'https://www.googleapis.com/';
+			$url = $baseUrl ?: 'https://www.googleapis.com/';
 			$url = $url . $endPoint;
 			$options = [
 				'timeout' => 0,
@@ -110,6 +133,8 @@ class GoogleAPIService {
 				$response = $this->client->put($url, $options);
 			} else if ($method === 'DELETE') {
 				$response = $this->client->delete($url, $options);
+			} else {
+				return ['error' => 'Bad HTTP method'];
 			}
 			$body = $response->getBody();
 			$respCode = $response->getStatusCode();
@@ -139,9 +164,9 @@ class GoogleAPIService {
 			// try to refresh the token if it's invalid
 			if ($response->getStatusCode() === 401) {
 				$this->logger->info('Trying to REFRESH the access token', ['app' => $this->appName]);
-				$refreshToken = $this->config->getUserValue($userId, Application::APP_ID, 'refresh_token', '');
-				$clientID = $this->config->getAppValue(Application::APP_ID, 'client_id', '');
-				$clientSecret = $this->config->getAppValue(Application::APP_ID, 'client_secret', '');
+				$refreshToken = $this->config->getUserValue($userId, Application::APP_ID, 'refresh_token');
+				$clientID = $this->config->getAppValue(Application::APP_ID, 'client_id');
+				$clientSecret = $this->config->getAppValue(Application::APP_ID, 'client_secret');
 				$result = $this->requestOAuthAccessToken([
 					'client_id' => $clientID,
 					'client_secret' => $clientSecret,
@@ -207,6 +232,8 @@ class GoogleAPIService {
 				$response = $this->client->put($url, $options);
 			} else if ($method === 'DELETE') {
 				$response = $this->client->delete($url, $options);
+			} else {
+				return ['error' => 'Bad HTTP method'];
 			}
 			$body = $response->getBody();
 			$respCode = $response->getStatusCode();
@@ -216,7 +243,7 @@ class GoogleAPIService {
 			} else {
 				return json_decode($body, true);
 			}
-		} catch (\Exception $e) {
+		} catch (Exception $e) {
 			$this->logger->warning('Google OAuth error : '.$e->getMessage(), ['app' => $this->appName]);
 			return ['error' => $e->getMessage()];
 		}
@@ -258,6 +285,8 @@ class GoogleAPIService {
 				$response = $this->client->put($url, $options);
 			} else if ($method === 'DELETE') {
 				$response = $this->client->delete($url, $options);
+			} else {
+				return ['error' => 'Bad HTTP method'];
 			}
 			$body = $response->getBody();
 			$respCode = $response->getStatusCode();
@@ -272,9 +301,9 @@ class GoogleAPIService {
 			if ($response->getStatusCode() === 401) {
 				// refresh the token if it's invalid and we are using oauth
 				$this->logger->info('Trying to REFRESH the access token', ['app' => $this->appName]);
-				$refreshToken = $this->config->getUserValue($userId, Application::APP_ID, 'refresh_token', '');
-				$clientID = $this->config->getAppValue(Application::APP_ID, 'client_id', '');
-				$clientSecret = $this->config->getAppValue(Application::APP_ID, 'client_secret', '');
+				$refreshToken = $this->config->getUserValue($userId, Application::APP_ID, 'refresh_token');
+				$clientID = $this->config->getAppValue(Application::APP_ID, 'client_id');
+				$clientSecret = $this->config->getAppValue(Application::APP_ID, 'client_secret');
 				$result = $this->requestOAuthAccessToken([
 					'client_id' => $clientID,
 					'client_secret' => $clientSecret,
@@ -335,6 +364,8 @@ class GoogleAPIService {
 				$response = $this->client->put($url, $options);
 			} else if ($method === 'DELETE') {
 				$response = $this->client->delete($url, $options);
+			} else {
+				return ['error' => 'Bad HTTP method'];
 			}
 			//$body = $response->getBody();
 			$respCode = $response->getStatusCode();
@@ -349,9 +380,9 @@ class GoogleAPIService {
 			if ($response->getStatusCode() === 401) {
 				// refresh the token if it's invalid and we are using oauth
 				$this->logger->info('Trying to REFRESH the access token', ['app' => $this->appName]);
-				$refreshToken = $this->config->getUserValue($userId, Application::APP_ID, 'refresh_token', '');
-				$clientID = $this->config->getAppValue(Application::APP_ID, 'client_id', '');
-				$clientSecret = $this->config->getAppValue(Application::APP_ID, 'client_secret', '');
+				$refreshToken = $this->config->getUserValue($userId, Application::APP_ID, 'refresh_token');
+				$clientID = $this->config->getAppValue(Application::APP_ID, 'client_id');
+				$clientSecret = $this->config->getAppValue(Application::APP_ID, 'client_secret');
 				$result = $this->requestOAuthAccessToken([
 					'client_id' => $clientID,
 					'client_secret' => $clientSecret,
@@ -371,7 +402,7 @@ class GoogleAPIService {
 		} catch (ConnectException $e) {
 			$this->logger->error('Google API request connection error: ' . $e->getMessage(), ['app' => $this->appName]);
 			return ['error' => 'Connection error: ' . $e->getMessage()];
-		} catch (\Throwable | \Exception $e) {
+		} catch (Throwable | Exception $e) {
 			return ['error' => 'Unknown error: ' . $e->getMessage()];
 		}
 	}

@@ -9,11 +9,7 @@
 
 namespace OCA\Google\AppInfo;
 
-use OCP\IContainer;
-use OCP\IUser;
-
 use OCP\AppFramework\App;
-use OCP\AppFramework\IAppContainer;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
@@ -39,7 +35,7 @@ class Application extends App implements IBootstrap {
         parent::__construct(self::APP_ID, $urlParams);
 
         $container = $this->getContainer();
-        $manager = $container->query(INotificationManager::class);
+        $manager = $container->get(INotificationManager::class);
         $manager->registerNotifierService(Notifier::class);
     }
 

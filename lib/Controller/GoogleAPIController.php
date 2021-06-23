@@ -11,21 +11,7 @@
 
 namespace OCA\Google\Controller;
 
-use OCP\App\IAppManager;
-use OCP\Files\IAppData;
-use OCP\AppFramework\Http\DataDisplayResponse;
-
-use OCP\IURLGenerator;
 use OCP\IConfig;
-use OCP\IServerContainer;
-use OCP\IL10N;
-
-use OCP\AppFramework\Http;
-use OCP\AppFramework\Http\RedirectResponse;
-
-use OCP\AppFramework\Http\ContentSecurityPolicy;
-
-use Psr\Log\LoggerInterface;
 use OCP\IRequest;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Controller;
@@ -38,38 +24,51 @@ use OCA\Google\AppInfo\Application;
 
 class GoogleAPIController extends Controller {
 
-
-	private $userId;
+	/**
+	 * @var IConfig
+	 */
 	private $config;
-	private $dbconnection;
-	private $dbtype;
+	/**
+	 * @var GooglePhotosAPIService
+	 */
+	private $googlePhotosAPIService;
+	/**
+	 * @var GoogleContactsAPIService
+	 */
+	private $googleContactsAPIService;
+	/**
+	 * @var GoogleDriveAPIService
+	 */
+	private $googleDriveAPIService;
+	/**
+	 * @var GoogleCalendarAPIService
+	 */
+	private $googleCalendarAPIService;
+	/**
+	 * @var string|null
+	 */
+	private $userId;
+	/**
+	 * @var string
+	 */
+	private $accessToken;
 
-	public function __construct($AppName,
+	public function __construct(string $appName,
 								IRequest $request,
-								IServerContainer $serverContainer,
 								IConfig $config,
-								IL10N $l10n,
-								IAppManager $appManager,
-								IAppData $appData,
-								LoggerInterface $logger,
 								GooglePhotosAPIService $googlePhotosAPIService,
 								GoogleContactsAPIService $googleContactsAPIService,
 								GoogleDriveAPIService $googleDriveAPIService,
 								GoogleCalendarAPIService $googleCalendarAPIService,
-								$userId) {
-		parent::__construct($AppName, $request);
-		$this->userId = $userId;
-		$this->AppName = $AppName;
-		$this->l10n = $l10n;
-		$this->appData = $appData;
-		$this->serverContainer = $serverContainer;
+								?string $userId) {
+		parent::__construct($appName, $request);
 		$this->config = $config;
-		$this->logger = $logger;
 		$this->googlePhotosAPIService = $googlePhotosAPIService;
 		$this->googleContactsAPIService = $googleContactsAPIService;
 		$this->googleDriveAPIService = $googleDriveAPIService;
 		$this->googleCalendarAPIService = $googleCalendarAPIService;
-		$this->accessToken = $this->config->getUserValue($this->userId, Application::APP_ID, 'token', '');
+		$this->userId = $userId;
+		$this->accessToken = $this->config->getUserValue($this->userId, Application::APP_ID, 'token');
 	}
 
 	/**
@@ -81,12 +80,11 @@ class GoogleAPIController extends Controller {
 		if ($this->accessToken === '') {
 			return new DataResponse(null, 400);
 		}
-		$response = new DataResponse([
-			'importing_photos' => $this->config->getUserValue($this->userId, Application::APP_ID, 'importing_photos', '') === '1',
+		return new DataResponse([
+			'importing_photos' => $this->config->getUserValue($this->userId, Application::APP_ID, 'importing_photos') === '1',
 			'last_import_timestamp' => (int) $this->config->getUserValue($this->userId, Application::APP_ID, 'last_import_timestamp', '0'),
 			'nb_imported_photos' => (int) $this->config->getUserValue($this->userId, Application::APP_ID, 'nb_imported_photos', '0'),
 		]);
-		return $response;
 	}
 
 	/**
@@ -98,12 +96,11 @@ class GoogleAPIController extends Controller {
 		if ($this->accessToken === '') {
 			return new DataResponse(null, 400);
 		}
-		$response = new DataResponse([
-			'importing_drive' => $this->config->getUserValue($this->userId, Application::APP_ID, 'importing_drive', '') === '1',
+		return new DataResponse([
+			'importing_drive' => $this->config->getUserValue($this->userId, Application::APP_ID, 'importing_drive') === '1',
 			'last_drive_import_timestamp' => (int) $this->config->getUserValue($this->userId, Application::APP_ID, 'last_drive_import_timestamp', '0'),
 			'nb_imported_files' => (int) $this->config->getUserValue($this->userId, Application::APP_ID, 'nb_imported_files', '0'),
 		]);
-		return $response;
 	}
 
 	/**
@@ -187,7 +184,7 @@ class GoogleAPIController extends Controller {
 		if ($this->accessToken === '') {
 			return new DataResponse(null, 400);
 		}
-		$result = $this->googlePhotosAPIService->startImportPhotos($this->accessToken, $this->userId);
+		$result = $this->googlePhotosAPIService->startImportPhotos($this->userId);
 		if (isset($result['error'])) {
 			$response = new DataResponse($result['error'], 401);
 		} else {
@@ -205,7 +202,7 @@ class GoogleAPIController extends Controller {
 		if ($this->accessToken === '') {
 			return new DataResponse(null, 400);
 		}
-		$result = $this->googleDriveAPIService->startImportDrive($this->accessToken, $this->userId);
+		$result = $this->googleDriveAPIService->startImportDrive($this->userId);
 		if (isset($result['error'])) {
 			$response = new DataResponse($result['error'], 401);
 		} else {
@@ -243,7 +240,7 @@ class GoogleAPIController extends Controller {
 	 * @param ?string $newAddressBookName
 	 * @return DataResponse
 	 */
-	public function importContacts(?string $uri = '', int $key, ?string $newAddressBookName = ''): DataResponse {
+	public function importContacts(?string $uri = '', int $key = 0, ?string $newAddressBookName = ''): DataResponse {
 		if ($this->accessToken === '') {
 			return new DataResponse(null, 400);
 		}

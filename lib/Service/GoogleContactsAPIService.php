@@ -11,14 +11,36 @@
 
 namespace OCA\Google\Service;
 
+use Datetime;
+use Exception;
+use Generator;
 use OCP\Contacts\IManager as IContactManager;
 use Sabre\VObject\Component\VCard;
 use OCA\DAV\CardDAV\CardDavBackend;
 use Psr\Log\LoggerInterface;
-
-use OCA\Google\AppInfo\Application;
+use Throwable;
 
 class GoogleContactsAPIService {
+	/**
+	 * @var string
+	 */
+	private $appName;
+	/**
+	 * @var LoggerInterface
+	 */
+	private $logger;
+	/**
+	 * @var IContactManager
+	 */
+	private $contactsManager;
+	/**
+	 * @var CardDavBackend
+	 */
+	private $cdBackend;
+	/**
+	 * @var GoogleAPIService
+	 */
+	private $googleApiService;
 
 	/**
 	 * Service to make requests to Google v3 (JSON) API
@@ -62,9 +84,9 @@ class GoogleContactsAPIService {
 	/**
 	 * @param string $accessToken
 	 * @param string $userId
-	 * @return \Generator
+	 * @return Generator
 	 */
-	public function getContactList(string $accessToken, string $userId): \Generator {
+	public function getContactList(string $accessToken, string $userId): Generator {
 		$params = [
 			'personFields' => implode(',', [
 				'addresses',
@@ -101,7 +123,7 @@ class GoogleContactsAPIService {
 	 * @param string $accessToken
 	 * @param string $userId
 	 * @param ?string $uri
-	 * @param string $key
+	 * @param int $key
 	 * @param ?string $newAddrBookName
 	 * @return array
 	 */
@@ -193,7 +215,7 @@ class GoogleContactsAPIService {
 										]
 									);
 									$vCard->add($prop);
-								} catch (\Exception | \Throwable $ex) {
+								} catch (Exception | Throwable $ex) {
 									$this->logger->warning('Error when setting contact photo "' . ($displayName ?? 'no name') . '" ' . $ex->getMessage(), ['app' => $this->appName]);
 								}
 								break;
@@ -227,7 +249,7 @@ class GoogleContactsAPIService {
 			if (isset($c['birthdays']) && is_array($c['birthdays'])) {
 				foreach ($c['birthdays'] as $birthday) {
 					if (isset($birthday['date'], $birthday['date']['year'], $birthday['date']['month'], $birthday['date']['day'])) {
-						$date = new \Datetime($birthday['date']['year'] . '-' . $birthday['date']['month'] . '-' . $birthday['date']['day']);
+						$date = new Datetime($birthday['date']['year'] . '-' . $birthday['date']['month'] . '-' . $birthday['date']['day']);
 						$strDate = $date->format('Ymd');
 
 						$type = ['VALUE' => 'DATE'];
@@ -305,7 +327,7 @@ class GoogleContactsAPIService {
 			try {
 				$this->cdBackend->createCard($key, 'goog' . $k, $vCard->serialize());
 				$nbAdded++;
-			} catch (\Throwable | \Exception $e) {
+			} catch (Throwable | Exception $e) {
 				$this->logger->warning('Error when creating contact "' . ($displayName ?? 'no name') . '" ' . json_encode($c), ['app' => $this->appName]);
 			}
 		}
@@ -323,13 +345,13 @@ class GoogleContactsAPIService {
 	 */
 	private function contactExists(array $contact, int $addressBookKey): bool {
 		$displayName = null;
-		$familyName = null;
-		$firstName = null;
+		// $familyName = null;
+		// $firstName = null;
 		if (isset($contact['names']) && is_array($contact['names'])) {
 			foreach ($contact['names'] as $n) {
 				$displayName = $n['displayName'] ?? '';
-				$familyName = $n['familyName'] ?? '';
-				$firstName = $n['givenName'] ?? '';
+				// $familyName = $n['familyName'] ?? '';
+				// $firstName = $n['givenName'] ?? '';
 				break;
 			}
 			if ($displayName) {
