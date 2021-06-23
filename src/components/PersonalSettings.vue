@@ -106,7 +106,7 @@
 						<input id="photo-output"
 							:readonly="true"
 							:value="state.photo_output_dir">
-						<button
+						<button class="edit-output-dir"
 							@click="onPhotoOutputChange">
 							<span class="icon-rename" />
 						</button>
@@ -185,7 +185,7 @@
 						<input id="drive-output"
 							:readonly="true"
 							:value="state.drive_output_dir">
-						<button
+						<button class="edit-output-dir"
 							@click="onDriveOutputChange">
 							<span class="icon-rename" />
 						</button>
@@ -865,6 +865,10 @@ body.theme--dark .icon-google-settings {
 		button {
 			width: 44px !important;
 		}
+	}
+
+	.edit-output-dir {
+		padding: 6px 6px;
 	}
 }
 
