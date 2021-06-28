@@ -29,7 +29,7 @@
     "Google admin options saved" : "已儲存 Google 管理員選項",
     "Failed to save Google admin options" : "儲存 Google 管理員選項失敗",
     "Google data migration" : "Google 數據遷移",
-    "No Google OAuth app configured. Ask your Nextcloud administrator to configure Google connected accounts admin section." : "未配置Google OAuth應用程式。 要求您的Nextcloud管理員配置Google關聯賬戶管理部分。",
+    "No Google OAuth app configured. Ask your Nextcloud administrator to configure Google connected accounts admin section." : "未配置Google OAuth應用程式。要求您的Nextcloud管理員配置Google關聯賬戶管理部分。",
     "Authentication" : "驗證",
     "Connect to Google" : "連線至 Google",
     "Connected as {user}" : "以 {user} 身分連線",
@@ -58,7 +58,7 @@
     "Cancel Google Drive import" : "取消 Google Drive 匯入",
     "Photo import background process will begin soon." : "照片匯入後台進程即將開始。",
     "Last photo import job at {date}" : "上次照片匯入作業為{date}",
-    "You can close this page. You will be notified when it finishes." : "您可以關閉此頁面。 完成時會通知您。",
+    "You can close this page. You will be notified when it finishes." : "您可以關閉此頁面。完成時會通知您。",
     "Google Drive background import process will begin soon." : "Google Drive 匯入後台進程即將開始。",
     "Last Google Drive import job at {date}" : "上一次 Google Drive 匯入作業的運行日期為 {date}",
     "Successfully connected to Google!" : "與 Google 連線成功！",
@@ -82,7 +82,7 @@
     "_{amount} photo imported_::_{amount} photos imported_" : ["匯入了 {amount} 張照片"],
     "_{nbFiles} file in Google Drive ({formSize} + {formSharedSize} shared with you)_::_{nbFiles} files in Google Drive ({formSize} + {formSharedSize} shared with you)_" : ["Google Drive 的{nbFiles}個檔案（與您共享的{formSize} + {formSharedSize}）"],
     "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["Google Drive 的{nbFiles}個檔案（{formSize}）"],
-    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["匯入了 {amount} 個檔案（{progress}%)"],
+    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["匯入了 {amount} 個檔案（{progress}%）"],
     "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number}位聯絡人已成功匯入{name}中"],
     "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number}項活動已成功匯入{name}中"]
 },"pluralForm" :"nplurals=1; plural=0;"
