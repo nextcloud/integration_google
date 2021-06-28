@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## 1.0.3 – 2021-06-28
+### Changed
+- bump js libs
+- get rid of all deprecated stuff
+- bump min NC version to 22
+- cleanup backend code
+
 ## 1.0.2 – 2021-04-20
 ### Changed
 - bump js libs
