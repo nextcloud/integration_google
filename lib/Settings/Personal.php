@@ -51,6 +51,7 @@ class Personal implements ISettings {
 		$photoOutputDir = $this->config->getUserValue($this->userId, Application::APP_ID, 'photo_output_dir', '/Google Photos');
 		$photoOutputDir = $photoOutputDir ?: '/Google Photos';
 		$considerSharedFiles = $this->config->getUserValue($this->userId, Application::APP_ID, 'consider_shared_files', '0') === '1';
+		$considerSharedDrives = $this->config->getUserValue($this->userId, Application::APP_ID, 'consider_shared_drives', '0') === '1';
 		$considerSharedAlbums = $this->config->getUserValue($this->userId, Application::APP_ID, 'consider_shared_albums', '0') === '1';
 		$documentFormat = $this->config->getUserValue($this->userId, Application::APP_ID, 'document_format', 'openxml');
 		if (!in_array($documentFormat, ['openxml', 'opendoc'])) {
@@ -73,6 +74,7 @@ class Personal implements ISettings {
 			'free_space' => $freeSpace,
 			'user_quota' => $user->getQuota(),
 			'consider_shared_files' => $considerSharedFiles,
+			'consider_shared_drives' => $considerSharedDrives,
 			'consider_shared_albums' => $considerSharedAlbums,
 			'document_format' => $documentFormat,
 			'drive_output_dir' => $driveOutputDir,
