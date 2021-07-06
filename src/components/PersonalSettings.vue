@@ -152,11 +152,19 @@
 					<h3>{{ t('integration_google', 'Drive') }}</h3>
 					<div v-if="!importingDrive" class="check-option">
 						<input
+							id="consider-shared-drives"
+							type="checkbox"
+							class="checkbox"
+							:checked="!state.consider_shared_drives"
+							@input="onDriveConsiderSharedDrivesChange">
+						<label for="consider-shared-drives">{{ t('integration_google', 'Ignore shared drives') }}</label>
+						<br>
+						<input
 							id="consider-shared-files"
 							type="checkbox"
 							class="checkbox"
 							:checked="!state.consider_shared_files"
-							@input="onDriveConsiderSharedChange">
+							@input="onDriveConsiderSharedFilesChange">
 						<label for="consider-shared-files">{{ t('integration_google', 'Ignore shared files') }}</label>
 						<br>
 					</div>
@@ -192,7 +200,7 @@
 						<br><br>
 					</div>
 					<div class="line">
-						<label v-if="state.consider_shared_files && sharedWithMeSize > 0">
+						<label v-if="state.consider_shared_drives || (state.consider_shared_files && sharedWithMeSize > 0)">
 							<span class="icon icon-folder" />
 							{{ n('integration_google',
 								'{nbFiles} file in Google Drive ({formSize} + {formSharedSize} shared with you)',
@@ -724,7 +732,11 @@ export default {
 		myHumanFileSize(bytes, approx = false, si = false, dp = 1) {
 			return humanFileSize(bytes, approx, si, dp)
 		},
-		onDriveConsiderSharedChange(e) {
+		onDriveConsiderSharedDrivesChange(e) {
+			this.state.consider_shared_drives = !e.target.checked
+			this.saveOptions({ consider_shared_drives: this.state.consider_shared_drives ? '1' : '0' }, this.getGoogleDriveInfo)
+		},
+		onDriveConsiderSharedFilesChange(e) {
 			this.state.consider_shared_files = !e.target.checked
 			this.saveOptions({ consider_shared_files: this.state.consider_shared_files ? '1' : '0' }, this.getGoogleDriveInfo)
 		},
