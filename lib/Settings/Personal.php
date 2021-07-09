@@ -7,7 +7,9 @@ use OCP\IConfig;
 use OCP\Settings\ISettings;
 use OCP\IUserManager;
 use OCP\Files\IRootFolder;
+
 use OCA\Google\AppInfo\Application;
+use OCA\Google\Service\GoogleAPIService;
 
 class Personal implements ISettings {
 
@@ -31,18 +33,24 @@ class Personal implements ISettings {
 	 * @var string|null
 	 */
 	private $userId;
+	/**
+	 * @var GoogleAPIService
+	 */
+	private $googleAPIService;
 
 	public function __construct(
 								IConfig $config,
 								IRootFolder $root,
 								IUserManager $userManager,
 								IInitialState $initialStateService,
+								GoogleAPIService $googleAPIService,
 								?string $userId) {
 		$this->config = $config;
 		$this->root = $root;
 		$this->userManager = $userManager;
 		$this->initialStateService = $initialStateService;
 		$this->userId = $userId;
+		$this->googleAPIService = $googleAPIService;
 	}
 
 	/**
@@ -69,6 +77,12 @@ class Personal implements ISettings {
 		$userFolder = $this->root->getUserFolder($this->userId);
 		$freeSpace = $userFolder->getStorage()->free_space('/');
 		$user = $this->userManager->get($this->userId);
+
+		// make a request to potentially refresh the token before the settings page is loaded
+		$accessToken = $this->config->getUserValue($this->userId, Application::APP_ID, 'token');
+		if ($accessToken) {
+			$info = $this->googleAPIService->request($accessToken, $this->userId, 'oauth2/v1/userinfo', ['alt' => 'json']);
+		}
 
 		$userConfig = [
 			'client_id' => $clientID,

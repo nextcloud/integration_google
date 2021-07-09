@@ -174,13 +174,15 @@ class GoogleAPIService {
 					'refresh_token' => $refreshToken,
 				], 'POST');
 				if (isset($result['access_token'])) {
+					$this->logger->info('Google access token successfully refreshed', ['app' => $this->appName]);
 					$accessToken = $result['access_token'];
 					$this->config->setUserValue($userId, Application::APP_ID, 'token', $accessToken);
 					return $this->request(
 						$accessToken, $userId, $endPoint, $params, $method, $baseUrl
 					);
 				}
-				$this->logger->warning('Google API error, impossible to refresh the token', ['app' => $this->appName]);
+				$responseTxt = json_encode($result);
+				$this->logger->warning('Google API error, impossible to refresh the token. Response: ' . $responseTxt, ['app' => $this->appName]);
 				return ['error' => 'Impossible to refresh the token'];
 			}
 			$this->logger->warning(
@@ -311,12 +313,16 @@ class GoogleAPIService {
 					'refresh_token' => $refreshToken,
 				], 'POST');
 				if (isset($result['access_token'])) {
+					$this->logger->info('Google access token successfully refreshed', ['app' => $this->appName]);
 					$accessToken = $result['access_token'];
 					$this->config->setUserValue($userId, Application::APP_ID, 'token', $accessToken);
 					return $this->simpleRequest(
 						$accessToken, $userId, $url, $params, $method
 					);
 				}
+				$responseTxt = json_encode($result);
+				$this->logger->warning('Google API error, impossible to refresh the token. Response: ' . $responseTxt, ['app' => $this->appName]);
+				return ['error' => 'Impossible to refresh the token'];
 			}
 			$this->logger->warning('Google API error : '.$e->getMessage(), ['app' => $this->appName]);
 			return ['error' => $e->getMessage()];
@@ -390,12 +396,16 @@ class GoogleAPIService {
 					'refresh_token' => $refreshToken,
 				], 'POST');
 				if (isset($result['access_token'])) {
+					$this->logger->info('Google access token successfully refreshed', ['app' => $this->appName]);
 					$accessToken = $result['access_token'];
 					$this->config->setUserValue($userId, Application::APP_ID, 'token', $accessToken);
 					return $this->simpleDownload(
 						$accessToken, $userId, $url, $resource, $params, $method
 					);
 				}
+				$responseTxt = json_encode($result);
+				$this->logger->warning('Google API error, impossible to refresh the token. Response: ' . $responseTxt, ['app' => $this->appName]);
+				return ['error' => 'Impossible to refresh the token'];
 			}
 			$this->logger->warning('Google API error : '.$e->getMessage(), ['app' => $this->appName]);
 			return ['error' => $e->getMessage()];
