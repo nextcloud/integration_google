@@ -161,28 +161,14 @@ class GoogleAPIService {
 					. ' , body: ' . $body . ' status code: ' . $response->getStatusCode(),
 				['app' => $this->appName]
 			);
-			// try to refresh the token if it's invalid
 			if ($response->getStatusCode() === 401) {
-				$this->logger->info('Trying to REFRESH the access token', ['app' => $this->appName]);
-				$refreshToken = $this->config->getUserValue($userId, Application::APP_ID, 'refresh_token');
-				$clientID = $this->config->getAppValue(Application::APP_ID, 'client_id');
-				$clientSecret = $this->config->getAppValue(Application::APP_ID, 'client_secret');
-				$result = $this->requestOAuthAccessToken([
-					'client_id' => $clientID,
-					'client_secret' => $clientSecret,
-					'grant_type' => 'refresh_token',
-					'refresh_token' => $refreshToken,
-				], 'POST');
+				// refresh the token if it's invalid
+				$result = $this->refreshToken($userId);
 				if (isset($result['access_token'])) {
-					$this->logger->info('Google access token successfully refreshed', ['app' => $this->appName]);
-					$accessToken = $result['access_token'];
-					$this->config->setUserValue($userId, Application::APP_ID, 'token', $accessToken);
 					return $this->request(
-						$accessToken, $userId, $endPoint, $params, $method, $baseUrl
+						$result['access_token'], $userId, $endPoint, $params, $method, $baseUrl
 					);
 				}
-				$responseTxt = json_encode($result);
-				$this->logger->warning('Google API error, impossible to refresh the token. Response: ' . $responseTxt, ['app' => $this->appName]);
 				return ['error' => 'Impossible to refresh the token'];
 			}
 			$this->logger->warning(
@@ -301,27 +287,13 @@ class GoogleAPIService {
 		} catch (ServerException | ClientException $e) {
 			$response = $e->getResponse();
 			if ($response->getStatusCode() === 401) {
-				// refresh the token if it's invalid and we are using oauth
-				$this->logger->info('Trying to REFRESH the access token', ['app' => $this->appName]);
-				$refreshToken = $this->config->getUserValue($userId, Application::APP_ID, 'refresh_token');
-				$clientID = $this->config->getAppValue(Application::APP_ID, 'client_id');
-				$clientSecret = $this->config->getAppValue(Application::APP_ID, 'client_secret');
-				$result = $this->requestOAuthAccessToken([
-					'client_id' => $clientID,
-					'client_secret' => $clientSecret,
-					'grant_type' => 'refresh_token',
-					'refresh_token' => $refreshToken,
-				], 'POST');
+				// refresh the token if it's invalid
+				$result = $this->refreshToken($userId);
 				if (isset($result['access_token'])) {
-					$this->logger->info('Google access token successfully refreshed', ['app' => $this->appName]);
-					$accessToken = $result['access_token'];
-					$this->config->setUserValue($userId, Application::APP_ID, 'token', $accessToken);
 					return $this->simpleRequest(
-						$accessToken, $userId, $url, $params, $method
+						$result['access_token'], $userId, $url, $params, $method
 					);
 				}
-				$responseTxt = json_encode($result);
-				$this->logger->warning('Google API error, impossible to refresh the token. Response: ' . $responseTxt, ['app' => $this->appName]);
 				return ['error' => 'Impossible to refresh the token'];
 			}
 			$this->logger->warning('Google API error : '.$e->getMessage(), ['app' => $this->appName]);
@@ -384,27 +356,13 @@ class GoogleAPIService {
 		} catch (ServerException | ClientException $e) {
 			$response = $e->getResponse();
 			if ($response->getStatusCode() === 401) {
-				// refresh the token if it's invalid and we are using oauth
-				$this->logger->info('Trying to REFRESH the access token', ['app' => $this->appName]);
-				$refreshToken = $this->config->getUserValue($userId, Application::APP_ID, 'refresh_token');
-				$clientID = $this->config->getAppValue(Application::APP_ID, 'client_id');
-				$clientSecret = $this->config->getAppValue(Application::APP_ID, 'client_secret');
-				$result = $this->requestOAuthAccessToken([
-					'client_id' => $clientID,
-					'client_secret' => $clientSecret,
-					'grant_type' => 'refresh_token',
-					'refresh_token' => $refreshToken,
-				], 'POST');
+				// refresh the token if it's invalid
+				$result = $this->refreshToken($userId);
 				if (isset($result['access_token'])) {
-					$this->logger->info('Google access token successfully refreshed', ['app' => $this->appName]);
-					$accessToken = $result['access_token'];
-					$this->config->setUserValue($userId, Application::APP_ID, 'token', $accessToken);
 					return $this->simpleDownload(
-						$accessToken, $userId, $url, $resource, $params, $method
+						$result['access_token'], $userId, $url, $resource, $params, $method
 					);
 				}
-				$responseTxt = json_encode($result);
-				$this->logger->warning('Google API error, impossible to refresh the token. Response: ' . $responseTxt, ['app' => $this->appName]);
 				return ['error' => 'Impossible to refresh the token'];
 			}
 			$this->logger->warning('Google API error : '.$e->getMessage(), ['app' => $this->appName]);
@@ -415,5 +373,28 @@ class GoogleAPIService {
 		} catch (Throwable | Exception $e) {
 			return ['error' => 'Unknown error: ' . $e->getMessage()];
 		}
+	}
+
+	public function refreshToken(string $userId): array {
+		$this->logger->info('Trying to REFRESH the access token', ['app' => $this->appName]);
+		$refreshToken = $this->config->getUserValue($userId, Application::APP_ID, 'refresh_token');
+		$clientID = $this->config->getAppValue(Application::APP_ID, 'client_id');
+		$clientSecret = $this->config->getAppValue(Application::APP_ID, 'client_secret');
+		$result = $this->requestOAuthAccessToken([
+			'client_id' => $clientID,
+			'client_secret' => $clientSecret,
+			'grant_type' => 'refresh_token',
+			'refresh_token' => $refreshToken,
+		], 'POST');
+
+		if (isset($result['access_token'])) {
+			$this->logger->info('Google access token successfully refreshed', ['app' => $this->appName]);
+			$this->config->setUserValue($userId, Application::APP_ID, 'token', $result['access_token']);
+		} else {
+			$responseTxt = json_encode($result);
+			$this->logger->warning('Google API error, impossible to refresh the token. Response: ' . $responseTxt, ['app' => $this->appName]);
+		}
+
+		return $result;
 	}
 }
