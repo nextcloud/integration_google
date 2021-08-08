@@ -3,9 +3,14 @@ OC.L10N.register(
     {
     "Client ID" : "Client ID",
     "Client secret" : "Client secret",
-    "Authentication" : "รับรองความถูกต้อง",
-    "Contacts" : "ข้อมูลผู้ติดต่อ",
+    "Authentication" : "การตรวจสอบสิทธิ์",
+    "Connect to Google" : "เชื่อมต่อไปยัง Google",
+    "Connected as {user}" : "เชื่อมต่อเป็น {user} แล้ว",
+    "Disconnect from Google" : "ยกเลิกการเชื่อมต่อจาก Google",
+    "Contacts" : "รายชื่อผู้ติดต่อ",
+    "{amount} Google contacts" : "{amount} รายชื่อผู้ติดต่อ Google",
+    "Calendars" : "ปฏิทิน",
     "Import calendar" : "นำเข้าปฏิทิน",
-    "Photos" : "Photos"
+    "Photos" : "รูปภาพ"
 },
 "nplurals=1; plural=0;");
