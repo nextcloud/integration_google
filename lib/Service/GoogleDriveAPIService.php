@@ -177,7 +177,13 @@ class GoogleDriveAPIService {
 		// import by batch of 500 Mo
 		$alreadyImported = $this->config->getUserValue($userId, Application::APP_ID, 'nb_imported_files', '0');
 		$alreadyImported = (int) $alreadyImported;
-		$result = $this->importFiles($accessToken, $userId, $targetPath, 500000000, $alreadyImported, $directoryProgress);
+		try {
+			$result = $this->importFiles($accessToken, $userId, $targetPath, 500000000, $alreadyImported, $directoryProgress);
+		} catch (\Exception | \Throwable $e) {
+			$result = [
+				'error' => 'Unknow job failure. ' . $e->getMessage(),
+			];
+		}
 		if (isset($result['error']) || (isset($result['finished']) && $result['finished'])) {
 			if (isset($result['finished']) && $result['finished']) {
 				$nbImported = (int) $this->config->getUserValue($userId, Application::APP_ID, 'nb_imported_files', '0');
