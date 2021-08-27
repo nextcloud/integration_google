@@ -10,9 +10,9 @@
 		<div v-else
 			id="google-content">
 			<h3>{{ t('integration_google', 'Authentication') }}</h3>
-			<button v-if="!connected" id="google-oauth" @click="onOAuthClick">
-				<span class="icon icon-external" />
-				{{ t('integration_google', 'Connect to Google') }}
+			<button v-if="!connected" class="google-oauth" @click="onOAuthClick">
+				<img class="google-signin">
+				<span>{{ t('integration_google', 'Sign in with Google') }}</span>
 			</button>
 			<div v-else>
 				<div class="google-grid-form">
@@ -869,6 +869,22 @@ body.theme--dark .icon-google-settings {
 
 	.edit-output-dir {
 		padding: 6px 6px;
+	}
+
+	.google-oauth {
+		color: white;
+		background-color: #4580F1;
+		border-radius: 4px;
+		padding: 0;
+		display: flex;
+		align-items: center;
+		.google-signin {
+			content: url('../../img/google.svg')
+		}
+		span {
+			padding: 0 8px 0 8px;
+			font-size: 1.1em;
+		}
 	}
 }
 
