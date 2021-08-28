@@ -4,7 +4,6 @@ OC.L10N.register(
     "Client ID" : "Client ID",
     "Client secret" : "Client secret",
     "Authentication" : "การตรวจสอบสิทธิ์",
-    "Connect to Google" : "เชื่อมต่อไปยัง Google",
     "Connected as {user}" : "เชื่อมต่อเป็น {user} แล้ว",
     "Disconnect from Google" : "ยกเลิกการเชื่อมต่อจาก Google",
     "Contacts" : "รายชื่อผู้ติดต่อ",

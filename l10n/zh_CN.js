@@ -27,7 +27,6 @@ OC.L10N.register(
     "Client secret" : "客户端 secret",
     "No Google OAuth app configured. Ask your Nextcloud administrator to configure Google connected accounts admin section." : "没有配置谷歌OAuth应用。请求你的Nextcloud管理员配置谷歌连接帐户管理部分。",
     "Authentication" : "验证",
-    "Connect to Google" : "已连接上Google",
     "Connected as {user}" : "作为 {user} 已连接",
     "Disconnect from Google" : "已从Google断开连接",
     "Contacts" : "联系人",

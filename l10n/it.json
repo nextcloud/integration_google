@@ -31,7 +31,6 @@
     "Google data migration" : "Migrazione dei dati di Google",
     "No Google OAuth app configured. Ask your Nextcloud administrator to configure Google connected accounts admin section." : "Nessuna applicazione OAuth di Google configurata. Chiedi al tuo amministratore di Nextcloud di configurare la sezione di amministrazione degli account collegati a Google.",
     "Authentication" : "Autenticazione",
-    "Connect to Google" : "Connetti a Google",
     "Connected as {user}" : "Connesso come {user}",
     "Disconnect from Google" : "Disconnetti da Google",
     "Contacts" : "Contatti",

@@ -33,7 +33,6 @@ OC.L10N.register(
     "Google data migration" : "Google Datenmigration",
     "No Google OAuth app configured. Ask your Nextcloud administrator to configure Google connected accounts admin section." : "Google OAuth-App nicht konfiguriert. Bitte Deinen Nextcloud-Administrator, den Administrationsbereich für verbundene Google-Konten zu konfigurieren.",
     "Authentication" : "Authentifizierung",
-    "Connect to Google" : "Mit Google verbinden",
     "Connected as {user}" : "Verbunden als {user}",
     "Disconnect from Google" : "Von Google trennen",
     "Contacts" : "Kontakte",

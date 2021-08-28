@@ -11,7 +11,6 @@ OC.L10N.register(
     "Client ID" : "מזהה לקו",
     "Client secret" : "סוד לקוח",
     "Authentication" : "אימות",
-    "Connect to Google" : "התחברות ל־Google",
     "Disconnect from Google" : "ניתוק מ־Google",
     "Contacts" : "אנשי קשר",
     "{amount} Google contacts" : "{amount} אנשי קשר ב־Google",

@@ -11,7 +11,6 @@ OC.L10N.register(
     "Client secret" : "クライアントシークレット",
     "Google data migration" : "Google データの移行",
     "Authentication" : "認証",
-    "Connect to Google" : "Google に接続",
     "Connected as {user}" : "{user} を接続済み",
     "Disconnect from Google" : "Google から切断",
     "Contacts" : "連絡先",

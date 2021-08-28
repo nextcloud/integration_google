@@ -31,7 +31,6 @@
     "Google data migration" : "Google migracija podataka",
     "No Google OAuth app configured. Ask your Nextcloud administrator to configure Google connected accounts admin section." : "Nije konfigurirana aplikacija Google OAuth. Zatražite svog administratora za Nextcloud da konfigurira administratorski odjeljak računa povezanih s Googleom.",
     "Authentication" : "Autentifikacija",
-    "Connect to Google" : "Poveži se s Googleom",
     "Connected as {user}" : "Povezan kao {user}",
     "Disconnect from Google" : "Odspoji se s Googlea",
     "Contacts" : "Kontakti",

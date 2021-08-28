@@ -33,7 +33,6 @@ OC.L10N.register(
     "Google data migration" : "Google 數據遷移",
     "No Google OAuth app configured. Ask your Nextcloud administrator to configure Google connected accounts admin section." : "未配置Google OAuth應用程式。要求您的Nextcloud管理員配置Google關聯賬戶管理部分。",
     "Authentication" : "驗證",
-    "Connect to Google" : "連線至 Google",
     "Connected as {user}" : "以 {user} 身分連線",
     "Disconnect from Google" : "與 Google 斷開連線",
     "Contacts" : "聯絡人",
