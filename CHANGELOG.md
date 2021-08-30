@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## 1.0.5 – 2021-08-30
+### Fixed
+- change connection button to comply with Google's branding guidelines
+[#70](https://github.com/nextcloud/integration_google/issues/70) @tabp0le
+- handle unknown job Exceptions to avoid blocking import process
+[#60](https://github.com/nextcloud/integration_google/issues/60) @StaceZ @ancow
+- drive/photo import with SSE enabled
+[#71](https://github.com/nextcloud/integration_google/issues/71) @Niveshkrishna @arnaudvp
+
 ## 1.0.3 – 2021-06-28
 ### Changed
 - bump js libs
