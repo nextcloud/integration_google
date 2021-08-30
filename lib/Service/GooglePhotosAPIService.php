@@ -16,7 +16,6 @@ use OCP\Files\Folder;
 use OCP\IConfig;
 use OCP\Files\IRootFolder;
 use OCP\Files\FileInfo;
-use OCP\Files\Node;
 use OCP\Lock\LockedException;
 use OCP\BackgroundJob\IJobList;
 use Psr\Log\LoggerInterface;
@@ -49,6 +48,10 @@ class GooglePhotosAPIService {
 	 * @var GoogleAPIService
 	 */
 	private $googleApiService;
+	/**
+	 * @var UserScopeService
+	 */
+	private $userScopeService;
 
 	/**
 	 * Service to make requests to Google v3 (JSON) API
@@ -58,6 +61,7 @@ class GooglePhotosAPIService {
 								IConfig $config,
 								IRootFolder $root,
 								IJobList $jobList,
+								UserScopeService $userScopeService,
 								GoogleAPIService $googleApiService) {
 		$this->appName = $appName;
 		$this->logger = $logger;
@@ -65,6 +69,7 @@ class GooglePhotosAPIService {
 		$this->root = $root;
 		$this->jobList = $jobList;
 		$this->googleApiService = $googleApiService;
+		$this->userScopeService = $userScopeService;
 	}
 
 	/**
@@ -161,6 +166,11 @@ class GooglePhotosAPIService {
 	 */
 	public function importPhotosJob(string $userId): void {
 		$this->logger->info('Importing photos for ' . $userId);
+
+		// Set the user to register the change under his name
+		$this->userScopeService->setUserScope($userId);
+		$this->userScopeService->setFilesystemScope($userId);
+
 		$importingPhotos = $this->config->getUserValue($userId, Application::APP_ID, 'importing_photos', '0') === '1';
 		$jobRunning = $this->config->getUserValue($userId, Application::APP_ID, 'photo_import_running', '0') === '1';
 		if (!$importingPhotos || $jobRunning) {

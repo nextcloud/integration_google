@@ -317,7 +317,10 @@ class GoogleAPIService {
 	public function simpleDownload(string $accessToken, string $userId, string $url, $resource, array $params = [], string $method = 'GET'): array {
 		try {
 			$options = [
-				'sink' => $resource,
+				// does not work with sink if SSE is enabled
+				// 'sink' => $resource,
+				// rather use stream and write to the file ourselves
+				'stream' => true,
 				'timeout' => 0,
 				'headers' => [
 					'Authorization' => 'Bearer ' . $accessToken,
@@ -345,8 +348,14 @@ class GoogleAPIService {
 			} else {
 				return ['error' => 'Bad HTTP method'];
 			}
-			//$body = $response->getBody();
 			$respCode = $response->getStatusCode();
+
+			$body = $response->getBody();
+			while (!feof($body)) {
+				// write ~5 MB chunks
+				$chunk = fread($body, 5000000);
+				fwrite($resource, $chunk);
+			}
 
 			if ($respCode >= 400) {
 				return ['error' => $this->l10n->t('Bad credentials')];

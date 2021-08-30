@@ -16,7 +16,6 @@ use OCP\Files\Folder;
 use OCP\IConfig;
 use OCP\Files\IRootFolder;
 use OCP\Files\FileInfo;
-use OCP\Files\Node;
 use OCP\BackgroundJob\IJobList;
 use Psr\Log\LoggerInterface;
 use OCP\Files\NotFoundException;
@@ -50,6 +49,10 @@ class GoogleDriveAPIService {
 	 * @var GoogleAPIService
 	 */
 	private $googleApiService;
+	/**
+	 * @var UserScopeService
+	 */
+	private $userScopeService;
 
 	/**
 	 * Service to make requests to Google v3 (JSON) API
@@ -59,6 +62,7 @@ class GoogleDriveAPIService {
 								IConfig $config,
 								IRootFolder $root,
 								IJobList $jobList,
+								UserScopeService $userScopeService,
 								GoogleAPIService $googleApiService) {
 		$this->appName = $appName;
 		$this->logger = $logger;
@@ -66,6 +70,7 @@ class GoogleDriveAPIService {
 		$this->root = $root;
 		$this->jobList = $jobList;
 		$this->googleApiService = $googleApiService;
+		$this->userScopeService = $userScopeService;
 	}
 
 	/**
@@ -158,6 +163,11 @@ class GoogleDriveAPIService {
 	 */
 	public function importDriveJob(string $userId): void {
 		$this->logger->info('Importing drive files for ' . $userId);
+
+		// Set the user to register the change under his name
+		$this->userScopeService->setUserScope($userId);
+		$this->userScopeService->setFilesystemScope($userId);
+
 		$importingDrive = $this->config->getUserValue($userId, Application::APP_ID, 'importing_drive', '0') === '1';
 		$jobRunning = $this->config->getUserValue($userId, Application::APP_ID, 'drive_import_running', '0') === '1';
 		if (!$importingDrive || $jobRunning) {
