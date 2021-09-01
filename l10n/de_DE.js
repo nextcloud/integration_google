@@ -38,7 +38,7 @@ OC.L10N.register(
     "Disconnect from Google" : "Von Google trennen",
     "Contacts" : "Kontakte",
     "{amount} Google contacts" : "{amount} Google-Kontakte",
-    "Import Google Contacts in Nextcloud" : "Goggle-Kontakte in Nextcloud importieren",
+    "Import Google Contacts in Nextcloud" : "Google-Kontakte in Nextcloud importieren",
     "Choose where to import the contacts" : "Auswählen, wo die Kontakte importiert werden sollen",
     "New address book" : "Neues Adressbuch",
     "address book name" : "Name des Adressbuchs",

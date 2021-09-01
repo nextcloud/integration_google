@@ -59,7 +59,7 @@ OC.L10N.register(
     "Last photo import job at {date}" : "Zadnji uvoz slik je bil izveden {date}",
     "You can close this page. You will be notified when it finishes." : "To stran lahko zaprete. Ob koncu opravila boste obveščeni, ko se to zaključi.",
     "Google Drive background import process will begin soon." : "Uvažanje datotek z računa Google Drive bo kmalu začeto.",
-    "Last Google Drive import job at {date}" : "Zadnji uvoz datotek z računa Goggle Drive je bil izveden {date}",
+    "Last Google Drive import job at {date}" : "Zadnji uvoz datotek z računa Google Drive je bil izveden {date}",
     "Successfully connected to Google!" : "Povezava z računom Google je uspešno vzpostavljena!",
     "Google connection error:" : "Napaka povezave Google:",
     "Google options saved" : "Nastavitve Google so shranjene",
