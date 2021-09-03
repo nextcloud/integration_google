@@ -21,7 +21,7 @@ OC.L10N.register(
     "Go to \"APIs & Services\" => \"Credentials\" and click on \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\"." : "前往 \"APIs & Services\" => \"Credentials\" 然後單擊 \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\"。",
     "Set the \"Application type\" to \"Web application\" and give a name to the application." : "將「Application type」設置為 \"Web application\"，然後為應用程序命名。",
     "Make sure you set one \"Authorized redirect URI\" to" : "確保您將「Authorized redirect URI」設定為",
-    "Put the \"Client ID\" and \"Client secret\" below." : "在下方輸入「客戶端 ID」和「客戶端密碼」。",
+    "Put the \"Client ID\" and \"Client secret\" below." : "在下方輸入「客戶端 ID」與「客戶端密碼」。",
     "Finally, go to \"APIs & Services\" => \"Library\" and add the following APIs: \"Google Drive API\", \"Google Calendar API\", \"People API\" and \"Photos Library API\"." : "最後，轉到 \"APIs & Services\" => \"Library\" 並添加以下 API：\"Google Drive API\"、\"Google Calendar API\"、\"People API\" 和 \"Photos Library API\"。",
     "Your Nextcloud users will then see a \"Connect to Google\" button in their personal settings." : "您的 Nextcloud 用戶將會在他們的個人設定中看到【連線至 Google】按鈕。",
     "Client ID" : "客戶端 ID",

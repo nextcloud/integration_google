@@ -30,6 +30,7 @@
     "Google data migration" : "Google-tietojen migraatio",
     "No Google OAuth app configured. Ask your Nextcloud administrator to configure Google connected accounts admin section." : "Google OAuth-sovellusta ei ole määritelty. Pyydä Nextcloud-ylläpitäjääsi määrittämään Googlen tilien yhdistäminen.",
     "Authentication" : "Tunnistautuminen",
+    "Sign in with Google" : "Kirjaudu sisään Google-tililläsi",
     "Connected as {user}" : "Yhdistetty käyttäjänä {user}",
     "Disconnect from Google" : "Katkaise yhteys Googleen",
     "Contacts" : "Yhteystiedot",
