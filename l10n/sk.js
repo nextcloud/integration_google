@@ -33,6 +33,7 @@ OC.L10N.register(
     "Google data migration" : "Prenos údajov z Google",
     "No Google OAuth app configured. Ask your Nextcloud administrator to configure Google connected accounts admin section." : "Nie je nastavená aplikácia Google OAuth. Požiadajte svojho správcu Nextcloudu, aby nastavil sekciu pre správu pripojených účtov Google.",
     "Authentication" : "Autentifikácia",
+    "Sign in with Google" : "Prihlásiť pomocou Google",
     "Connected as {user}" : "Pripojený ako {user}",
     "Disconnect from Google" : "Odpojiť od Google",
     "Contacts" : "Kontakty",
