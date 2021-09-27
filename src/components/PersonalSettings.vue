@@ -11,7 +11,7 @@
 			id="google-content">
 			<h3>{{ t('integration_google', 'Authentication') }}</h3>
 			<button v-if="!connected" class="google-oauth" @click="onOAuthClick">
-				<img class="google-signin">
+				<span class="google-signin" />
 				<span>{{ t('integration_google', 'Sign in with Google') }}</span>
 			</button>
 			<div v-else>
@@ -879,7 +879,9 @@ body.theme--dark .icon-google-settings {
 		display: flex;
 		align-items: center;
 		.google-signin {
-			content: url('../../img/google.svg')
+			background: url('../../img/google.svg');
+			width: 46px;
+			height: 46px;
 		}
 		span {
 			padding: 0 8px 0 8px;
