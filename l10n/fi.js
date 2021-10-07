@@ -1,6 +1,7 @@
 OC.L10N.register(
     "integration_google",
     {
+    "Missing refresh token in Google response." : "Googlen vastauksesta puuttui päivityspoletti.",
     "Error getting OAuth access token." : "Virhe haettaessa OAuth-käyttöpolettia.",
     "Error during OAuth exchanges" : "Virhe OAuth-tunnistautumisessa",
     "Google" : "Google",
