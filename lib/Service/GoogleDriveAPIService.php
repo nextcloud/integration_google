@@ -432,6 +432,7 @@ class GoogleDriveAPIService {
 				} else {
 					$this->logger->warning('Google Drive error downloading file ' . $fileItem['name'] . ' : ' . $res['error'], ['app' => $this->appName]);
 					if ($savedFile->isDeletable()) {
+						$savedFile->unlock(\OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE);
 						$savedFile->delete();
 					}
 				}
@@ -503,6 +504,7 @@ class GoogleDriveAPIService {
 				} else {
 					$this->logger->warning('Google Drive error downloading file ' . $fileItem['name'] . ' : ' . $res['error'], ['app' => $this->appName]);
 					if ($savedFile->isDeletable()) {
+						$savedFile->unlock(\OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE);
 						$savedFile->delete();
 					}
 				}
