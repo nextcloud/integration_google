@@ -130,6 +130,30 @@ class GooglePhotosAPIService {
 				$params['pageToken'] = $result['nextPageToken'] ?? '';
 			} while (isset($result['nextPageToken']));
 		}
+
+		if (!($nbPhotos > 0)) {
+
+			$params = [
+				'pageSize' => 50,
+			];
+
+			$result = $this->googleApiService->request($accessToken, $userId, 'v1/mediaItems', $params, 'GET', 'https://photoslibrary.googleapis.com/');
+            if (isset($result['error'])) {
+                return $result;
+			}
+			  
+			if(isset($result['mediaItems']) && is_array($result['mediaItems'])) {
+                $nbPhotos += count($result['mediaItems']);
+			}
+			else {
+				$this->logger->warning(
+					'Google API error getting media items list to get photo number, no "mediaItems" key in '
+						. json_encode($result),
+					['app' => $this->appName]
+				);
+			}
+		}
+		
 		return [
 			'nbPhotos' => $nbPhotos,
 		];
