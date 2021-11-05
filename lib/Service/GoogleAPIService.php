@@ -69,6 +69,22 @@ class GoogleAPIService {
 	}
 
 	/**
+	 * @param string $baseUrl
+	 * @param array $params
+	 * @return string
+	 */
+	private function buildURL(string $baseUrl, array $params = []): string {
+		$paramsContent = http_build_query($params);
+		if (strpos($baseUrl, '?') !== FALSE) {
+        	$baseUrl .= '&'. $paramsContent;
+        }
+        else {
+			$baseUrl .= '?' . $paramsContent;
+		}
+		return $baseUrl;
+
+	}
+	/**
 	 * @param string $userId
 	 * @param string $subject
 	 * @param array $params
@@ -112,8 +128,7 @@ class GoogleAPIService {
 
 			if (count($params) > 0) {
 				if ($method === 'GET') {
-					$paramsContent = http_build_query($params);
-					$url .= '?' . $paramsContent;
+					$url = $this->buildURL($url, $params);
 				} else {
 					$options['body'] = json_encode($params);
 				}
@@ -205,8 +220,7 @@ class GoogleAPIService {
 
 			if (count($params) > 0) {
 				if ($method === 'GET') {
-					$paramsContent = http_build_query($params);
-					$url .= '?' . $paramsContent;
+					$url = $this->buildURL($url, $params);
 				} else {
 					$options['body'] = $params;
 				}
@@ -258,8 +272,7 @@ class GoogleAPIService {
 
 			if (count($params) > 0) {
 				if ($method === 'GET') {
-					$paramsContent = http_build_query($params);
-					$url .= '?' . $paramsContent;
+					$url = $this->buildURL($url, $params);
 				} else {
 					$options['body'] = json_encode($params);
 				}
@@ -330,8 +343,7 @@ class GoogleAPIService {
 
 			if (count($params) > 0) {
 				if ($method === 'GET') {
-					$paramsContent = http_build_query($params);
-					$url .= '?' . $paramsContent;
+					$url = $this->buildURL($url, $params);
 				} else {
 					$options['body'] = json_encode($params);
 				}

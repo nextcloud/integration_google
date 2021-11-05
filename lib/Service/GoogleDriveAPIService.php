@@ -396,48 +396,12 @@ class GoogleDriveAPIService {
 		} else {
 			$saveFolder = $topFolder;
 		}
-		// classic file
-		if (isset($fileItem['webContentLink'])) {
-			if (!$saveFolder->nodeExists($fileName)) {
-				$fileUrl = 'https://www.googleapis.com/drive/v3/files/' . $fileItem['id'] . '?alt=media';
-				try {
-					$savedFile = $saveFolder->newFile($fileName);
-				} catch (NotFoundException $e) {
-					$this->logger->warning(
-						'Google Drive error, can\'t create file "' . $fileName . '" in "' . $saveFolder->getPath() . '"',
-						['app' => $this->appName]
-					);
-					return null;
-				}
-				try {
-					$resource = $savedFile->fopen('w');
-				} catch (LockedException $e) {
-					$this->logger->warning('Google Drive error opening target file ' . $savedFile->getPath() . ' : file is locked', ['app' => $this->appName]);
-					return null;
-				}
-				$res = $this->googleApiService->simpleDownload($accessToken, $userId, $fileUrl, $resource);
-				if (!isset($res['error'])) {
-					if (is_resource($resource)) {
-						fclose($resource);
-					}
-					if (isset($fileItem['modifiedTime'])) {
-						$d = new Datetime($fileItem['modifiedTime']);
-						$ts = $d->getTimestamp();
-						$savedFile->touch($ts);
-					} else {
-						$savedFile->touch();
-					}
-					$stat = $savedFile->stat();
-					return $stat['size'] ?? 0;
-				} else {
-					$this->logger->warning('Google Drive error downloading file ' . $fileItem['name'] . ' : ' . $res['error'], ['app' => $this->appName]);
-					if ($savedFile->isDeletable()) {
-						$savedFile->unlock(\OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE);
-						$savedFile->delete();
-					}
-				}
-			}
-		} else {
+
+		$documentMimeTypes = array('document' => 'application/vnd.google-apps.document', 
+								'spreadsheet' => 'application/vnd.google-apps.spreadsheet', 
+								'presentation' => 'application/vnd.google-apps.presentation');
+		
+		if(in_array($fileItem['mimeType'], array_values($documentMimeTypes))) {
 			$documentFormat = $this->config->getUserValue($userId, Application::APP_ID, 'document_format', 'openxml');
 			if (!in_array($documentFormat, ['openxml', 'opendoc'])) {
 				$documentFormat = 'openxml';
@@ -458,14 +422,7 @@ class GoogleDriveAPIService {
 				$mimeType = $documentFormat === 'openxml'
 					? 'application/vnd.openxmlformats-officedocument.presentationml.presentation'
 					:'application/vnd.oasis.opendocument.presentation';
-			} else {
-				$this->logger->warning(
-					'Google Drive error downloading file, no webContentLink, unknown mime type: ' . $saveFolder->getInternalPath() . '/' . ($fileItem['name'] ?? 'Untitled') . ' : '
-						. json_encode($fileItem),
-					['app' => $this->appName]
-				);
-				return null;
-			}
+			} 
 			if (!$saveFolder->nodeExists($fileName)) {
 				$params = [
 					'mimeType' => $mimeType,
@@ -510,6 +467,55 @@ class GoogleDriveAPIService {
 				}
 			}
 		}
+		// classic file
+		else if (isset($fileItem['webContentLink'])) {
+			if (!$saveFolder->nodeExists($fileName)) {
+				$fileUrl = 'https://www.googleapis.com/drive/v3/files/' . $fileItem['id'] . '?alt=media';
+				try {
+					$savedFile = $saveFolder->newFile($fileName);
+				} catch (NotFoundException $e) {
+					$this->logger->warning( 
+						'Google Drive error, can\'t create file "' . $fileName . '" in "' . $saveFolder->getPath() . '"',
+						['app' => $this->appName]
+					);
+					return null;
+				}
+				try {
+					$resource = $savedFile->fopen('w');
+				} catch (LockedException $e) {
+					$this->logger->warning('Google Drive error opening target file ' . $savedFile->getPath() . ' : file is locked', ['app' => $this->appName]);
+					return null;
+				}
+				$res = $this->googleApiService->simpleDownload($accessToken, $userId, $fileUrl, $resource);
+				if (!isset($res['error'])) {
+					if (is_resource($resource)) {
+						fclose($resource);
+					}
+					if (isset($fileItem['modifiedTime'])) {
+						$d = new Datetime($fileItem['modifiedTime']);
+						$ts = $d->getTimestamp();
+						$savedFile->touch($ts);
+					} else {
+						$savedFile->touch();
+					}
+					$stat = $savedFile->stat();
+					return $stat['size'] ?? 0;
+				} else {
+					$this->logger->warning('Google Drive error downloading file ' . $fileItem['name'] . ' : ' . $res['error'], ['app' => $this->appName]);
+					if ($savedFile->isDeletable()) {
+						$savedFile->unlock(\OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE);
+						$savedFile->delete();
+					}
+				}
+			}
+		}
+		else {
+			$this->logger->warning(
+				'Google Drive error downloading file, no webContentLink, unknown mime type: ' . $saveFolder->getInternalPath() . '/' . ($fileItem['name'] ?? 'Untitled') . ' : '
+					. json_encode($fileItem),
+				['app' => $this->appName]
+			);			
+		} 
 		return null;
 	}
 }
