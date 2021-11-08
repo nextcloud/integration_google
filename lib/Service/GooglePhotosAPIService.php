@@ -429,6 +429,7 @@ class GooglePhotosAPIService {
 			} else {
 				$this->logger->warning('Google API error downloading photo ' . $photoName . ' : ' . $res['error'], ['app' => $this->appName]);
 				if ($savedFile->isDeletable()) {
+					$savedFile->unlock(\OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE);
 					$savedFile->delete();
 				}
 			}
