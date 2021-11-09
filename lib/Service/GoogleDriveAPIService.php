@@ -322,7 +322,12 @@ class GoogleDriveAPIService {
 					if (!$considerSharedFiles && !$fileItem['ownedByMe']) {
 						continue;
 					}
-					$size = $this->getFile($accessToken, $userId, $fileItem, $directoriesById, $folder, $completedFileIDs);
+
+					if(in_array($fileItem['id'], $completedFileIDs)) {
+						continue;
+					}
+
+					$size = $this->getFile($accessToken, $userId, $fileItem, $directoriesById, $folder);
 					if (!is_null($size)) {
 						$nbDownloaded++;
 						$completedFileIDs[] = $fileItem['id'];
@@ -336,6 +341,9 @@ class GoogleDriveAPIService {
 								'finished' => false,
 							];
 						}
+					}
+					else {
+						$this->logFailedDownloadsForUser($folder, $fileItem['name']);
 					}
 				}
 				$params['pageToken'] = $result['nextPageToken'] ?? '';
@@ -351,6 +359,19 @@ class GoogleDriveAPIService {
 		];
 	}
 
+
+	private function logFailedDownloadsForUser($folder, $fileName) {
+		try {
+			$logFile = $folder->get('failed-downloads.md');
+		}
+		catch(NotFoundException $e) {
+			$logFile = $folder->newFile('failed-downloads.md');
+		}
+
+		$stream = $logFile->fopen('a');
+		fwrite($stream, '1. Failed to download file: ' . $fileName . PHP_EOL);
+		fclose($stream);
+	}
 	/**
 	 * recursive directory creation
 	 * associate the folder node to directories on the fly
@@ -475,14 +496,9 @@ class GoogleDriveAPIService {
 	 * @param array $fileItem
 	 * @param array $directoriesById
 	 * @param Folder $topFolder
-	 * @param array $completedFileIDs
 	 * @return ?int downloaded size, null if error getting file
 	 */
-	private function getFile(string $accessToken, string $userId, array $fileItem, array $directoriesById, Folder $topFolder, Array $completedFileIDs): ?int {
-		
-		if(in_array($fileItem['id'], $completedFileIDs)) {
-			return null;
-		}
+	private function getFile(string $accessToken, string $userId, array $fileItem, array $directoriesById, Folder $topFolder): ?int {
 		
 		$fileName = preg_replace('/\//', '-slash-', $fileItem['name'] ?? 'Untitled');
 
