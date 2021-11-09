@@ -159,7 +159,7 @@ class GoogleAPIService {
 					'Google API request 400 FAILURE, method '.$method.', URL: ' . $url . ' , body: ' . $body,
 					['app' => $this->appName]
 				);
-				return ['error' => 'Bad credentials'];
+				return ['error' => 'Bad credentials', 'statusCode' => $respCode];
 			} else {
 				$this->logger->info(
 					'Google API request SUCCESS: , method ' . $method . ', URL: ' . $url
@@ -184,7 +184,7 @@ class GoogleAPIService {
 						$result['access_token'], $userId, $endPoint, $params, $method, $baseUrl
 					);
 				}
-				return ['error' => 'Impossible to refresh the token'];
+				return ['error' => 'Impossible to refresh the token', 'statusCode' => 401];
 			}
 			$this->logger->warning(
 				'Google API ServerException|ClientException error : '.$e->getMessage()
@@ -194,8 +194,8 @@ class GoogleAPIService {
 			);
 			return [
 				'error' => 'ServerException|ClientException, message:'
-					. $e->getMessage()
-					. ' status code: ' . $response->getStatusCode()
+					. $e->getMessage(),
+				'statusCode' => $response->getStatusCode()
 			];
 		} catch (ConnectException $e) {
 			$this->logger->warning('Google API error : '.$e->getMessage(), ['app' => $this->appName]);

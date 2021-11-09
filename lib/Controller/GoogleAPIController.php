@@ -114,7 +114,7 @@ class GoogleAPIController extends Controller {
 		}
 		$result = $this->googlePhotosAPIService->getPhotoNumber($this->accessToken, $this->userId);
 		if (isset($result['error'])) {
-			$response = new DataResponse($result['error'], 401);
+			$response = new DataResponse($result['error'], $result['statusCode']);
 		} else {
 			$response = new DataResponse($result);
 		}
@@ -132,7 +132,7 @@ class GoogleAPIController extends Controller {
 		}
 		$result = $this->googleContactsAPIService->getContactNumber($this->accessToken, $this->userId);
 		if (isset($result['error'])) {
-			$response = new DataResponse($result['error'], 401);
+			$response = new DataResponse($result['error'], $result['statusCode']);
 		} else {
 			$response = new DataResponse($result);
 		}
@@ -150,7 +150,7 @@ class GoogleAPIController extends Controller {
 		}
 		$result = $this->googleCalendarAPIService->getCalendarList($this->accessToken, $this->userId);
 		if (isset($result['error'])) {
-			$response = new DataResponse($result['error'], 401);
+			$response = new DataResponse($result['error'], $result['statusCode']);
 		} else {
 			$response = new DataResponse($result);
 		}
@@ -168,7 +168,7 @@ class GoogleAPIController extends Controller {
 		}
 		$result = $this->googleDriveAPIService->getDriveSize($this->accessToken, $this->userId);
 		if (isset($result['error'])) {
-			$response = new DataResponse($result['error'], 401);
+			$response = new DataResponse($result['error'], $result['statusCode']);
 		} else {
 			$response = new DataResponse($result);
 		}

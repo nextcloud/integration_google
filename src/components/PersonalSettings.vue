@@ -443,10 +443,13 @@ export default {
 					}
 				})
 				.catch((error) => {
-					showError(
-						t('integration_google', 'Failed to get Google Drive information')
-						+ ': ' + error.response?.request?.responseText
-					)
+					// Ignore 403s as it could mean that the user hasn't given permissions
+					if (error.response.status !== 403) {
+						showError(
+							t('integration_google', 'Failed to get Google Drive information')
+							+ ': ' + error.response?.request?.responseText
+						)
+					}
 				})
 				.then(() => {
 					this.gettingDriveInfo = false
@@ -461,10 +464,13 @@ export default {
 					}
 				})
 				.catch((error) => {
-					showError(
-						t('integration_google', 'Failed to get calendar list')
-						+ ': ' + error.response?.request?.responseText
-					)
+					// Ignore 403s as it could mean that the user hasn't given permissions
+					if (error.response.status !== 403) {
+						showError(
+							t('integration_google', 'Failed to get calendar list')
+							+ ': ' + error.response?.request?.responseText
+						)
+					}
 				})
 				.then(() => {
 				})
@@ -509,10 +515,13 @@ export default {
 					}
 				})
 				.catch((error) => {
-					showError(
-						t('integration_google', 'Failed to get number of Google photos')
-						+ ': ' + error.response?.request?.responseText
-					)
+					// Ignore 403s as it could mean that the user hasn't given permissions
+					if (error.response.status !== 403) {
+						showError(
+							t('integration_google', 'Failed to get number of Google photos')
+							+ ': ' + error.response?.request?.responseText
+						)
+					}
 				})
 				.then(() => {
 					this.gettingPhotoInfo = false
@@ -527,10 +536,13 @@ export default {
 					}
 				})
 				.catch((error) => {
-					showError(
-						t('integration_google', 'Failed to get number of Google contacts')
-						+ ': ' + error.response?.request?.responseText
-					)
+					// Ignore 403s as it could mean that the user hasn't given permissions
+					if (error.response.status !== 403) {
+						showError(
+							t('integration_google', 'Failed to get number of Google contacts')
+							+ ': ' + error.response?.request?.responseText
+						)
+					}
 				})
 				.then(() => {
 				})
