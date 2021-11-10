@@ -354,13 +354,21 @@ export default {
 
 		// get informations if we are connected
 		if (this.showOAuth && this.connected) {
-			this.getGoogleCalendarList()
-			this.getLocalAddressBooks()
-			this.getNbGoogleContacts()
-			this.getNbGooglePhotos()
-			this.getPhotoImportValues(true)
-			this.getGoogleDriveInfo()
-			this.getDriveImportValues(true)
+			if (this.state.user_scopes.can_access_calendar) {
+				this.getGoogleCalendarList()
+				this.getLocalAddressBooks()
+			}
+			if (this.state.user_scopes.can_access_contacts) {
+				this.getNbGoogleContacts()
+			}
+			if (this.state.user_scopes.can_access_photos) {
+				this.getNbGooglePhotos()
+				this.getPhotoImportValues(true)
+			}
+			if (this.state.user_scopes.can_access_drive) {
+				this.getGoogleDriveInfo()
+				this.getDriveImportValues(true)
+			}
 		}
 	},
 
@@ -443,13 +451,10 @@ export default {
 					}
 				})
 				.catch((error) => {
-					// Ignore 403s as it could mean that the user hasn't given permissions
-					if (error.response.status !== 403) {
-						showError(
-							t('integration_google', 'Failed to get Google Drive information')
-							+ ': ' + error.response?.request?.responseText
-						)
-					}
+					showError(
+						t('integration_google', 'Failed to get Google Drive information')
+						+ ': ' + error.response?.request?.responseText
+					)
 				})
 				.then(() => {
 					this.gettingDriveInfo = false
@@ -464,13 +469,10 @@ export default {
 					}
 				})
 				.catch((error) => {
-					// Ignore 403s as it could mean that the user hasn't given permissions
-					if (error.response.status !== 403) {
-						showError(
-							t('integration_google', 'Failed to get calendar list')
-							+ ': ' + error.response?.request?.responseText
-						)
-					}
+					showError(
+						t('integration_google', 'Failed to get calendar list')
+						+ ': ' + error.response?.request?.responseText
+					)
 				})
 				.then(() => {
 				})
@@ -515,13 +517,10 @@ export default {
 					}
 				})
 				.catch((error) => {
-					// Ignore 403s as it could mean that the user hasn't given permissions
-					if (error.response.status !== 403) {
-						showError(
-							t('integration_google', 'Failed to get number of Google photos')
-							+ ': ' + error.response?.request?.responseText
-						)
-					}
+					showError(
+						t('integration_google', 'Failed to get number of Google photos')
+						+ ': ' + error.response?.request?.responseText
+					)
 				})
 				.then(() => {
 					this.gettingPhotoInfo = false
@@ -536,13 +535,10 @@ export default {
 					}
 				})
 				.catch((error) => {
-					// Ignore 403s as it could mean that the user hasn't given permissions
-					if (error.response.status !== 403) {
-						showError(
-							t('integration_google', 'Failed to get number of Google contacts')
-							+ ': ' + error.response?.request?.responseText
-						)
-					}
+					showError(
+						t('integration_google', 'Failed to get number of Google contacts')
+						+ ': ' + error.response?.request?.responseText
+					)
 				})
 				.then(() => {
 				})
