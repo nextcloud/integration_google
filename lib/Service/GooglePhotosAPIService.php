@@ -95,13 +95,7 @@ class GooglePhotosAPIService {
 				foreach ($result['albums'] as $album) {
 					$nbPhotos += $album['mediaItemsCount'] ?? 0;
 				}
-			} else {
-				$this->logger->warning(
-					'Google API error getting album list to get photo number, no "albums" key in '
-						. json_encode($result),
-					['app' => $this->appName]
-				);
-			}
+			} 
 			$params['pageToken'] = $result['nextPageToken'] ?? '';
 		} while (isset($result['nextPageToken']));
 
@@ -120,13 +114,7 @@ class GooglePhotosAPIService {
 					foreach ($result['sharedAlbums'] as $album) {
 						$nbPhotos += $album['mediaItemsCount'] ?? 0;
 					}
-				} else {
-					$this->logger->warning(
-						'Google API error getting shared albums list to get photo number, no "sharedAlbums" key in '
-							. json_encode($result),
-						['app' => $this->appName]
-					);
-				}
+				} 
 				$params['pageToken'] = $result['nextPageToken'] ?? '';
 			} while (isset($result['nextPageToken']));
 		}
@@ -250,13 +238,7 @@ class GooglePhotosAPIService {
 				foreach ($result['albums'] as $album) {
 					$albums[] = $album;
 				}
-			} else {
-				$this->logger->warning(
-					'Google API error getting album list when importing, no "albums" key in '
-						. json_encode($result),
-					['app' => $this->appName]
-				);
-			}
+			} 
 			$params['pageToken'] = $result['nextPageToken'] ?? '';
 		} while (isset($result['nextPageToken']));
 
@@ -275,8 +257,6 @@ class GooglePhotosAPIService {
 					foreach ($result['sharedAlbums'] as $album) {
 						$albums[] = $album;
 					}
-				} else {
-					$this->logger->warning('Google API error getting shared albums list, no "sharedAlbums" key in ' . json_encode($result), ['app' => $this->appName]);
 				}
 				$params['pageToken'] = $result['nextPageToken'] ?? '';
 			} while (isset($result['nextPageToken']));
@@ -331,9 +311,7 @@ class GooglePhotosAPIService {
 							}
 						}
 					}
-				} else {
-					$this->logger->warning('Google API error getting photo list, no "mediaItems" key in ' . json_encode($result), ['app' => $this->appName]);
-				}
+				} 
 				$params['pageToken'] = $result['nextPageToken'] ?? '';
 			} while (isset($result['nextPageToken']));
 		}
@@ -368,9 +346,7 @@ class GooglePhotosAPIService {
 						}
 					}
 				}
-			} else {
-				$this->logger->warning('Google API error getting photo list, no "mediaItems" key in ' . json_encode($result), ['app' => $this->appName]);
-			}
+			} 
 			$params['pageToken'] = $result['nextPageToken'] ?? '';
 		} while (isset($result['nextPageToken']));
 
@@ -409,7 +385,6 @@ class GooglePhotosAPIService {
 			try {
 				$resource = $savedFile->fopen('w');
 			} catch (LockedException $e) {
-				$this->logger->warning('Google Photo, error opening target file ' . $savedFile->getPath() . ' : file is locked', ['app' => $this->appName]);
 				return null;
 			}
 			$res = $this->googleApiService->simpleDownload($accessToken, $userId, $photoUrl, $resource);
@@ -427,7 +402,6 @@ class GooglePhotosAPIService {
 				$stat = $savedFile->stat();
 				return $stat['size'] ?? 0;
 			} else {
-				$this->logger->warning('Google API error downloading photo ' . $photoName . ' : ' . $res['error'], ['app' => $this->appName]);
 				if ($savedFile->isDeletable()) {
 					$savedFile->unlock(\OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE);
 					$savedFile->delete();
