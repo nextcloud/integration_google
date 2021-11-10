@@ -343,7 +343,8 @@ class GoogleDriveAPIService {
 						}
 					}
 					else {
-						$this->logFailedDownloadsForUser($folder, $fileItem['name']);
+						$filePathInDrive = $dirId === 'root' ? '/' . $fileItem['name'] : $directoriesById[$dirId]['name'] . '/' . $fileItem['name'];
+						$this->logFailedDownloadsForUser($folder, $filePathInDrive);
 					}
 				}
 				$params['pageToken'] = $result['nextPageToken'] ?? '';
@@ -422,20 +423,32 @@ class GoogleDriveAPIService {
 	 * @throws \OCP\Files\NotPermittedException
 	 */
 	 private function downloadAndSaveFile(string $accessToken, Folder $saveFolder, string $fileName, string $userId, string $fileUrl, array $fileItem, array $params = []) : ?int {
+		
+		if($saveFolder->nodeExists($fileName)) {
+			$savedFile = $saveFolder->get($fileName);
+			$timestampOnFile = $savedFile->getMtime();
+			$d = new Datetime($fileItem['modifiedTime']);
+			$timestampOnDrive = $d->getTimestamp();
+
+			if($timestampOnFile !== $timestampOnDrive) {
+				$this->logger->error($fileName . ' ' . $timestampOnFile . ' ' . $timestampOnDrive);
+				$savedFile->delete();
+			}
+			else {
+				$stat = $savedFile->stat();
+				return $stat['size'] ?? 0;	
+			}
+		}
+
 		try {
 			$savedFile = $saveFolder->newFile($fileName);
 		} catch (NotFoundException $e) {
-			$this->logger->warning(
-				'Google Drive error, can\'t create file "' . $fileName . '" in "' . $saveFolder->getPath() . '"',
-				['app' => $this->appName]
-			);
 			return null;
 		}
 
 		try {
 			$resource = $savedFile->fopen('w');
 		} catch (LockedException $e) {
-			$this->logger->warning('Google Drive error opening target file ' . $savedFile->getPath() . ' : file is locked', ['app' => $this->appName]);
 			return null;
 		}
 
@@ -455,7 +468,6 @@ class GoogleDriveAPIService {
 			return $stat['size'] ?? 0;
 
 		} else {
-			$this->logger->warning('Google Drive error downloading file ' . $fileItem['name'] . ' : ' . $res['error'], ['app' => $this->appName]);
 			if ($savedFile->isDeletable()) {
 				$savedFile->unlock(\OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE);
 				$savedFile->delete();
@@ -464,31 +476,6 @@ class GoogleDriveAPIService {
 		return null;
 	 }
 
-	/**
-	 * Check if file with given name already exists
-	 * Append positive integer n to the file name if it already exists
-	 * (To handle files with same name in Google Drive)
-	 * @param Folder $folder
-	 * @param string $fileName
-	 * @return string name of file to be created
-	 */
-	private function getFileNameRecursively(Folder $folder,  string $fileName) : string  {
-		if(!$folder->nodeExists($fileName)){
-			return $fileName;
-		}
-		$suffix = pathinfo($fileName, PATHINFO_EXTENSION);
-		$baseFileName = pathinfo($fileName, PATHINFO_FILENAME);
-		$match = preg_match('/\s\((?P<id>\d+)\)$/u', $baseFileName, $matches);
-		if ($match) {
-			$newId = ((int) $matches['id']) + 1;
-			$baseFileName = preg_replace('/\s\(\d+\)$/u', '', $baseFileName);
-			$idSuffix = ' (' . $newId . ')';
-		} else {
-			$idSuffix = ' (2)';
-		}
-		$newBaseFileName = $baseFileName . $idSuffix;
-		return $this->getFileNameRecursively($folder, $newBaseFileName . '.' . $suffix);
-	}
 
 	/**
 	 * @param string $accessToken
@@ -500,7 +487,12 @@ class GoogleDriveAPIService {
 	 */
 	private function getFile(string $accessToken, string $userId, array $fileItem, array $directoriesById, Folder $topFolder): ?int {
 		
-		$fileName = preg_replace('/\//', '-slash-', $fileItem['name'] ?? 'Untitled');
+		$fileName = preg_replace('/\//', '-', $fileItem['name'] ?? 'Untitled');
+		$extension = pathinfo($fileName, PATHINFO_EXTENSION);
+		$name = pathinfo($fileName, PATHINFO_FILENAME);
+		$name = $name . '_' . substr($fileItem['id'], -6);
+
+		$fileName = strlen($extension) ? $name . '.' . $extension : $name; 
 
 		if (isset($fileItem['parents']) && count($fileItem['parents']) > 0 && array_key_exists($fileItem['parents'][0], $directoriesById)) {
 			$saveFolder = $directoriesById[$fileItem['parents'][0]]['node'];
@@ -545,24 +537,15 @@ class GoogleDriveAPIService {
 				'mimeType' => $mimeType,
 			];
 
-			$fileName = $this->getFileNameRecursively($saveFolder, $fileName);
 			$fileUrl = 'https://www.googleapis.com/drive/v3/files/' . $fileItem['id'] . '/export';
 			return $this->downloadAndSaveFile($accessToken, $saveFolder, $fileName, $userId, $fileUrl, $fileItem, $params);
 			
 		}
 		// classic file
 		else if (isset($fileItem['webContentLink'])) {
-			$fileName = $this->getFileNameRecursively($saveFolder, $fileName);
 			$fileUrl = 'https://www.googleapis.com/drive/v3/files/' . $fileItem['id'] . '?alt=media';
 			return $this->downloadAndSaveFile($accessToken, $saveFolder, $fileName, $userId, $fileUrl, $fileItem);	
 		}
-		else {
-			$this->logger->warning(
-				'Google Drive error downloading file, no webContentLink, unknown mime type: ' . $saveFolder->getInternalPath() . '/' . ($fileItem['name'] ?? 'Untitled') . ' : '
-					. json_encode($fileItem),
-				['app' => $this->appName]
-			);			
-		} 
 		return null;
 	}
 }
