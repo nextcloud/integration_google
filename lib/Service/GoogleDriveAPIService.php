@@ -318,8 +318,15 @@ class GoogleDriveAPIService {
 						continue;
 					}
 
+					if (isset($fileItem['parents']) && count($fileItem['parents']) > 0 && array_key_exists($fileItem['parents'][0], $directoriesById)) {
+						$saveFolder = $directoriesById[$fileItem['parents'][0]]['node'];
+					} else {
+						$saveFolder = $folder;
+					}
 
-					$size = $this->getFile($accessToken, $userId, $fileItem, $directoriesById, $folder);
+					$fileName = $this->getFileName($fileItem);
+					$size = $this->getFile($accessToken, $userId, $fileItem, $saveFolder, $fileName);
+					
 					if (!is_null($size)) {
 						$nbDownloaded++;
 						$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_files', $alreadyImported + $nbDownloaded);
@@ -332,7 +339,7 @@ class GoogleDriveAPIService {
 							];
 						}
 					}
-					else {
+					else if(!$saveFolder->nodeExists($fileName)) {
 						$filePathInDrive = $dirId === 'root' ? '/' . $fileItem['name'] : $directoriesById[$dirId]['name'] . '/' . $fileItem['name'];
 						$this->logFailedDownloadsForUser($folder, $filePathInDrive);
 					}
@@ -465,29 +472,29 @@ class GoogleDriveAPIService {
 		return null;
 	 }
 
+	/**
+	 * @param array $fileItem
+	 * @return string name of the file to be saved
+	*/
+
+	private function getFileName(array $fileItem) {
+		
+		$fileName = preg_replace('/\//', '-', $fileItem['name'] ?? 'Untitled');
+		$extension = pathinfo($fileName, PATHINFO_EXTENSION);
+		$name = pathinfo($fileName, PATHINFO_FILENAME) . '_' . substr($fileItem['id'], -6);
+
+		return strlen($extension) ? $name . '.' . $extension : $name;
+	}
 
 	/**
 	 * @param string $accessToken
 	 * @param string $userId
 	 * @param array $fileItem
-	 * @param array $directoriesById
-	 * @param Folder $topFolder
+	 * @param Folder $saveFolder
+	 * @param string $fileName
 	 * @return ?int downloaded size, null if error getting file
 	 */
-	private function getFile(string $accessToken, string $userId, array $fileItem, array $directoriesById, Folder $topFolder): ?int {
-		
-		$fileName = preg_replace('/\//', '-', $fileItem['name'] ?? 'Untitled');
-		$extension = pathinfo($fileName, PATHINFO_EXTENSION);
-		$name = pathinfo($fileName, PATHINFO_FILENAME);
-		$name = $name . '_' . substr($fileItem['id'], -6);
-
-		$fileName = strlen($extension) ? $name . '.' . $extension : $name; 
-
-		if (isset($fileItem['parents']) && count($fileItem['parents']) > 0 && array_key_exists($fileItem['parents'][0], $directoriesById)) {
-			$saveFolder = $directoriesById[$fileItem['parents'][0]]['node'];
-		} else {
-			$saveFolder = $topFolder;
-		}
+	private function getFile(string $accessToken, string $userId, array $fileItem, Folder $saveFolder, string $fileName): ?int {
 
 		$documentMimeTypes = array('document' => 'application/vnd.google-apps.document', 
 								'spreadsheet' => 'application/vnd.google-apps.spreadsheet', 
