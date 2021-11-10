@@ -209,7 +209,6 @@ class GoogleDriveAPIService {
 			$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_files', '0');
 			$this->config->setUserValue($userId, Application::APP_ID, 'last_drive_import_timestamp', '0');
 			$this->config->deleteUserValue($userId, Application::APP_ID, 'directory_progress');
-			$this->config->deleteUserValue($userId, Application::APP_ID, 'completed_file_ids');
 		} else {
 			$this->config->setUserValue($userId, Application::APP_ID, 'directory_progress', json_encode($directoryProgress));
 			$ts = (new Datetime())->getTimestamp();
@@ -294,10 +293,6 @@ class GoogleDriveAPIService {
 		$downloadedSize = 0;
 		$nbDownloaded = 0;
 
-		// Maintain a list of completed files so as to not repeat downloads
-		$completedFileIDsString = $this->config->getUserValue($userId, Application::APP_ID, 'completed_file_ids', '[]');
-		$completedFileIDs = json_decode($completedFileIDsString);
-
 		foreach ($directoryIdsToExplore as $dirId) {
 			$params = [
 				'pageSize' => 1000,
@@ -323,18 +318,13 @@ class GoogleDriveAPIService {
 						continue;
 					}
 
-					if(in_array($fileItem['id'], $completedFileIDs)) {
-						continue;
-					}
 
 					$size = $this->getFile($accessToken, $userId, $fileItem, $directoriesById, $folder);
 					if (!is_null($size)) {
 						$nbDownloaded++;
-						$completedFileIDs[] = $fileItem['id'];
 						$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_files', $alreadyImported + $nbDownloaded);
 						$downloadedSize += $size;
 						if ($maxDownloadSize && $downloadedSize > $maxDownloadSize) {
-							$this->config->setUserValue($userId, Application::APP_ID, 'completed_file_ids', json_encode($completedFileIDs));
 							return [
 								'nbDownloaded' => $nbDownloaded,
 								'targetPath' => $targetPath,
@@ -435,8 +425,7 @@ class GoogleDriveAPIService {
 				$savedFile->delete();
 			}
 			else {
-				$stat = $savedFile->stat();
-				return $stat['size'] ?? 0;	
+				return null;
 			}
 		}
 
