@@ -54,6 +54,10 @@ class GoogleDriveAPIService {
 	 */
 	private $userScopeService;
 
+	const DOCUMENT_MIME_TYPES = array('document' => 'application/vnd.google-apps.document', 
+								'spreadsheet' => 'application/vnd.google-apps.spreadsheet', 
+								'presentation' => 'application/vnd.google-apps.presentation');
+
 	/**
 	 * Service to make requests to Google v3 (JSON) API
 	 */
@@ -324,7 +328,23 @@ class GoogleDriveAPIService {
 						$saveFolder = $folder;
 					}
 
-					$fileName = $this->getFileName($fileItem);
+					$fileName = $this->getFileName($fileItem, $userId);
+					
+					// If file already exists on folder, don't download unless timestamp is different
+					if($saveFolder->nodeExists($fileName)) {
+						$savedFile = $saveFolder->get($fileName);
+						$timestampOnFile = $savedFile->getMtime();
+						$d = new Datetime($fileItem['modifiedTime']);
+						$timestampOnDrive = $d->getTimestamp();
+			
+						if($timestampOnFile < $timestampOnDrive) {
+							$savedFile->delete();
+						}
+						else {
+							continue;
+						}
+					}	
+
 					$size = $this->getFile($accessToken, $userId, $fileItem, $saveFolder, $fileName);
 					
 					if (!is_null($size)) {
@@ -421,21 +441,6 @@ class GoogleDriveAPIService {
 	 */
 	 private function downloadAndSaveFile(string $accessToken, Folder $saveFolder, string $fileName, string $userId, string $fileUrl, array $fileItem, array $params = []) : ?int {
 		
-		if($saveFolder->nodeExists($fileName)) {
-			$savedFile = $saveFolder->get($fileName);
-			$timestampOnFile = $savedFile->getMtime();
-			$d = new Datetime($fileItem['modifiedTime']);
-			$timestampOnDrive = $d->getTimestamp();
-
-			if($timestampOnFile !== $timestampOnDrive) {
-				$this->logger->error($fileName . ' ' . $timestampOnFile . ' ' . $timestampOnDrive);
-				$savedFile->delete();
-			}
-			else {
-				return null;
-			}
-		}
-
 		try {
 			$savedFile = $saveFolder->newFile($fileName);
 		} catch (NotFoundException $e) {
@@ -474,16 +479,72 @@ class GoogleDriveAPIService {
 
 	/**
 	 * @param array $fileItem
+	 * @param string $userId
 	 * @return string name of the file to be saved
 	*/
 
-	private function getFileName(array $fileItem) {
-		
+	private function getFileName(array $fileItem, string $userId) : string {
 		$fileName = preg_replace('/\//', '-', $fileItem['name'] ?? 'Untitled');
+
+		if(in_array($fileItem['mimeType'], array_values(self::DOCUMENT_MIME_TYPES))) {
+			$documentFormat = $this->getUserDocumentFormat($userId);
+			switch($fileItem['mimeType']) {
+				case self::DOCUMENT_MIME_TYPES['document']:
+					$fileName .= $documentFormat === 'openxml' ? '.docx' : '.odt';
+					break;
+				case self::DOCUMENT_MIME_TYPES['spreadsheet']:
+					$fileName .= $documentFormat === 'openxml' ? '.xlsx' : '.ods';
+					break;
+				case self::DOCUMENT_MIME_TYPES['presentation']:
+					$fileName .= $documentFormat === 'openxml' ? '.pptx' : '.odp';
+					break;
+			}
+		}
+
 		$extension = pathinfo($fileName, PATHINFO_EXTENSION);
 		$name = pathinfo($fileName, PATHINFO_FILENAME) . '_' . substr($fileItem['id'], -6);
 
 		return strlen($extension) ? $name . '.' . $extension : $name;
+	}
+
+	/**
+	 * @param string $userId
+	 * @return string User's preferred document format
+	*/
+
+	private function getUserDocumentFormat(string $userId) : string {
+		$documentFormat = $this->config->getUserValue($userId, Application::APP_ID, 'document_format', 'openxml');
+		if (!in_array($documentFormat, ['openxml', 'opendoc'])) {
+			$documentFormat = 'openxml';
+		}
+		return $documentFormat;
+	}
+	
+	/**
+	 * @param string $mimeType
+	 * @param string $documentFormat
+	 * @return array Request parameters for document
+	*/
+	private function getDocumentRequestParams(string $mimeType, string $documentFormat) : array {
+		$params = array();
+		switch($mimeType) {
+			case self::DOCUMENT_MIME_TYPES['document']:
+				$params['mimeType'] = $documentFormat === 'openxml'
+					? 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+					: 'application/vnd.oasis.opendocument.text';
+				break;
+			case self::DOCUMENT_MIME_TYPES['spreadsheet']:
+				$params['mimeType'] = $documentFormat === 'openxml'
+					? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+					: 'application/vnd.oasis.opendocument.spreadsheet';
+				break;
+			case self::DOCUMENT_MIME_TYPES['presentation']:
+				$params['mimeType'] = $documentFormat === 'openxml'
+					? 'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+					:'application/vnd.oasis.opendocument.presentation';
+				break;
+		}
+		return $params;
 	}
 
 	/**
@@ -495,47 +556,13 @@ class GoogleDriveAPIService {
 	 * @return ?int downloaded size, null if error getting file
 	 */
 	private function getFile(string $accessToken, string $userId, array $fileItem, Folder $saveFolder, string $fileName): ?int {
-
-		$documentMimeTypes = array('document' => 'application/vnd.google-apps.document', 
-								'spreadsheet' => 'application/vnd.google-apps.spreadsheet', 
-								'presentation' => 'application/vnd.google-apps.presentation');
 		
-		if(in_array($fileItem['mimeType'], array_values($documentMimeTypes))) {
-			$documentFormat = $this->config->getUserValue($userId, Application::APP_ID, 'document_format', 'openxml');
-			if (!in_array($documentFormat, ['openxml', 'opendoc'])) {
-				$documentFormat = 'openxml';
-			}
+		if(in_array($fileItem['mimeType'], array_values(self::DOCUMENT_MIME_TYPES))) {
+			$documentFormat = $this->getUserDocumentFormat($userId);
 			// potentially a doc
-			switch($fileItem['mimeType']) {
-
-				case $documentMimeTypes['document']:
-					$fileName .= $documentFormat === 'openxml' ? '.docx' : '.odt';
-					$mimeType = $documentFormat === 'openxml'
-						? 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-						: 'application/vnd.oasis.opendocument.text';
-					break;
-
-				case $documentMimeTypes['spreadsheet']:
-					$fileName .= $documentFormat === 'openxml' ? '.xlsx' : '.ods';
-					$mimeType = $documentFormat === 'openxml'
-						? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-						: 'application/vnd.oasis.opendocument.spreadsheet';
-					break;
-
-				case $documentMimeTypes['presentation']:
-					$fileName .= $documentFormat === 'openxml' ? '.pptx' : '.odp';
-					$mimeType = $documentFormat === 'openxml'
-						? 'application/vnd.openxmlformats-officedocument.presentationml.presentation'
-						:'application/vnd.oasis.opendocument.presentation';
-					break;
-			}
-			$params = [
-				'mimeType' => $mimeType,
-			];
-
+			$params = $this->getDocumentRequestParams($fileItem['mimeType'], $documentFormat);
 			$fileUrl = 'https://www.googleapis.com/drive/v3/files/' . $fileItem['id'] . '/export';
-			return $this->downloadAndSaveFile($accessToken, $saveFolder, $fileName, $userId, $fileUrl, $fileItem, $params);
-			
+			return $this->downloadAndSaveFile($accessToken, $saveFolder, $fileName, $userId, $fileUrl, $fileItem, $params);	
 		}
 		// classic file
 		else if (isset($fileItem['webContentLink'])) {
