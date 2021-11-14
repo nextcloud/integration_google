@@ -116,8 +116,8 @@
 						<label>
 							<span class="icon icon-toggle-pictures" />
 							{{ n('integration_google',
-								'~{nbPhotos} Google photo (~{formSize})',
-								'~{nbPhotos} Google photos (~{formSize})',
+								'>{nbPhotos} Google photo (>{formSize})',
+								'>{nbPhotos} Google photos (>{formSize})',
 								nbPhotos,
 								{ nbPhotos, formSize: myHumanFileSize(estimatedPhotoCollectionSize, true) })
 							}}
