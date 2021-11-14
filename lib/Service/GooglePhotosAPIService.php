@@ -16,6 +16,7 @@ use OCP\Files\Folder;
 use OCP\IConfig;
 use OCP\Files\IRootFolder;
 use OCP\Files\FileInfo;
+use OCP\Lock\ILockingProvider;
 use OCP\Lock\LockedException;
 use OCP\BackgroundJob\IJobList;
 use Psr\Log\LoggerInterface;
@@ -95,7 +96,7 @@ class GooglePhotosAPIService {
 				foreach ($result['albums'] as $album) {
 					$nbPhotos += $album['mediaItemsCount'] ?? 0;
 				}
-			} 
+			}
 			$params['pageToken'] = $result['nextPageToken'] ?? '';
 		} while (isset($result['nextPageToken']));
 
@@ -114,7 +115,7 @@ class GooglePhotosAPIService {
 					foreach ($result['sharedAlbums'] as $album) {
 						$nbPhotos += $album['mediaItemsCount'] ?? 0;
 					}
-				} 
+				}
 				$params['pageToken'] = $result['nextPageToken'] ?? '';
 			} while (isset($result['nextPageToken']));
 		}
@@ -238,7 +239,7 @@ class GooglePhotosAPIService {
 				foreach ($result['albums'] as $album) {
 					$albums[] = $album;
 				}
-			} 
+			}
 			$params['pageToken'] = $result['nextPageToken'] ?? '';
 		} while (isset($result['nextPageToken']));
 
@@ -311,7 +312,7 @@ class GooglePhotosAPIService {
 							}
 						}
 					}
-				} 
+				}
 				$params['pageToken'] = $result['nextPageToken'] ?? '';
 			} while (isset($result['nextPageToken']));
 		}
@@ -346,7 +347,7 @@ class GooglePhotosAPIService {
 						}
 					}
 				}
-			} 
+			}
 			$params['pageToken'] = $result['nextPageToken'] ?? '';
 		} while (isset($result['nextPageToken']));
 
@@ -403,7 +404,7 @@ class GooglePhotosAPIService {
 				return $stat['size'] ?? 0;
 			} else {
 				if ($savedFile->isDeletable()) {
-					$savedFile->unlock(\OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE);
+					$savedFile->unlock(ILockingProvider::LOCK_EXCLUSIVE);
 					$savedFile->delete();
 				}
 			}

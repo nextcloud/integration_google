@@ -142,7 +142,7 @@ class ConfigController extends Controller {
 	 * @param string $code request code to use when requesting oauth token
 	 * @param string $state value that was sent with original GET request. Used to check auth redirection is valid
 	 * @param string $scope scopes allowed by user
-	 *  @param ?string $error
+	 * @param ?string $error
 	 * @return RedirectResponse to user settings
 	 */
 	public function oauthRedirect(string $code = '', string $state = '',  string $scope = '', string $error = ''): RedirectResponse {
@@ -150,18 +150,18 @@ class ConfigController extends Controller {
 		$clientID = $this->config->getAppValue(Application::APP_ID, 'client_id');
 		$clientSecret = $this->config->getAppValue(Application::APP_ID, 'client_secret');
 
-		// Store given scopes in comma-separated string
+		// Store given scopes in space-separated string
 		$scopes =  explode(' ', $scope);
-		
-		$scopesArray = array(
-			'can_access_drive' => intval(in_array(self::DRIVE_SCOPE, $scopes)),
-			'can_access_contacts' => intval(in_array(self::CONTACTS_SCOPE, $scopes)),
-			'can_access_photos' => intval(in_array(self::PHOTOS_SCOPE, $scopes)),
-			'can_access_calendar' => intval(in_array(self::CALENDAR_SCOPE, $scopes) && in_array(self::CALENDAR_EVENTS_SCOPE, $scopes))
-		);
-		
+
+		$scopesArray = [
+			'can_access_drive' => in_array(self::DRIVE_SCOPE, $scopes) ? 1 : 0,
+			'can_access_contacts' => in_array(self::CONTACTS_SCOPE, $scopes) ? 1 : 0,
+			'can_access_photos' => in_array(self::PHOTOS_SCOPE, $scopes) ? 1 : 0,
+			'can_access_calendar' => (in_array(self::CALENDAR_SCOPE, $scopes) && in_array(self::CALENDAR_EVENTS_SCOPE, $scopes)) ? 1 : 0,
+		];
+
 		$this->config->setUserValue($this->userId, Application::APP_ID, 'user_scopes', json_encode($scopesArray));
-		
+
         // anyway, reset state
         $this->config->setUserValue($this->userId, Application::APP_ID, 'oauth_state', '');
 

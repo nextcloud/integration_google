@@ -73,12 +73,11 @@ class GoogleAPIService {
 	 * @param array $params
 	 * @return string
 	 */
-	private function buildURL(string $baseUrl, array $params = []): string {
+	private function buildUrl(string $baseUrl, array $params = []): string {
 		$paramsContent = http_build_query($params);
-		if (strpos($baseUrl, '?') !== FALSE) {
+		if (strpos($baseUrl, '?') !== false) {
         	$baseUrl .= '&'. $paramsContent;
-        }
-        else {
+        } else {
 			$baseUrl .= '?' . $paramsContent;
 		}
 		return $baseUrl;
@@ -128,7 +127,7 @@ class GoogleAPIService {
 
 			if (count($params) > 0) {
 				if ($method === 'GET') {
-					$url = $this->buildURL($url, $params);
+					$url = $this->buildUrl($url, $params);
 				} else {
 					$options['body'] = json_encode($params);
 				}
@@ -220,7 +219,7 @@ class GoogleAPIService {
 
 			if (count($params) > 0) {
 				if ($method === 'GET') {
-					$url = $this->buildURL($url, $params);
+					$url = $this->buildUrl($url, $params);
 				} else {
 					$options['body'] = $params;
 				}
@@ -272,7 +271,7 @@ class GoogleAPIService {
 
 			if (count($params) > 0) {
 				if ($method === 'GET') {
-					$url = $this->buildURL($url, $params);
+					$url = $this->buildUrl($url, $params);
 				} else {
 					$options['body'] = json_encode($params);
 				}
@@ -343,7 +342,7 @@ class GoogleAPIService {
 
 			if (count($params) > 0) {
 				if ($method === 'GET') {
-					$url = $this->buildURL($url, $params);
+					$url = $this->buildUrl($url, $params);
 				} else {
 					$options['body'] = json_encode($params);
 				}

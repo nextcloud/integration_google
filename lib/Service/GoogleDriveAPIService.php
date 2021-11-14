@@ -13,10 +13,13 @@ namespace OCA\Google\Service;
 
 use Datetime;
 use OCP\Files\Folder;
+use OCP\Files\InvalidPathException;
+use OCP\Files\NotPermittedException;
 use OCP\IConfig;
 use OCP\Files\IRootFolder;
 use OCP\Files\FileInfo;
 use OCP\BackgroundJob\IJobList;
+use OCP\Lock\ILockingProvider;
 use Psr\Log\LoggerInterface;
 use OCP\Files\NotFoundException;
 use OCP\Lock\LockedException;
@@ -54,9 +57,11 @@ class GoogleDriveAPIService {
 	 */
 	private $userScopeService;
 
-	const DOCUMENT_MIME_TYPES = array('document' => 'application/vnd.google-apps.document', 
-								'spreadsheet' => 'application/vnd.google-apps.spreadsheet', 
-								'presentation' => 'application/vnd.google-apps.presentation');
+	private const DOCUMENT_MIME_TYPES = [
+		'document' => 'application/vnd.google-apps.document',
+		'spreadsheet' => 'application/vnd.google-apps.spreadsheet',
+		'presentation' => 'application/vnd.google-apps.presentation',
+	];
 
 	/**
 	 * Service to make requests to Google v3 (JSON) API
@@ -322,31 +327,31 @@ class GoogleDriveAPIService {
 						continue;
 					}
 
-					if (isset($fileItem['parents']) && count($fileItem['parents']) > 0 && array_key_exists($fileItem['parents'][0], $directoriesById)) {
+					if (isset($fileItem['parents']) && count($fileItem['parents']) > 0
+						&& isset($directoriesById[$fileItem['parents'][0]], $directoriesById[$fileItem['parents'][0]]['node'])) {
 						$saveFolder = $directoriesById[$fileItem['parents'][0]]['node'];
 					} else {
 						$saveFolder = $folder;
 					}
 
 					$fileName = $this->getFileName($fileItem, $userId);
-					
-					// If file already exists on folder, don't download unless timestamp is different
-					if($saveFolder->nodeExists($fileName)) {
+
+					// If file already exists in folder, don't download unless timestamp is different
+					if ($saveFolder->nodeExists($fileName)) {
 						$savedFile = $saveFolder->get($fileName);
 						$timestampOnFile = $savedFile->getMtime();
 						$d = new Datetime($fileItem['modifiedTime']);
 						$timestampOnDrive = $d->getTimestamp();
-			
-						if($timestampOnFile < $timestampOnDrive) {
+
+						if ($timestampOnFile < $timestampOnDrive) {
 							$savedFile->delete();
-						}
-						else {
+						} else {
 							continue;
 						}
-					}	
+					}
 
 					$size = $this->getFile($accessToken, $userId, $fileItem, $saveFolder, $fileName);
-					
+
 					if (!is_null($size)) {
 						$nbDownloaded++;
 						$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_files', $alreadyImported + $nbDownloaded);
@@ -358,8 +363,7 @@ class GoogleDriveAPIService {
 								'finished' => false,
 							];
 						}
-					}
-					else if(!$saveFolder->nodeExists($fileName)) {
+					} elseif (!$saveFolder->nodeExists($fileName)) {
 						$filePathInDrive = $dirId === 'root' ? '/' . $fileItem['name'] : $directoriesById[$dirId]['name'] . '/' . $fileItem['name'];
 						$this->logFailedDownloadsForUser($folder, $filePathInDrive);
 					}
@@ -377,12 +381,16 @@ class GoogleDriveAPIService {
 		];
 	}
 
-
-	private function logFailedDownloadsForUser($folder, $fileName) {
+	/**
+	 * @param Folder $folder
+	 * @param string $fileName
+	 * @throws LockedException
+	 * @throws \OCP\Files\NotPermittedException
+	 */
+	private function logFailedDownloadsForUser(Folder $folder, string $fileName): void {
 		try {
 			$logFile = $folder->get('failed-downloads.md');
-		}
-		catch(NotFoundException $e) {
+		} catch (NotFoundException $e) {
 			$logFile = $folder->newFile('failed-downloads.md');
 		}
 
@@ -390,6 +398,7 @@ class GoogleDriveAPIService {
 		fwrite($stream, '1. Failed to download file: ' . $fileName . PHP_EOL);
 		fclose($stream);
 	}
+
 	/**
 	 * recursive directory creation
 	 * associate the folder node to directories on the fly
@@ -435,15 +444,16 @@ class GoogleDriveAPIService {
 	 * @param array $fileItem
 	 * @param array $params
 	 * @return ?int downloaded size, null if error during file creation or download
+	 * @throws InvalidPathException
+	 * @throws LockedException
 	 * @throws NotFoundException
-	 * @throws \OCP\Files\InvalidPathException
-	 * @throws \OCP\Files\NotPermittedException
+	 * @throws NotPermittedException
 	 */
-	 private function downloadAndSaveFile(string $accessToken, Folder $saveFolder, string $fileName, string $userId, string $fileUrl, array $fileItem, array $params = []) : ?int {
-		
+	 private function downloadAndSaveFile(string $accessToken, Folder $saveFolder, string $fileName, string $userId,
+										  string $fileUrl, array $fileItem, array $params = []): ?int {
 		try {
 			$savedFile = $saveFolder->newFile($fileName);
-		} catch (NotFoundException $e) {
+		} catch (NotPermittedException $e) {
 			return null;
 		}
 
@@ -467,10 +477,9 @@ class GoogleDriveAPIService {
 			}
 			$stat = $savedFile->stat();
 			return $stat['size'] ?? 0;
-
 		} else {
 			if ($savedFile->isDeletable()) {
-				$savedFile->unlock(\OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE);
+				$savedFile->unlock(ILockingProvider::LOCK_EXCLUSIVE);
 				$savedFile->delete();
 			}
 		}
@@ -482,13 +491,12 @@ class GoogleDriveAPIService {
 	 * @param string $userId
 	 * @return string name of the file to be saved
 	*/
-
-	private function getFileName(array $fileItem, string $userId) : string {
+	private function getFileName(array $fileItem, string $userId): string {
 		$fileName = preg_replace('/\//', '-', $fileItem['name'] ?? 'Untitled');
 
-		if(in_array($fileItem['mimeType'], array_values(self::DOCUMENT_MIME_TYPES))) {
+		if (in_array($fileItem['mimeType'], array_values(self::DOCUMENT_MIME_TYPES))) {
 			$documentFormat = $this->getUserDocumentFormat($userId);
-			switch($fileItem['mimeType']) {
+			switch ($fileItem['mimeType']) {
 				case self::DOCUMENT_MIME_TYPES['document']:
 					$fileName .= $documentFormat === 'openxml' ? '.docx' : '.odt';
 					break;
@@ -511,23 +519,22 @@ class GoogleDriveAPIService {
 	 * @param string $userId
 	 * @return string User's preferred document format
 	*/
-
-	private function getUserDocumentFormat(string $userId) : string {
+	private function getUserDocumentFormat(string $userId): string {
 		$documentFormat = $this->config->getUserValue($userId, Application::APP_ID, 'document_format', 'openxml');
 		if (!in_array($documentFormat, ['openxml', 'opendoc'])) {
 			$documentFormat = 'openxml';
 		}
 		return $documentFormat;
 	}
-	
+
 	/**
 	 * @param string $mimeType
 	 * @param string $documentFormat
 	 * @return array Request parameters for document
 	*/
-	private function getDocumentRequestParams(string $mimeType, string $documentFormat) : array {
-		$params = array();
-		switch($mimeType) {
+	private function getDocumentRequestParams(string $mimeType, string $documentFormat): array {
+		$params = [];
+		switch ($mimeType) {
 			case self::DOCUMENT_MIME_TYPES['document']:
 				$params['mimeType'] = $documentFormat === 'openxml'
 					? 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
@@ -556,18 +563,16 @@ class GoogleDriveAPIService {
 	 * @return ?int downloaded size, null if error getting file
 	 */
 	private function getFile(string $accessToken, string $userId, array $fileItem, Folder $saveFolder, string $fileName): ?int {
-		
-		if(in_array($fileItem['mimeType'], array_values(self::DOCUMENT_MIME_TYPES))) {
+		if (in_array($fileItem['mimeType'], array_values(self::DOCUMENT_MIME_TYPES))) {
 			$documentFormat = $this->getUserDocumentFormat($userId);
 			// potentially a doc
 			$params = $this->getDocumentRequestParams($fileItem['mimeType'], $documentFormat);
 			$fileUrl = 'https://www.googleapis.com/drive/v3/files/' . $fileItem['id'] . '/export';
-			return $this->downloadAndSaveFile($accessToken, $saveFolder, $fileName, $userId, $fileUrl, $fileItem, $params);	
-		}
-		// classic file
-		else if (isset($fileItem['webContentLink'])) {
+			return $this->downloadAndSaveFile($accessToken, $saveFolder, $fileName, $userId, $fileUrl, $fileItem, $params);
+		} elseif (isset($fileItem['webContentLink'])) {
+			// classic file
 			$fileUrl = 'https://www.googleapis.com/drive/v3/files/' . $fileItem['id'] . '?alt=media';
-			return $this->downloadAndSaveFile($accessToken, $saveFolder, $fileName, $userId, $fileUrl, $fileItem);	
+			return $this->downloadAndSaveFile($accessToken, $saveFolder, $fileName, $userId, $fileUrl, $fileItem);
 		}
 		return null;
 	}
