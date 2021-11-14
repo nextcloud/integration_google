@@ -131,29 +131,29 @@ class GooglePhotosAPIService {
 			} while (isset($result['nextPageToken']));
 		}
 
-		if (!($nbPhotos > 0)) {
-
+		// check if there is any photo outside albums
+		// (number is not relevant here as we just make one paginated request to avoid reaching request limit)
+		if ($nbPhotos === 0) {
 			$params = [
 				'pageSize' => 50,
 			];
 
 			$result = $this->googleApiService->request($accessToken, $userId, 'v1/mediaItems', $params, 'GET', 'https://photoslibrary.googleapis.com/');
-            if (isset($result['error'])) {
-                return $result;
+			if (isset($result['error'])) {
+				return $result;
 			}
-			  
-			if(isset($result['mediaItems']) && is_array($result['mediaItems'])) {
-                $nbPhotos += count($result['mediaItems']);
-			}
-			else {
+
+			if (isset($result['mediaItems']) && is_array($result['mediaItems'])) {
+				$nbPhotos += count($result['mediaItems']);
+			} else {
 				$this->logger->warning(
 					'Google API error getting media items list to get photo number, no "mediaItems" key in '
-						. json_encode($result),
+					. json_encode($result),
 					['app' => $this->appName]
 				);
 			}
 		}
-		
+
 		return [
 			'nbPhotos' => $nbPhotos,
 		];
