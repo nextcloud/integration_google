@@ -75,7 +75,6 @@
     "Failed to start importing Google Drive" : "Uvažanje vsebine Google Drive je spodletelo",
     "Choose where to write imported files" : "Izbor mesta za shranjevanje uvoženih datotek",
     "Choose where to write imported photos" : "Izbor mesta za shranjevanje uvoženih slik",
-    "_~{nbPhotos} Google photo (~{formSize})_::_~{nbPhotos} Google photos (~{formSize})_" : ["~{nbPhotos} slika Google Photos (~{formSize})","~{nbPhotos} sliki Google Photos (~{formSize})","~{nbPhotos} slike Google Photos (~{formSize})","~{nbPhotos} slik Google Photos (~{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} uvožena slika","{amount} uvoženi sliki","{amount} uvožene slike","{amount} uvoženih slik"],
     "_{nbFiles} file in Google Drive ({formSize} + {formSharedSize} shared with you)_::_{nbFiles} files in Google Drive ({formSize} + {formSharedSize} shared with you)_" : ["{nbFiles} datoteka v Google Drive ({formSize}) + {formSharedSize} v souporabi)","{nbFiles} datoteki v Google Drive ({formSize}) + {formSharedSize} v souporabi)","{nbFiles} datoteke v Google Drive ({formSize}) + {formSharedSize} v souporabi)","{nbFiles} datotek v Google Drive ({formSize}) + {formSharedSize} v souporabi)"],
     "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["{nbFiles} datoteka v programu Google Drive ({formSize})","{nbFiles} datoteki v programu Google Drive ({formSize})","{nbFiles} datoteke v programu Google Drive ({formSize})","{nbFiles} datotek v programu Google Drive ({formSize})"],

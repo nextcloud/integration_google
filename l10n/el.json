@@ -78,7 +78,6 @@
     "Failed to start importing Google Drive" : "Αποτυχία έναρξης εισαγωγής του Google Drive",
     "Choose where to write imported files" : "Επιλέξτε πού να γράψετε τα εισαγόμενα αρχεία",
     "Choose where to write imported photos" : "Επιλέξτε πού θα γράψετε τις εισαγόμενες φωτογραφίες",
-    "_~{nbPhotos} Google photo (~{formSize})_::_~{nbPhotos} Google photos (~{formSize})_" : ["~{nbPhotos} φωτογραφία Google (~{formSize})","~{nbPhotos} φωτογραφίες Google (~{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["Προστέθηκε {amount} φωτογραφία","Προστέθηκαν {amount} φωτογραφίες"],
     "_{nbFiles} file in Google Drive ({formSize} + {formSharedSize} shared with you)_::_{nbFiles} files in Google Drive ({formSize} + {formSharedSize} shared with you)_" : ["{nbFiles} αρχείο στο Google Drive ({formSize} + {formSharedSize} διαμοιράστηκε μαζί σας)","{nbFiles} αρχεία στο Google Drive ({formSize} + {formSharedSize} διαμοιράστηκαν μαζί σας)"],
     "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["{nbFiles} αρχείο στο Google Drive ({formSize})","{nbFiles} αρχεία στο Google Drive ({formSize})"],

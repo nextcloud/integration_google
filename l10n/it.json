@@ -77,7 +77,6 @@
     "Failed to start importing Google Drive" : "Avvio dell'importazione da Google Drive non riuscito",
     "Choose where to write imported files" : "Scegli dove scrivere i file importati",
     "Choose where to write imported photos" : "Scegli dove scrivere le foto importate",
-    "_~{nbPhotos} Google photo (~{formSize})_::_~{nbPhotos} Google photos (~{formSize})_" : ["~{nbPhotos} foto di Google (~{formSize})","~{nbPhotos} foto di Google (~{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} foto importata","{amount} foto importate"],
     "_{nbFiles} file in Google Drive ({formSize} + {formSharedSize} shared with you)_::_{nbFiles} files in Google Drive ({formSize} + {formSharedSize} shared with you)_" : ["{nbFiles} file in Google Drive ({formSize} + {formSharedSize} condivisi con te)","{nbFiles} file in Google Drive ({formSize} + {formSharedSize} condivisi con te)"],
     "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["{nbFiles} file in Google Drive ({formSize})","{nbFiles} file in Google Drive ({formSize})"],

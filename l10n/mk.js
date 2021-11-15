@@ -80,7 +80,6 @@ OC.L10N.register(
     "Failed to start importing Google Drive" : "Неуспешен почеток на увоз на Google драјв",
     "Choose where to write imported files" : "Избери каде да ги увезете датотеките",
     "Choose where to write imported photos" : "Избери каде да ги снимите увезените фотографии",
-    "_~{nbPhotos} Google photo (~{formSize})_::_~{nbPhotos} Google photos (~{formSize})_" : ["~{nbPhotos} Google фотографија (~{formSize})","~{nbPhotos} Google фотографии (~{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} фотографија увезена","{amount} фотографии увезени"],
     "_{nbFiles} file in Google Drive ({formSize} + {formSharedSize} shared with you)_::_{nbFiles} files in Google Drive ({formSize} + {formSharedSize} shared with you)_" : ["{nbFiles} датотека во Google драјв ({formSize} + {formSharedSize} споделени со вас)","{nbFiles} датотеки во Google драјв ({formSize} + {formSharedSize} споделени со вас)"],
     "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["{nbFiles} датотека во Google драјв ({formSize})","{nbFiles} датотеки во Google драјв ({formSize})"],

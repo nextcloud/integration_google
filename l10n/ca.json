@@ -72,7 +72,6 @@
     "Failed to start importing Google photos" : "No s'ha pogut començar a importar fotos de Google",
     "Starting importing files in {targetPath} directory" : "S'està iniciant la importació de fitxers al directori {targetPath}",
     "Failed to start importing Google Drive" : "No s'ha pogut començar a importar Google Drive",
-    "_~{nbPhotos} Google photo (~{formSize})_::_~{nbPhotos} Google photos (~{formSize})_" : ["~ {nbPhotos} foto de Google (~ {formSize})","~ {nbPhotos} fotos de Google (~ {formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} foto importada","{amount} fotos importades"],
     "_{nbFiles} file in Google Drive ({formSize} + {formSharedSize} shared with you)_::_{nbFiles} files in Google Drive ({formSize} + {formSharedSize} shared with you)_" : ["{nbFiles} fitxer a Google Drive ({formSize} + {formSharedSize} compartit amb tu)","{nbFiles} fitxers a Google Drive ({formSize} + {formSharedSize} compartits amb tu)"],
     "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["{nbFiles} fitxer a Google Drive ({formSize})","{nbFiles} fitxers a Google Drive ({formSize})"],

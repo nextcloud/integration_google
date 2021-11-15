@@ -80,7 +80,6 @@ OC.L10N.register(
     "Failed to start importing Google Drive" : "Google Drive inportatzen hasteak huts egin du",
     "Choose where to write imported files" : "Aukeratu non idatzi inportatutako fitxategiak",
     "Choose where to write imported photos" : "Aukeratu  non idatzi inportatutako argazkiak",
-    "_~{nbPhotos} Google photo (~{formSize})_::_~{nbPhotos} Google photos (~{formSize})_" : ["~{nbPhotos} Google argazkiak (~{formSize})","~{nbPhotos} Google argazkiak (~{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} argazki inportatu dira ","{amount} argazki inportatu dira "],
     "_{nbFiles} file in Google Drive ({formSize} + {formSharedSize} shared with you)_::_{nbFiles} files in Google Drive ({formSize} + {formSharedSize} shared with you)_" : ["{nbFiles} fitxategi daude Google Driven ({formSize}) + {formSharedSize} zurekin partekatuta","{nbFiles} fitxategi daude Google Driven ({formSize}) + {formSharedSize} zurekin partekatuta)"],
     "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["Fitxategi {nbFiles} dago Google Driven ({formSize})","{nbFiles} fitxategi daude Google Driven ({formSize})"],
