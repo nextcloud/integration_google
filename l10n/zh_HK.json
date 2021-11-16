@@ -78,6 +78,7 @@
     "Failed to start importing Google Drive" : "無法開始導入Google Drive",
     "Choose where to write imported files" : "選擇寫入導入檔案的位置",
     "Choose where to write imported photos" : "選擇寫入導入照片的位置",
+    "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} 張 Google 照片（>{formSize}）"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["導入了 {amount} 張照片"],
     "_{nbFiles} file in Google Drive ({formSize} + {formSharedSize} shared with you)_::_{nbFiles} files in Google Drive ({formSize} + {formSharedSize} shared with you)_" : ["Google Drive 的{nbFiles}個檔案（與您共享的{formSize} + {formSharedSize}）"],
     "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["Google Drive 的{nbFiles}個檔案（{formSize}）"],

@@ -78,6 +78,7 @@
     "Failed to start importing Google Drive" : "Nezdařilo se spustit import Google Drive",
     "Choose where to write imported files" : "Vyberte, kam chcete zapsat importované soubory",
     "Choose where to write imported photos" : "Vyberte, kam chcete zapsat importované fotky",
+    "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} Google fotka (>{formSize})",">{nbPhotos} Google fotky (>{formSize})",">{nbPhotos} Google fotek (>{formSize})",">{nbPhotos} Google fotky (>{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["importována {amount} fotka","importovány {amount} fotky","importováno {amount} fotek","importováno {amount} fotky"],
     "_{nbFiles} file in Google Drive ({formSize} + {formSharedSize} shared with you)_::_{nbFiles} files in Google Drive ({formSize} + {formSharedSize} shared with you)_" : ["{nbFiles} soubor na Google Drive ({formSize} + {formSharedSize} sdílený s vámi)","{nbFiles} soubory na Google Drive ({formSize} + {formSharedSize} sdílené s vámi)","{nbFiles} souborů na Google Drive ({formSize} + {formSharedSize} sdílených s vámi)","{nbFiles} souborů na Google Drive ({formSize} + {formSharedSize} sdílených s vámi)"],
     "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["{nbFiles} soubor na Google Drive ({formSize})","{nbFiles} soubory na Google Drive ({formSize})","{nbFiles} souborů na Google Drive ({formSize})","{nbFiles} souborů na Google Drive ({formSize})"],

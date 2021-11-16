@@ -80,6 +80,7 @@ OC.L10N.register(
     "Failed to start importing Google Drive" : "Nie udało się rozpocząć importowania Dysku Google",
     "Choose where to write imported files" : "Wybierz, gdzie zapisać zaimportowane pliki",
     "Choose where to write imported photos" : "Wybierz, gdzie zapisać zaimportowane zdjęcia",
+    "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} zdjęcie Google (>{formSize})",">{nbPhotos} zdjęcia Google (>{formSize})",">{nbPhotos} zdjęć Google (>{formSize})",">{nbPhotos} zdjęć Google (>{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["Zaimportowano {amount} zdjęcie","Zaimportowano {amount} zdjęcia","Zaimportowano {amount} zdjęć","Zaimportowano {amount} zdjęć"],
     "_{nbFiles} file in Google Drive ({formSize} + {formSharedSize} shared with you)_::_{nbFiles} files in Google Drive ({formSize} + {formSharedSize} shared with you)_" : ["{nbFiles} plik na Dysku Google ({formSize} + {formSharedSize} udostępnione Tobie)","{nbFiles} pliki na Dysku Google ({formSize} + {formSharedSize} udostępnione Tobie)","{nbFiles} plików na Dysku Google ({formSize} + {formSharedSize} udostępnione Tobie)","{nbFiles} plików na Dysku Google ({formSize} + {formSharedSize} udostępnione Tobie)"],
     "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["{nbFiles} plik na Dysku Google ({formSize})","{nbFiles} pliki na Dysku Google ({formSize})","{nbFiles} plików na Dysku Google ({formSize})","{nbFiles} plików na Dysku Google ({formSize})"],

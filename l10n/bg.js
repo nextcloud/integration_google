@@ -80,6 +80,7 @@ OC.L10N.register(
     "Failed to start importing Google Drive" : "Неуспешно стартиране на импортирането на Google Диск",
     "Choose where to write imported files" : "Изберете къде да запишете импортирани файлове",
     "Choose where to write imported photos" : "Изберете къде да запишете импортираните снимки",
+    "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} Google снимкa (>{formSize})",">{nbPhotos} Google снимки (>{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} снимки са импортирани","{amount} снимки са импортирани"],
     "_{nbFiles} file in Google Drive ({formSize} + {formSharedSize} shared with you)_::_{nbFiles} files in Google Drive ({formSize} + {formSharedSize} shared with you)_" : ["{nbFiles} файлове в Google Диск ({formSize} + {formSharedSize} споделени с вас)","{nbFiles} файлове в Google Диск ({formSize} + {formSharedSize} споделени с вас)"],
     "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["{nbFiles} файлове в Google Диск ({formSize})","{nbFiles} файлове в Google Диск ({formSize})"],

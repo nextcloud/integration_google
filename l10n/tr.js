@@ -80,6 +80,7 @@ OC.L10N.register(
     "Failed to start importing Google Drive" : "Google Drive dosyalarının içe aktarılmasına başlanamadı",
     "Choose where to write imported files" : "İçe aktarılan dosyaların kaydedileceği konumu seçin",
     "Choose where to write imported photos" : "İçe aktarılan fotoğrafların kaydedileceği konumu seçin",
+    "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} Google fotoğrafı (>{formSize})",">{nbPhotos} Google fotoğrafı (>{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} fotoğraf içe aktarıldı","{amount} fotoğraf içe aktarıldı"],
     "_{nbFiles} file in Google Drive ({formSize} + {formSharedSize} shared with you)_::_{nbFiles} files in Google Drive ({formSize} + {formSharedSize} shared with you)_" : ["{nbFiles} Google Drive üzerinde ({formSize} + {formSharedSize} sizinle paylaşılmış)","{nbFiles} Google Drive üzerinde ({formSize} + {formSharedSize} sizinle paylaşılmış)"],
     "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["{nbFiles} Google Drive dosyası ({formSize})","{nbFiles} Google Drive dosyası ({formSize})"],
