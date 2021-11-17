@@ -78,6 +78,7 @@
     "Failed to start importing Google Drive" : "Kon import Google drive niet starten",
     "Choose where to write imported files" : "Kies waar geïmporteerde bestanden moeten worden weggeschreven",
     "Choose where to write imported photos" : "Kies waar geïmporteerde foto's moeten worden weggeschreven",
+    "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} Google foto's (>{formSize})",">{nbPhotos} Google foto's (>{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} foto geïmporteerd","{amount} foto's geïmporteerd"],
     "_{nbFiles} file in Google Drive ({formSize} + {formSharedSize} shared with you)_::_{nbFiles} files in Google Drive ({formSize} + {formSharedSize} shared with you)_" : ["{nbFiles} bestand in Google Drive ({formSize} + {formSharedSize} gedeeld met jou)","{nbFiles} bestanden in Google Drive ({formSize} + {formSharedSize} gedeeld met jou)"],
     "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["{nbFiles} bestand in Google Drive ({formSize})","{nbFiles} bestanden in Google Drive ({formSize})"],
