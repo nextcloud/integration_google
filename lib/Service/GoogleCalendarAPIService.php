@@ -265,12 +265,12 @@ class GoogleCalendarAPIService {
 				$nbAdded++;
 			} catch (BadRequest $ex) {
 				if (strpos($ex->getMessage(), 'uid already exists') !== false) {
-					$this->logger->info('Skip existing event "' . ($e['summary'] ?? 'no title') . '"', ['app' => $this->appName]);
+					$this->logger->debug('Skip existing event', ['app' => $this->appName]);
 				} else {
-					$this->logger->warning('Error when creating calendar event "' . ($e['summary'] ?? 'no title') . '" ' . $ex->getMessage(), ['app' => $this->appName]);
+					$this->logger->warning('Error when creating calendar event "' . '<redacted>' . '" ' . $ex->getMessage(), ['app' => $this->appName]);
 				}
 			} catch (Exception | Throwable $ex) {
-				$this->logger->warning('Error when creating calendar event "' . ($e['summary'] ?? 'no title') . '" ' . $ex->getMessage(), ['app' => $this->appName]);
+				$this->logger->warning('Error when creating calendar event "' . '<redacted>' . '" ' . $ex->getMessage(), ['app' => $this->appName]);
 			}
 		}
 
