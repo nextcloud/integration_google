@@ -13,10 +13,13 @@ namespace OCA\Google\Service;
 
 use Datetime;
 use OCP\Files\Folder;
+use OCP\Files\InvalidPathException;
+use OCP\Files\NotPermittedException;
 use OCP\IConfig;
 use OCP\Files\IRootFolder;
 use OCP\Files\FileInfo;
 use OCP\BackgroundJob\IJobList;
+use OCP\Lock\ILockingProvider;
 use Psr\Log\LoggerInterface;
 use OCP\Files\NotFoundException;
 use OCP\Lock\LockedException;
@@ -53,6 +56,12 @@ class GoogleDriveAPIService {
 	 * @var UserScopeService
 	 */
 	private $userScopeService;
+
+	private const DOCUMENT_MIME_TYPES = [
+		'document' => 'application/vnd.google-apps.document',
+		'spreadsheet' => 'application/vnd.google-apps.spreadsheet',
+		'presentation' => 'application/vnd.google-apps.presentation',
+	];
 
 	/**
 	 * Service to make requests to Google v3 (JSON) API
@@ -191,7 +200,7 @@ class GoogleDriveAPIService {
 			$result = $this->importFiles($accessToken, $userId, $targetPath, 500000000, $alreadyImported, $directoryProgress);
 		} catch (\Exception | \Throwable $e) {
 			$result = [
-				'error' => 'Unknow job failure. ' . $e->getMessage(),
+				'error' => 'Unknown job failure. ' . $e->getMessage(),
 			];
 		}
 		if (isset($result['error']) || (isset($result['finished']) && $result['finished'])) {
@@ -317,7 +326,32 @@ class GoogleDriveAPIService {
 					if (!$considerSharedFiles && !$fileItem['ownedByMe']) {
 						continue;
 					}
-					$size = $this->getFile($accessToken, $userId, $fileItem, $directoriesById, $folder);
+
+					if (isset($fileItem['parents']) && count($fileItem['parents']) > 0
+						&& isset($directoriesById[$fileItem['parents'][0]], $directoriesById[$fileItem['parents'][0]]['node'])) {
+						$saveFolder = $directoriesById[$fileItem['parents'][0]]['node'];
+					} else {
+						$saveFolder = $folder;
+					}
+
+					$fileName = $this->getFileName($fileItem, $userId);
+
+					// If file already exists in folder, don't download unless timestamp is different
+					if ($saveFolder->nodeExists($fileName)) {
+						$savedFile = $saveFolder->get($fileName);
+						$timestampOnFile = $savedFile->getMtime();
+						$d = new Datetime($fileItem['modifiedTime']);
+						$timestampOnDrive = $d->getTimestamp();
+
+						if ($timestampOnFile < $timestampOnDrive) {
+							$savedFile->delete();
+						} else {
+							continue;
+						}
+					}
+
+					$size = $this->getFile($accessToken, $userId, $fileItem, $saveFolder, $fileName);
+
 					if (!is_null($size)) {
 						$nbDownloaded++;
 						$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_files', $alreadyImported + $nbDownloaded);
@@ -329,6 +363,9 @@ class GoogleDriveAPIService {
 								'finished' => false,
 							];
 						}
+					} elseif (!$saveFolder->nodeExists($fileName)) {
+						$filePathInDrive = $dirId === 'root' ? '/' . $fileItem['name'] : $directoriesById[$dirId]['name'] . '/' . $fileItem['name'];
+						$this->logFailedDownloadsForUser($folder, $filePathInDrive);
 					}
 				}
 				$params['pageToken'] = $result['nextPageToken'] ?? '';
@@ -342,6 +379,24 @@ class GoogleDriveAPIService {
 			'targetPath' => $targetPath,
 			'finished' => true,
 		];
+	}
+
+	/**
+	 * @param Folder $folder
+	 * @param string $fileName
+	 * @throws LockedException
+	 * @throws \OCP\Files\NotPermittedException
+	 */
+	private function logFailedDownloadsForUser(Folder $folder, string $fileName): void {
+		try {
+			$logFile = $folder->get('failed-downloads.md');
+		} catch (NotFoundException $e) {
+			$logFile = $folder->newFile('failed-downloads.md');
+		}
+
+		$stream = $logFile->fopen('a');
+		fwrite($stream, '1. Failed to download file: ' . $fileName . PHP_EOL);
+		fclose($stream);
 	}
 
 	/**
@@ -379,133 +434,145 @@ class GoogleDriveAPIService {
 	}
 
 	/**
+	 * Create new file in the given folder with given filename
+	 * Download contents of the file from Google Drive and save it into the created file
+	 * @param string $accessToken
+	 * @param Folder $saveFolder
+	 * @param string $fileName
+	 * @param string $userId
+	 * @param string $fileUrl
+	 * @param array $fileItem
+	 * @param array $params
+	 * @return ?int downloaded size, null if error during file creation or download
+	 * @throws InvalidPathException
+	 * @throws LockedException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	 private function downloadAndSaveFile(string $accessToken, Folder $saveFolder, string $fileName, string $userId,
+										  string $fileUrl, array $fileItem, array $params = []): ?int {
+		try {
+			$savedFile = $saveFolder->newFile($fileName);
+		} catch (NotPermittedException $e) {
+			return null;
+		}
+
+		try {
+			$resource = $savedFile->fopen('w');
+		} catch (LockedException $e) {
+			return null;
+		}
+
+		$res = $this->googleApiService->simpleDownload($accessToken, $userId, $fileUrl, $resource, $params);
+		if (!isset($res['error'])) {
+			if (is_resource($resource)) {
+				fclose($resource);
+			}
+			if (isset($fileItem['modifiedTime'])) {
+				$d = new Datetime($fileItem['modifiedTime']);
+				$ts = $d->getTimestamp();
+				$savedFile->touch($ts);
+			} else {
+				$savedFile->touch();
+			}
+			$stat = $savedFile->stat();
+			return $stat['size'] ?? 0;
+		} else {
+			if ($savedFile->isDeletable()) {
+				$savedFile->unlock(ILockingProvider::LOCK_EXCLUSIVE);
+				$savedFile->delete();
+			}
+		}
+		return null;
+	 }
+
+	/**
+	 * @param array $fileItem
+	 * @param string $userId
+	 * @return string name of the file to be saved
+	*/
+	private function getFileName(array $fileItem, string $userId): string {
+		$fileName = preg_replace('/\//', '-', $fileItem['name'] ?? 'Untitled');
+
+		if (in_array($fileItem['mimeType'], array_values(self::DOCUMENT_MIME_TYPES))) {
+			$documentFormat = $this->getUserDocumentFormat($userId);
+			switch ($fileItem['mimeType']) {
+				case self::DOCUMENT_MIME_TYPES['document']:
+					$fileName .= $documentFormat === 'openxml' ? '.docx' : '.odt';
+					break;
+				case self::DOCUMENT_MIME_TYPES['spreadsheet']:
+					$fileName .= $documentFormat === 'openxml' ? '.xlsx' : '.ods';
+					break;
+				case self::DOCUMENT_MIME_TYPES['presentation']:
+					$fileName .= $documentFormat === 'openxml' ? '.pptx' : '.odp';
+					break;
+			}
+		}
+
+		$extension = pathinfo($fileName, PATHINFO_EXTENSION);
+		$name = pathinfo($fileName, PATHINFO_FILENAME) . '_' . substr($fileItem['id'], -6);
+
+		return strlen($extension) ? $name . '.' . $extension : $name;
+	}
+
+	/**
+	 * @param string $userId
+	 * @return string User's preferred document format
+	*/
+	private function getUserDocumentFormat(string $userId): string {
+		$documentFormat = $this->config->getUserValue($userId, Application::APP_ID, 'document_format', 'openxml');
+		if (!in_array($documentFormat, ['openxml', 'opendoc'])) {
+			$documentFormat = 'openxml';
+		}
+		return $documentFormat;
+	}
+
+	/**
+	 * @param string $mimeType
+	 * @param string $documentFormat
+	 * @return array Request parameters for document
+	*/
+	private function getDocumentRequestParams(string $mimeType, string $documentFormat): array {
+		$params = [];
+		switch ($mimeType) {
+			case self::DOCUMENT_MIME_TYPES['document']:
+				$params['mimeType'] = $documentFormat === 'openxml'
+					? 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+					: 'application/vnd.oasis.opendocument.text';
+				break;
+			case self::DOCUMENT_MIME_TYPES['spreadsheet']:
+				$params['mimeType'] = $documentFormat === 'openxml'
+					? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+					: 'application/vnd.oasis.opendocument.spreadsheet';
+				break;
+			case self::DOCUMENT_MIME_TYPES['presentation']:
+				$params['mimeType'] = $documentFormat === 'openxml'
+					? 'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+					:'application/vnd.oasis.opendocument.presentation';
+				break;
+		}
+		return $params;
+	}
+
+	/**
 	 * @param string $accessToken
 	 * @param string $userId
 	 * @param array $fileItem
-	 * @param array $directoriesById
-	 * @param Folder $topFolder
-	 * @return ?int downloaded size, null if already existing
-	 * @throws NotFoundException
-	 * @throws \OCP\Files\InvalidPathException
-	 * @throws \OCP\Files\NotPermittedException
+	 * @param Folder $saveFolder
+	 * @param string $fileName
+	 * @return ?int downloaded size, null if error getting file
 	 */
-	private function getFile(string $accessToken, string $userId, array $fileItem, array $directoriesById, Folder $topFolder): ?int {
-		$fileName = preg_replace('/\//', '-slash-', $fileItem['name'] ?? 'Untitled');
-		if (isset($fileItem['parents']) && count($fileItem['parents']) > 0 && array_key_exists($fileItem['parents'][0], $directoriesById)) {
-			$saveFolder = $directoriesById[$fileItem['parents'][0]]['node'];
-		} else {
-			$saveFolder = $topFolder;
-		}
-		// classic file
-		if (isset($fileItem['webContentLink'])) {
-			if (!$saveFolder->nodeExists($fileName)) {
-				$fileUrl = 'https://www.googleapis.com/drive/v3/files/' . $fileItem['id'] . '?alt=media';
-				try {
-					$savedFile = $saveFolder->newFile($fileName);
-				} catch (NotFoundException $e) {
-					$this->logger->warning(
-						'Google Drive error, can\'t create file',
-						['app' => $this->appName]
-					);
-					return null;
-				}
-				try {
-					$resource = $savedFile->fopen('w');
-				} catch (LockedException $e) {
-					$this->logger->warning('Google Drive error opening target file ' . '<redacted>' . ' : file is locked', ['app' => $this->appName]);
-					return null;
-				}
-				$res = $this->googleApiService->simpleDownload($accessToken, $userId, $fileUrl, $resource);
-				if (!isset($res['error'])) {
-					if (is_resource($resource)) {
-						fclose($resource);
-					}
-					if (isset($fileItem['modifiedTime'])) {
-						$d = new Datetime($fileItem['modifiedTime']);
-						$ts = $d->getTimestamp();
-						$savedFile->touch($ts);
-					} else {
-						$savedFile->touch();
-					}
-					$stat = $savedFile->stat();
-					return $stat['size'] ?? 0;
-				} else {
-					$this->logger->warning('Google Drive error downloading file ' . '<redacted>' . ' : ' . $res['error'], ['app' => $this->appName]);
-					if ($savedFile->isDeletable()) {
-						$savedFile->delete();
-					}
-				}
-			}
-		} else {
-			$documentFormat = $this->config->getUserValue($userId, Application::APP_ID, 'document_format', 'openxml');
-			if (!in_array($documentFormat, ['openxml', 'opendoc'])) {
-				$documentFormat = 'openxml';
-			}
+	private function getFile(string $accessToken, string $userId, array $fileItem, Folder $saveFolder, string $fileName): ?int {
+		if (in_array($fileItem['mimeType'], array_values(self::DOCUMENT_MIME_TYPES))) {
+			$documentFormat = $this->getUserDocumentFormat($userId);
 			// potentially a doc
-			if ($fileItem['mimeType'] === 'application/vnd.google-apps.document') {
-				$fileName .= $documentFormat === 'openxml' ? '.docx' : '.odt';
-				$mimeType = $documentFormat === 'openxml'
-					? 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-					: 'application/vnd.oasis.opendocument.text';
-			} elseif ($fileItem['mimeType'] === 'application/vnd.google-apps.spreadsheet') {
-				$fileName .= $documentFormat === 'openxml' ? '.xlsx' : '.ods';
-				$mimeType = $documentFormat === 'openxml'
-					? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-					: 'application/vnd.oasis.opendocument.spreadsheet';
-			} elseif ($fileItem['mimeType'] === 'application/vnd.google-apps.presentation') {
-				$fileName .= $documentFormat === 'openxml' ? '.pptx' : '.odp';
-				$mimeType = $documentFormat === 'openxml'
-					? 'application/vnd.openxmlformats-officedocument.presentationml.presentation'
-					:'application/vnd.oasis.opendocument.presentation';
-			} else {
-				$this->logger->warning(
-					'Google Drive error downloading file, no webContentLink, unknown mime type',
-					['app' => $this->appName]
-				);
-				return null;
-			}
-			if (!$saveFolder->nodeExists($fileName)) {
-				$params = [
-					'mimeType' => $mimeType,
-				];
-				$fileUrl = 'https://www.googleapis.com/drive/v3/files/' . $fileItem['id'] . '/export';
-				$saveFolder->newFile($fileName);
-				try {
-					$savedFile = $saveFolder->newFile($fileName);
-				} catch (NotFoundException $e) {
-					$this->logger->warning(
-						'Google Drive error, can\'t create document file',
-						['app' => $this->appName]
-					);
-					return null;
-				}
-				try {
-					$resource = $savedFile->fopen('w');
-				} catch (LockedException $e) {
-					$this->logger->warning('Google Drive error opening target file ' . $savedFile->getPath() . ' : file is locked', ['app' => $this->appName]);
-					return null;
-				}
-				$res = $this->googleApiService->simpleDownload($accessToken, $userId, $fileUrl, $resource, $params);
-				if (!isset($res['error'])) {
-					if (is_resource($resource)) {
-						fclose($resource);
-					}
-					if (isset($fileItem['modifiedTime'])) {
-						$d = new Datetime($fileItem['modifiedTime']);
-						$ts = $d->getTimestamp();
-						$savedFile->touch($ts);
-					} else {
-						$savedFile->touch();
-					}
-					$stat = $savedFile->stat();
-					return $stat['size'] ?? 0;
-				} else {
-					$this->logger->warning('Google Drive error downloading file ' . '<redacted>' . ' : ' . $res['error'], ['app' => $this->appName]);
-					if ($savedFile->isDeletable()) {
-						$savedFile->delete();
-					}
-				}
-			}
+			$params = $this->getDocumentRequestParams($fileItem['mimeType'], $documentFormat);
+			$fileUrl = 'https://www.googleapis.com/drive/v3/files/' . $fileItem['id'] . '/export';
+			return $this->downloadAndSaveFile($accessToken, $saveFolder, $fileName, $userId, $fileUrl, $fileItem, $params);
+		} elseif (isset($fileItem['webContentLink'])) {
+			// classic file
+			$fileUrl = 'https://www.googleapis.com/drive/v3/files/' . $fileItem['id'] . '?alt=media';
+			return $this->downloadAndSaveFile($accessToken, $saveFolder, $fileName, $userId, $fileUrl, $fileItem);
 		}
 		return null;
 	}

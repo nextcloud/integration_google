@@ -116,8 +116,8 @@
 						<label>
 							<span class="icon icon-toggle-pictures" />
 							{{ n('integration_google',
-								'~{nbPhotos} Google photo (~{formSize})',
-								'~{nbPhotos} Google photos (~{formSize})',
+								'>{nbPhotos} Google photo (>{formSize})',
+								'>{nbPhotos} Google photos (>{formSize})',
 								nbPhotos,
 								{ nbPhotos, formSize: myHumanFileSize(estimatedPhotoCollectionSize, true) })
 							}}
@@ -354,13 +354,21 @@ export default {
 
 		// get informations if we are connected
 		if (this.showOAuth && this.connected) {
-			this.getGoogleCalendarList()
-			this.getLocalAddressBooks()
-			this.getNbGoogleContacts()
-			this.getNbGooglePhotos()
-			this.getPhotoImportValues(true)
-			this.getGoogleDriveInfo()
-			this.getDriveImportValues(true)
+			if (this.state.user_scopes.can_access_calendar) {
+				this.getGoogleCalendarList()
+				this.getLocalAddressBooks()
+			}
+			if (this.state.user_scopes.can_access_contacts) {
+				this.getNbGoogleContacts()
+			}
+			if (this.state.user_scopes.can_access_photos) {
+				this.getNbGooglePhotos()
+				this.getPhotoImportValues(true)
+			}
+			if (this.state.user_scopes.can_access_drive) {
+				this.getGoogleDriveInfo()
+				this.getDriveImportValues(true)
+			}
 		}
 	},
 

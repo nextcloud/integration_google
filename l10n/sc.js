@@ -79,7 +79,6 @@ OC.L10N.register(
     "Failed to start importing Google Drive" : "No at fatu a cumintzare s'importatzione de Google Drive",
     "Choose where to write imported files" : "Sèbera in ue est a pònnere is archìvios importados",
     "Choose where to write imported photos" : "Sèbera in ue est a pònnere is fotos importadas",
-    "_~{nbPhotos} Google photo (~{formSize})_::_~{nbPhotos} Google photos (~{formSize})_" : ["~{nbPhotos} foto de Google (~{formSize})","~{nbPhotos} fotos de Google (~{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} fotos importadas","{amount} fotos importadas"],
     "_{nbFiles} file in Google Drive ({formSize} + {formSharedSize} shared with you)_::_{nbFiles} files in Google Drive ({formSize} + {formSharedSize} shared with you)_" : ["{nbFiles} archìvios in Google Drive ({formSize} + {formSharedSize} cumpartzidos cun tegus)","{nbFiles} archìvios in Google Drive ({formSize} + {formSharedSize} cumpartzidos cun tegus)"],
     "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["{nbFiles} archìvios in Google Drive ({formSize})","{nbFiles} file in Google Drive ({formSize})"],

@@ -69,6 +69,21 @@ class GoogleAPIService {
 	}
 
 	/**
+	 * @param string $baseUrl
+	 * @param array $params
+	 * @return string
+	 */
+	private function buildUrl(string $baseUrl, array $params = []): string {
+		$paramsContent = http_build_query($params);
+		if (strpos($baseUrl, '?') !== false) {
+        	$baseUrl .= '&'. $paramsContent;
+        } else {
+			$baseUrl .= '?' . $paramsContent;
+		}
+		return $baseUrl;
+
+	}
+	/**
 	 * @param string $userId
 	 * @param string $subject
 	 * @param array $params
@@ -112,8 +127,7 @@ class GoogleAPIService {
 
 			if (count($params) > 0) {
 				if ($method === 'GET') {
-					$paramsContent = http_build_query($params);
-					$url .= '?' . $paramsContent;
+					$url = $this->buildUrl($url, $params);
 				} else {
 					$options['body'] = json_encode($params);
 				}
@@ -180,7 +194,7 @@ class GoogleAPIService {
 			return [
 				'error' => 'ServerException|ClientException, message:'
 					. $e->getMessage()
-					. ' status code: ' . $response->getStatusCode()
+					. ' status code: ' . $response->getStatusCode(),
 			];
 		} catch (ConnectException $e) {
 			$this->logger->warning('Google API error : '.$e->getMessage(), ['app' => $this->appName]);
@@ -205,8 +219,7 @@ class GoogleAPIService {
 
 			if (count($params) > 0) {
 				if ($method === 'GET') {
-					$paramsContent = http_build_query($params);
-					$url .= '?' . $paramsContent;
+					$url = $this->buildUrl($url, $params);
 				} else {
 					$options['body'] = $params;
 				}
@@ -258,8 +271,7 @@ class GoogleAPIService {
 
 			if (count($params) > 0) {
 				if ($method === 'GET') {
-					$paramsContent = http_build_query($params);
-					$url .= '?' . $paramsContent;
+					$url = $this->buildUrl($url, $params);
 				} else {
 					$options['body'] = json_encode($params);
 				}
@@ -330,8 +342,7 @@ class GoogleAPIService {
 
 			if (count($params) > 0) {
 				if ($method === 'GET') {
-					$paramsContent = http_build_query($params);
-					$url .= '?' . $paramsContent;
+					$url = $this->buildUrl($url, $params);
 				} else {
 					$options['body'] = json_encode($params);
 				}

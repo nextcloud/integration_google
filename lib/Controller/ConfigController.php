@@ -52,6 +52,12 @@ class ConfigController extends Controller {
 	 */
 	private $userId;
 
+	const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.readonly';
+	const CONTACTS_SCOPE = 'https://www.googleapis.com/auth/contacts.readonly';
+	const CALENDAR_SCOPE = 'https://www.googleapis.com/auth/calendar.readonly';
+	const CALENDAR_EVENTS_SCOPE = 'https://www.googleapis.com/auth/calendar.events.readonly';
+	const PHOTOS_SCOPE = 'https://www.googleapis.com/auth/photoslibrary.readonly';
+
 	public function __construct($appName,
 								IRequest $request,
 								IConfig $config,
@@ -135,13 +141,26 @@ class ConfigController extends Controller {
 	 *
 	 * @param string $code request code to use when requesting oauth token
 	 * @param string $state value that was sent with original GET request. Used to check auth redirection is valid
+	 * @param string $scope scopes allowed by user
 	 * @param ?string $error
 	 * @return RedirectResponse to user settings
 	 */
-	public function oauthRedirect(string $code = '', string $state = '', string $error = ''): RedirectResponse {
+	public function oauthRedirect(string $code = '', string $state = '',  string $scope = '', string $error = ''): RedirectResponse {
 		$configState = $this->config->getUserValue($this->userId, Application::APP_ID, 'oauth_state');
 		$clientID = $this->config->getAppValue(Application::APP_ID, 'client_id');
 		$clientSecret = $this->config->getAppValue(Application::APP_ID, 'client_secret');
+
+		// Store given scopes in space-separated string
+		$scopes =  explode(' ', $scope);
+
+		$scopesArray = [
+			'can_access_drive' => in_array(self::DRIVE_SCOPE, $scopes) ? 1 : 0,
+			'can_access_contacts' => in_array(self::CONTACTS_SCOPE, $scopes) ? 1 : 0,
+			'can_access_photos' => in_array(self::PHOTOS_SCOPE, $scopes) ? 1 : 0,
+			'can_access_calendar' => (in_array(self::CALENDAR_SCOPE, $scopes) && in_array(self::CALENDAR_EVENTS_SCOPE, $scopes)) ? 1 : 0,
+		];
+
+		$this->config->setUserValue($this->userId, Application::APP_ID, 'user_scopes', json_encode($scopesArray));
 
         // anyway, reset state
         $this->config->setUserValue($this->userId, Application::APP_ID, 'oauth_state', '');

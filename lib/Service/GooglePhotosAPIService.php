@@ -16,6 +16,7 @@ use OCP\Files\Folder;
 use OCP\IConfig;
 use OCP\Files\IRootFolder;
 use OCP\Files\FileInfo;
+use OCP\Lock\ILockingProvider;
 use OCP\Lock\LockedException;
 use OCP\BackgroundJob\IJobList;
 use Psr\Log\LoggerInterface;
@@ -95,12 +96,6 @@ class GooglePhotosAPIService {
 				foreach ($result['albums'] as $album) {
 					$nbPhotos += $album['mediaItemsCount'] ?? 0;
 				}
-			} else {
-				$this->logger->warning(
-					'Google API error getting album list to get photo number, no "albums" key in '
-						. json_encode($result),
-					['app' => $this->appName]
-				);
 			}
 			$params['pageToken'] = $result['nextPageToken'] ?? '';
 		} while (isset($result['nextPageToken']));
@@ -120,16 +115,34 @@ class GooglePhotosAPIService {
 					foreach ($result['sharedAlbums'] as $album) {
 						$nbPhotos += $album['mediaItemsCount'] ?? 0;
 					}
-				} else {
-					$this->logger->warning(
-						'Google API error getting shared albums list to get photo number, no "sharedAlbums" key in '
-							. json_encode($result),
-						['app' => $this->appName]
-					);
 				}
 				$params['pageToken'] = $result['nextPageToken'] ?? '';
 			} while (isset($result['nextPageToken']));
 		}
+
+		// check if there is any photo outside albums
+		// (number is not relevant here as we just make one paginated request to avoid reaching request limit)
+		if ($nbPhotos === 0) {
+			$params = [
+				'pageSize' => 50,
+			];
+
+			$result = $this->googleApiService->request($accessToken, $userId, 'v1/mediaItems', $params, 'GET', 'https://photoslibrary.googleapis.com/');
+			if (isset($result['error'])) {
+				return $result;
+			}
+
+			if (isset($result['mediaItems']) && is_array($result['mediaItems'])) {
+				$nbPhotos += count($result['mediaItems']);
+			} else {
+				$this->logger->warning(
+					'Google API error getting media items list to get photo number, no "mediaItems" key in '
+					. json_encode($result),
+					['app' => $this->appName]
+				);
+			}
+		}
+
 		return [
 			'nbPhotos' => $nbPhotos,
 		];
@@ -250,12 +263,6 @@ class GooglePhotosAPIService {
 				foreach ($result['albums'] as $album) {
 					$albums[] = $album;
 				}
-			} else {
-				$this->logger->warning(
-					'Google API error getting album list when importing, no "albums" key in '
-						. json_encode($result),
-					['app' => $this->appName]
-				);
 			}
 			$params['pageToken'] = $result['nextPageToken'] ?? '';
 		} while (isset($result['nextPageToken']));
@@ -275,8 +282,6 @@ class GooglePhotosAPIService {
 					foreach ($result['sharedAlbums'] as $album) {
 						$albums[] = $album;
 					}
-				} else {
-					$this->logger->warning('Google API error getting shared albums list, no "sharedAlbums" key in ' . json_encode($result), ['app' => $this->appName]);
 				}
 				$params['pageToken'] = $result['nextPageToken'] ?? '';
 			} while (isset($result['nextPageToken']));
@@ -331,8 +336,6 @@ class GooglePhotosAPIService {
 							}
 						}
 					}
-				} else {
-					$this->logger->warning('Google API error getting photo list, no "mediaItems" key in ' . json_encode($result), ['app' => $this->appName]);
 				}
 				$params['pageToken'] = $result['nextPageToken'] ?? '';
 			} while (isset($result['nextPageToken']));
@@ -368,8 +371,6 @@ class GooglePhotosAPIService {
 						}
 					}
 				}
-			} else {
-				$this->logger->warning('Google API error getting photo list, no "mediaItems" key in ' . json_encode($result), ['app' => $this->appName]);
 			}
 			$params['pageToken'] = $result['nextPageToken'] ?? '';
 		} while (isset($result['nextPageToken']));
@@ -429,6 +430,7 @@ class GooglePhotosAPIService {
 			} else {
 				$this->logger->warning('Google API error downloading photo ' . '<redacted>' . ' : ' . $res['error'], ['app' => $this->appName]);
 				if ($savedFile->isDeletable()) {
+					$savedFile->unlock(ILockingProvider::LOCK_EXCLUSIVE);
 					$savedFile->delete();
 				}
 			}

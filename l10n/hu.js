@@ -79,7 +79,6 @@ OC.L10N.register(
     "Failed to start importing Google Drive" : "Nem sikerült elindítani a Google Drive importálását",
     "Choose where to write imported files" : "Válassza ki az importált fájlok helyét",
     "Choose where to write imported photos" : "Válassza ki az importált fotókat helyét",
-    "_~{nbPhotos} Google photo (~{formSize})_::_~{nbPhotos} Google photos (~{formSize})_" : ["~{nbPhotos} Google photo (~{formSize})","~{nbPhotos} Google photo (~{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} fotó importálva","{amount} fotó importálva"],
     "_{nbFiles} file in Google Drive ({formSize} + {formSharedSize} shared with you)_::_{nbFiles} files in Google Drive ({formSize} + {formSharedSize} shared with you)_" : ["{nbFiles} fájl a Google Drive-on ({formSize} + {formSharedSize} megosztva Önnel)","{nbFiles} fájl a Google Drive-on ({formSize} + {formSharedSize} megosztva Önnel)"],
     "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["{nbFiles} fájl a Google Drive-on ({formSize})","{nbFiles} fájl a Google Drive-on ({formSize})"],

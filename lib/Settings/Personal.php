@@ -84,6 +84,10 @@ class Personal implements ISettings {
 			$info = $this->googleAPIService->request($accessToken, $this->userId, 'oauth2/v1/userinfo', ['alt' => 'json']);
 		}
 
+		// Get scopes of user
+		$userScopes = $this->config->getUserValue($this->userId, Application::APP_ID, 'user_scopes', '{}');
+		$userScopes = json_decode($userScopes);
+
 		$userConfig = [
 			'client_id' => $clientID,
 			'client_secret' => $clientSecret,
@@ -95,6 +99,7 @@ class Personal implements ISettings {
 			'document_format' => $documentFormat,
 			'drive_output_dir' => $driveOutputDir,
 			'photo_output_dir' => $photoOutputDir,
+			'user_scopes' => $userScopes,
 		];
 		$this->initialStateService->provideInitialState('user-config', $userConfig);
 		return new TemplateResponse(Application::APP_ID, 'personalSettings');

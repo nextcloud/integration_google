@@ -78,7 +78,6 @@ OC.L10N.register(
     "Failed to start importing Google Drive" : "Produciuse un fallo ao comezar a importar dende Google Drive",
     "Choose where to write imported files" : "Escolla onde gravar os ficheiros importados",
     "Choose where to write imported photos" : "Escolla onde gravar as fotos importadas",
-    "_~{nbPhotos} Google photo (~{formSize})_::_~{nbPhotos} Google photos (~{formSize})_" : ["~{nbPhotos} foto de Google (~{formSize})","~{nbPhotos} fotos de Google (~{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} foto importada","{amount} fotos importadas"],
     "_{nbFiles} file in Google Drive ({formSize} + {formSharedSize} shared with you)_::_{nbFiles} files in Google Drive ({formSize} + {formSharedSize} shared with you)_" : ["{nbFiles} ficheiro no Google Drive ({formSize} + {formSharedSize} compartido con vostede)","{nbFiles} ficheiros no Google Drive ({formSize} + {formSharedSize} compartidos con vostede)"],
     "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["{nbFiles} ficheiro no Google Drive ({formSize})","{nbFiles} ficheiros no Google Drive ({formSize})"],
