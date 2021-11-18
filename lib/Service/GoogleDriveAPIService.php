@@ -171,7 +171,7 @@ class GoogleDriveAPIService {
 	 * @return void
 	 */
 	public function importDriveJob(string $userId): void {
-		$this->logger->info('Importing drive files for ' . $userId);
+		$this->logger->debug('Importing drive files for ' . $userId);
 
 		// Set the user to register the change under his name
 		$this->userScopeService->setUserScope($userId);
@@ -250,7 +250,7 @@ class GoogleDriveAPIService {
 		} else {
 			$folder = $userFolder->get($targetPath);
 			if ($folder->getType() !== FileInfo::TYPE_FOLDER) {
-				return ['error' => 'Impossible to create ' . $targetPath . ' folder'];
+				return ['error' => 'Impossible to create ' . '<redacted>' . ' folder'];
 			}
 		}
 

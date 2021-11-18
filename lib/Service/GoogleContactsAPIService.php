@@ -216,7 +216,7 @@ class GoogleContactsAPIService {
 									);
 									$vCard->add($prop);
 								} catch (Exception | Throwable $ex) {
-									$this->logger->warning('Error when setting contact photo "' . ($displayName ?? 'no name') . '" ' . $ex->getMessage(), ['app' => $this->appName]);
+									$this->logger->warning('Error when setting contact photo "' . '<redacted>' . '" ' . $ex->getMessage(), ['app' => $this->appName]);
 								}
 								break;
 							}
@@ -328,7 +328,7 @@ class GoogleContactsAPIService {
 				$this->cdBackend->createCard($key, 'goog' . $k, $vCard->serialize());
 				$nbAdded++;
 			} catch (Throwable | Exception $e) {
-				$this->logger->warning('Error when creating contact "' . ($displayName ?? 'no name') . '" ' . json_encode($c), ['app' => $this->appName]);
+				$this->logger->warning('Error when creating contact', ['app' => $this->appName]);
 			}
 		}
 		$contactGeneratorReturn = $contacts->getReturn();

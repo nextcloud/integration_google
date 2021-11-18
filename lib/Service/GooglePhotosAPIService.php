@@ -84,7 +84,7 @@ class GooglePhotosAPIService {
 			'pageSize' => 50,
 		];
 		do {
-			$this->logger->info(
+			$this->logger->debug(
 				'Photos service::getPhotoNumber LAUNCHING ALBUM LIST REQUEST, userid: "' . $userId . '", token length: ' . strlen($accessToken),
 				['app' => $this->appName]
 			);
@@ -178,7 +178,7 @@ class GooglePhotosAPIService {
 	 * @return void
 	 */
 	public function importPhotosJob(string $userId): void {
-		$this->logger->info('Importing photos for ' . $userId);
+		$this->logger->debug('Importing photos for ' . $userId);
 
 		// Set the user to register the change under his name
 		$this->userScopeService->setUserScope($userId);
@@ -201,7 +201,7 @@ class GooglePhotosAPIService {
 			$result = $this->importPhotos($accessToken, $userId, $targetPath, 500000000, $alreadyImported);
 		} catch (\Exception | \Throwable $e) {
 			$result = [
-				'error' => 'Unknow job failure. ' . $e->getMessage(),
+				'error' => 'Unknown job failure. ' . $e->getMessage(),
 			];
 		}
 		if (isset($result['error']) || (isset($result['finished']) && $result['finished'])) {
@@ -251,7 +251,7 @@ class GooglePhotosAPIService {
 			'pageSize' => 50,
 		];
 		do {
-			$this->logger->info(
+			$this->logger->debug(
 				'Photos service::importPhotos LAUNCHING ALBUM LIST REQUEST, userid: "' . $userId . '", token length: ' . strlen($accessToken),
 				['app' => $this->appName]
 			);
@@ -288,7 +288,7 @@ class GooglePhotosAPIService {
 		}
 
 		// get the photos
-		$this->logger->info(
+		$this->logger->debug(
 			'Photos service::importPhotos GETTING PHOTOS, nb albums: "' . count($albums) . '"',
 			['app' => $this->appName]
 		);
@@ -410,6 +410,7 @@ class GooglePhotosAPIService {
 			try {
 				$resource = $savedFile->fopen('w');
 			} catch (LockedException $e) {
+				$this->logger->warning('Google Photo, error opening target file ' . '<redacted>' . ' : file is locked', ['app' => $this->appName]);
 				return null;
 			}
 			$res = $this->googleApiService->simpleDownload($accessToken, $userId, $photoUrl, $resource);
@@ -427,6 +428,7 @@ class GooglePhotosAPIService {
 				$stat = $savedFile->stat();
 				return $stat['size'] ?? 0;
 			} else {
+				$this->logger->warning('Google API error downloading photo ' . '<redacted>' . ' : ' . $res['error'], ['app' => $this->appName]);
 				if ($savedFile->isDeletable()) {
 					$savedFile->unlock(ILockingProvider::LOCK_EXCLUSIVE);
 					$savedFile->delete();
