@@ -74,7 +74,7 @@ OC.L10N.register(
     "Failed to get number of Google contacts" : "Kon aantal Google contactpersonen niet ophalen",
     "Failed to get address book list" : "Adresboekentlijst ophalen mislukt",
     "Failed to import Google calendar" : "Kon Google agenda niet ophalen",
-    "Starting importing photos in {targetPath} directory" : "Beginnen met importeren foto's  in {targetPath} directory",
+    "Starting importing photos in {targetPath} directory" : "Beginnen met importeren foto's in {targetPath} directory",
     "Failed to start importing Google photos" : "Kon import van Google foto's niet beginnen",
     "Starting importing files in {targetPath} directory" : "Beginnen met importeren bestanden in {targetPath} directory",
     "Failed to start importing Google Drive" : "Kon import Google drive niet starten",
