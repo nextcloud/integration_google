@@ -119,7 +119,7 @@ class GoogleAPIService {
 				}
 			}
 
-			$this->logger->info(
+			$this->logger->debug(
 				'REQUESTING Google API, method '.$method.', URL: ' . $url . ' , params: ' . json_encode($params)
 					. 'token length: ' . strlen($accessToken),
 				['app' => $this->appName]
@@ -140,13 +140,13 @@ class GoogleAPIService {
 			$respCode = $response->getStatusCode();
 
 			if ($respCode >= 400) {
-				$this->logger->info(
+				$this->logger->debug(
 					'Google API request 400 FAILURE, method '.$method.', URL: ' . $url . ' , body: ' . $body,
 					['app' => $this->appName]
 				);
 				return ['error' => 'Bad credentials'];
 			} else {
-				$this->logger->info(
+				$this->logger->debug(
 					'Google API request SUCCESS: , method ' . $method . ', URL: ' . $url
 						. ' , body:' . substr($body, 0, 30) . '...',
 					['app' => $this->appName]
@@ -156,7 +156,7 @@ class GoogleAPIService {
 		} catch (ServerException | ClientException $e) {
 			$response = $e->getResponse();
 			$body = (string) $response->getBody();
-			$this->logger->info(
+			$this->logger->debug(
 				'Google API request FAILURE, method '.$method . ', URL: ' . $url
 					. ' , body: ' . $body . ' status code: ' . $response->getStatusCode(),
 				['app' => $this->appName]
@@ -385,7 +385,7 @@ class GoogleAPIService {
 	}
 
 	public function refreshToken(string $userId): array {
-		$this->logger->info('Trying to REFRESH the access token', ['app' => $this->appName]);
+		$this->logger->debug('Trying to REFRESH the access token', ['app' => $this->appName]);
 		$refreshToken = $this->config->getUserValue($userId, Application::APP_ID, 'refresh_token');
 		$clientID = $this->config->getAppValue(Application::APP_ID, 'client_id');
 		$clientSecret = $this->config->getAppValue(Application::APP_ID, 'client_secret');
@@ -397,7 +397,7 @@ class GoogleAPIService {
 		], 'POST');
 
 		if (isset($result['access_token'])) {
-			$this->logger->info('Google access token successfully refreshed', ['app' => $this->appName]);
+			$this->logger->debug('Google access token successfully refreshed', ['app' => $this->appName]);
 			$this->config->setUserValue($userId, Application::APP_ID, 'token', $result['access_token']);
 		} else {
 			$responseTxt = json_encode($result);

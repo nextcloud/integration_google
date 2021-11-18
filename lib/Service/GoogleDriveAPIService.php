@@ -162,7 +162,7 @@ class GoogleDriveAPIService {
 	 * @return void
 	 */
 	public function importDriveJob(string $userId): void {
-		$this->logger->info('Importing drive files for ' . $userId);
+		$this->logger->debug('Importing drive files for ' . $userId);
 
 		// Set the user to register the change under his name
 		$this->userScopeService->setUserScope($userId);
@@ -241,7 +241,7 @@ class GoogleDriveAPIService {
 		} else {
 			$folder = $userFolder->get($targetPath);
 			if ($folder->getType() !== FileInfo::TYPE_FOLDER) {
-				return ['error' => 'Impossible to create ' . $targetPath . ' folder'];
+				return ['error' => 'Impossible to create ' . '<redacted>' . ' folder'];
 			}
 		}
 
@@ -404,7 +404,7 @@ class GoogleDriveAPIService {
 					$savedFile = $saveFolder->newFile($fileName);
 				} catch (NotFoundException $e) {
 					$this->logger->warning(
-						'Google Drive error, can\'t create file "' . $fileName . '" in "' . $saveFolder->getPath() . '"',
+						'Google Drive error, can\'t create file',
 						['app' => $this->appName]
 					);
 					return null;
@@ -412,7 +412,7 @@ class GoogleDriveAPIService {
 				try {
 					$resource = $savedFile->fopen('w');
 				} catch (LockedException $e) {
-					$this->logger->warning('Google Drive error opening target file ' . $savedFile->getPath() . ' : file is locked', ['app' => $this->appName]);
+					$this->logger->warning('Google Drive error opening target file ' . '<redacted>' . ' : file is locked', ['app' => $this->appName]);
 					return null;
 				}
 				$res = $this->googleApiService->simpleDownload($accessToken, $userId, $fileUrl, $resource);
@@ -430,7 +430,7 @@ class GoogleDriveAPIService {
 					$stat = $savedFile->stat();
 					return $stat['size'] ?? 0;
 				} else {
-					$this->logger->warning('Google Drive error downloading file ' . $fileItem['name'] . ' : ' . $res['error'], ['app' => $this->appName]);
+					$this->logger->warning('Google Drive error downloading file ' . '<redacted>' . ' : ' . $res['error'], ['app' => $this->appName]);
 					if ($savedFile->isDeletable()) {
 						$savedFile->delete();
 					}
@@ -459,8 +459,7 @@ class GoogleDriveAPIService {
 					:'application/vnd.oasis.opendocument.presentation';
 			} else {
 				$this->logger->warning(
-					'Google Drive error downloading file, no webContentLink, unknown mime type: ' . $saveFolder->getInternalPath() . '/' . ($fileItem['name'] ?? 'Untitled') . ' : '
-						. json_encode($fileItem),
+					'Google Drive error downloading file, no webContentLink, unknown mime type',
 					['app' => $this->appName]
 				);
 				return null;
@@ -475,7 +474,7 @@ class GoogleDriveAPIService {
 					$savedFile = $saveFolder->newFile($fileName);
 				} catch (NotFoundException $e) {
 					$this->logger->warning(
-						'Google Drive error, can\'t create document file "' . $fileName . '" in "' . $saveFolder->getPath() . '"',
+						'Google Drive error, can\'t create document file',
 						['app' => $this->appName]
 					);
 					return null;
@@ -501,7 +500,7 @@ class GoogleDriveAPIService {
 					$stat = $savedFile->stat();
 					return $stat['size'] ?? 0;
 				} else {
-					$this->logger->warning('Google Drive error downloading file ' . $fileItem['name'] . ' : ' . $res['error'], ['app' => $this->appName]);
+					$this->logger->warning('Google Drive error downloading file ' . '<redacted>' . ' : ' . $res['error'], ['app' => $this->appName]);
 					if ($savedFile->isDeletable()) {
 						$savedFile->delete();
 					}
