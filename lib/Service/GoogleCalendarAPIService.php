@@ -295,7 +295,7 @@ class GoogleCalendarAPIService {
 			'maxResults' => 100,
 		];
 		do {
-			$result = $this->googleApiService->request($accessToken, $userId, 'calendar/v3/calendars/'.$calId.'/events', $params);
+			$result = $this->googleApiService->request($accessToken, $userId, 'calendar/v3/calendars/'. urlencode($calId) .'/events', $params);
 			if (isset($result['error'])) {
 				return $result;
 			}

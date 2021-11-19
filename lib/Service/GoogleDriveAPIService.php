@@ -567,11 +567,11 @@ class GoogleDriveAPIService {
 			$documentFormat = $this->getUserDocumentFormat($userId);
 			// potentially a doc
 			$params = $this->getDocumentRequestParams($fileItem['mimeType'], $documentFormat);
-			$fileUrl = 'https://www.googleapis.com/drive/v3/files/' . $fileItem['id'] . '/export';
+			$fileUrl = 'https://www.googleapis.com/drive/v3/files/' . urlencode($fileItem['id']) . '/export';
 			return $this->downloadAndSaveFile($accessToken, $saveFolder, $fileName, $userId, $fileUrl, $fileItem, $params);
 		} elseif (isset($fileItem['webContentLink'])) {
 			// classic file
-			$fileUrl = 'https://www.googleapis.com/drive/v3/files/' . $fileItem['id'] . '?alt=media';
+			$fileUrl = 'https://www.googleapis.com/drive/v3/files/' . urlencode($fileItem['id']) . '?alt=media';
 			return $this->downloadAndSaveFile($accessToken, $saveFolder, $fileName, $userId, $fileUrl, $fileItem);
 		}
 		return null;
