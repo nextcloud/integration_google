@@ -6,14 +6,33 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
-## 1.0.5 – 2021-08-30
+## 1.0.6 – 2021-11-21
+### Added
+- list download failures in `failed-downloads.md` file
+  [#83](https://github.com/nextcloud/integration_google/pull/83) @akhil1508
+
+### Changed
+- improve permission management, don't fail on missing permission
+  [#83](https://github.com/nextcloud/integration_google/pull/83) @akhil1508
+- remove private information in logs
+  [#83](https://github.com/nextcloud/integration_google/pull/83) @akhil1508
+- improve photo count
+  [#84](https://github.com/nextcloud/integration_google/pull/84) @akhil1508
+- improve release action and clarify package.json
+
 ### Fixed
+- urlencode calendar ids and fileItem ids
+  [#89](https://github.com/nextcloud/integration_google/pull/89) @akhil1508
+- multiple files having the same name
+  [#83](https://github.com/nextcloud/integration_google/pull/83) @akhil1508
+- google signin button
+  [#78](https://github.com/nextcloud/integration_google/issues/78) @Niveshkrishna
 - change connection button to comply with Google's branding guidelines
-[#70](https://github.com/nextcloud/integration_google/issues/70) @tabp0le
+  [#70](https://github.com/nextcloud/integration_google/issues/70) @tabp0le
 - handle unknown job Exceptions to avoid blocking import process
-[#60](https://github.com/nextcloud/integration_google/issues/60) @StaceZ @ancow
+  [#60](https://github.com/nextcloud/integration_google/issues/60) @StaceZ @ancow
 - drive/photo import with SSE enabled
-[#71](https://github.com/nextcloud/integration_google/issues/71) @Niveshkrishna @arnaudvp
+  [#71](https://github.com/nextcloud/integration_google/issues/71) @Niveshkrishna @arnaudvp
 
 ## 1.0.3 – 2021-06-28
 ### Changed
