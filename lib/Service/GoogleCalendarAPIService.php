@@ -180,6 +180,16 @@ class GoogleCalendarAPIService {
 			$ncCalId = $this->caldavBackend->createCalendar('principals/users/' . $userId, $newCalName, $params);
 		}
 
+		// Delete old calendar events
+		// Only trust new ones
+		// They could have been deleted in Google Calendar or moved,
+		// in which case they would be doubled
+		// TODO: This is not very efficient, really we should check what's in Google
+		// Calendar and only delete the stuff that was deleted there
+		foreach ($this->caldavBackend->getCalendarObjects($ncCalId) as $e) {
+			$this->caldavBackend->deleteCalendarObject($ncCalId, $e['uri'], $this->caldavBackend::CALENDAR_TYPE_CALENDAR, true);
+		}
+
 		// get color list
 		$eventColors = [];
 		$colors = $this->googleApiService->request($userId, 'calendar/v3/colors');
