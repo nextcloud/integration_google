@@ -88,6 +88,14 @@
 							</template>
 							{{ t('integration_google', 'Import calendar') }}
 						</NcButton>
+						<NcButton
+							class="calendar-button-sync"
+							@click="onCalendarSync(cal)">
+							<template #icon>
+								<CalendarSyncIcon />
+							</template>
+							{{ t('integration_google', 'Sync calendar') }}
+						</NcButton>
 					</div>
 					<br>
 				</div>
@@ -255,6 +263,7 @@ import FileIcon from 'vue-material-design-icons/File.vue'
 import FolderIcon from 'vue-material-design-icons/Folder.vue'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
 import CalendarIcon from 'vue-material-design-icons/Calendar.vue'
+import CalendarSyncIcon from 'vue-material-design-icons/CalendarSync.vue'
 import FileImageIcon from 'vue-material-design-icons/FileImage.vue'
 import ImageIcon from 'vue-material-design-icons/Image.vue'
 import DownloadIcon from 'vue-material-design-icons/Download.vue'
@@ -288,6 +297,7 @@ export default {
 		AccountMultipleIcon,
 		DownloadIcon,
 		CalendarIcon,
+		CalendarSyncIcon,
 		FileImageIcon,
 		ImageIcon,
 		FolderIcon,
@@ -701,6 +711,30 @@ export default {
 					this.$set(this.importingCalendar, calId, false)
 				})
 		},
+		onCalendarSync(cal) {
+			const calId = cal.id
+			const req = {
+				params: {
+					calId,
+					calName: this.getCalendarLabel(cal),
+					color: cal.backgroundColor || '#0082c9',
+				},
+			}
+			const url = generateUrl('/apps/integration_google/sync-calendar')
+			axios.get(url, req)
+				.then((_response) => {
+					showSuccess(
+						this.n('integration_google', 'Successfully registered background job', 'Successfully registered background job', 1)
+					)
+				})
+				.catch((error) => {
+					console.error('Failed to register background job', error)
+					showError(
+						t('integration_google', 'Failed to register background job')
+						+ ': ' + error.response?.request?.responseText
+					)
+				})
+		},
 		onImportPhotos() {
 			const req = {
 				params: {
@@ -891,6 +925,11 @@ export default {
 			height: 40px;
 			min-height: 40px;
 		}
+	}
+	/* There are better ways to do this, */
+	/* but I'm trying to avoid conflicts with upstream*/
+	.calendar-button-sync {
+		margin-left: 10px;
 	}
 
 	#google-drive button,
