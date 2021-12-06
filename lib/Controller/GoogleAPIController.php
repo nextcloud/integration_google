@@ -208,6 +208,24 @@ class GoogleAPIController extends Controller {
 		return $response;
 	}
 
+
+	/**
+	 * @NoAdminRequired
+	 *
+	 * @param string $calId
+	 * @param string $calName
+	 * @param ?string $color
+	 * @return DataResponse
+	 */
+	public function registerSyncCalendar(string $calId, string $calName, ?string $color = null): DataResponse {
+		if ($this->accessToken === '') {
+			return new DataResponse('', 400);
+		}
+		$result = $this->googleCalendarAPIService->registerSyncCalendar($this->accessToken, $this->userId, $calId, $calName, $color);
+		$response = new DataResponse($result, 200);
+		return $response;
+	}
+
 	/**
 	 * @NoAdminRequired
 	 *

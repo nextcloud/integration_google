@@ -22,6 +22,7 @@ return [
 		['name' => 'googleAPI#getContactNumber', 'url' => '/contact-number', 'verb' => 'GET'],
 		['name' => 'googleAPI#getPhotoNumber', 'url' => '/photo-number', 'verb' => 'GET'],
 		['name' => 'googleAPI#importCalendar', 'url' => '/import-calendar', 'verb' => 'GET'],
+		['name' => 'googleAPI#registerSyncCalendar', 'url' => '/sync-calendar', 'verb' => 'GET'],
 		['name' => 'googleAPI#importContacts', 'url' => '/import-contacts', 'verb' => 'GET'],
 		['name' => 'googleAPI#importPhotos', 'url' => '/import-photos', 'verb' => 'GET'],
 		['name' => 'googleAPI#getImportPhotosInformation', 'url' => '/import-photos-info', 'verb' => 'GET'],
