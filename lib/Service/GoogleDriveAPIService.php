@@ -103,12 +103,12 @@ class GoogleDriveAPIService {
 		$nbFiles = 0;
 		$sharedWithMeSize = 0;
 		$params = [
-			'fields' => 'files/name,files/ownedByMe',
+			'fields' => 'nextPageToken,files/name,files/ownedByMe',
 			'pageSize' => 1000,
 			'q' => "mimeType!='application/vnd.google-apps.folder'",
 		];
 		if ($considerSharedFiles) {
-			$params['fields'] = 'files/name,files/ownedByMe,files/size';
+			$params['fields'] = 'nextPageToken,files/name,files/ownedByMe,files/size';
 		}
 		do {
 			$result = $this->googleApiService->request($accessToken, $userId, 'drive/v3/files', $params);
@@ -306,6 +306,7 @@ class GoogleDriveAPIService {
 			$params = [
 				'pageSize' => 1000,
 				'fields' => implode(',', [
+					'nextPageToken',
 					'files/id',
 					'files/name',
 					'files/parents',
