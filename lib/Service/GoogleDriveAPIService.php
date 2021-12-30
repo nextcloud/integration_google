@@ -200,7 +200,7 @@ class GoogleDriveAPIService {
 			$result = $this->importFiles($accessToken, $userId, $targetPath, 500000000, $alreadyImported, $directoryProgress);
 		} catch (\Exception | \Throwable $e) {
 			$result = [
-				'error' => 'Unknown job failure. ' . $e->getMessage(),
+				'error' => 'Unknown job failure. ' . $e,
 			];
 		}
 		if (isset($result['error']) || (isset($result['finished']) && $result['finished'])) {
@@ -493,7 +493,7 @@ class GoogleDriveAPIService {
 	 * @return string name of the file to be saved
 	*/
 	private function getFileName(array $fileItem, string $userId): string {
-		$fileName = preg_replace('/\//', '-', $fileItem['name'] ?? 'Untitled');
+		$fileName = preg_replace('/\\n/', '', preg_replace('/\//', '-', $fileItem['name'] ?? 'Untitled'));
 
 		if (in_array($fileItem['mimeType'], array_values(self::DOCUMENT_MIME_TYPES))) {
 			$documentFormat = $this->getUserDocumentFormat($userId);
