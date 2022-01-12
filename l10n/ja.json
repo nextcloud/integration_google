@@ -3,6 +3,7 @@
     "Google" : "Google",
     "OAuth access token refused" : "OAuthアクセストークンが拒否されました",
     "Bad credentials" : "不正な資格情報",
+    "Private event" : "非公開イベント",
     "Connected accounts" : "接続済みアカウント",
     "Google API settings" : "Google API 設定",
     "Client ID" : "クライアント ID",
@@ -19,8 +20,10 @@
     "Calendars" : "カレンダー",
     "Import calendar" : "カレンダーのインポート",
     "Photos" : "写真",
+    "Ignore shared albums" : "共有済みアルバムを無視",
     "Import Google photos" : "Google フォトをインポート",
     "Drive" : "ドライブ",
+    "Ignore shared files" : "共有済みファイルを無視",
     "Successfully connected to Google!" : "Google への接続に成功しました！"
 },"pluralForm" :"nplurals=1; plural=0;"
 }
