@@ -20,6 +20,7 @@ OC.L10N.register(
     "Google API settings" : "Google API 设置",
     "Go to \"APIs & Services\" => \"Credentials\" and click on \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\"." : "前往 \"APIs & Services\" => \"Credentials\" 然后点击 \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\"。",
     "Set the \"Application type\" to \"Web application\" and give a name to the application." : "将“应用程序类型”设置为“Web应用程序”，并为应用程序指定一个名称。 ",
+    "Put the \"Client ID\" and \"Client secret\" below." : "请在下方输入\"客户端ID\"和\"客户端密码\"。",
     "Finally, go to \"APIs & Services\" => \"Library\" and add the following APIs: \"Google Drive API\", \"Google Calendar API\", \"People API\" and \"Photos Library API\"." : "最后，转到“API & Services”=>“Library”，添加以下API:“谷歌云盘 API”、“谷歌日历 API”、“People API”和“Photos Library API”。",
     "Your Nextcloud users will then see a \"Connect to Google\" button in their personal settings." : "然后，你的Nextcloud用户将在他们的个人设置中看到一个“连接到谷歌”按钮。 ",
     "Client ID" : "客户端 ID",
@@ -30,6 +31,7 @@ OC.L10N.register(
     "Connected as {user}" : "作为 {user} 已连接",
     "Disconnect from Google" : "已从Google断开连接",
     "Contacts" : "联系人",
+    "{amount} Google contacts" : "{amount} 位Google联系人",
     "Import Google Contacts in Nextcloud" : "在Nextcloud中导入Google联系人",
     "Choose where to import the contacts" : "选择从哪里导入联系人",
     "New address book" : "新通讯录",
@@ -51,6 +53,8 @@ OC.L10N.register(
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "你的谷歌云盘大于你的剩余空间 ({formSpace})",
     "You can close this page. You will be notified when it finishes." : "您可以关闭此页面。当它完成时，您将收到通知。",
     "Google Drive background import process will begin soon." : "谷歌云盘后台导入过程即将开始。",
+    "Successfully connected to Google!" : "成功连接到Google！",
+    "Google connection error:" : "Google连接错误：",
     "_{nbFiles} file in Google Drive ({formSize} + {formSharedSize} shared with you)_::_{nbFiles} files in Google Drive ({formSize} + {formSharedSize} shared with you)_" : ["谷歌云盘中的 {nbFiles} 文件 (与你分享了 {formSize} + {formSharedSize})"]
 },
 "nplurals=1; plural=0;");
