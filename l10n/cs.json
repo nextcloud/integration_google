@@ -29,7 +29,7 @@
     "Google admin options saved" : "Předvolby správy Google uloženy",
     "Failed to save Google admin options" : "Nepodařilo se uložit předvolby správy Google",
     "Google data migration" : "Migrace dat z Google",
-    "No Google OAuth app configured. Ask your Nextcloud administrator to configure Google connected accounts admin section." : "Není nastavena žádná Google OAuth aplikace. Požádejte svého Nextcloud administrátora o nastavení propojených Google účtů v administraci.",
+    "No Google OAuth app configured. Ask your Nextcloud administrator to configure Google connected accounts admin section." : "Není nastavena žádná Google OAuth aplikace. Požádejte správce vámi využívané instance Nextcloud o nastavení propojených Google účtů v sekci správy.",
     "Authentication" : "Ověření",
     "Sign in with Google" : "Přihlásit se prostřednictvím Google účtu",
     "Connected as {user}" : "Připojení jako {user}",
