@@ -188,6 +188,9 @@ class GoogleCalendarAPIService {
 	 * @return array
 	 */
 	public function safeImportCalendar(string $userId, string $calId, string $calName, ?string $color = null): array {
+		$startTime = microtime(true);
+		$this->logger->debug("Starting calendar import of $calId", ['app' => $this->appName]);
+
 		$lockFile = sys_get_temp_dir() .
 			"/nextcloud_integration_google_calendar_import_$calId.lock";
 
@@ -200,6 +203,7 @@ class GoogleCalendarAPIService {
 		try {
 			return $this->importCalendar($userId, $calId, $calName, $color);
 		} finally {
+			$this->logger->debug('Elapsed time is: ' . (microtime(true) - $startTime) . ' seconds', ['app' => $this->appName]);
 			try {
 				unlink($lockFile);
 			} catch (Exception) {
