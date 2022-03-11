@@ -171,6 +171,33 @@ class GoogleCalendarAPIService {
 	 * @param ?string $color
 	 * @return array
 	 */
+	public function safeImportCalendar(string $userId, string $calId, string $calName, ?string $color = null): array {
+		$lockFile = sys_get_temp_dir() .
+			"/nextcloud_integration_google_calendar_import_$calId.lock";
+
+		if (file_exists($lockFile)) {
+			throw new Exception('Could not acquire lock');
+		}
+
+		touch($lockFile);
+
+		try {
+			return $this->importCalendar($userId, $calId, $calName, $color);
+		} finally {
+			try {
+				unlink($lockFile);
+			} catch (Exception) {
+			}
+		}
+	}
+
+	/**
+	 * @param string $userId
+	 * @param string $calId
+	 * @param string $calName
+	 * @param ?string $color
+	 * @return array
+	 */
 	public function importCalendar(string $userId, string $calId, string $calName, ?string $color = null): array {
 		$params = [];
 		if ($color) {
@@ -182,16 +209,6 @@ class GoogleCalendarAPIService {
 		$calendarIsNew = is_null($ncCalId);
 		if (is_null($ncCalId)) {
 			$ncCalId = $this->caldavBackend->createCalendar('principals/users/' . $userId, $newCalName, $params);
-		}
-
-		// Delete old calendar events
-		// Only trust new ones
-		// They could have been deleted in Google Calendar or moved,
-		// in which case they would be doubled
-		// TODO: This is not very efficient, really we should check what's in Google
-		// Calendar and only delete the stuff that was deleted there
-		foreach ($this->caldavBackend->getCalendarObjects($ncCalId) as $e) {
-			$this->caldavBackend->deleteCalendarObject($ncCalId, $e['uri'], $this->caldavBackend::CALENDAR_TYPE_CALENDAR, true);
 		}
 
 		// get color list

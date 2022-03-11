@@ -19,7 +19,7 @@ class ImportCalendarJob extends TimedJob {
 
 	protected function run($arguments) {
 		echo(date("Y-m-d H:i:s") . ' Importing ' . $arguments['cal_name'] . '...');
-		$result = $this->service->importCalendar(
+		$result = $this->service->safeImportCalendar(
 			$arguments['user_id'],
 			$arguments['cal_id'],
 			$arguments['cal_name'],
