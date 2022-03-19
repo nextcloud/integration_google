@@ -1,12 +1,24 @@
 { "translations": {
+    "Missing refresh token in Google response." : "В ответе Google отсутствует токен обновления.",
+    "Error getting OAuth access token." : "Ошибка получения токена доступа OAuth.",
     "Error during OAuth exchanges" : "Ошибка во время обмена данными OAuth",
+    "Google" : "Google",
+    "_%s photo was imported from Google._::_%s photos were imported from Google._" : ["%sфотография была импортирована из Google.","%s фотографий были импортированы из Google.","%sфотографий были импортированы из Google.","%s фотографий были импортированы из Google."],
     "OAuth access token refused" : "Токен доступа OAuth отклонён",
     "Bad credentials" : "Неверные учётные данные",
+    "Google Calendar import" : "Импорт Google Календаря",
     "Connected accounts" : "Подключённые учётные записи",
+    "Data migration" : "Перенос данных",
+    "Google integration" : "Интеграция с Google",
+    "Import Google data into Nextcloud" : "Импорт данных из Google в Nextcloud",
+    "Google integration allows you to automatically import your Google calendars, contacts, photos and files into Nextcloud." : "Интеграция с Google позволяет автоматически импортировать календари, контакты, фотографии и файлы Google в Nextcloud.",
+    "If you want to allow your Nextcloud users to authenticate to Google, create an OAuth application in your Google settings." : "Если вы хотите разрешить пользователям Nextcloud проходить аутентификацию в Google, создайте приложение OAuth в настройках Google.",
+    "Google API settings" : "Настройки Google API",
     "Client ID" : "ID клиента",
     "Client secret" : "Клиентский ключ ",
     "Authentication" : "Аутентификация",
     "Connected as {user}" : "Подключено под именем {user}",
+    "Disconnect from Google" : "Отключить от Google",
     "Contacts" : "Контакты",
     "{amount} Google contacts" : "Количество контактов: {amount} ",
     "New address book" : "Создать адресную книгу",
@@ -14,6 +26,8 @@
     "Calendars" : "Календари",
     "Import calendar" : "Импорт календаря",
     "Photos" : "Фотографии",
-    "Drive" : "Диск"
+    "Drive" : "Диск",
+    "Successfully connected to Google!" : "Успешное подключено к Google!",
+    "Google connection error:" : "Ошибка подключения к Google:"
 },"pluralForm" :"nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);"
 }
