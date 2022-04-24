@@ -19,6 +19,7 @@ OC.L10N.register(
     "Import calendar" : "Importera kalender",
     "Photos" : "Bilder",
     "Import Google photos" : "Importera Google-foton",
+    "Drive" : "Biltur",
     "Photo import background process will begin soon." : "Fotoimportbakgrundsprocessen börjar snart."
 },
 "nplurals=2; plural=(n != 1);");

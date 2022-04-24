@@ -3,6 +3,7 @@
     "Client secret" : "Segredo do cliente\\\\",
     "Authentication" : "Autenticação",
     "Contacts" : "Contactos",
+    "Calendars" : "Calendários",
     "Import calendar" : "Importar calendário",
     "Photos" : "Fotos"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

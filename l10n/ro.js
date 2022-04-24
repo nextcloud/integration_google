@@ -1,10 +1,15 @@
 OC.L10N.register(
     "integration_google",
     {
+    "Error during OAuth exchanges" : "Eroare în schimbarea OAuth",
+    "OAuth access token refused" : "Token-ul OAuth a fost refuzat",
+    "Bad credentials" : "Credențiale greșite",
+    "Connected accounts" : "Conturile conectate",
     "Client ID" : "ID client",
     "Client secret" : "Secret client",
     "Authentication" : "Autentificare",
     "Contacts" : "Contacte",
+    "Calendars" : "Calendare",
     "Import calendar" : "Import calendar",
     "Photos" : "Poze"
 },

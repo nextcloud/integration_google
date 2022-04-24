@@ -5,6 +5,7 @@ OC.L10N.register(
     "Client secret" : "Ключ клієнта",
     "Authentication" : "Автентифікація",
     "Contacts" : "Контакти",
+    "Calendars" : "Календарі",
     "Import calendar" : "Імпортувати календар",
     "Photos" : "Світлини",
     "Drive" : "Їхати автомобілем"

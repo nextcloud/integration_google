@@ -3,6 +3,7 @@
     "Client secret" : "Klient hemmelighed",
     "Authentication" : "Godkendelse",
     "Contacts" : "Kontakter",
+    "Calendars" : "Kalendere",
     "Import calendar" : "Importer kalender",
     "Photos" : "Billeder"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
