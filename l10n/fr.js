@@ -5,8 +5,8 @@ OC.L10N.register(
     "Error getting OAuth access token." : "Erreur lors de l'obtention du jeton d'accès OAuth.",
     "Error during OAuth exchanges" : "Erreur lors des échanges OAuth",
     "Google" : "Google",
-    "_%s photo was imported from Google._::_%s photos were imported from Google._" : ["%s photo importée depuis Google.","%s photos importées depuis Google."],
-    "_%s file was imported from Google Drive._::_%s files were imported from Google Drive._" : ["%s fichier a été importé depuis Google Drive.","%s fichiers ont été importés depuis Google Drive."],
+    "_%s photo was imported from Google._::_%s photos were imported from Google._" : ["%s photo importée depuis Google.","%s photos importées depuis Google.","%s photos importées depuis Google."],
+    "_%s file was imported from Google Drive._::_%s files were imported from Google Drive._" : ["%s fichier a été importé depuis Google Drive.","%s fichiers ont été importés depuis Google Drive.","%s fichiers ont été importés depuis Google Drive."],
     "OAuth access token refused" : "Jeton d'accès OAuth refusé",
     "Bad credentials" : "Identifiants incorrects",
     "Google Calendar import" : "Importation de Google Agenda",
@@ -79,11 +79,11 @@ OC.L10N.register(
     "Failed to start importing Google Drive" : "Échec du démarrage de l'importation de Google Drive",
     "Choose where to write imported files" : "Choisissez où écrire les fichiers importés",
     "Choose where to write imported photos" : "Choisissez où écrire les photos importées",
-    "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} photo importée","{amount} photos importées"],
-    "_{nbFiles} file in Google Drive ({formSize} + {formSharedSize} shared with you)_::_{nbFiles} files in Google Drive ({formSize} + {formSharedSize} shared with you)_" : ["{nbFiles} fichier Google Drive ({formSize} + {formSharedSize} partagé avec vous)","{nbFiles} fichiers dans Google Drive ({formSize} + {formSharedSize} partagés avec vous)"],
-    "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["{nbFiles} fichier dans Google Drive ({formSize})","{nbFiles} fichiers dans Google Drive ({formSize})"],
-    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} fichier importé ({progress}%)","{amount} fichiers importés ({progress}%)"],
-    "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} contact importé avec succès dans {name}","{number} contacts importés avec succès dans {name}"],
-    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number} événement importé avec succès dans {name}","{number} événements importés avec succès dans {name}"]
+    "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} photo importée","{amount} photos importées","{amount} photos importées"],
+    "_{nbFiles} file in Google Drive ({formSize} + {formSharedSize} shared with you)_::_{nbFiles} files in Google Drive ({formSize} + {formSharedSize} shared with you)_" : ["{nbFiles} fichier Google Drive ({formSize} + {formSharedSize} partagé avec vous)","{nbFiles} fichiers dans Google Drive ({formSize} + {formSharedSize} partagés avec vous)","{nbFiles} fichiers dans Google Drive ({formSize} + {formSharedSize} partagés avec vous)"],
+    "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["{nbFiles} fichier dans Google Drive ({formSize})","{nbFiles} fichiers dans Google Drive ({formSize})","{nbFiles} fichiers dans Google Drive ({formSize})"],
+    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} fichier importé ({progress}%)","{amount} fichiers importés ({progress}%)","{amount} fichiers importés ({progress}%)"],
+    "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} contact importé avec succès dans {name}","{number} contacts importés avec succès dans {name}","{number} contacts importés avec succès dans {name}"],
+    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number} événement importé avec succès dans {name}","{number} événements importés avec succès dans {name}","{number} événements importés avec succès dans {name}"]
 },
-"nplurals=2; plural=(n > 1);");
+"nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

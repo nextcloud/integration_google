@@ -3,8 +3,8 @@
     "Error getting OAuth access token." : "Erro ao obter o token de acesso OAuth.",
     "Error during OAuth exchanges" : "Erro durante as trocas de autenticação OAuth",
     "Google" : "Google",
-    "_%s photo was imported from Google._::_%s photos were imported from Google._" : ["%sfoto foi importada do Google.","%s fotos foram importadas do Google."],
-    "_%s file was imported from Google Drive._::_%s files were imported from Google Drive._" : ["%sarquivo foi importado do Google Drive.","%s arquivos foram importados do Google Drive."],
+    "_%s photo was imported from Google._::_%s photos were imported from Google._" : ["%sfoto foi importada do Google.","%s fotos foram importadas do Google.","%s fotos foram importadas do Google."],
+    "_%s file was imported from Google Drive._::_%s files were imported from Google Drive._" : ["%sarquivo foi importado do Google Drive.","%s arquivos foram importados do Google Drive.","%s arquivos foram importados do Google Drive."],
     "OAuth access token refused" : "Token de acesso OAuth recusado",
     "Bad credentials" : "Credenciais erradas",
     "Google Calendar import" : "Importação do Google Agenda",
@@ -78,12 +78,12 @@
     "Failed to start importing Google Drive" : "Falha ao iniciar a importação do Google Drive",
     "Choose where to write imported files" : "Escolha onde gravar os arquivos importados ",
     "Choose where to write imported photos" : "Escolha onde escrever as fotos importadas ",
-    "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} Google foto (>{formSize})",">{nbPhotos} Google fotos (>{formSize})"],
-    "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} fotos importadas","{amount} foto importada"],
-    "_{nbFiles} file in Google Drive ({formSize} + {formSharedSize} shared with you)_::_{nbFiles} files in Google Drive ({formSize} + {formSharedSize} shared with you)_" : ["{nbFiles} arquivo no Google Drive ({formSize} + {formSharedSize} compartilhado com você)","{nbFiles} arquivos no Google Drive ({formSize} + {formSharedSize} compartilhados com você)"],
-    "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["{nbFiles} arquivo no Google Drive ({formSize})","{nbFiles} arquivos no Google Drive ({formSize})"],
-    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} arquivo importado ({progresso}%)","{amount} arquivos importados ({progresso}%)"],
-    "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} contato importado com sucesso em {name}","{number} contatos importados com sucesso em {name}"],
-    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number} evento importado com sucesso em {name}","{number} eventos importados com sucesso em {name}"]
-},"pluralForm" :"nplurals=2; plural=(n > 1);"
+    "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} Google foto (>{formSize})",">{nbPhotos} Google fotos (>{formSize})",">{nbPhotos} Google fotos (>{formSize})"],
+    "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} fotos importadas","{amount} foto importada","{amount} foto importada"],
+    "_{nbFiles} file in Google Drive ({formSize} + {formSharedSize} shared with you)_::_{nbFiles} files in Google Drive ({formSize} + {formSharedSize} shared with you)_" : ["{nbFiles} arquivo no Google Drive ({formSize} + {formSharedSize} compartilhado com você)","{nbFiles} arquivos no Google Drive ({formSize} + {formSharedSize} compartilhados com você)","{nbFiles} arquivos no Google Drive ({formSize} + {formSharedSize} compartilhados com você)"],
+    "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["{nbFiles} arquivo no Google Drive ({formSize})","{nbFiles} arquivos no Google Drive ({formSize})","{nbFiles} arquivos no Google Drive ({formSize})"],
+    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} arquivo importado ({progresso}%)","{amount} arquivos importados ({progresso}%)","{amount} arquivos importados ({progresso}%)"],
+    "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} contato importado com sucesso em {name}","{number} contatos importados com sucesso em {name}","{number} contatos importados com sucesso em {name}"],
+    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number} evento importado com sucesso em {name}","{number} eventos importados com sucesso em {name}","{number} eventos importados com sucesso em {name}"]
+},"pluralForm" :"nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }
