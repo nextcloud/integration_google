@@ -80,6 +80,7 @@ OC.L10N.register(
     "Failed to start importing Google Drive" : "Google Driven tuonnin aloittaminen epäonnistui",
     "Choose where to write imported files" : "Valitse, mihin tiedostot tuodaan",
     "Choose where to write imported photos" : "Valitse, mihin kuvat tuodaan",
+    "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} Google-kuva (>{formSize})",">{nbPhotos} Google-kuvaa (>{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} kuva tuotu","{amount} kuvaa tuotu"],
     "_{nbFiles} file in Google Drive ({formSize} + {formSharedSize} shared with you)_::_{nbFiles} files in Google Drive ({formSize} + {formSharedSize} shared with you)_" : ["{nbFiles} tiedosto Google Drivessä ({formSize} + {formSharedSize} jaettu kanssasi)","{nbFiles} tiedostoa Google Drivessä ({formSize} + {formSharedSize} jaettu kanssasi)"],
     "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["{nbFiles} tiedosto Google Drivessa ({formSize})","{nbFiles} tiedostoa Google Drivessa ({formSize})"],
