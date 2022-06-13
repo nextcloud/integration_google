@@ -11,7 +11,7 @@ OC.L10N.register(
     "Bad credentials" : "Credencials dolentes",
     "Google Calendar import" : "Importació de Google Calendar",
     "Private event" : "Esdeveniment privat",
-    "Connected accounts" : "Comptes connectades",
+    "Connected accounts" : "Comptes connectats",
     "Data migration" : "Migració de dades",
     "Google integration" : "Integració de Google",
     "Import Google data into Nextcloud" : "Importar dades de Google a Nextcloud",
