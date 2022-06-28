@@ -8,6 +8,7 @@ OC.L10N.register(
     "Client secret" : "Client secret",
     "Authentication" : "Authentication",
     "Contacts" : "Contacts",
+    "Calendars" : "Calendars",
     "Import calendar" : "Import calendar",
     "Photos" : "Photos"
 },

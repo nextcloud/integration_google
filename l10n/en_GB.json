@@ -6,6 +6,7 @@
     "Client secret" : "Client secret",
     "Authentication" : "Authentication",
     "Contacts" : "Contacts",
+    "Calendars" : "Calendars",
     "Import calendar" : "Import calendar",
     "Photos" : "Photos"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
