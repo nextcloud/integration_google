@@ -11,6 +11,7 @@
 
 namespace OCA\Google\Controller;
 
+use DateTime;
 use OCP\IURLGenerator;
 use OCP\IConfig;
 use OCP\IL10N;
@@ -93,6 +94,7 @@ class ConfigController extends Controller {
 			$this->config->deleteUserValue($this->userId, Application::APP_ID, 'user_id');
 			$this->config->deleteUserValue($this->userId, Application::APP_ID, 'user_name');
 			$this->config->deleteUserValue($this->userId, Application::APP_ID, 'refresh_token');
+			$this->config->deleteUserValue($this->userId, Application::APP_ID, 'token_expires_at');
 			$this->config->deleteUserValue($this->userId, Application::APP_ID, 'token');
 			$result['user_name'] = '';
 		}
@@ -177,9 +179,14 @@ class ConfigController extends Controller {
 			if (isset($result['access_token'], $result['refresh_token'])) {
 				$accessToken = $result['access_token'];
 				$refreshToken = $result['refresh_token'];
+				if (isset($result['expires_in'])) {
+					$nowTs = (new Datetime())->getTimestamp();
+					$expiresAt = $nowTs + (int) $result['expires_in'];
+					$this->config->setUserValue($this->userId, Application::APP_ID, 'token_expires_at', $expiresAt);
+				}
 				$this->config->setUserValue($this->userId, Application::APP_ID, 'token', $accessToken);
 				$this->config->setUserValue($this->userId, Application::APP_ID, 'refresh_token', $refreshToken);
-				$this->storeUserInfo($accessToken);
+				$this->storeUserInfo();
 				return new RedirectResponse(
 					$this->urlGenerator->linkToRoute('settings.PersonalSettings.index', ['section' => 'migration']) .
 					'?googleToken=success'
@@ -200,11 +207,10 @@ class ConfigController extends Controller {
 	}
 
 	/**
-	 * @param string $accessToken
 	 * @return string
 	 */
-	private function storeUserInfo(string $accessToken): string {
-		$info = $this->googleApiService->request($accessToken, $this->userId, 'oauth2/v1/userinfo', ['alt' => 'json']);
+	private function storeUserInfo(): string {
+		$info = $this->googleApiService->request($this->userId, 'oauth2/v1/userinfo', ['alt' => 'json']);
 		if (isset($info['name'], $info['id'])) {
 			$this->config->setUserValue($this->userId, Application::APP_ID, 'user_id', $info['id']);
 			$this->config->setUserValue($this->userId, Application::APP_ID, 'user_name', $info['name']);

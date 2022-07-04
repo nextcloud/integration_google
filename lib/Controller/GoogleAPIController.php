@@ -112,7 +112,7 @@ class GoogleAPIController extends Controller {
 		if ($this->accessToken === '') {
 			return new DataResponse(null, 400);
 		}
-		$result = $this->googlePhotosAPIService->getPhotoNumber($this->accessToken, $this->userId);
+		$result = $this->googlePhotosAPIService->getPhotoNumber($this->userId);
 		if (isset($result['error'])) {
 			$response = new DataResponse($result['error'], 401);
 		} else {
@@ -130,7 +130,7 @@ class GoogleAPIController extends Controller {
 		if ($this->accessToken === '') {
 			return new DataResponse(null, 400);
 		}
-		$result = $this->googleContactsAPIService->getContactNumber($this->accessToken, $this->userId);
+		$result = $this->googleContactsAPIService->getContactNumber($this->userId);
 		if (isset($result['error'])) {
 			$response = new DataResponse($result['error'], 401);
 		} else {
@@ -148,7 +148,7 @@ class GoogleAPIController extends Controller {
 		if ($this->accessToken === '') {
 			return new DataResponse(null, 400);
 		}
-		$result = $this->googleCalendarAPIService->getCalendarList($this->accessToken, $this->userId);
+		$result = $this->googleCalendarAPIService->getCalendarList($this->userId);
 		if (isset($result['error'])) {
 			$response = new DataResponse($result['error'], 401);
 		} else {
@@ -166,7 +166,7 @@ class GoogleAPIController extends Controller {
 		if ($this->accessToken === '') {
 			return new DataResponse(null, 400);
 		}
-		$result = $this->googleDriveAPIService->getDriveSize($this->accessToken, $this->userId);
+		$result = $this->googleDriveAPIService->getDriveSize($this->userId);
 		if (isset($result['error'])) {
 			$response = new DataResponse($result['error'], 401);
 		} else {
@@ -223,7 +223,7 @@ class GoogleAPIController extends Controller {
 		if ($this->accessToken === '') {
 			return new DataResponse('', 400);
 		}
-		$result = $this->googleCalendarAPIService->importCalendar($this->accessToken, $this->userId, $calId, $calName, $color);
+		$result = $this->googleCalendarAPIService->importCalendar($this->userId, $calId, $calName, $color);
 		if (isset($result['error'])) {
 			$response = new DataResponse($result['error'], 401);
 		} else {
@@ -244,7 +244,7 @@ class GoogleAPIController extends Controller {
 		if ($this->accessToken === '') {
 			return new DataResponse(null, 400);
 		}
-		$result = $this->googleContactsAPIService->importContacts($this->accessToken, $this->userId, $uri, $key, $newAddressBookName);
+		$result = $this->googleContactsAPIService->importContacts($this->userId, $uri, $key, $newAddressBookName);
 		if (isset($result['error'])) {
 			$response = new DataResponse($result['error'], 401);
 		} else {

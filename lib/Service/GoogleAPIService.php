@@ -104,7 +104,6 @@ class GoogleAPIService {
 
 	/**
 	 * Make the HTTP request
-	 * @param string $accessToken
 	 * @param string $userId the user from which the request is coming
 	 * @param string $endPoint The path to reach in api.google.com
 	 * @param array $params Query parameters (key/val pairs)
@@ -112,8 +111,10 @@ class GoogleAPIService {
 	 * @param ?string $baseUrl
 	 * @return array
 	 */
-	public function request(string $accessToken, string $userId,
-							string $endPoint, array $params = [], string $method = 'GET', ?string $baseUrl = null): array {
+	public function request(string $userId, string $endPoint, array $params = [],
+							string $method = 'GET', ?string $baseUrl = null): array {
+		$this->checkTokenExpiration($userId);
+		$accessToken = $this->config->getUserValue($userId, Application::APP_ID, 'token');
 		try {
 			$url = $baseUrl ?: 'https://www.googleapis.com/';
 			$url = $url . $endPoint;
@@ -170,21 +171,6 @@ class GoogleAPIService {
 		} catch (ServerException | ClientException $e) {
 			$response = $e->getResponse();
 			$body = (string) $response->getBody();
-			$this->logger->debug(
-				'Google API request FAILURE, method '.$method . ', URL: ' . $url
-					. ' , body: ' . $body . ' status code: ' . $response->getStatusCode(),
-				['app' => $this->appName]
-			);
-			if ($response->getStatusCode() === 401) {
-				// refresh the token if it's invalid
-				$result = $this->refreshToken($userId);
-				if (isset($result['access_token'])) {
-					return $this->request(
-						$result['access_token'], $userId, $endPoint, $params, $method, $baseUrl
-					);
-				}
-				return ['error' => 'Impossible to refresh the token'];
-			}
 			$this->logger->warning(
 				'Google API ServerException|ClientException error : '.$e->getMessage()
 					. ' status code: ' .$response->getStatusCode()
@@ -252,14 +238,15 @@ class GoogleAPIService {
 
 	/**
 	 * Make a simple authenticated HTTP request
-	 * @param string $accessToken
 	 * @param string $userId the user from which the request is coming
 	 * @param string $url The path to reach
 	 * @param array $params Query parameters (key/val pairs)
 	 * @param string $method HTTP query method
 	 * @return array
 	 */
-	public function simpleRequest(string $accessToken, string $userId, string $url, array $params = [], string $method = 'GET'): array {
+	public function simpleRequest(string $userId, string $url, array $params = [], string $method = 'GET'): array {
+		$this->checkTokenExpiration($userId);
+		$accessToken = $this->config->getUserValue($userId, Application::APP_ID, 'token');
 		try {
 			$options = [
 				'timeout' => 0,
@@ -297,17 +284,6 @@ class GoogleAPIService {
 				return ['content' => $body];
 			}
 		} catch (ServerException | ClientException $e) {
-			$response = $e->getResponse();
-			if ($response->getStatusCode() === 401) {
-				// refresh the token if it's invalid
-				$result = $this->refreshToken($userId);
-				if (isset($result['access_token'])) {
-					return $this->simpleRequest(
-						$result['access_token'], $userId, $url, $params, $method
-					);
-				}
-				return ['error' => 'Impossible to refresh the token'];
-			}
 			$this->logger->warning('Google API error : '.$e->getMessage(), ['app' => $this->appName]);
 			return ['error' => $e->getMessage()];
 		} catch (ConnectException $e) {
@@ -318,7 +294,6 @@ class GoogleAPIService {
 
 	/**
 	 * Make a simple authenticated HTTP request to download a file
-	 * @param string $accessToken
 	 * @param string $userId the user from which the request is coming
 	 * @param string $url The path to reach
 	 * @param resource $resource
@@ -326,7 +301,9 @@ class GoogleAPIService {
 	 * @param string $method HTTP query method
 	 * @return array
 	 */
-	public function simpleDownload(string $accessToken, string $userId, string $url, $resource, array $params = [], string $method = 'GET'): array {
+	public function simpleDownload(string $userId, string $url, $resource, array $params = [], string $method = 'GET'): array {
+		$this->checkTokenExpiration($userId);
+		$accessToken = $this->config->getUserValue($userId, Application::APP_ID, 'token');
 		try {
 			$options = [
 				// does not work with sink if SSE is enabled
@@ -374,17 +351,6 @@ class GoogleAPIService {
 				return ['success' => true];
 			}
 		} catch (ServerException | ClientException $e) {
-			$response = $e->getResponse();
-			if ($response->getStatusCode() === 401) {
-				// refresh the token if it's invalid
-				$result = $this->refreshToken($userId);
-				if (isset($result['access_token'])) {
-					return $this->simpleDownload(
-						$result['access_token'], $userId, $url, $resource, $params, $method
-					);
-				}
-				return ['error' => 'Impossible to refresh the token'];
-			}
 			$this->logger->warning('Google API error : '.$e->getMessage(), ['app' => $this->appName]);
 			return ['error' => $e->getMessage()];
 		} catch (ConnectException $e) {
@@ -392,6 +358,19 @@ class GoogleAPIService {
 			return ['error' => 'Connection error: ' . $e->getMessage()];
 		} catch (Throwable | Exception $e) {
 			return ['error' => 'Unknown error: ' . $e->getMessage()];
+		}
+	}
+
+	private function checkTokenExpiration(string $userId): void {
+		$refreshToken = $this->config->getUserValue($userId, Application::APP_ID, 'refresh_token');
+		$expireAt = $this->config->getUserValue($userId, Application::APP_ID, 'token_expires_at');
+		if ($refreshToken !== '' && $expireAt !== '') {
+			$nowTs = (new Datetime())->getTimestamp();
+			$expireAt = (int) $expireAt;
+			// if token expires in less than 2 minutes or has already expired
+			if ($nowTs > $expireAt - 120) {
+				$this->refreshToken($userId);
+			}
 		}
 	}
 
@@ -410,6 +389,11 @@ class GoogleAPIService {
 		if (isset($result['access_token'])) {
 			$this->logger->debug('Google access token successfully refreshed', ['app' => $this->appName]);
 			$this->config->setUserValue($userId, Application::APP_ID, 'token', $result['access_token']);
+			if (isset($result['expires_in'])) {
+				$nowTs = (new Datetime())->getTimestamp();
+				$expiresAt = $nowTs + (int) $result['expires_in'];
+				$this->config->setUserValue($userId, Application::APP_ID, 'token_expires_at', $expiresAt);
+			}
 		} else {
 			$responseTxt = json_encode($result);
 			$this->logger->warning('Google API error, impossible to refresh the token. Response: ' . $responseTxt, ['app' => $this->appName]);

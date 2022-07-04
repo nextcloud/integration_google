@@ -63,12 +63,11 @@ class GoogleCalendarAPIService {
 	}
 
 	/**
-	 * @param string $accessToken
 	 * @param string $userId
 	 * @return array
 	 */
-	public function getCalendarList(string $accessToken, string $userId): array {
-		$result = $this->googleApiService->request($accessToken, $userId, 'calendar/v3/users/me/calendarList');
+	public function getCalendarList(string $userId): array {
+		$result = $this->googleApiService->request($userId, 'calendar/v3/users/me/calendarList');
 		if (isset($result['error']) || !isset($result['items'])) {
 			return $result;
 		}
@@ -135,14 +134,13 @@ class GoogleCalendarAPIService {
 	}
 
 	/**
-	 * @param string $accessToken
 	 * @param string $userId
 	 * @param string $calId
 	 * @param string $calName
 	 * @param ?string $color
 	 * @return array
 	 */
-	public function importCalendar(string $accessToken, string $userId, string $calId, string $calName, ?string $color = null): array {
+	public function importCalendar(string $userId, string $calId, string $calName, ?string $color = null): array {
 		$params = [];
 		if ($color) {
 			$params['{http://apple.com/ns/ical/}calendar-color'] = $color;
@@ -156,14 +154,14 @@ class GoogleCalendarAPIService {
 
 		// get color list
 		$eventColors = [];
-		$colors = $this->googleApiService->request($accessToken, $userId, 'calendar/v3/colors');
+		$colors = $this->googleApiService->request($userId, 'calendar/v3/colors');
 		if (!isset($colors['error']) && isset($colors['event'])) {
 			$eventColors = $colors['event'];
 		}
 
 		date_default_timezone_set('UTC');
 		$utcTimezone = new DateTimeZone('-0000');
-		$events = $this->getCalendarEvents($accessToken, $userId, $calId);
+		$events = $this->getCalendarEvents($userId, $calId);
 		$nbAdded = 0;
 		foreach ($events as $e) {
 			$calData = 'BEGIN:VCALENDAR' . "\n"
@@ -285,17 +283,16 @@ class GoogleCalendarAPIService {
 	}
 
 	/**
-	 * @param string $accessToken
 	 * @param string $userId
 	 * @param string $calId
 	 * @return Generator
 	 */
-	private function getCalendarEvents(string $accessToken, string $userId, string $calId): Generator {
+	private function getCalendarEvents(string $userId, string $calId): Generator {
 		$params = [
 			'maxResults' => 100,
 		];
 		do {
-			$result = $this->googleApiService->request($accessToken, $userId, 'calendar/v3/calendars/'. urlencode($calId) .'/events', $params);
+			$result = $this->googleApiService->request($userId, 'calendar/v3/calendars/'. urlencode($calId) .'/events', $params);
 			if (isset($result['error'])) {
 				return $result;
 			}

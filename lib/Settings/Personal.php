@@ -81,7 +81,7 @@ class Personal implements ISettings {
 		// make a request to potentially refresh the token before the settings page is loaded
 		$accessToken = $this->config->getUserValue($this->userId, Application::APP_ID, 'token');
 		if ($accessToken) {
-			$info = $this->googleAPIService->request($accessToken, $this->userId, 'oauth2/v1/userinfo', ['alt' => 'json']);
+			$info = $this->googleAPIService->request($this->userId, 'oauth2/v1/userinfo', ['alt' => 'json']);
 		}
 
 		// Get scopes of user

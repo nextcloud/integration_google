@@ -83,16 +83,15 @@ class GoogleDriveAPIService {
 	}
 
 	/**
-	 * @param string $accessToken
 	 * @param string $userId
 	 * @return array
 	 */
-	public function getDriveSize(string $accessToken, string $userId): array {
+	public function getDriveSize(string $userId): array {
 		$considerSharedFiles = $this->config->getUserValue($userId, Application::APP_ID, 'consider_shared_files', '0') === '1';
 		$params = [
 			'fields' => '*',
 		];
-		$result = $this->googleApiService->request($accessToken, $userId, 'drive/v3/about', $params);
+		$result = $this->googleApiService->request($userId, 'drive/v3/about', $params);
 		if (isset($result['error']) || !isset($result['storageQuota']) || !isset($result['storageQuota']['usageInDrive'])) {
 			return $result;
 		}
@@ -111,7 +110,7 @@ class GoogleDriveAPIService {
 			$params['fields'] = 'files/name,files/ownedByMe,files/size';
 		}
 		do {
-			$result = $this->googleApiService->request($accessToken, $userId, 'drive/v3/files', $params);
+			$result = $this->googleApiService->request($userId, 'drive/v3/files', $params);
 			if (isset($result['error']) || !isset($result['files'])) {
 				return ['error' => $result['error'] ?? 'no files found'];
 			}
@@ -184,7 +183,6 @@ class GoogleDriveAPIService {
 		}
 		$this->config->setUserValue($userId, Application::APP_ID, 'drive_import_running', '1');
 
-		$accessToken = $this->config->getUserValue($userId, Application::APP_ID, 'token');
 		// import batch of files
 		$targetPath = $this->config->getUserValue($userId, Application::APP_ID, 'drive_output_dir', '/Google Drive');
 		$targetPath = $targetPath ?: '/Google Drive';
@@ -197,7 +195,7 @@ class GoogleDriveAPIService {
 		$alreadyImported = $this->config->getUserValue($userId, Application::APP_ID, 'nb_imported_files', '0');
 		$alreadyImported = (int) $alreadyImported;
 		try {
-			$result = $this->importFiles($accessToken, $userId, $targetPath, 500000000, $alreadyImported, $directoryProgress);
+			$result = $this->importFiles($userId, $targetPath, 500000000, $alreadyImported, $directoryProgress);
 		} catch (\Exception | \Throwable $e) {
 			$result = [
 				'error' => 'Unknown job failure. ' . $e->getMessage(),
@@ -228,7 +226,6 @@ class GoogleDriveAPIService {
 	}
 
 	/**
-	 * @param string $accessToken
 	 * @param string $userId
 	 * @param string $targetPath
 	 * @param ?int $maxDownloadSize
@@ -240,7 +237,7 @@ class GoogleDriveAPIService {
 	 * @throws \OCP\PreConditionNotMetException
 	 * @throws \OC\User\NoUserException
 	 */
-	public function importFiles(string $accessToken, string $userId, string $targetPath,
+	public function importFiles(string $userId, string $targetPath,
 								?int $maxDownloadSize = null, int $alreadyImported = 0, array &$directoryProgress = []): array {
 		$considerSharedFiles = $this->config->getUserValue($userId, Application::APP_ID, 'consider_shared_files', '0') === '1';
 		// create root folder
@@ -262,7 +259,7 @@ class GoogleDriveAPIService {
 			'q' => "mimeType='application/vnd.google-apps.folder'",
 		];
 		do {
-			$result = $this->googleApiService->request($accessToken, $userId, 'drive/v3/files', $params);
+			$result = $this->googleApiService->request($userId, 'drive/v3/files', $params);
 			if (isset($result['error'])) {
 				return $result;
 			}
@@ -294,7 +291,7 @@ class GoogleDriveAPIService {
 		}
 
 		// get files
-		$info = $this->getDriveSize($accessToken, $userId);
+		$info = $this->getDriveSize($userId);
 		if (isset($info['error'])) {
 			return $info;
 		}
@@ -317,7 +314,7 @@ class GoogleDriveAPIService {
 				'q' => "mimeType!='application/vnd.google-apps.folder' and '" . $dirId . "' in parents",
 			];
 			do {
-				$result = $this->googleApiService->request($accessToken, $userId, 'drive/v3/files', $params);
+				$result = $this->googleApiService->request($userId, 'drive/v3/files', $params);
 				if (isset($result['error'])) {
 					return $result;
 				}
@@ -350,7 +347,7 @@ class GoogleDriveAPIService {
 						}
 					}
 
-					$size = $this->getFile($accessToken, $userId, $fileItem, $saveFolder, $fileName);
+					$size = $this->getFile($userId, $fileItem, $saveFolder, $fileName);
 
 					if (!is_null($size)) {
 						$nbDownloaded++;
@@ -436,7 +433,6 @@ class GoogleDriveAPIService {
 	/**
 	 * Create new file in the given folder with given filename
 	 * Download contents of the file from Google Drive and save it into the created file
-	 * @param string $accessToken
 	 * @param Folder $saveFolder
 	 * @param string $fileName
 	 * @param string $userId
@@ -449,7 +445,7 @@ class GoogleDriveAPIService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	 private function downloadAndSaveFile(string $accessToken, Folder $saveFolder, string $fileName, string $userId,
+	 private function downloadAndSaveFile(Folder $saveFolder, string $fileName, string $userId,
 										  string $fileUrl, array $fileItem, array $params = []): ?int {
 		try {
 			$savedFile = $saveFolder->newFile($fileName);
@@ -463,7 +459,7 @@ class GoogleDriveAPIService {
 			return null;
 		}
 
-		$res = $this->googleApiService->simpleDownload($accessToken, $userId, $fileUrl, $resource, $params);
+		$res = $this->googleApiService->simpleDownload($userId, $fileUrl, $resource, $params);
 		if (!isset($res['error'])) {
 			if (is_resource($resource)) {
 				fclose($resource);
@@ -555,24 +551,23 @@ class GoogleDriveAPIService {
 	}
 
 	/**
-	 * @param string $accessToken
 	 * @param string $userId
 	 * @param array $fileItem
 	 * @param Folder $saveFolder
 	 * @param string $fileName
 	 * @return ?int downloaded size, null if error getting file
 	 */
-	private function getFile(string $accessToken, string $userId, array $fileItem, Folder $saveFolder, string $fileName): ?int {
+	private function getFile(string $userId, array $fileItem, Folder $saveFolder, string $fileName): ?int {
 		if (in_array($fileItem['mimeType'], array_values(self::DOCUMENT_MIME_TYPES))) {
 			$documentFormat = $this->getUserDocumentFormat($userId);
 			// potentially a doc
 			$params = $this->getDocumentRequestParams($fileItem['mimeType'], $documentFormat);
 			$fileUrl = 'https://www.googleapis.com/drive/v3/files/' . urlencode($fileItem['id']) . '/export';
-			return $this->downloadAndSaveFile($accessToken, $saveFolder, $fileName, $userId, $fileUrl, $fileItem, $params);
+			return $this->downloadAndSaveFile($saveFolder, $fileName, $userId, $fileUrl, $fileItem, $params);
 		} elseif (isset($fileItem['webContentLink'])) {
 			// classic file
 			$fileUrl = 'https://www.googleapis.com/drive/v3/files/' . urlencode($fileItem['id']) . '?alt=media';
-			return $this->downloadAndSaveFile($accessToken, $saveFolder, $fileName, $userId, $fileUrl, $fileItem);
+			return $this->downloadAndSaveFile($saveFolder, $fileName, $userId, $fileUrl, $fileItem);
 		}
 		return null;
 	}

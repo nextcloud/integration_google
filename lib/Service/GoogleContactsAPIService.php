@@ -58,11 +58,10 @@ class GoogleContactsAPIService {
 	}
 
 	/**
-	 * @param string $accessToken
 	 * @param string $userId
 	 * @return array
 	 */
-	public function getContactNumber(string $accessToken, string $userId): array {
+	public function getContactNumber(string $userId): array {
 		$nbContacts = 0;
 		$params = [
 			'personFields' => implode(',', [
@@ -71,7 +70,7 @@ class GoogleContactsAPIService {
 			'pageSize' => 100,
 		];
 		do {
-			$result = $this->googleApiService->request($accessToken, $userId, 'v1/people/me/connections', $params, 'GET', 'https://people.googleapis.com/');
+			$result = $this->googleApiService->request($userId, 'v1/people/me/connections', $params, 'GET', 'https://people.googleapis.com/');
 			if (isset($result['error'])) {
 				return $result;
 			}
@@ -82,11 +81,10 @@ class GoogleContactsAPIService {
 	}
 
 	/**
-	 * @param string $accessToken
 	 * @param string $userId
 	 * @return Generator
 	 */
-	public function getContactList(string $accessToken, string $userId): Generator {
+	public function getContactList(string $userId): Generator {
 		$params = [
 			'personFields' => implode(',', [
 				'addresses',
@@ -105,7 +103,7 @@ class GoogleContactsAPIService {
 			'pageSize' => 100,
 		];
 		do {
-			$result = $this->googleApiService->request($accessToken, $userId, 'v1/people/me/connections', $params, 'GET', 'https://people.googleapis.com/');
+			$result = $this->googleApiService->request($userId, 'v1/people/me/connections', $params, 'GET', 'https://people.googleapis.com/');
 			if (isset($result['error'])) {
 				return $result;
 			}
@@ -120,14 +118,13 @@ class GoogleContactsAPIService {
 	}
 
 	/**
-	 * @param string $accessToken
 	 * @param string $userId
 	 * @param ?string $uri
 	 * @param int $key
 	 * @param ?string $newAddrBookName
 	 * @return array
 	 */
-	public function importContacts(string $accessToken, string $userId, ?string $uri, int $key, ?string $newAddrBookName): array {
+	public function importContacts(string $userId, ?string $uri, int $key, ?string $newAddrBookName): array {
 		if ($key === 0) {
 			$addressBooks = $this->contactsManager->getUserAddressBooks();
 			foreach ($addressBooks as $k => $ab) {
@@ -155,7 +152,7 @@ class GoogleContactsAPIService {
 			}
 		}
 
-		$contacts = $this->getContactList($accessToken, $userId);
+		$contacts = $this->getContactList($userId);
 		$nbAdded = 0;
 		foreach ($contacts as $k => $c) {
 			// avoid existing contacts
@@ -202,7 +199,7 @@ class GoogleContactsAPIService {
 							$type = 'PNG';
 						}
 						if ($type !== '') {
-							$photoFile = $this->googleApiService->simpleRequest($accessToken, $userId, $photo['url']);
+							$photoFile = $this->googleApiService->simpleRequest($userId, $photo['url']);
 							if (!isset($photoFile['error'])) {
 								$b64Photo = stripslashes('data:image/' . strtolower($type) . ';base64\,') . base64_encode($photoFile['content']);
 								try {

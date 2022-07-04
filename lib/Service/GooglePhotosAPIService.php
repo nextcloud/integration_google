@@ -74,21 +74,20 @@ class GooglePhotosAPIService {
 	}
 
 	/**
-	 * @param string $accessToken
 	 * @param string $userId
 	 * @return array
 	 */
-	public function getPhotoNumber(string $accessToken, string $userId): array {
+	public function getPhotoNumber(string $userId): array {
 		$nbPhotos = 0;
 		$params = [
 			'pageSize' => 50,
 		];
 		do {
 			$this->logger->debug(
-				'Photos service::getPhotoNumber LAUNCHING ALBUM LIST REQUEST, userid: "' . $userId . '", token length: ' . strlen($accessToken),
+				'Photos service::getPhotoNumber LAUNCHING ALBUM LIST REQUEST, userid: "' . $userId . '"',
 				['app' => $this->appName]
 			);
-			$result = $this->googleApiService->request($accessToken, $userId, 'v1/albums', $params, 'GET', 'https://photoslibrary.googleapis.com/');
+			$result = $this->googleApiService->request($userId, 'v1/albums', $params, 'GET', 'https://photoslibrary.googleapis.com/');
 			if (isset($result['error'])) {
 				return $result;
 			}
@@ -107,7 +106,7 @@ class GooglePhotosAPIService {
 				'pageSize' => 50,
 			];
 			do {
-				$result = $this->googleApiService->request($accessToken, $userId, 'v1/sharedAlbums', $params, 'GET', 'https://photoslibrary.googleapis.com/');
+				$result = $this->googleApiService->request($userId, 'v1/sharedAlbums', $params, 'GET', 'https://photoslibrary.googleapis.com/');
 				if (isset($result['error'])) {
 					return $result;
 				}
@@ -127,7 +126,7 @@ class GooglePhotosAPIService {
 				'pageSize' => 50,
 			];
 
-			$result = $this->googleApiService->request($accessToken, $userId, 'v1/mediaItems', $params, 'GET', 'https://photoslibrary.googleapis.com/');
+			$result = $this->googleApiService->request($userId, 'v1/mediaItems', $params, 'GET', 'https://photoslibrary.googleapis.com/');
 			if (isset($result['error'])) {
 				return $result;
 			}
@@ -191,14 +190,13 @@ class GooglePhotosAPIService {
 		}
 		$this->config->setUserValue($userId, Application::APP_ID, 'photo_import_running', '1');
 
-		$accessToken = $this->config->getUserValue($userId, Application::APP_ID, 'token');
 		$targetPath = $this->config->getUserValue($userId, Application::APP_ID, 'photo_output_dir', '/Google Photos');
 		$targetPath = $targetPath ?: '/Google Photos';
 		// import photos by batch of 500 Mo
 		$alreadyImported = $this->config->getUserValue($userId, Application::APP_ID, 'nb_imported_photos', '0');
 		$alreadyImported = (int) $alreadyImported;
 		try {
-			$result = $this->importPhotos($accessToken, $userId, $targetPath, 500000000, $alreadyImported);
+			$result = $this->importPhotos($userId, $targetPath, 500000000, $alreadyImported);
 		} catch (\Exception | \Throwable $e) {
 			$result = [
 				'error' => 'Unknown job failure. ' . $e->getMessage(),
@@ -226,14 +224,13 @@ class GooglePhotosAPIService {
 	}
 
 	/**
-	 * @param string $accessToken
 	 * @param string $userId
 	 * @param string $targetPath
 	 * @param ?int $maxDownloadSize
 	 * @param int $alreadyImported
 	 * @return array
 	 */
-	public function importPhotos(string $accessToken, string $userId, string $targetPath,
+	public function importPhotos(string $userId, string $targetPath,
 								?int $maxDownloadSize = null, int $alreadyImported = 0): array {
 		// create root folder
 		$userFolder = $this->root->getUserFolder($userId);
@@ -252,10 +249,10 @@ class GooglePhotosAPIService {
 		];
 		do {
 			$this->logger->debug(
-				'Photos service::importPhotos LAUNCHING ALBUM LIST REQUEST, userid: "' . $userId . '", token length: ' . strlen($accessToken),
+				'Photos service::importPhotos LAUNCHING ALBUM LIST REQUEST, userid: "' . $userId . '"',
 				['app' => $this->appName]
 			);
-			$result = $this->googleApiService->request($accessToken, $userId, 'v1/albums', $params, 'GET', 'https://photoslibrary.googleapis.com/');
+			$result = $this->googleApiService->request($userId, 'v1/albums', $params, 'GET', 'https://photoslibrary.googleapis.com/');
 			if (isset($result['error'])) {
 				return $result;
 			}
@@ -274,7 +271,7 @@ class GooglePhotosAPIService {
 				'pageSize' => 50,
 			];
 			do {
-				$result = $this->googleApiService->request($accessToken, $userId, 'v1/sharedAlbums', $params, 'GET', 'https://photoslibrary.googleapis.com/');
+				$result = $this->googleApiService->request($userId, 'v1/sharedAlbums', $params, 'GET', 'https://photoslibrary.googleapis.com/');
 				if (isset($result['error'])) {
 					return $result;
 				}
@@ -313,7 +310,7 @@ class GooglePhotosAPIService {
 				'albumId' => $albumId,
 			];
 			do {
-				$result = $this->googleApiService->request($accessToken, $userId, 'v1/mediaItems:search', $params, 'POST', 'https://photoslibrary.googleapis.com/');
+				$result = $this->googleApiService->request($userId, 'v1/mediaItems:search', $params, 'POST', 'https://photoslibrary.googleapis.com/');
 				if (isset($result['error'])) {
 					return $result;
 				}
@@ -321,7 +318,7 @@ class GooglePhotosAPIService {
 					foreach ($result['mediaItems'] as $photo) {
 						$seenIds[] = $photo['id'];
 						$totalSeenNumber++;
-						$size = $this->getPhoto($accessToken, $userId, $photo, $albumFolder);
+						$size = $this->getPhoto($userId, $photo, $albumFolder);
 						if (!is_null($size)) {
 							$nbDownloaded++;
 							$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_photos', $alreadyImported + $nbDownloaded);
@@ -346,7 +343,7 @@ class GooglePhotosAPIService {
 			'pageSize' => 100,
 		];
 		do {
-			$result = $this->googleApiService->request($accessToken, $userId, 'v1/mediaItems', $params, 'GET', 'https://photoslibrary.googleapis.com/');
+			$result = $this->googleApiService->request($userId, 'v1/mediaItems', $params, 'GET', 'https://photoslibrary.googleapis.com/');
 			if (isset($result['error'])) {
 				return $result;
 			}
@@ -355,7 +352,7 @@ class GooglePhotosAPIService {
 					if (!in_array($photo['id'], $seenIds)) {
 						$seenIds[] = $photo['id'];
 						$totalSeenNumber++;
-						$size = $this->getPhoto($accessToken, $userId, $photo, $folder);
+						$size = $this->getPhoto($userId, $photo, $folder);
 						if (!is_null($size)) {
 							$nbDownloaded++;
 							$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_photos', $alreadyImported + $nbDownloaded);
@@ -384,7 +381,6 @@ class GooglePhotosAPIService {
 	}
 
 	/**
-	 * @param string $accessToken
 	 * @param string $userId
 	 * @param array $photo
 	 * @param Folder $albumFolder
@@ -393,7 +389,7 @@ class GooglePhotosAPIService {
 	 * @throws \OCP\Files\NotFoundException
 	 * @throws \OCP\Files\NotPermittedException
 	 */
-	private function getPhoto(string $accessToken, string $userId, array $photo, Folder $albumFolder): ?int {
+	private function getPhoto(string $userId, array $photo, Folder $albumFolder): ?int {
 		$photoName = $photo['filename'];
 		if (!$albumFolder->nodeExists($photoName)) {
 			if (isset($photo['mediaMetadata']['photo'])) {
@@ -413,7 +409,7 @@ class GooglePhotosAPIService {
 				$this->logger->warning('Google Photo, error opening target file ' . '<redacted>' . ' : file is locked', ['app' => $this->appName]);
 				return null;
 			}
-			$res = $this->googleApiService->simpleDownload($accessToken, $userId, $photoUrl, $resource);
+			$res = $this->googleApiService->simpleDownload($userId, $photoUrl, $resource);
 			if (!isset($res['error'])) {
 				if (is_resource($resource)) {
 					fclose($resource);
