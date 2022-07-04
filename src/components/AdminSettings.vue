@@ -139,6 +139,7 @@ export default {
 	background-size: 23px 23px;
 	height: 23px;
 	margin-bottom: -4px;
+	filter: var(--background-invert-if-dark);
 }
 
 body.theme--dark .icon-google {
