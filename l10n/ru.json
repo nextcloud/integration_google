@@ -7,6 +7,7 @@
     "OAuth access token refused" : "Токен доступа OAuth отклонён",
     "Bad credentials" : "Неверные учётные данные",
     "Google Calendar import" : "Импорт Google Календаря",
+    "Private event" : "Личное событие",
     "Connected accounts" : "Подключённые учётные записи",
     "Data migration" : "Перенос данных",
     "Google integration" : "Интеграция с Google",
@@ -23,11 +24,24 @@
     "{amount} Google contacts" : "Количество контактов: {amount} ",
     "New address book" : "Создать адресную книгу",
     "address book name" : "Имя адресной книги",
+    "Import in {name} address book" : "Импортировать в адресную книгу «{name}»",
     "Calendars" : "Календари",
     "Import calendar" : "Импорт календаря",
     "Photos" : "Фотографии",
+    "Ignore shared albums" : "Игнорировать полученные альбомы",
+    "Import Google photos" : "Импорт из Google Фото",
+    "Cancel photo import" : "Отменить импорт фотографий",
     "Drive" : "Диск",
+    "Ignore shared files" : "Игнорировать полученные файлы",
     "Successfully connected to Google!" : "Успешное подключено к Google!",
-    "Google connection error:" : "Ошибка подключения к Google:"
+    "Google connection error:" : "Ошибка подключения к Google:",
+    "Failed to save Google options" : "Не удалось сохранить параметры Google",
+    "Failed to save Google OAuth state" : "Не удалось сохранить состояние Google OAuth",
+    "Failed to get calendar list" : "Не удалось получить список календарей",
+    "Failed to get number of Google photos" : "Не удалось получить количество фотограифий в Google",
+    "Failed to get number of Google contacts" : "Не удалось получить количество контактов в Google",
+    "Failed to get address book list" : "Не удалось получить список адресных книг",
+    "Failed to import Google calendar" : "Не удалось импортировать календарь из Google",
+    "_{amount} photo imported_::_{amount} photos imported_" : ["Импортирована одна фотография","Импортировано {amount} фотографии","Импортировано {amount} фотографий","Импортировано {amount} фотографии"]
 },"pluralForm" :"nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);"
 }
