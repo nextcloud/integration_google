@@ -72,6 +72,7 @@ class Personal implements ISettings {
 		// for OAuth
 		$clientID = $this->config->getAppValue(Application::APP_ID, 'client_id');
 		$clientSecret = $this->config->getAppValue(Application::APP_ID, 'client_secret') !== '';
+		$usePopup = $this->config->getAppValue(Application::APP_ID, 'use_popup', '0');
 
 		// get free space
 		$userFolder = $this->root->getUserFolder($this->userId);
@@ -91,6 +92,7 @@ class Personal implements ISettings {
 		$userConfig = [
 			'client_id' => $clientID,
 			'client_secret' => $clientSecret,
+			'use_popup' => ($usePopup === '1'),
 			'user_name' => $userName,
 			'free_space' => $freeSpace,
 			'user_quota' => $user->getQuota(),

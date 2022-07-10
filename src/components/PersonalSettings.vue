@@ -352,27 +352,30 @@ export default {
 			showError(t('integration_google', 'Google connection error:') + ' ' + urlParams.get('message'))
 		}
 
-		// get informations if we are connected
-		if (this.showOAuth && this.connected) {
-			if (this.state.user_scopes.can_access_calendar) {
-				this.getGoogleCalendarList()
-				this.getLocalAddressBooks()
-			}
-			if (this.state.user_scopes.can_access_contacts) {
-				this.getNbGoogleContacts()
-			}
-			if (this.state.user_scopes.can_access_photos) {
-				this.getNbGooglePhotos()
-				this.getPhotoImportValues(true)
-			}
-			if (this.state.user_scopes.can_access_drive) {
-				this.getGoogleDriveInfo()
-				this.getDriveImportValues(true)
-			}
-		}
+		this.loadData()
 	},
 
 	methods: {
+		loadData() {
+			// get informations if we are connected
+			if (this.showOAuth && this.connected) {
+				if (this.state.user_scopes.can_access_calendar) {
+					this.getGoogleCalendarList()
+					this.getLocalAddressBooks()
+				}
+				if (this.state.user_scopes.can_access_contacts) {
+					this.getNbGoogleContacts()
+				}
+				if (this.state.user_scopes.can_access_photos) {
+					this.getNbGooglePhotos()
+					this.getPhotoImportValues(true)
+				}
+				if (this.state.user_scopes.can_access_drive) {
+					this.getGoogleDriveInfo()
+					this.getDriveImportValues(true)
+				}
+			}
+		},
 		onLogoutClick() {
 			this.state.user_name = ''
 			this.saveOptions({ user_name: this.state.user_name })
@@ -426,18 +429,28 @@ export default {
 				},
 			}
 			const url = generateUrl('/apps/integration_google/config')
-			axios.put(url, req)
-				.then((response) => {
-					window.location.replace(requestUrl)
-				})
-				.catch((error) => {
-					showError(
-						t('integration_google', 'Failed to save Google OAuth state')
-						+ ': ' + error.response?.request?.responseText
+			axios.put(url, req).then((response) => {
+				if (this.state.use_popup) {
+					const ssoWindow = window.open(
+						requestUrl,
+						t('integration_google', 'Sign in with Google'),
+						'toolbar=no, menubar=no, width=600, height=700'
 					)
-				})
-				.then(() => {
-				})
+					ssoWindow.focus()
+					window.addEventListener('message', (event) => {
+						console.debug('Child window message received', event)
+						this.state.user_name = event.data.username
+						this.loadData()
+					})
+				} else {
+					window.location.replace(requestUrl)
+				}
+			}).catch((error) => {
+				showError(
+					t('integration_google', 'Failed to save Google OAuth state')
+					+ ': ' + error.response?.request?.responseText
+				)
+			})
 		},
 		getGoogleDriveInfo() {
 			this.gettingDriveInfo = true

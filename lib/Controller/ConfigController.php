@@ -12,6 +12,8 @@
 namespace OCA\Google\Controller;
 
 use DateTime;
+use OCP\AppFramework\Http\TemplateResponse;
+use OCP\AppFramework\Services\IInitialState;
 use OCP\IURLGenerator;
 use OCP\IConfig;
 use OCP\IL10N;
@@ -58,6 +60,7 @@ class ConfigController extends Controller {
 	const CALENDAR_SCOPE = 'https://www.googleapis.com/auth/calendar.readonly';
 	const CALENDAR_EVENTS_SCOPE = 'https://www.googleapis.com/auth/calendar.events.readonly';
 	const PHOTOS_SCOPE = 'https://www.googleapis.com/auth/photoslibrary.readonly';
+	private IInitialState $initialStateService;
 
 	public function __construct($appName,
 								IRequest $request,
@@ -65,6 +68,7 @@ class ConfigController extends Controller {
 								IURLGenerator $urlGenerator,
 								IL10N $l,
 								IContactManager $contactsManager,
+								IInitialState $initialStateService,
 								GoogleAPIService $googleApiService,
 								?string $userId) {
 		parent::__construct($appName, $request);
@@ -75,6 +79,7 @@ class ConfigController extends Controller {
 		$this->contactsManager = $contactsManager;
 		$this->googleApiService = $googleApiService;
 		$this->userId = $userId;
+		$this->initialStateService = $initialStateService;
 	}
 
 	/**
@@ -139,6 +144,18 @@ class ConfigController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 *
+	 * @param string $username
+	 * @return TemplateResponse
+	 */
+	public function popupSuccessPage(string $username): TemplateResponse {
+		$this->initialStateService->provideInitialState('popup-data', ['user_name' => $username]);
+		return new TemplateResponse(Application::APP_ID, 'popupSuccess', [], TemplateResponse::RENDER_AS_GUEST);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 *
 	 * Receive oauth code and get oauth access token
 	 *
 	 * @param string $code request code to use when requesting oauth token
@@ -186,11 +203,18 @@ class ConfigController extends Controller {
 				}
 				$this->config->setUserValue($this->userId, Application::APP_ID, 'token', $accessToken);
 				$this->config->setUserValue($this->userId, Application::APP_ID, 'refresh_token', $refreshToken);
-				$this->storeUserInfo();
-				return new RedirectResponse(
-					$this->urlGenerator->linkToRoute('settings.PersonalSettings.index', ['section' => 'migration']) .
-					'?googleToken=success'
-				);
+				$username = $this->storeUserInfo();
+				$usePopup = $this->config->getAppValue(Application::APP_ID, 'use_popup', '0') === '1';
+				if ($usePopup) {
+					return new RedirectResponse(
+						$this->urlGenerator->linkToRoute('integration_google.config.popupSuccessPage', ['username' => $username])
+					);
+				} else {
+					return new RedirectResponse(
+						$this->urlGenerator->linkToRoute('settings.PersonalSettings.index', ['section' => 'migration']) .
+						'?googleToken=success'
+					);
+				}
 			}
 			$message = $result['error']
 				?? (isset($result['access_token'])

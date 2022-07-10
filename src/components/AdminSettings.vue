@@ -45,6 +45,11 @@
 				:placeholder="t('integration_google', 'Client secret of your Google application')"
 				@input="onInput"
 				@focus="readonly = false">
+			<CheckboxRadioSwitch
+				:checked.sync="state.use_popup"
+				@update:checked="onUsePopupChanged">
+				{{ t('integration_google', 'Use a popup to authenticate') }}
+			</CheckboxRadioSwitch>
 		</div>
 	</div>
 </template>
@@ -55,12 +60,13 @@ import { generateUrl } from '@nextcloud/router'
 import axios from '@nextcloud/axios'
 import { delay } from '../utils'
 import { showSuccess, showError } from '@nextcloud/dialogs'
-import '@nextcloud/dialogs/styles/toast.scss'
+import CheckboxRadioSwitch from '@nextcloud/vue/dist/Components/CheckboxRadioSwitch'
 
 export default {
 	name: 'AdminSettings',
 
 	components: {
+		CheckboxRadioSwitch,
 	},
 
 	props: [],
@@ -78,18 +84,21 @@ export default {
 	},
 
 	methods: {
+		onUsePopupChanged(newValue) {
+			this.saveOptions({ use_popup: newValue ? '1' : '0' })
+		},
 		onInput() {
 			const that = this
 			delay(() => {
-				that.saveOptions()
-			}, 2000)()
-		},
-		saveOptions() {
-			const req = {
-				values: {
+				that.saveOptions({
 					client_id: this.state.client_id,
 					client_secret: this.state.client_secret,
-				},
+				})
+			}, 2000)()
+		},
+		saveOptions(values) {
+			const req = {
+				values,
 			}
 			const url = generateUrl('/apps/integration_google/admin-config')
 			axios.put(url, req)

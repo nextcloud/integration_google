@@ -16,6 +16,7 @@ const appId = 'integration_google'
 webpackConfig.entry = {
 	personalSettings: { import: path.join(__dirname, 'src', 'personalSettings.js'), filename: appId + '-personalSettings.js' },
 	adminSettings: { import: path.join(__dirname, 'src', 'adminSettings.js'), filename: appId + '-adminSettings.js' },
+	popupSuccess: { import: path.join(__dirname, 'src', 'popupSuccess.js'), filename: appId + '-popupSuccess.js' },
 }
 
 webpackConfig.plugins.push(
