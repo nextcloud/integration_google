@@ -28,6 +28,7 @@ OC.L10N.register(
     "Client ID of your Google application" : "Клиентски идентификатор на вашето Google приложение",
     "Client secret" : "Тайна на клиент",
     "Client secret of your Google application" : "Клиентска тайна на вашето Google приложение",
+    "Use a popup to authenticate" : "Използване на изскачащ прозорец за удостоверяване",
     "Google admin options saved" : "Опциите за администратор на Google са записани",
     "Failed to save Google admin options" : "Неуспешно записване на опциите за администратор на Google",
     "Google data migration" : "Миграция на данни от Google",
