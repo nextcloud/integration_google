@@ -10,6 +10,7 @@ OC.L10N.register(
     "Authentication" : "Auðkenning",
     "Connected as {user}" : "Tengt sem {user}",
     "Contacts" : "Tengiliðir",
+    "Calendars" : "Dagatöl",
     "Import calendar" : "Flytja inn dagatal",
     "Photos" : "Ljósmyndir",
     "Drive" : "Keyra"
