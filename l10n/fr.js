@@ -47,6 +47,7 @@ OC.L10N.register(
     "Import calendar" : "Importer un calendrier",
     "Photos" : "Photos",
     "Ignore shared albums" : "Ignorer les albums partagés",
+    "Warning: Google does not provide location data in imported photos." : "Attention : Google ne fournit pas de données de localisation pour des photos importées.",
     "Import directory" : "Importer le répertoire",
     "Import Google photos" : "Importer les photos Google",
     "Your Google photo collection size is estimated to be bigger than your remaining space left ({formSpace})" : "La taille de votre collection de photos Google est estimée supérieure à l'espace restant ({formSpace})",
