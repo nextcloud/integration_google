@@ -12,8 +12,8 @@
  */
 
 import Vue from 'vue'
-import './bootstrap'
-import AdminSettings from './components/AdminSettings'
+import './bootstrap.js'
+import AdminSettings from './components/AdminSettings.vue'
 
 // eslint-disable-next-line
 'use strict'

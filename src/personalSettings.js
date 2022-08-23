@@ -12,8 +12,8 @@
  */
 
 import Vue from 'vue'
-import './bootstrap'
-import PersonalSettings from './components/PersonalSettings'
+import './bootstrap.js'
+import PersonalSettings from './components/PersonalSettings.vue'
 
 // eslint-disable-next-line
 'use strict'

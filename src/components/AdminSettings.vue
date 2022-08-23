@@ -58,9 +58,9 @@
 import { loadState } from '@nextcloud/initial-state'
 import { generateUrl } from '@nextcloud/router'
 import axios from '@nextcloud/axios'
-import { delay } from '../utils'
+import { delay } from '../utils.js'
 import { showSuccess, showError } from '@nextcloud/dialogs'
-import CheckboxRadioSwitch from '@nextcloud/vue/dist/Components/CheckboxRadioSwitch'
+import CheckboxRadioSwitch from '@nextcloud/vue/dist/Components/CheckboxRadioSwitch.js'
 
 export default {
 	name: 'AdminSettings',
@@ -144,7 +144,7 @@ export default {
 }
 
 .icon-google {
-	background-image: url(./../../img/app-dark.svg);
+	background-image: url('../../img/app-dark.svg');
 	background-size: 23px 23px;
 	height: 23px;
 	margin-bottom: -4px;
@@ -152,7 +152,7 @@ export default {
 }
 
 body.theme--dark .icon-google {
-	background-image: url(./../../img/app.svg);
+	background-image: url('../../img/app.svg');
 }
 
 </style>

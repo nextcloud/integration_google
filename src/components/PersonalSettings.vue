@@ -242,8 +242,8 @@ import axios from '@nextcloud/axios'
 import moment from '@nextcloud/moment'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import '@nextcloud/dialogs/styles/toast.scss'
-import AppNavigationIconBullet from '@nextcloud/vue/dist/Components/AppNavigationIconBullet'
-import { humanFileSize } from '../utils'
+import AppNavigationIconBullet from '@nextcloud/vue/dist/Components/AppNavigationIconBullet.js'
+import { humanFileSize } from '../utils.js'
 
 export default {
 	name: 'PersonalSettings',
