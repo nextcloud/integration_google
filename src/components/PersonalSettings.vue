@@ -1,7 +1,7 @@
 <template>
 	<div id="google_prefs" class="section">
 		<h2>
-			<a class="icon icon-google-settings" />
+			<GoogleIcon />
 			{{ t('integration_google', 'Google data migration') }}
 		</h2>
 		<p v-if="!showOAuth" class="settings-hint">
@@ -15,106 +15,114 @@
 				<span>{{ t('integration_google', 'Sign in with Google') }}</span>
 			</button>
 			<div v-else>
-				<div class="google-grid-form">
+				<div class="line">
 					<label class="google-connected">
-						<a class="icon icon-checkmark-color" />
+						<CheckIcon />
 						{{ t('integration_google', 'Connected as {user}', { user: state.user_name }) }}
 					</label>
-					<button id="google-rm-cred" @click="onLogoutClick">
-						<span class="icon icon-close" />
+					<NcButton @click="onLogoutClick">
+						<template #icon>
+							<CloseIcon />
+						</template>
 						{{ t('integration_google', 'Disconnect from Google') }}
-					</button>
+					</NcButton>
 				</div>
 				<br>
 				<div v-if="nbContacts > 0"
 					id="google-contacts">
 					<h3>{{ t('integration_google', 'Contacts') }}</h3>
-					<label>
-						<span class="icon icon-menu-sidebar" />
-						{{ t('integration_google', '{amount} Google contacts', { amount: nbContacts }) }}
-					</label>
-					<button id="google-import-contacts" @click="onImportContacts">
-						<span class="icon icon-contacts-dark" />
-						{{ t('integration_google', 'Import Google Contacts in Nextcloud') }}
-					</button>
-					<br>
-					<select v-if="showAddressBooks"
-						v-model.number="selectedAddressBook">
-						<option :value="-1">
-							{{ t('integration_google', 'Choose where to import the contacts') }}
-						</option>
-						<option :value="0">
-							➕ {{ t('integration_google', 'New address book') }}
-						</option>
-						<option v-for="(ab, k) in addressbooks" :key="k" :value="k">
-							📕 {{ ab.name }}
-						</option>
-					</select>
-					<input v-if="showAddressBooks && selectedAddressBook === 0"
-						v-model="newAddressBookName"
-						type="text"
-						class="contact-input"
-						:placeholder="t('integration_google', 'address book name')">
-					<button v-if="showAddressBooks && selectedAddressBook > -1 && (selectedAddressBook > 0 || newAddressBookName)"
-						id="google-import-contacts-in-book"
-						:class="{ loading: importingContacts }"
-						@click="onFinalImportContacts">
-						<span class="icon icon-download" />
-						{{ t('integration_google', 'Import in {name} address book', { name: selectedAddressBookName }) }}
-					</button>
-					<br>
-				</div>
-				<div v-if="calendars.length > 0"
-					id="google-calendars">
-					<h3>{{ t('integration_google', 'Calendars') }}</h3>
-					<div v-for="cal in calendars" :key="cal.id" class="google-grid-form">
+					<div class="line">
 						<label>
-							<AppNavigationIconBullet slot="icon" :color="getCalendarColor(cal)" />
+							<AccountGroupIcon />
+							{{ t('integration_google', '{amount} Google contacts', { amount: nbContacts }) }}
+						</label>
+						<NcButton @click="onImportContacts">
+							<template #icon>
+								<AccountMultipleIcon />
+							</template>
+							{{ t('integration_google', 'Import Google Contacts in Nextcloud') }}
+						</NcButton>
+					</div>
+					<br>
+					<div class="line">
+						<select v-if="showAddressBooks"
+							v-model.number="selectedAddressBook">
+							<option :value="-1">
+								{{ t('integration_google', 'Choose where to import the contacts') }}
+							</option>
+							<option :value="0">
+								➕ {{ t('integration_google', 'New address book') }}
+							</option>
+							<option v-for="(ab, k) in addressbooks" :key="k" :value="k">
+								📕 {{ ab.name }}
+							</option>
+						</select>
+						<input v-if="showAddressBooks && selectedAddressBook === 0"
+							v-model="newAddressBookName"
+							type="text"
+							class="contact-input"
+							:placeholder="t('integration_google', 'address book name')">
+						<NcButton v-if="showAddressBooks && selectedAddressBook > -1 && (selectedAddressBook > 0 || newAddressBookName)"
+							:class="{ loading: importingContacts }"
+							@click="onFinalImportContacts">
+							<template #icon>
+								<DownloadIcon />
+							</template>
+							{{ t('integration_google', 'Import in "{name}" address book', { name: selectedAddressBookName }) }}
+						</NcButton>
+						<br>
+					</div>
+				</div>
+				<div v-if="calendars.length > 0">
+					<h3>{{ t('integration_google', 'Calendars') }}</h3>
+					<div v-for="cal in calendars" :key="cal.id" class="calendar-item">
+						<label>
+							<AppNavigationIconBullet :color="getCalendarColor(cal)" />
 							<span>{{ getCalendarLabel(cal) }}</span>
 						</label>
-						<button
+						<NcButton
 							:class="{ loading: importingCalendar[cal.id] }"
 							@click="onCalendarImport(cal)">
-							<span class="icon icon-calendar-dark" />
+							<template #icon>
+								<CalendarIcon />
+							</template>
 							{{ t('integration_google', 'Import calendar') }}
-						</button>
+						</NcButton>
 					</div>
 					<br>
 				</div>
 				<div v-if="nbPhotos > 0"
 					id="google-photos">
 					<h3>{{ t('integration_google', 'Photos') }}</h3>
-					<div v-if="!importingPhotos" class="check-option">
-						<input
-							id="consider-shared-albums"
-							type="checkbox"
-							class="checkbox"
-							:checked="!state.consider_shared_albums"
-							@input="onPhotoConsiderSharedChange">
-						<label for="consider-shared-albums">{{ t('integration_google', 'Ignore shared albums') }}</label>
-						<br><br>
-					</div>
+					<CheckboxRadioSwitch v-if="!importingPhotos"
+						:checked="!state.consider_shared_albums"
+						@update:checked="onPhotoConsiderSharedChange">
+						{{ t('integration_google', 'Ignore shared albums') }}
+					</CheckboxRadioSwitch>
+					<br>
 					<p v-if="!importingPhotos" class="settings-hint">
-						<span class="icon icon-details" />
+						<InformationIcon />
 						{{ t('integration_google', 'Warning: Google does not provide location data in imported photos.') }}
 					</p>
-					<div v-if="!importingPhotos" class="output-selection">
+					<div v-if="!importingPhotos" class="line">
 						<label for="photo-output">
-							<span class="icon icon-folder" />
+							<FolderIcon />
 							{{ t('integration_google', 'Import directory') }}
 						</label>
 						<input id="photo-output"
 							:readonly="true"
 							:value="state.photo_output_dir">
-						<button class="edit-output-dir"
+						<NcButton class="edit-output-dir"
 							@click="onPhotoOutputChange">
-							<span class="icon-rename" />
-						</button>
+							<template #icon>
+								<PencilIcon />
+							</template>
+						</NcButton>
 						<br><br>
 					</div>
 					<div class="line">
 						<label>
-							<span class="icon icon-toggle-pictures" />
+							<ImageIcon />
 							{{ n('integration_google',
 								'>{nbPhotos} Google photo (>{formSize})',
 								'>{nbPhotos} Google photos (>{formSize})',
@@ -122,14 +130,16 @@
 								{ nbPhotos, formSize: myHumanFileSize(estimatedPhotoCollectionSize, true) })
 							}}
 						</label>
-						<button v-if="enoughSpaceForPhotos && !importingPhotos"
+						<NcButton v-if="enoughSpaceForPhotos && !importingPhotos"
 							id="google-import-photos"
 							:disabled="gettingPhotoInfo"
 							:class="{ loading: gettingPhotoInfo }"
 							@click="onImportPhotos">
-							<span class="icon icon-picture" />
+							<template #icon>
+								<FileImageIcon />
+							</template>
 							{{ t('integration_google', 'Import Google photos') }}
-						</button>
+						</NcButton>
 						<span v-else-if="!enoughSpaceForPhotos">
 							{{ t('integration_google', 'Your Google photo collection size is estimated to be bigger than your remaining space left ({formSpace})', { formSpace: myHumanFileSize(state.free_space) }) }}
 						</span>
@@ -140,29 +150,26 @@
 						<br>
 						{{ lastPhotoImportDate }}
 						<br>
-						<button @click="onCancelPhotoImport">
-							<span class="icon icon-close" />
+						<NcButton @click="onCancelPhotoImport">
+							<template #icon>
+								<CloseIcon />
+							</template>
 							{{ t('integration_google', 'Cancel photo import') }}
-						</button>
+						</NcButton>
 					</div>
 					<br><br>
 				</div>
 				<div v-if="nbFiles > 0"
 					id="google-drive">
 					<h3>{{ t('integration_google', 'Drive') }}</h3>
-					<div v-if="!importingDrive" class="check-option">
-						<input
-							id="consider-shared-files"
-							type="checkbox"
-							class="checkbox"
-							:checked="!state.consider_shared_files"
-							@input="onDriveConsiderSharedChange">
-						<label for="consider-shared-files">{{ t('integration_google', 'Ignore shared files') }}</label>
-						<br>
-					</div>
-					<div v-if="!importingDrive" class="selectOption">
+					<CheckboxRadioSwitch v-if="!importingDrive"
+						:checked="!state.consider_shared_files"
+						@update:checked="onDriveConsiderSharedChange">
+						{{ t('integration_google', 'Ignore shared files') }}
+					</CheckboxRadioSwitch>
+					<div v-if="!importingDrive" class="line">
 						<label for="document-format">
-							<span class="icon icon-category-office" />
+							<FileDocumentIcon />
 							{{ t('integration_google', 'Google documents import format') }}
 						</label>
 						<select id="document-format"
@@ -177,23 +184,25 @@
 						</select>
 						<br>
 					</div>
-					<div v-if="!importingDrive" class="output-selection">
+					<div v-if="!importingDrive" class="line">
 						<label for="drive-output">
-							<span class="icon icon-folder" />
+							<FolderIcon />
 							{{ t('integration_google', 'Import directory') }}
 						</label>
 						<input id="drive-output"
 							:readonly="true"
 							:value="state.drive_output_dir">
-						<button class="edit-output-dir"
+						<NcButton class="edit-output-dir"
 							@click="onDriveOutputChange">
-							<span class="icon-rename" />
-						</button>
+							<template #icon>
+								<PencilIcon />
+							</template>
+						</NcButton>
 						<br><br>
 					</div>
 					<div class="line">
 						<label v-if="state.consider_shared_files && sharedWithMeSize > 0">
-							<span class="icon icon-folder" />
+							<FileIcon />
 							{{ n('integration_google',
 								'{nbFiles} file in Google Drive ({formSize} + {formSharedSize} shared with you)',
 								'{nbFiles} files in Google Drive ({formSize} + {formSharedSize} shared with you)',
@@ -203,17 +212,19 @@
 							}}
 						</label>
 						<label v-else>
-							<span class="icon icon-folder" />
+							<FileIcon />
 							{{ n('integration_google', '{nbFiles} file in Google Drive ({formSize})', '{nbFiles} files in Google Drive ({formSize})', nbFiles, { nbFiles, formSize: myHumanFileSize(driveSize, true) }) }}
 						</label>
-						<button v-if="enoughSpaceForDrive && !importingDrive"
+						<NcButton v-if="enoughSpaceForDrive && !importingDrive"
 							id="google-import-files"
 							:disabled="gettingDriveInfo"
 							:class="{ loading: gettingDriveInfo }"
 							@click="onImportDrive">
-							<span class="icon icon-files-dark" />
+							<template #icon>
+								<GoogleDriveIcon />
+							</template>
 							{{ t('integration_google', 'Import Google Drive files') }}
-						</button>
+						</NcButton>
 						<span v-else-if="!enoughSpaceForDrive">
 							{{ t('integration_google', 'Your Google Drive is bigger than your remaining space left ({formSpace})', { formSpace: myHumanFileSize(state.free_space) }) }}
 						</span>
@@ -224,10 +235,12 @@
 						<br>
 						{{ lastDriveImportDate }}
 						<br>
-						<button @click="onCancelDriveImport">
-							<span class="icon icon-close" />
+						<NcButton @click="onCancelDriveImport">
+							<template #icon>
+								<CloseIcon />
+							</template>
 							{{ t('integration_google', 'Cancel Google Drive import') }}
-						</button>
+						</NcButton>
 					</div>
 				</div>
 			</div>
@@ -236,6 +249,23 @@
 </template>
 
 <script>
+import CheckIcon from 'vue-material-design-icons/Check.vue'
+import AccountGroupIcon from 'vue-material-design-icons/AccountGroup.vue'
+import InformationIcon from 'vue-material-design-icons/Information.vue'
+import FileDocumentIcon from 'vue-material-design-icons/FileDocument.vue'
+import FileIcon from 'vue-material-design-icons/File.vue'
+import FolderIcon from 'vue-material-design-icons/Folder.vue'
+import CloseIcon from 'vue-material-design-icons/Close.vue'
+import CalendarIcon from 'vue-material-design-icons/Calendar.vue'
+import FileImageIcon from 'vue-material-design-icons/FileImage.vue'
+import ImageIcon from 'vue-material-design-icons/Image.vue'
+import DownloadIcon from 'vue-material-design-icons/Download.vue'
+import AccountMultipleIcon from 'vue-material-design-icons/AccountMultiple.vue'
+import PencilIcon from 'vue-material-design-icons/Pencil.vue'
+import GoogleDriveIcon from 'vue-material-design-icons/GoogleDrive.vue'
+
+import GoogleIcon from './icons/GoogleIcon.vue'
+
 import { loadState } from '@nextcloud/initial-state'
 import { generateUrl } from '@nextcloud/router'
 import axios from '@nextcloud/axios'
@@ -243,13 +273,32 @@ import moment from '@nextcloud/moment'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import '@nextcloud/dialogs/styles/toast.scss'
 import AppNavigationIconBullet from '@nextcloud/vue/dist/Components/AppNavigationIconBullet.js'
+import CheckboxRadioSwitch from '@nextcloud/vue/dist/Components/CheckboxRadioSwitch.js'
+import NcButton from '@nextcloud/vue/dist/Components/Button.js'
 import { humanFileSize } from '../utils.js'
 
 export default {
 	name: 'PersonalSettings',
 
 	components: {
+		GoogleIcon,
 		AppNavigationIconBullet,
+		NcButton,
+		CheckboxRadioSwitch,
+		CloseIcon,
+		GoogleDriveIcon,
+		PencilIcon,
+		AccountMultipleIcon,
+		DownloadIcon,
+		CalendarIcon,
+		FileImageIcon,
+		ImageIcon,
+		FolderIcon,
+		FileDocumentIcon,
+		InformationIcon,
+		FileIcon,
+		CheckIcon,
+		AccountGroupIcon,
 	},
 
 	props: [],
@@ -745,12 +794,12 @@ export default {
 		myHumanFileSize(bytes, approx = false, si = false, dp = 1) {
 			return humanFileSize(bytes, approx, si, dp)
 		},
-		onDriveConsiderSharedChange(e) {
-			this.state.consider_shared_files = !e.target.checked
+		onDriveConsiderSharedChange(newValue) {
+			this.state.consider_shared_files = !newValue
 			this.saveOptions({ consider_shared_files: this.state.consider_shared_files ? '1' : '0' }, this.getGoogleDriveInfo)
 		},
-		onPhotoConsiderSharedChange(e) {
-			this.state.consider_shared_albums = !e.target.checked
+		onPhotoConsiderSharedChange(newValue) {
+			this.state.consider_shared_albums = !newValue
 			this.saveOptions({ consider_shared_albums: this.state.consider_shared_albums ? '1' : '0' }, this.getNbGooglePhotos)
 		},
 		onDocumentFormatChange(e) {
@@ -791,48 +840,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.google-grid-form label {
-	line-height: 38px;
-	.app-navigation-entry__icon-bullet {
-		padding: 0;
-		display: inline-block;
-	}
-}
-
-.google-grid-form input {
-	width: 100%;
-}
-
-.google-grid-form {
-	max-width: 600px;
-	display: grid;
-	grid-template: 1fr / 1fr 1fr;
-	button .icon {
-		margin-bottom: -1px;
-	}
-}
-
-#google_prefs .icon {
-	display: inline-block;
-	width: 32px;
-}
-
-#google_prefs .grid-form .icon {
-	margin-bottom: -3px;
-}
-
-.icon-google-settings {
-	background-image: url('./../../img/app-dark.svg');
-	background-size: 23px 23px;
-	height: 23px;
-	margin-bottom: -4px;
-	filter: var(--background-invert-if-dark);
-}
-
-body.theme--dark .icon-google-settings {
-	background-image: url('./../../img/app.svg');
-}
-
 #google-content {
 	margin-left: 40px;
 
@@ -842,17 +849,33 @@ body.theme--dark .icon-google-settings {
 
 	.line {
 		display: flex;
+		align-items: center;
 
 		label {
-			margin-top: auto;
-			margin-bottom: auto;
+			width: 300px;
+			display: flex;
+			.material-design-icon {
+				margin-right: 8px;
+			}
+		}
+	}
+
+	.calendar-item {
+		display: flex;
+		align-items: center;
+		margin: 8px 0;
+		label {
+			width: 300px;
+		}
+		button {
+			height: 40px;
+			min-height: 40px;
 		}
 	}
 
 	#google-drive button,
 	#google-drive select,
-	#google-photos button,
-	#google-contacts > button {
+	#google-photos button {
 		width: 300px;
 
 		&#google-import-photos,
@@ -861,36 +884,22 @@ body.theme--dark .icon-google-settings {
 		}
 	}
 
-	#google-drive label,
-	#google-photos label,
-	#google-contacts > label {
-		width: 300px;
-		display: inline-block;
-
-		span {
-			margin-bottom: -2px;
+	#google-contacts {
+		select {
+			width: 300px;
 		}
-	}
-
-	.contact-input {
-		width: 200px;
+		.contact-input {
+			width: 200px;
+		}
 	}
 
 	.check-option {
 		margin-left: 5px;
 	}
 
-	.output-selection {
-		input {
-			width: 300px;
-		}
-		button {
-			width: 44px !important;
-		}
-	}
-
 	.edit-output-dir {
-		padding: 6px 6px;
+		height: 34px;
+		min-height: 34px;
 	}
 
 	.google-oauth {
@@ -909,6 +918,14 @@ body.theme--dark .icon-google-settings {
 			padding: 0 8px 0 8px;
 			font-size: 1.1em;
 		}
+	}
+}
+
+h2,
+.settings-hint {
+	display: flex;
+	span {
+		margin-right: 8px;
 	}
 }
 

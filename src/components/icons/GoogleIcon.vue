@@ -1,0 +1,40 @@
+<template>
+	<span :aria-hidden="!title"
+		:aria-label="title"
+		class="material-design-icon google-icon"
+		role="img"
+		v-bind="$attrs"
+		@click="$emit('click', $event)">
+		<svg
+			:fill="fillColor"
+			:width="size"
+			:height="size"
+			enable-background="new 0 0 1000 1000"
+			version="1.1"
+			viewBox="0 0 1000 1000"
+			xml:space="preserve"
+			xmlns="http://www.w3.org/2000/svg">
+			<path d="m500 10c-270.6 0-490 219.4-490 490s219.4 490 490 490 490-219.4 490-490-219.4-490-490-490zm7.3 857.5c-203.1 0-367.5-164.4-367.5-367.5s164.4-367.5 367.5-367.5c99.1 0 182.2 36.2 246.1 96.1l-99.7 96.1c-27.4-26.2-75-56.7-146.4-56.7-125.6 0-227.8 103.9-227.8 232s102.4 232 227.8 232c145.5 0 200-104.5 208.4-158.5h-208.4v-125.9h347c3.1 18.4 5.7 36.8 5.7 60.9 0.2 209.9-140.5 359-352.7 359z" />
+		</svg>
+	</span>
+</template>
+
+<script>
+export default {
+	name: 'GoogleIcon',
+	props: {
+		title: {
+			type: String,
+			default: '',
+		},
+		fillColor: {
+			type: String,
+			default: 'currentColor',
+		},
+		size: {
+			type: Number,
+			default: 24,
+		},
+	},
+}
+</script>
