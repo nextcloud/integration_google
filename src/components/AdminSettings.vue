@@ -1,50 +1,58 @@
 <template>
 	<div id="google_prefs" class="section">
 		<h2>
-			<a class="icon icon-google" />
+			<GoogleIcon />
 			{{ t('integration_google', 'Google integration') }}
 		</h2>
 		<p class="settings-hint">
 			{{ t('integration_google', 'If you want to allow your Nextcloud users to authenticate to Google, create an OAuth application in your Google settings.') }}
-			<a href="https://console.developers.google.com/" class="external">{{ t('integration_google', 'Google API settings') }}</a>
+			<a href="https://console.developers.google.com/" class="external" target="_blank">{{ t('integration_google', 'Google API settings') }}</a>
 			<br>
 			{{ t('integration_google', 'Go to "APIs & Services" => "Credentials" and click on "+ CREATE CREDENTIALS" -> "OAuth client ID".') }}
 			<br>
 			{{ t('integration_google', 'Set the "Application type" to "Web application" and give a name to the application.') }}
-			<br><br>
-			<span class="icon icon-details" />
+		</p>
+		<br>
+		<p class="settings-hint with-icon">
+			<InformationOutlineIcon />
 			{{ t('integration_google', 'Make sure you set one "Authorized redirect URI" to') }}
 			<b> {{ redirect_uri }} </b>
-			<br><br>
+		</p>
+		<br>
+		<p class="settings-hint">
 			{{ t('integration_google', 'Put the "Client ID" and "Client secret" below.') }}
 			<br>
 			{{ t('integration_google', 'Finally, go to "APIs & Services" => "Library" and add the following APIs: "Google Drive API", "Google Calendar API", "People API" and "Photos Library API".') }}
 			<br>
 			{{ t('integration_google', 'Your Nextcloud users will then see a "Connect to Google" button in their personal settings.') }}
 		</p>
-		<div class="grid-form">
-			<label for="google-client-id">
-				<a class="icon icon-category-auth" />
-				{{ t('integration_google', 'Client ID') }}
-			</label>
-			<input id="google-client-id"
-				v-model="state.client_id"
-				type="password"
-				:readonly="readonly"
-				:placeholder="t('integration_google', 'Client ID of your Google application')"
-				@focus="readonly = false"
-				@input="onInput">
-			<label for="google-client-secret">
-				<a class="icon icon-category-auth" />
-				{{ t('integration_google', 'Client secret') }}
-			</label>
-			<input id="google-client-secret"
-				v-model="state.client_secret"
-				type="password"
-				:readonly="readonly"
-				:placeholder="t('integration_google', 'Client secret of your Google application')"
-				@input="onInput"
-				@focus="readonly = false">
+		<div class="fields">
+			<div class="line">
+				<label for="google-client-id">
+					<KeyIcon />
+					{{ t('integration_google', 'Client ID') }}
+				</label>
+				<input id="google-client-id"
+					v-model="state.client_id"
+					type="password"
+					:readonly="readonly"
+					:placeholder="t('integration_google', 'Client ID of your Google application')"
+					@focus="readonly = false"
+					@input="onInput">
+			</div>
+			<div class="line">
+				<label for="google-client-secret">
+					<KeyIcon />
+					{{ t('integration_google', 'Client secret') }}
+				</label>
+				<input id="google-client-secret"
+					v-model="state.client_secret"
+					type="password"
+					:readonly="readonly"
+					:placeholder="t('integration_google', 'Client secret of your Google application')"
+					@input="onInput"
+					@focus="readonly = false">
+			</div>
 			<CheckboxRadioSwitch
 				:checked.sync="state.use_popup"
 				@update:checked="onUsePopupChanged">
@@ -55,6 +63,11 @@
 </template>
 
 <script>
+import KeyIcon from 'vue-material-design-icons/Key.vue'
+import InformationOutlineIcon from 'vue-material-design-icons/InformationOutline.vue'
+
+import GoogleIcon from './icons/GoogleIcon.vue'
+
 import { loadState } from '@nextcloud/initial-state'
 import { generateUrl } from '@nextcloud/router'
 import axios from '@nextcloud/axios'
@@ -66,7 +79,10 @@ export default {
 	name: 'AdminSettings',
 
 	components: {
+		GoogleIcon,
 		CheckboxRadioSwitch,
+		KeyIcon,
+		InformationOutlineIcon,
 	},
 
 	props: [],
@@ -119,40 +135,33 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.grid-form label {
-	line-height: 38px;
-}
+#google_prefs {
+	.settings-hint.with-icon,
+	h2 {
+		display: flex;
+		span {
+			margin-right: 8px;
+		}
+	}
 
-.grid-form input {
-	width: 100%;
-}
+	.fields {
+		margin-left: 30px;
+	}
 
-.grid-form {
-	max-width: 500px;
-	display: grid;
-	grid-template: 1fr / 1fr 1fr;
-	margin-left: 30px;
-}
+	.line {
+		display: flex;
+		align-items: center;
 
-#google_prefs .icon {
-	display: inline-block;
-	width: 32px;
+		label {
+			width: 250px;
+			display: flex;
+			.material-design-icon {
+				margin-right: 8px;
+			}
+		}
+		input[type=password] {
+			width: 250px;
+		}
+	}
 }
-
-#google_prefs .grid-form .icon {
-	margin-bottom: -3px;
-}
-
-.icon-google {
-	background-image: url('../../img/app-dark.svg');
-	background-size: 23px 23px;
-	height: 23px;
-	margin-bottom: -4px;
-	filter: var(--background-invert-if-dark);
-}
-
-body.theme--dark .icon-google {
-	background-image: url('../../img/app.svg');
-}
-
 </style>

@@ -101,7 +101,7 @@
 					</CheckboxRadioSwitch>
 					<br>
 					<p v-if="!importingPhotos" class="settings-hint">
-						<InformationIcon />
+						<InformationOutlineIcon />
 						{{ t('integration_google', 'Warning: Google does not provide location data in imported photos.') }}
 					</p>
 					<div v-if="!importingPhotos" class="line">
@@ -251,7 +251,7 @@
 <script>
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 import AccountGroupIcon from 'vue-material-design-icons/AccountGroup.vue'
-import InformationIcon from 'vue-material-design-icons/Information.vue'
+import InformationOutlineIcon from 'vue-material-design-icons/InformationOutline.vue'
 import FileDocumentIcon from 'vue-material-design-icons/FileDocument.vue'
 import FileIcon from 'vue-material-design-icons/File.vue'
 import FolderIcon from 'vue-material-design-icons/Folder.vue'
@@ -295,7 +295,7 @@ export default {
 		ImageIcon,
 		FolderIcon,
 		FileDocumentIcon,
-		InformationIcon,
+		InformationOutlineIcon,
 		FileIcon,
 		CheckIcon,
 		AccountGroupIcon,
