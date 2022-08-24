@@ -42,7 +42,6 @@ OC.L10N.register(
     "Choose where to import the contacts" : "Kies waar contactpersonen geïmporteerd moeten worden",
     "New address book" : "Nieuw adresboek",
     "address book name" : "naam adresboek",
-    "Import in {name} address book" : "Importeren in {name} adresboek",
     "Calendars" : "Kalenders",
     "Import calendar" : "Importeer agenda",
     "Photos" : "Foto's",

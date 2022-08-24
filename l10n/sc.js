@@ -41,7 +41,6 @@ OC.L10N.register(
     "Choose where to import the contacts" : "Sèbera in ue est a importare is cuntatos",
     "New address book" : "Rubrica noa",
     "address book name" : "Importa calendàriu",
-    "Import in {name} address book" : "Importa in {name} sa rubrica",
     "Calendars" : "Calendàrios",
     "Import calendar" : "Importa calendàrios",
     "Photos" : "Fotos",

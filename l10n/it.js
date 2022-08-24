@@ -42,7 +42,6 @@ OC.L10N.register(
     "Choose where to import the contacts" : "Scegli dove importare i contatti",
     "New address book" : "Nuova rubrica",
     "address book name" : "nome della rubrica",
-    "Import in {name} address book" : "Importa nella rubrica {name}",
     "Calendars" : "Calendari",
     "Import calendar" : "Importa calendario",
     "Photos" : "Foto",

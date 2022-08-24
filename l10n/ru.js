@@ -40,7 +40,6 @@ OC.L10N.register(
     "Choose where to import the contacts" : "Выберите, куда импортировать контакты",
     "New address book" : "Создать адресную книгу",
     "address book name" : "Имя адресной книги",
-    "Import in {name} address book" : "Импортировать в адресную книгу «{name}»",
     "Calendars" : "Календари",
     "Import calendar" : "Импорт календаря",
     "Photos" : "Фотографии",

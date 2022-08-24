@@ -18,7 +18,6 @@ OC.L10N.register(
     "Choose where to import the contacts" : "連絡先をインポートする場所を選択してください",
     "New address book" : "新しいアドレス帳",
     "address book name" : "アドレス帳の名前",
-    "Import in {name} address book" : "アドレス帳 {name} にインポート",
     "Calendars" : "カレンダー",
     "Import calendar" : "カレンダーのインポート",
     "Photos" : "写真",

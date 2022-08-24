@@ -35,7 +35,6 @@ OC.L10N.register(
     "Choose where to import the contacts" : "Pasirinkite kur importuoti adresatus",
     "New address book" : "Nauja adresų knyga",
     "address book name" : "adresų knygos pavadinimas",
-    "Import in {name} address book" : "Importuoti į {name} adresų knygą",
     "Calendars" : "Kalendoriai",
     "Import calendar" : "Importuoti kalendorių",
     "Photos" : "Nuotraukos",

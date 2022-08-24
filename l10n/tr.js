@@ -43,7 +43,6 @@ OC.L10N.register(
     "Choose where to import the contacts" : "Kişilerin içe aktarılacağı yeri seçin",
     "New address book" : "Yeni adres defteri",
     "address book name" : "adres defteri adı",
-    "Import in {name} address book" : "{name} adres defteri içine aktar",
     "Calendars" : "Takvimler",
     "Import calendar" : "Takvimi içe aktar",
     "Photos" : "Fotoğraflar",

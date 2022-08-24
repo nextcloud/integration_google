@@ -36,7 +36,6 @@ OC.L10N.register(
     "Choose where to import the contacts" : "选择从哪里导入联系人",
     "New address book" : "新通讯录",
     "address book name" : "通讯录名称",
-    "Import in {name} address book" : "导入 {name} 通讯录",
     "Calendars" : "日历",
     "Import calendar" : "导入日历",
     "Photos" : "照片",

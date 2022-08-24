@@ -42,7 +42,6 @@ OC.L10N.register(
     "Choose where to import the contacts" : "Valitse mihin yhteystiedot tuodaan",
     "New address book" : "Uusi osoitekirja",
     "address book name" : "osoitekirjan nimi",
-    "Import in {name} address book" : "Tuo osoitekirjaan {name}",
     "Calendars" : "Kalenterit",
     "Import calendar" : "Tuo kalenteri",
     "Photos" : "Kuvat",
