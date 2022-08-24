@@ -344,6 +344,7 @@ class GoogleDriveAPIService {
 						if ($timestampOnFile < $timestampOnDrive) {
 							$savedFile->delete();
 						} else {
+							error_log('SKIP '.$fileName.': already exists');
 							continue;
 						}
 					}
@@ -364,6 +365,19 @@ class GoogleDriveAPIService {
 					} elseif (!$saveFolder->nodeExists($fileName)) {
 						$filePathInDrive = $dirId === 'root' ? '/' . $fileItem['name'] : $directoriesById[$dirId]['name'] . '/' . $fileItem['name'];
 						$this->logFailedDownloadsForUser($folder, $filePathInDrive);
+					}
+					// check if the user canceled the import, do not get anymore files if canceled
+					$importing = $this->config->getUserValue($userId, Application::APP_ID, 'importing_drive', '0') === '1';
+					error_log('importing_drive VALUE '.$this->config->getUserValue($userId, Application::APP_ID, 'importing_drive', '0'));
+					if (!$importing) {
+						error_log('STOP');
+						return [
+							'nbDownloaded' => $nbDownloaded,
+							'targetPath' => $targetPath,
+							'finished' => false,
+						];
+					} else {
+						error_log('CONTINUE');
 					}
 				}
 				$params['pageToken'] = $result['nextPageToken'] ?? '';

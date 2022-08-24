@@ -782,14 +782,10 @@ export default {
 				},
 			}
 			const url = generateUrl('/apps/integration_google/config')
-			axios.put(url, req)
-				.then((response) => {
-				})
-				.catch((error) => {
-					console.debug(error)
-				})
-				.then(() => {
-				})
+			axios.put(url, req).then((response) => {
+			}).catch((error) => {
+				console.debug(error)
+			})
 		},
 		myHumanFileSize(bytes, approx = false, si = false, dp = 1) {
 			return humanFileSize(bytes, approx, si, dp)

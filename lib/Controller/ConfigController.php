@@ -91,6 +91,7 @@ class ConfigController extends Controller {
 	 */
 	public function setConfig(array $values): DataResponse {
 		foreach ($values as $key => $value) {
+			error_log('['.$this->userId.'] SET '.$key.' to '.$value);
 			$this->config->setUserValue($this->userId, Application::APP_ID, $key, $value);
 		}
 		$result = [];
