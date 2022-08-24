@@ -281,7 +281,10 @@ class GoogleAPIService {
 			if ($respCode >= 400) {
 				return ['error' => $this->l10n->t('Bad credentials')];
 			} else {
-				return ['content' => $body];
+				return [
+					'content' => $body,
+					'headers' => $response->getHeaders(),
+				];
 			}
 		} catch (ServerException | ClientException $e) {
 			$this->logger->warning('Google API error : '.$e->getMessage(), ['app' => $this->appName]);

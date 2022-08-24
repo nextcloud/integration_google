@@ -192,31 +192,43 @@ class GoogleContactsAPIService {
 				foreach ($c['photos'] as $photo) {
 					if (isset($photo['url'])) {
 						// determine photo type
-						$type = '';
+						$type = 'JPEG';
 						if (preg_match('/\.jpg$/i', $photo['url']) || preg_match('/\.jpeg$/i', $photo['url'])) {
 							$type = 'JPEG';
 						} elseif (preg_match('/\.png$/i', $photo['url'])) {
 							$type = 'PNG';
 						}
-						if ($type !== '') {
-							$photoFile = $this->googleApiService->simpleRequest($userId, $photo['url']);
-							if (!isset($photoFile['error'])) {
-								$b64Photo = stripslashes('data:image/' . strtolower($type) . ';base64\,') . base64_encode($photoFile['content']);
-								try {
-									$prop = $vCard->createProperty(
-										'PHOTO',
-										$b64Photo,
-										[
-											'type' => $type,
-											// 'encoding' => 'b',
-										]
-									);
-									$vCard->add($prop);
-								} catch (Exception | Throwable $ex) {
-									$this->logger->warning('Error when setting contact photo "' . '<redacted>' . '" ' . $ex->getMessage(), ['app' => $this->appName]);
+						$photoFile = $this->googleApiService->simpleRequest($userId, $photo['url']);
+						if (!isset($photoFile['error'])) {
+							// try again to determine photo type from response headers
+							if (isset($photoFile['headers'], $photoFile['headers']['Content-Type'])) {
+								if (is_array($photoFile['headers']['Content-Type']) && count($photoFile['headers']['Content-Type']) > 0) {
+									$contentType = $photoFile['headers']['Content-Type'][0];
+								} else {
+									$contentType = $photoFile['headers']['Content-Type'];
 								}
-								break;
+								if ($contentType === 'image/png') {
+									$type = 'PNG';
+								} elseif ($contentType === 'image/jpeg') {
+									$type = 'JPEG';
+								}
 							}
+
+							$b64Photo = stripslashes('data:image/' . strtolower($type) . ';base64\,') . base64_encode($photoFile['content']);
+							try {
+								$prop = $vCard->createProperty(
+									'PHOTO',
+									$b64Photo,
+									[
+										'type' => $type,
+										// 'encoding' => 'b',
+									]
+								);
+								$vCard->add($prop);
+							} catch (Exception|Throwable $ex) {
+								$this->logger->warning('Error when setting contact photo "' . '<redacted>' . '" ' . $ex->getMessage(), ['app' => $this->appName]);
+							}
+							break;
 						}
 					}
 				}
