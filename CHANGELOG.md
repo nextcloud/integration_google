@@ -6,6 +6,23 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## 1.0.7 – 2022-08-24
+### Added
+- admin option to use a popup during the OAuth flow rather than a redirect
+
+### Changed
+- adjust to NC 25 (style, icons, no more svg api etc...)
+- implement proper token expiration check
+- use node 16, adjust to new eslint config
+- improve perso/admin settings style, use NC components etc...
+
+### Fixed
+- drive pagination to count files
+  [#94](https://github.com/nextcloud/integration_google/pull/94) @hjylewis
+- remove new lines from file names
+  [#94](https://github.com/nextcloud/integration_google/pull/94) @hjylewis
+- contact photo import, correctly get photo file type so photo is not skipped
+
 ## 1.0.6 – 2021-11-21
 ### Added
 - list download failures in `failed-downloads.md` file
