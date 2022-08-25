@@ -43,6 +43,7 @@ OC.L10N.register(
     "Choose where to import the contacts" : "Auswählen, wo die Kontakte importiert werden sollen",
     "New address book" : "Neues Adressbuch",
     "address book name" : "Name des Adressbuchs",
+    "Import in \"{name}\" address book" : "In das \"{name}\" Adressbuch importieren",
     "Calendars" : "Kalender",
     "Import calendar" : "Kalender importieren",
     "Photos" : "Fotos",
