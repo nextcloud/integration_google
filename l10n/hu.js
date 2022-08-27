@@ -43,6 +43,7 @@ OC.L10N.register(
     "Choose where to import the contacts" : "Válassza ki, hova importálja a névjegyeket",
     "New address book" : "Új címjegyzék",
     "address book name" : "címjegyzék neve",
+    "Import in \"{name}\" address book" : "Importálás a(z) „{name}” címjegyzékbe",
     "Calendars" : "Naptárak",
     "Import calendar" : "Naptár importálása",
     "Photos" : "Fényképek",
