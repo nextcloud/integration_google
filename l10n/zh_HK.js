@@ -43,6 +43,7 @@ OC.L10N.register(
     "Choose where to import the contacts" : "選擇導入聯絡人的通訊錄",
     "New address book" : "新通訊錄",
     "address book name" : "通訊錄名稱",
+    "Import in \"{name}\" address book" : "導入 \"{name}\" 通訊錄",
     "Calendars" : "日曆",
     "Import calendar" : "導入日曆",
     "Photos" : "Photos",
