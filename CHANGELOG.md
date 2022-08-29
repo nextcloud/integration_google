@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
-## 1.0.7 – 2022-08-24
+## 1.0.8 – 2022-08-24
 ### Added
 - admin option to use a popup during the OAuth flow rather than a redirect
 

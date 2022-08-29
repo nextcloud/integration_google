@@ -29,10 +29,19 @@ use OCP\IUserSession;
 
 class UserScopeService {
 
-    public function __construct(IUserSession $userSession, IUserManager $userManager) {
-        $this->userSession = $userSession;
-        $this->userManager = $userManager;
-    }
+	/**
+	 * @var IUserSession
+	 */
+	private $userSession;
+	/**
+	 * @var IUserManager
+	 */
+	private $userManager;
+
+	public function __construct(IUserSession $userSession, IUserManager $userManager) {
+		$this->userSession = $userSession;
+		$this->userManager = $userManager;
+	}
 
     /**
      * Set a valid user in IUserSession since lots of server logic is relying on obtaining

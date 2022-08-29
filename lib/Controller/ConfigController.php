@@ -60,7 +60,10 @@ class ConfigController extends Controller {
 	const CALENDAR_SCOPE = 'https://www.googleapis.com/auth/calendar.readonly';
 	const CALENDAR_EVENTS_SCOPE = 'https://www.googleapis.com/auth/calendar.events.readonly';
 	const PHOTOS_SCOPE = 'https://www.googleapis.com/auth/photoslibrary.readonly';
-	private IInitialState $initialStateService;
+	/**
+	 * @var IInitialState
+	 */
+	private $initialStateService;
 
 	public function __construct($appName,
 								IRequest $request,
