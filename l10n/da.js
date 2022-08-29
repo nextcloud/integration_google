@@ -7,6 +7,7 @@ OC.L10N.register(
     "Contacts" : "Kontakter",
     "Calendars" : "Kalendere",
     "Import calendar" : "Importer kalender",
-    "Photos" : "Billeder"
+    "Photos" : "Billeder",
+    "Drive" : "Køre"
 },
 "nplurals=2; plural=(n != 1);");
