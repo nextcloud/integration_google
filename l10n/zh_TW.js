@@ -7,6 +7,7 @@ OC.L10N.register(
     "Connected accounts" : "已連線的帳號",
     "Client ID" : "客戶端ID",
     "Client secret" : "客戶端密碼",
+    "Use a popup to authenticate" : "使用彈出式視窗進行驗證",
     "Authentication" : "驗證",
     "Connected as {user}" : "以 {user} 身份連線",
     "Contacts" : "聯絡人",
