@@ -41,6 +41,7 @@
     "Choose where to import the contacts" : "Aukeratu non inportatu kontaktuak",
     "New address book" : "Helbide-liburu berria",
     "address book name" : "helbide-liburuaren izena",
+    "Import in \"{name}\" address book" : "Inportatu \"{name}\" helbide-liburura",
     "Calendars" : "Egutegiak",
     "Import calendar" : "Inportatu egutegia",
     "Photos" : "Argazkiak",
