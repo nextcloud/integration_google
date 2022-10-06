@@ -2,7 +2,7 @@ OC.L10N.register(
     "integration_google",
     {
     "Missing refresh token in Google response." : "V odpovědi ze služeb Google chybí obnovovací token.",
-    "Error getting OAuth access token." : "Chyba při získávání přístupového OAuth přístupového tokenu.",
+    "Error getting OAuth access token." : "Chyba při získávání OAuth přístupového tokenu.",
     "Error during OAuth exchanges" : "Chyba při výměnách informací v rámci OAuth",
     "Google" : "Google",
     "_%s photo was imported from Google._::_%s photos were imported from Google._" : ["Z Google byla importována %s fotka.","Z Google byla importovány %s fotky.","Z Google bylo importováno %s fotek.","Z Google byla importovány %s fotky."],
