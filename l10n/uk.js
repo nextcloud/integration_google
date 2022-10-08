@@ -8,6 +8,7 @@ OC.L10N.register(
     "Client secret" : "Ключ клієнта",
     "Authentication" : "Автентифікація",
     "Contacts" : "Контакти",
+    "New address book" : "Нова адресна книга",
     "Calendars" : "Календарі",
     "Import calendar" : "Імпортувати календар",
     "Photos" : "Світлини",
