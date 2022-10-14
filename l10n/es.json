@@ -41,6 +41,7 @@
     "Choose where to import the contacts" : "Escoge dónde importar los contactos",
     "New address book" : "Nueva libreta de direcciones",
     "address book name" : "nombre de la libreta de direcciones",
+    "Import in \"{name}\" address book" : "Importar en la libreta de direcciones \"{name}\"",
     "Calendars" : "Calendarios",
     "Import calendar" : "Importar calendario",
     "Photos" : "Fotos",
