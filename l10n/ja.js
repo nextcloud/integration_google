@@ -7,6 +7,7 @@ OC.L10N.register(
     "Bad credentials" : "不正な資格情報",
     "Private event" : "非公開イベント",
     "Connected accounts" : "接続済みアカウント",
+    "Data migration" : "データ移行",
     "Google API settings" : "Google API 設定",
     "Client ID" : "クライアント ID",
     "Client secret" : "クライアントシークレット",
