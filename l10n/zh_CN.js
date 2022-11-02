@@ -50,10 +50,12 @@ OC.L10N.register(
     "Google documents import format" : "Google 文件导入格式",
     "Import Google Drive files" : "导入 Google Drive 文件",
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "你的谷歌云盘大于你的剩余空间 ({formSpace})",
+    "Cancel Google Drive import" : "取消 Google Drive 导入",
     "You can close this page. You will be notified when it finishes." : "您可以关闭此页面。当它完成时，您将收到通知。",
     "Google Drive background import process will begin soon." : "谷歌云盘后台导入过程即将开始。",
     "Successfully connected to Google!" : "成功连接到Google！",
     "Google connection error:" : "Google连接错误：",
+    "Failed to save Google options" : "保存 Google 选项失败",
     "_{nbFiles} file in Google Drive ({formSize} + {formSharedSize} shared with you)_::_{nbFiles} files in Google Drive ({formSize} + {formSharedSize} shared with you)_" : ["谷歌云盘中的 {nbFiles} 文件 (与你分享了 {formSize} + {formSharedSize})"]
 },
 "nplurals=1; plural=0;");
