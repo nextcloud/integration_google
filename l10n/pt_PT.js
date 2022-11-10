@@ -1,6 +1,8 @@
 OC.L10N.register(
     "integration_google",
     {
+    "Error during OAuth exchanges" : "Erro durante trocas com o OAuth",
+    "Bad credentials" : "Credenciais inválidas",
     "Client ID" : "Id. do Cliente",
     "Client secret" : "Segredo do cliente\\\\",
     "Authentication" : "Autenticação",

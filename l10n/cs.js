@@ -69,7 +69,7 @@ OC.L10N.register(
     "Google options saved" : "Předvolby pro Google uloženy",
     "Failed to save Google options" : "Nepodařilo se uložit předvolby pro Google",
     "Failed to save Google OAuth state" : "Nepodařilo se uložit stav Google OAuth",
-    "Failed to get Google Drive information" : "Selhalo zjištění informací o Google Drive",
+    "Failed to get Google Drive information" : "Nepodařilo se zjistit informace o Google Drive",
     "Failed to get calendar list" : "Nepodařilo se získat seznam kalendářů",
     "Failed to get number of Google photos" : "Nepodařilo se získat počet Google fotek",
     "Failed to get number of Google contacts" : "Nepodařilo se získat počet Google kontaktů",
