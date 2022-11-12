@@ -58,7 +58,7 @@
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "您的 Google Drive 大於剩餘空間（{formSpace}）",
     "Cancel Google Drive import" : "取消 Google Drive 導入",
     "Photo import background process will begin soon." : "照片導入後台作業進程即將開始。",
-    "Last photo import job at {date}" : "上次照片導入作業為{date}",
+    "Last photo import job at {date}" : "上次照片導入作業於 {date} 執行",
     "You can close this page. You will be notified when it finishes." : "您可以關閉此頁面。完成時會通知您。",
     "Google Drive background import process will begin soon." : "Google Drive 導入後台作業進程即將開始。",
     "Last Google Drive import job at {date}" : "上一次 Google Drive 導入作業的運行日期為 {date}",
