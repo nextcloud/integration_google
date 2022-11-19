@@ -6,6 +6,7 @@ OC.L10N.register(
     "Client secret" : "رمز مشتری",
     "Authentication" : "احراز هویت",
     "Contacts" : "مخاطبین",
+    "Calendars" : "تقویم‌ها",
     "Photos" : "عکس ها",
     "Drive" : "راندن"
 },
