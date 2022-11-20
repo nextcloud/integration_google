@@ -26,6 +26,7 @@ OC.L10N.register(
     "Client ID of your Google application" : "ID Odjemalca Google",
     "Client secret" : "Skrivni ključ odjemalca",
     "Client secret of your Google application" : "Koda programa za povezavo z računom Google",
+    "Use a popup to authenticate" : "Uporabi pojavno okno za overitev",
     "Google admin options saved" : "Skrbniške nastavitve povezave Google so shranjene",
     "Failed to save Google admin options" : "Shranjevanje skrbniških nastavitev računa Google je spodletelo",
     "Google data migration" : "Selitev podatkov Google",
