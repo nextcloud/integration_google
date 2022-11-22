@@ -1,6 +1,7 @@
 OC.L10N.register(
     "integration_google",
     {
+    "Error getting OAuth access token." : "Kunde inte hämta OAuth-token.",
     "Error during OAuth exchanges" : "Fel vid utväxling av OAuth-token",
     "OAuth access token refused" : "OAuth-token avvisades",
     "Bad credentials" : "Ogiltiga inloggningsuppgifter",
