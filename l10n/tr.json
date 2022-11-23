@@ -55,7 +55,7 @@
     "Ignore shared files" : "Paylaşılmış dosyalar yok sayılsın",
     "Google documents import format" : "Google belgeleri içe aktarma biçimi",
     "Import Google Drive files" : "Google Drive dosyalarını içe aktar",
-    "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Google Drive boyutunuz kalan boş alanınızdan daha büyük gibi görünüyor ({formSpace})",
+    "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Google Drive depolama alanınız kalan boş alanınızdan daha büyük gibi görünüyor ({formSpace})",
     "Cancel Google Drive import" : "Google Drive içe aktarmayı iptal et",
     "Photo import background process will begin soon." : "Birazdan arka planda fotoğrafların içe aktarılması işlemine başlanacak.",
     "Last photo import job at {date}" : "Son fotoğraf içe aktarımı {date}",

@@ -29,10 +29,10 @@
     "Use a popup to authenticate" : "Използване на изскачащ прозорец за удостоверяване",
     "Google admin options saved" : "Опциите за администратор на Google са записани",
     "Failed to save Google admin options" : "Неуспешно записване на опциите за администратор на Google",
-    "Google data migration" : "Миграция на данни от Google",
+    "Google data migration" : "Миграция на данни в Google",
     "No Google OAuth app configured. Ask your Nextcloud administrator to configure Google connected accounts admin section." : "Няма конфигурирано приложение на Google за OAuth. Помолете своя администратор на Nextcloud да конфигурира администраторската секция за свързани профили в Google. ",
     "Authentication" : "Удостоверяване",
-    "Sign in with Google" : "Влизане с Google",
+    "Sign in with Google" : "Вписване с Google",
     "Connected as {user}" : "Свързване като {user}",
     "Disconnect from Google" : "Прекъсване на връзката с Google",
     "Contacts" : "Контакти",
@@ -54,7 +54,7 @@
     "Drive" : "Диск",
     "Ignore shared files" : "Игнориране на споделените файлове",
     "Google documents import format" : "Формат за импортиране на документи от Google",
-    "Import Google Drive files" : "Импортирайте файлове от Google Диск",
+    "Import Google Drive files" : "Импортиране на файлове от Google Диск",
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Вашият Google Диск е по-голям от оставащото ви място ({formSpace})",
     "Cancel Google Drive import" : "Отказ на импортирането от Google Диск",
     "Photo import background process will begin soon." : "Фоновият процес на импортиране на снимки ще започне скоро.",
@@ -84,7 +84,7 @@
     "_{nbFiles} file in Google Drive ({formSize} + {formSharedSize} shared with you)_::_{nbFiles} files in Google Drive ({formSize} + {formSharedSize} shared with you)_" : ["{nbFiles} файлове в Google Диск ({formSize} + {formSharedSize} споделени с вас)","{nbFiles} файлове в Google Диск ({formSize} + {formSharedSize} споделени с вас)"],
     "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["{nbFiles} файлове в Google Диск ({formSize})","{nbFiles} файлове в Google Диск ({formSize})"],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} импортирани файлове ({progress}%)","{amount} импортирани файлове ({progress}%)"],
-    "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} контакта успешно импортирани в {name}","{number} контакта успешно импортирани в {name}"],
+    "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} контакта успешно импортирани в {name}","{number} контакта, успешно импортирани в {name}"],
     "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number} събития успешно импортирани в {name} ","{number} събития успешно импортирани в {name} "]
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
