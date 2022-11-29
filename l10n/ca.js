@@ -45,6 +45,7 @@ OC.L10N.register(
     "Import calendar" : "Importa un calendari",
     "Photos" : "Fotografies",
     "Ignore shared albums" : "Ignora els àlbums compartits",
+    "Import directory" : "Carpeta d'importació",
     "Import Google photos" : "Importació de fotos de Google",
     "Your Google photo collection size is estimated to be bigger than your remaining space left ({formSpace})" : "S'estima que la mida de la seva colecció de fotos de Google és més gran que l'espai restant que queda ({formSpace})",
     "Cancel photo import" : "Cancel·la la importació de fotos",
