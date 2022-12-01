@@ -1,9 +1,11 @@
 OC.L10N.register(
     "integration_google",
     {
+    "Connected accounts" : "Forbundne konti",
     "Client ID" : "Klient-ID",
     "Client secret" : "Klient hemmelighed",
     "Authentication" : "Godkendelse",
+    "Connected as {user}" : "Forbundet som {user}",
     "Contacts" : "Kontakter",
     "Calendars" : "Kalendere",
     "Import calendar" : "Importer kalender",
