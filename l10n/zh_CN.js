@@ -26,6 +26,7 @@ OC.L10N.register(
     "Client ID" : "客户端 ID",
     "Client ID of your Google application" : "谷歌应用程序的客户端ID ",
     "Client secret" : "客户端 secret",
+    "Google admin options saved" : "Google 管理员选项已保存",
     "No Google OAuth app configured. Ask your Nextcloud administrator to configure Google connected accounts admin section." : "没有配置谷歌OAuth应用。请求你的Nextcloud管理员配置谷歌连接帐户管理部分。",
     "Authentication" : "验证",
     "Connected as {user}" : "作为 {user} 已连接",
@@ -55,6 +56,7 @@ OC.L10N.register(
     "Google Drive background import process will begin soon." : "谷歌云盘后台导入过程即将开始。",
     "Successfully connected to Google!" : "成功连接到Google！",
     "Google connection error:" : "Google连接错误：",
+    "Google options saved" : "Google 选项已保存",
     "Failed to save Google options" : "保存 Google 选项失败",
     "_{nbFiles} file in Google Drive ({formSize} + {formSharedSize} shared with you)_::_{nbFiles} files in Google Drive ({formSize} + {formSharedSize} shared with you)_" : ["谷歌云盘中的 {nbFiles} 文件 (与你分享了 {formSize} + {formSharedSize})"]
 },
