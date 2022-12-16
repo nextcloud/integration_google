@@ -15,7 +15,7 @@
 		<br>
 		<p class="settings-hint with-icon">
 			<InformationOutlineIcon />
-			{{ t('integration_google', 'Make sure you set one "Authorized redirect URI" to') }}
+			{{ t('integration_google', 'Make sure you set one "Authorized redirect URI" to') + ' ' }}
 			<b> {{ redirect_uri }} </b>
 		</p>
 		<br>
