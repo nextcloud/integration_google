@@ -12,6 +12,7 @@
 namespace OCA\Google\Service;
 
 use Datetime;
+use Exception;
 use OCP\Files\Folder;
 use OCP\IConfig;
 use OCP\Files\IRootFolder;
@@ -23,6 +24,7 @@ use Psr\Log\LoggerInterface;
 
 use OCA\Google\AppInfo\Application;
 use OCA\Google\BackgroundJob\ImportPhotosJob;
+use Throwable;
 
 class GooglePhotosAPIService {
 	/**
@@ -184,11 +186,20 @@ class GooglePhotosAPIService {
 		$this->userScopeService->setFilesystemScope($userId);
 
 		$importingPhotos = $this->config->getUserValue($userId, Application::APP_ID, 'importing_photos', '0') === '1';
-		$jobRunning = $this->config->getUserValue($userId, Application::APP_ID, 'photo_import_running', '0') === '1';
-		if (!$importingPhotos || $jobRunning) {
+		if (!$importingPhotos) {
 			return;
 		}
+		$jobRunning = $this->config->getUserValue($userId, Application::APP_ID, 'photo_import_running', '0') === '1';
+		$nowTs = (new Datetime())->getTimestamp();
+		if ($jobRunning) {
+			$lastJobStart = $this->config->getUserValue($userId, Application::APP_ID, 'photo_import_job_last_start');
+			if ($lastJobStart !== '' && ($nowTs - intval($lastJobStart) < Application::IMPORT_JOB_TIMEOUT)) {
+				// last job has started less than an hour ago => we consider it can still be running
+				return;
+			}
+		}
 		$this->config->setUserValue($userId, Application::APP_ID, 'photo_import_running', '1');
+		$this->config->setUserValue($userId, Application::APP_ID, 'photo_import_job_last_start', strval($nowTs));
 
 		$targetPath = $this->config->getUserValue($userId, Application::APP_ID, 'photo_output_dir', '/Google Photos');
 		$targetPath = $targetPath ?: '/Google Photos';
@@ -197,7 +208,7 @@ class GooglePhotosAPIService {
 		$alreadyImported = (int) $alreadyImported;
 		try {
 			$result = $this->importPhotos($userId, $targetPath, 500000000, $alreadyImported);
-		} catch (\Exception | \Throwable $e) {
+		} catch (Exception | Throwable $e) {
 			$result = [
 				'error' => 'Unknown job failure. ' . $e->getMessage(),
 			];

@@ -12,6 +12,7 @@
 namespace OCA\Google\Service;
 
 use Datetime;
+use Exception;
 use OCP\Files\Folder;
 use OCP\Files\InvalidPathException;
 use OCP\Files\NotPermittedException;
@@ -26,6 +27,7 @@ use OCP\Lock\LockedException;
 
 use OCA\Google\AppInfo\Application;
 use OCA\Google\BackgroundJob\ImportDriveJob;
+use Throwable;
 
 class GoogleDriveAPIService {
 	/**
@@ -177,11 +179,20 @@ class GoogleDriveAPIService {
 		$this->userScopeService->setFilesystemScope($userId);
 
 		$importingDrive = $this->config->getUserValue($userId, Application::APP_ID, 'importing_drive', '0') === '1';
-		$jobRunning = $this->config->getUserValue($userId, Application::APP_ID, 'drive_import_running', '0') === '1';
-		if (!$importingDrive || $jobRunning) {
+		if (!$importingDrive) {
 			return;
 		}
+		$jobRunning = $this->config->getUserValue($userId, Application::APP_ID, 'drive_import_running', '0') === '1';
+		$nowTs = (new Datetime())->getTimestamp();
+		if ($jobRunning) {
+			$lastJobStart = $this->config->getUserValue($userId, Application::APP_ID, 'drive_import_job_last_start');
+			if ($lastJobStart !== '' && ($nowTs - intval($lastJobStart) < Application::IMPORT_JOB_TIMEOUT)) {
+				// last job has started less than an hour ago => we consider it can still be running
+				return;
+			}
+		}
 		$this->config->setUserValue($userId, Application::APP_ID, 'drive_import_running', '1');
+		$this->config->setUserValue($userId, Application::APP_ID, 'drive_import_job_last_start', strval($nowTs));
 
 		// import batch of files
 		$targetPath = $this->config->getUserValue($userId, Application::APP_ID, 'drive_output_dir', '/Google Drive');
@@ -196,7 +207,7 @@ class GoogleDriveAPIService {
 		$alreadyImported = (int) $alreadyImported;
 		try {
 			$result = $this->importFiles($userId, $targetPath, 500000000, $alreadyImported, $directoryProgress);
-		} catch (\Exception | \Throwable $e) {
+		} catch (Exception | Throwable $e) {
 			$result = [
 				'error' => 'Unknown job failure. ' . $e,
 			];

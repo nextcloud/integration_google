@@ -25,12 +25,9 @@ use OCA\Google\Notification\Notifier;
 class Application extends App implements IBootstrap {
 
     public const APP_ID = 'integration_google';
+	// consider that a job is not running anymore after N seconds
+	public const IMPORT_JOB_TIMEOUT = 3600;
 
-    /**
-     * Constructor
-     *
-     * @param array $urlParams
-     */
     public function __construct(array $urlParams = []) {
         parent::__construct(self::APP_ID, $urlParams);
 
