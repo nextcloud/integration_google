@@ -295,7 +295,7 @@ class GooglePhotosAPIService {
 		$seenIds = [];
 		foreach ($albums as $album) {
 			$albumId = $album['id'];
-			$albumName = $album['title'] ?? 'Untitled';
+			$albumName = preg_replace('/\//', '_', $album['title'] ?? 'Untitled');
 			if (!$folder->nodeExists($albumName)) {
 				$albumFolder = $folder->newFolder($albumName);
 			} else {
@@ -390,7 +390,7 @@ class GooglePhotosAPIService {
 	 * @throws \OCP\Files\NotPermittedException
 	 */
 	private function getPhoto(string $userId, array $photo, Folder $albumFolder): ?int {
-		$photoName = $photo['filename'];
+		$photoName = preg_replace('/\//', '_', $photo['filename'] ?? 'Untitled');
 		if (!$albumFolder->nodeExists($photoName)) {
 			if (isset($photo['mediaMetadata']['photo'])) {
 				$photoUrl = $photo['baseUrl']
