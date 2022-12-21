@@ -77,7 +77,7 @@
 					<h3>{{ t('integration_google', 'Calendars') }}</h3>
 					<div v-for="cal in calendars" :key="cal.id" class="calendar-item">
 						<label>
-							<AppNavigationIconBullet :color="getCalendarColor(cal)" />
+							<NcAppNavigationIconBullet :color="getCalendarColor(cal)" />
 							<span>{{ getCalendarLabel(cal) }}</span>
 						</label>
 						<NcButton
@@ -94,11 +94,11 @@
 				<div v-if="nbPhotos > 0"
 					id="google-photos">
 					<h3>{{ t('integration_google', 'Photos') }}</h3>
-					<CheckboxRadioSwitch v-if="!importingPhotos"
+					<NcCheckboxRadioSwitch v-if="!importingPhotos"
 						:checked="!state.consider_shared_albums"
 						@update:checked="onPhotoConsiderSharedChange">
 						{{ t('integration_google', 'Ignore shared albums') }}
-					</CheckboxRadioSwitch>
+					</NcCheckboxRadioSwitch>
 					<br>
 					<p v-if="!importingPhotos" class="settings-hint">
 						<InformationOutlineIcon />
@@ -162,11 +162,11 @@
 				<div v-if="nbFiles > 0"
 					id="google-drive">
 					<h3>{{ t('integration_google', 'Drive') }}</h3>
-					<CheckboxRadioSwitch v-if="!importingDrive"
+					<NcCheckboxRadioSwitch v-if="!importingDrive"
 						:checked="!state.consider_shared_files"
 						@update:checked="onDriveConsiderSharedChange">
 						{{ t('integration_google', 'Ignore shared files') }}
-					</CheckboxRadioSwitch>
+					</NcCheckboxRadioSwitch>
 					<div v-if="!importingDrive" class="line">
 						<label for="document-format">
 							<FileDocumentIcon />
@@ -271,10 +271,9 @@ import { generateUrl } from '@nextcloud/router'
 import axios from '@nextcloud/axios'
 import moment from '@nextcloud/moment'
 import { showSuccess, showError } from '@nextcloud/dialogs'
-import '@nextcloud/dialogs/styles/toast.scss'
-import AppNavigationIconBullet from '@nextcloud/vue/dist/Components/AppNavigationIconBullet.js'
-import CheckboxRadioSwitch from '@nextcloud/vue/dist/Components/CheckboxRadioSwitch.js'
-import NcButton from '@nextcloud/vue/dist/Components/Button.js'
+import NcAppNavigationIconBullet from '@nextcloud/vue/dist/Components/NcAppNavigationIconBullet.js'
+import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
+import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
 import { humanFileSize } from '../utils.js'
 
 export default {
@@ -282,9 +281,9 @@ export default {
 
 	components: {
 		GoogleIcon,
-		AppNavigationIconBullet,
+		NcAppNavigationIconBullet,
 		NcButton,
-		CheckboxRadioSwitch,
+		NcCheckboxRadioSwitch,
 		CloseIcon,
 		GoogleDriveIcon,
 		PencilIcon,

@@ -16,7 +16,7 @@
 		<p class="settings-hint with-icon">
 			<InformationOutlineIcon />
 			{{ t('integration_google', 'Make sure you set one "Authorized redirect URI" to') }}
-			<b> {{ redirect_uri }} </b>
+			&nbsp;<strong>{{ redirect_uri }}</strong>
 		</p>
 		<br>
 		<p class="settings-hint">
@@ -53,11 +53,11 @@
 					@input="onInput"
 					@focus="readonly = false">
 			</div>
-			<CheckboxRadioSwitch
+			<NcCheckboxRadioSwitch
 				:checked.sync="state.use_popup"
 				@update:checked="onUsePopupChanged">
 				{{ t('integration_google', 'Use a popup to authenticate') }}
-			</CheckboxRadioSwitch>
+			</NcCheckboxRadioSwitch>
 		</div>
 	</div>
 </template>
@@ -73,14 +73,14 @@ import { generateUrl } from '@nextcloud/router'
 import axios from '@nextcloud/axios'
 import { delay } from '../utils.js'
 import { showSuccess, showError } from '@nextcloud/dialogs'
-import CheckboxRadioSwitch from '@nextcloud/vue/dist/Components/CheckboxRadioSwitch.js'
+import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
 
 export default {
 	name: 'AdminSettings',
 
 	components: {
 		GoogleIcon,
-		CheckboxRadioSwitch,
+		NcCheckboxRadioSwitch,
 		KeyIcon,
 		InformationOutlineIcon,
 	},
