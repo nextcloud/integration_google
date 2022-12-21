@@ -58,6 +58,37 @@ class GoogleContactsAPIService {
 	}
 
 	/**
+	 * Get groups that are not empty and with type USER_CONTACT_GROUP
+	 *
+	 * @param string $userId
+	 * @return array
+	 */
+	public function getContactGroupsById(string $userId): array	{
+		$groups = [];
+		$params = [
+			'pageSize' => 100,
+		];
+		do {
+			$result = $this->googleApiService->request($userId, 'v1/contactGroups', $params, 'GET', 'https://people.googleapis.com/');
+			if (isset($result['error'])) {
+				return $result;
+			}
+			if (isset($result['contactGroups']) && is_array($result['contactGroups'])) {
+				foreach ($result['contactGroups'] as $group) {
+					$groupType = $group['groupType'] ?? '';
+					$memberCount = $group['memberCount'] ?? 0;
+					if ($groupType === 'USER_CONTACT_GROUP' && $memberCount > 0) {
+						$groupResourceName = $group['resourceName'];
+						$groups[$groupResourceName] = $group;
+					}
+				}
+			}
+			$params['pageToken'] = $result['nextPageToken'] ?? '';
+		} while (isset($result['nextPageToken']));
+		return $groups;
+	}
+
+	/**
 	 * @param string $userId
 	 * @return array
 	 */
@@ -91,6 +122,7 @@ class GoogleContactsAPIService {
 				'birthdays',
 				'emailAddresses',
 				'genders',
+				'memberships',
 				'metadata',
 				'names',
 				'nicknames',
@@ -152,6 +184,7 @@ class GoogleContactsAPIService {
 			}
 		}
 
+		$groupsById = $this->getContactGroupsById($userId);
 		$contacts = $this->getContactList($userId);
 		$nbAdded = 0;
 		foreach ($contacts as $k => $c) {
@@ -185,6 +218,26 @@ class GoogleContactsAPIService {
 			// we don't want empty names
 			if (!$displayName && !$familyName && !$firstName) {
 				continue;
+			}
+
+			// group/label
+			if (isset($c['memberships']) && is_array($c['memberships'])) {
+				$contactGroupNames = [];
+				foreach ($c['memberships'] as $membership) {
+					if (isset(
+						$membership['contactGroupMembership'],
+						$membership['contactGroupMembership']['contactGroupResourceName'],
+						$groupsById[$membership['contactGroupMembership']['contactGroupResourceName']]
+					)) {
+						$group = $groupsById[$membership['contactGroupMembership']['contactGroupResourceName']];
+						$groupName = $group['formattedName'];
+						$contactGroupNames[] = $groupName;
+					}
+				}
+				if (!empty($contactGroupNames)) {
+					$prop = $vCard->createProperty('CATEGORIES', $contactGroupNames);
+					$vCard->add($prop);
+				}
 			}
 
 			// photo
