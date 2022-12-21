@@ -12,6 +12,7 @@
 namespace OCA\Google\Controller;
 
 use DateTime;
+use Exception;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Services\IInitialState;
 use OCP\IURLGenerator;
@@ -27,6 +28,7 @@ use OCP\AppFramework\Controller;
 
 use OCA\Google\Service\GoogleAPIService;
 use OCA\Google\AppInfo\Application;
+use Throwable;
 
 class ConfigController extends Controller {
 
@@ -132,12 +134,16 @@ class ConfigController extends Controller {
 		$addressBooks = $this->contactsManager->getUserAddressBooks();
 		$result = [];
 		foreach ($addressBooks as $k => $ab) {
-			if ($ab->getUri() !== 'system') {
-				$result[$ab->getKey()] = [
-					'uri' => $ab->getUri(),
-					'name' => $ab->getDisplayName(),
-					'canEdit' => ($ab->getPermissions() & Constants::PERMISSION_CREATE) ? true : false,
-				];
+			try {
+				$canEdit = ($ab->getPermissions() & Constants::PERMISSION_CREATE) ? true : false;
+				if ($ab->getUri() !== 'system' && $canEdit) {
+					$result[$ab->getKey()] = [
+						'uri' => $ab->getUri(),
+						'name' => $ab->getDisplayName(),
+						'canEdit' => $canEdit,
+					];
+				}
+			} catch (Exception | Throwable $e) {
 			}
 		}
 		return new DataResponse($result);
