@@ -6,6 +6,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## 1.0.9 – 2022-12-21
+### Added
+- contact group import
+  [#124](https://github.com/nextcloud/integration_google/issues/124) @zgypa
+
+### Changed
+- update npm pkgs, adjust to @nextcloud/vue 7.2.0
+
+### Fixed
+- import photos/albums with slashes in their name
+[#122](https://github.com/nextcloud/integration_google/pull/122) @Gp2mv3
+
 ## 1.0.8 – 2022-08-24
 ### Added
 - admin option to use a popup during the OAuth flow rather than a redirect
