@@ -132,6 +132,7 @@ class GoogleContactsAPIService {
 				'photos',
 				'relations',
 				'residences',
+				'urls',
 			]),
 			'pageSize' => 100,
 		];
@@ -226,6 +227,22 @@ class GoogleContactsAPIService {
 				foreach ($c['biographies'] as $biography) {
 					if (isset($biography['value'], $biography['contentType']) && $biography['contentType'] === 'TEXT_PLAIN') {
 						$prop = $vCard->createProperty('NOTE', $biography['value']);
+						$vCard->add($prop);
+					}
+				}
+			}
+
+			// websites
+			if (isset($c['urls']) && is_array($c['urls'])) {
+				foreach ($c['urls'] as $url) {
+					if (isset($url['value'])) {
+						$params = [
+							'value' => 'uri',
+						];
+						if (isset($url['formattedType']) || isset($url['type'])) {
+							$params['type'] = $url['formattedType'] ?? $url['type'];
+						}
+						$prop = $vCard->createProperty('URL', $url['value'], $params);
 						$vCard->add($prop);
 					}
 				}
