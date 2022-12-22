@@ -28,10 +28,6 @@ use Throwable;
 
 class GooglePhotosAPIService {
 	/**
-	 * @var string
-	 */
-	private $appName;
-	/**
 	 * @var LoggerInterface
 	 */
 	private $logger;
@@ -66,7 +62,6 @@ class GooglePhotosAPIService {
 								IJobList $jobList,
 								UserScopeService $userScopeService,
 								GoogleAPIService $googleApiService) {
-		$this->appName = $appName;
 		$this->logger = $logger;
 		$this->config = $config;
 		$this->root = $root;
@@ -87,7 +82,7 @@ class GooglePhotosAPIService {
 		do {
 			$this->logger->debug(
 				'Photos service::getPhotoNumber LAUNCHING ALBUM LIST REQUEST, userid: "' . $userId . '"',
-				['app' => $this->appName]
+				['app' => Application::APP_ID]
 			);
 			$result = $this->googleApiService->request($userId, 'v1/albums', $params, 'GET', 'https://photoslibrary.googleapis.com/');
 			if (isset($result['error'])) {
@@ -139,7 +134,7 @@ class GooglePhotosAPIService {
 				$this->logger->warning(
 					'Google API error getting media items list to get photo number, no "mediaItems" key in '
 					. json_encode($result),
-					['app' => $this->appName]
+					['app' => Application::APP_ID]
 				);
 			}
 		}
@@ -224,7 +219,7 @@ class GooglePhotosAPIService {
 				]);
 			}
 			if (isset($result['error'])) {
-				$this->logger->error('Google Photo import error: ' . $result['error'], ['app' => $this->appName]);
+				$this->logger->error('Google Photo import error: ' . $result['error'], ['app' => Application::APP_ID]);
 			}
 		} else {
 			$ts = (new Datetime())->getTimestamp();
@@ -261,7 +256,7 @@ class GooglePhotosAPIService {
 		do {
 			$this->logger->debug(
 				'Photos service::importPhotos LAUNCHING ALBUM LIST REQUEST, userid: "' . $userId . '"',
-				['app' => $this->appName]
+				['app' => Application::APP_ID]
 			);
 			$result = $this->googleApiService->request($userId, 'v1/albums', $params, 'GET', 'https://photoslibrary.googleapis.com/');
 			if (isset($result['error'])) {
@@ -298,7 +293,7 @@ class GooglePhotosAPIService {
 		// get the photos
 		$this->logger->debug(
 			'Photos service::importPhotos GETTING PHOTOS, nb albums: "' . count($albums) . '"',
-			['app' => $this->appName]
+			['app' => Application::APP_ID]
 		);
 		$downloadedSize = 0;
 		$nbDownloaded = 0;
@@ -414,7 +409,7 @@ class GooglePhotosAPIService {
 			try {
 				$resource = $savedFile->fopen('w');
 			} catch (LockedException $e) {
-				$this->logger->warning('Google Photo, error opening target file ' . '<redacted>' . ' : file is locked', ['app' => $this->appName]);
+				$this->logger->warning('Google Photo, error opening target file ' . '<redacted>' . ' : file is locked', ['app' => Application::APP_ID]);
 				return null;
 			}
 			$res = $this->googleApiService->simpleDownload($userId, $photoUrl, $resource);
@@ -432,7 +427,7 @@ class GooglePhotosAPIService {
 				$stat = $savedFile->stat();
 				return $stat['size'] ?? 0;
 			} else {
-				$this->logger->warning('Google API error downloading photo ' . '<redacted>' . ' : ' . $res['error'], ['app' => $this->appName]);
+				$this->logger->warning('Google API error downloading photo ' . '<redacted>' . ' : ' . $res['error'], ['app' => Application::APP_ID]);
 				if ($savedFile->isDeletable()) {
 					$savedFile->unlock(ILockingProvider::LOCK_EXCLUSIVE);
 					$savedFile->delete();

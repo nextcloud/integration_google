@@ -31,10 +31,6 @@ use Throwable;
 
 class GoogleDriveAPIService {
 	/**
-	 * @var string
-	 */
-	private $appName;
-	/**
 	 * @var LoggerInterface
 	 */
 	private $logger;
@@ -75,7 +71,6 @@ class GoogleDriveAPIService {
 								IJobList $jobList,
 								UserScopeService $userScopeService,
 								GoogleAPIService $googleApiService) {
-		$this->appName = $appName;
 		$this->logger = $logger;
 		$this->config = $config;
 		$this->root = $root;
@@ -221,7 +216,7 @@ class GoogleDriveAPIService {
 				]);
 			}
 			if (isset($result['error'])) {
-				$this->logger->error('Google Drive import error: ' . $result['error'], ['app' => $this->appName]);
+				$this->logger->error('Google Drive import error: ' . $result['error'], ['app' => Application::APP_ID]);
 			}
 			$this->config->setUserValue($userId, Application::APP_ID, 'importing_drive', '0');
 			$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_files', '0');

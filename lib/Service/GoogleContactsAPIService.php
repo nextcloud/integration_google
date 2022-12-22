@@ -14,6 +14,7 @@ namespace OCA\Google\Service;
 use Datetime;
 use Exception;
 use Generator;
+use OCA\Google\AppInfo\Application;
 use OCP\Contacts\IManager as IContactManager;
 use Sabre\VObject\Component\VCard;
 use OCA\DAV\CardDAV\CardDavBackend;
@@ -21,10 +22,6 @@ use Psr\Log\LoggerInterface;
 use Throwable;
 
 class GoogleContactsAPIService {
-	/**
-	 * @var string
-	 */
-	private $appName;
 	/**
 	 * @var LoggerInterface
 	 */
@@ -50,7 +47,6 @@ class GoogleContactsAPIService {
 								IContactManager $contactsManager,
 								CardDavBackend $cdBackend,
 								GoogleAPIService $googleApiService) {
-		$this->appName = $appName;
 		$this->logger = $logger;
 		$this->contactsManager = $contactsManager;
 		$this->cdBackend = $cdBackend;
@@ -189,9 +185,12 @@ class GoogleContactsAPIService {
 		$groupsById = $this->getContactGroupsById($userId);
 		$contacts = $this->getContactList($userId);
 		$nbAdded = 0;
+		$totalContactNumber = 0;
 		foreach ($contacts as $k => $c) {
+			$totalContactNumber++;
 			// avoid existing contacts
 			if ($this->contactExists($c, $key)) {
+				$this->logger->debug('Skipping contact which already exists', ['contact' => $c, 'app' => Application::APP_ID]);
 				continue;
 			}
 			$vCard = new VCard();
@@ -201,6 +200,7 @@ class GoogleContactsAPIService {
 			$firstName = null;
 			// we just take first name
 			if (!isset($c['names']) || !is_array($c['names'])) {
+				$this->logger->debug('Skipping contact with no names array', ['app' => Application::APP_ID]);
 				continue;
 			}
 			foreach ($c['names'] as $n) {
@@ -219,6 +219,7 @@ class GoogleContactsAPIService {
 			}
 			// we don't want empty names
 			if (!$displayName && !$familyName && !$firstName) {
+				$this->logger->debug('Skipping contact with no displayname/familyname/firstname', ['app' => Application::APP_ID]);
 				continue;
 			}
 
@@ -307,7 +308,7 @@ class GoogleContactsAPIService {
 								);
 								$vCard->add($prop);
 							} catch (Exception|Throwable $ex) {
-								$this->logger->warning('Error when setting contact photo "' . '<redacted>' . '" ' . $ex->getMessage(), ['app' => $this->appName]);
+								$this->logger->warning('Error when setting contact photo "' . '<redacted>' . '" ' . $ex->getMessage(), ['app' => Application::APP_ID]);
 							}
 							break;
 						}
@@ -418,9 +419,11 @@ class GoogleContactsAPIService {
 				$this->cdBackend->createCard($key, 'goog' . $k, $vCard->serialize());
 				$nbAdded++;
 			} catch (Throwable | Exception $e) {
-				$this->logger->warning('Error when creating contact', ['app' => $this->appName]);
+				$this->logger->warning('Error when creating contact', ['exception' => $e, 'app' => Application::APP_ID]);
 			}
 		}
+		$this->logger->debug($totalContactNumber . ' contacts seen', ['app' => Application::APP_ID]);
+		$this->logger->debug($nbAdded . ' contacts imported', ['app' => Application::APP_ID]);
 		$contactGeneratorReturn = $contacts->getReturn();
 		if (isset($contactGeneratorReturn['error'])) {
 			return $contactGeneratorReturn;

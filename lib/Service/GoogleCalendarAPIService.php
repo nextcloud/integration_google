@@ -15,6 +15,7 @@ use Datetime;
 use DateTimeZone;
 use Exception;
 use Generator;
+use OCA\Google\AppInfo\Application;
 use OCP\IL10N;
 use OCA\DAV\CalDAV\CalDavBackend;
 use Sabre\DAV\Exception\BadRequest;
@@ -26,10 +27,6 @@ use Ortic\ColorConverter\Colors\Named;
 use Throwable;
 
 class GoogleCalendarAPIService {
-	/**
-	 * @var string
-	 */
-	private $appName;
 	/**
 	 * @var LoggerInterface
 	 */
@@ -55,7 +52,6 @@ class GoogleCalendarAPIService {
 								IL10N $l10n,
 								CalDavBackend $caldavBackend,
 								GoogleAPIService $googleApiService) {
-		$this->appName = $appName;
 		$this->logger = $logger;
 		$this->l10n = $l10n;
 		$this->caldavBackend = $caldavBackend;
@@ -263,12 +259,12 @@ class GoogleCalendarAPIService {
 				$nbAdded++;
 			} catch (BadRequest $ex) {
 				if (strpos($ex->getMessage(), 'uid already exists') !== false) {
-					$this->logger->debug('Skip existing event', ['app' => $this->appName]);
+					$this->logger->debug('Skip existing event', ['app' => Application::APP_ID]);
 				} else {
-					$this->logger->warning('Error when creating calendar event "' . '<redacted>' . '" ' . $ex->getMessage(), ['app' => $this->appName]);
+					$this->logger->warning('Error when creating calendar event "' . '<redacted>' . '" ' . $ex->getMessage(), ['app' => Application::APP_ID]);
 				}
 			} catch (Exception | Throwable $ex) {
-				$this->logger->warning('Error when creating calendar event "' . '<redacted>' . '" ' . $ex->getMessage(), ['app' => $this->appName]);
+				$this->logger->warning('Error when creating calendar event "' . '<redacted>' . '" ' . $ex->getMessage(), ['app' => Application::APP_ID]);
 			}
 		}
 
