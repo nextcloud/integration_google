@@ -119,6 +119,7 @@ class GoogleContactsAPIService {
 		$params = [
 			'personFields' => implode(',', [
 				'addresses',
+				'biographies',
 				'birthdays',
 				'emailAddresses',
 				'genders',
@@ -218,6 +219,16 @@ class GoogleContactsAPIService {
 			// we don't want empty names
 			if (!$displayName && !$familyName && !$firstName) {
 				continue;
+			}
+
+			// notes
+			if (isset($c['biographies']) && is_array($c['biographies'])) {
+				foreach ($c['biographies'] as $biography) {
+					if (isset($biography['value'], $biography['contentType']) && $biography['contentType'] === 'TEXT_PLAIN') {
+						$prop = $vCard->createProperty('NOTE', $biography['value']);
+						$vCard->add($prop);
+					}
+				}
 			}
 
 			// group/label
