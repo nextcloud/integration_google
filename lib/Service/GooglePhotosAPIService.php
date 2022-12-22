@@ -404,10 +404,7 @@ class GooglePhotosAPIService {
 		$photoName = preg_replace('/\//', '_', $photo['filename'] ?? 'Untitled');
 		if (!$albumFolder->nodeExists($photoName)) {
 			if (isset($photo['mediaMetadata']['photo'])) {
-				$photoUrl = $photo['baseUrl']
-					. '=w' . ($photo['mediaMetadata']['width'] ?? 10000)
-					. '-h' . ($photo['mediaMetadata']['height'] ?? 10000)
-					. '-d';
+				$photoUrl = $photo['baseUrl'] . '=d';
 			} elseif (isset($photo['mediaMetadata']['video'])) {
 				$photoUrl = $photo['baseUrl'] . '=dv';
 			} else {
