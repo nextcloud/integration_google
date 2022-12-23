@@ -139,7 +139,7 @@ class GoogleCalendarAPIService {
 	 * @return int|null
 	 * @throws Exception
 	 */
-	private function getLastModifiedTimestamp(string $calData): ?int {
+	private function getEventLastModifiedTimestamp(string $calData): ?int {
 		/** @var VCalendar $vCalendar */
 		$vCalendar = Reader::read($calData);
 		/** @var VEvent $vEvent */
@@ -159,6 +159,20 @@ class GoogleCalendarAPIService {
 	}
 
 	/**
+	 * get the most recent event update date in a calendar
+	 *
+	 * @param int $calendarId
+	 * @return int
+	 */
+	private function getCalendarLastEventModificationTimestamp(int $calendarId): int {
+		$objects = $this->caldavBackend->getCalendarObjects($calendarId);
+		$lastModifieds = array_map(static function (array $object) {
+			return $object['lastmodified'] ?? 0;
+		}, $objects);
+		return max($lastModifieds);
+	}
+
+	/**
 	 * @param string $userId
 	 * @param string $calId
 	 * @param string $calName
@@ -173,10 +187,10 @@ class GoogleCalendarAPIService {
 
 		$newCalName = trim($calName) . ' (' . $this->l10n->t('Google Calendar import') .')';
 		$ncCalId = $this->calendarExists($userId, $newCalName);
+		$calendarIsNew = is_null($ncCalId);
 		if (is_null($ncCalId)) {
 			$ncCalId = $this->caldavBackend->createCalendar('principals/users/' . $userId, $newCalName, $params);
 		}
-		$calendarIsNew = is_null($ncCalId);
 
 		// get color list
 		$eventColors = [];
@@ -193,17 +207,25 @@ class GoogleCalendarAPIService {
 		foreach ($events as $e) {
 			$objectUri = $e['id'];
 
+			$existingEvent = null;
 			// check if we should update existing events (on existing calendars only :-)
 			if (!$calendarIsNew) {
 				// check if it already exists and if we should update it
 				$existingEvent = $this->caldavBackend->getCalendarObject($ncCalId, $objectUri);
 				if ($existingEvent !== null) {
-					$remoteUpdatedTimestamp = (new Datetime($e['updated']))->getTimestamp();
-					$localUpdatedTimestamp = $this->getLastModifiedTimestamp($existingEvent['calendardata']);
+					$remoteEventUpdatedTimestamp = (new Datetime($e['updated']))->getTimestamp();
 
-					if ($localUpdatedTimestamp === null || $remoteUpdatedTimestamp <= $localUpdatedTimestamp) {
+					$localEventUpdatedTimestamp = $existingEvent['lastmodified'] ?? 0;
+					if ($remoteEventUpdatedTimestamp <= $localEventUpdatedTimestamp) {
 						continue;
 					}
+
+					//// in case we don't trust the calendar object's 'lastmodified' attr,
+					//// we can check the event real modification date in the ical data
+					//$localEventUpdatedTimestamp = $this->getEventLastModifiedTimestamp($existingEvent['calendardata']);
+					//if ($localEventUpdatedTimestamp === null || $remoteEventUpdatedTimestamp <= $localEventUpdatedTimestamp) {
+					//	continue;
+					//}
 				}
 			}
 
@@ -341,7 +363,7 @@ class GoogleCalendarAPIService {
 	 */
 	private function getCalendarEvents(string $userId, string $calId): Generator {
 		$params = [
-			'maxResults' => 100,
+			'maxResults' => 2500,
 		];
 		do {
 			$result = $this->googleApiService->request($userId, 'calendar/v3/calendars/'. urlencode($calId) .'/events', $params);
