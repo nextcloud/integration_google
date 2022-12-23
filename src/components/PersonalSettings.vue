@@ -667,9 +667,17 @@ export default {
 			axios.get(url, req)
 				.then((response) => {
 					const nbAdded = response.data.nbAdded
+					const nbUpdated = response.data.nbUpdated
+					const total = nbAdded + nbUpdated
 					const calName = response.data.calName
 					showSuccess(
-						this.n('integration_google', '{number} event successfully imported in {name}', '{number} events successfully imported in {name}', nbAdded, { number: nbAdded, name: calName })
+						this.n(
+							'integration_google',
+							'{total} event successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)',
+							'{total} events successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)',
+							total,
+							{ total, nbAdded, nbUpdated, name: calName }
+						)
 					)
 				})
 				.catch((error) => {

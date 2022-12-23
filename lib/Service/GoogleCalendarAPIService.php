@@ -24,6 +24,9 @@ use Psr\Log\LoggerInterface;
 require_once __DIR__ . '/../../vendor/autoload.php';
 use Ortic\ColorConverter\Color;
 use Ortic\ColorConverter\Colors\Named;
+use Sabre\VObject\Component\VCalendar;
+use Sabre\VObject\Component\VEvent;
+use Sabre\VObject\Reader;
 use Throwable;
 
 class GoogleCalendarAPIService {
@@ -130,6 +133,32 @@ class GoogleCalendarAPIService {
 	}
 
 	/**
+	 * Get last modified timestamp from the calendar data of a calendar object
+	 *
+	 * @param string $calData
+	 * @return int|null
+	 * @throws Exception
+	 */
+	private function getLastModifiedTimestamp(string $calData): ?int {
+		/** @var VCalendar $vCalendar */
+		$vCalendar = Reader::read($calData);
+		/** @var VEvent $vEvent */
+		$vEvent = $vCalendar->{'VEVENT'};
+		$iCalEvents = $vEvent->getIterator();
+		foreach ($iCalEvents as $event) {
+			if (isset($event->{'LAST-MODIFIED'})) {
+				$lastMod = $event->{'LAST-MODIFIED'};
+				if (is_string($lastMod)) {
+					return (new Datetime($lastMod))->getTimestamp();
+				} elseif ($lastMod instanceof \Sabre\VObject\Property\ICalendar\DateTime) {
+					return $lastMod->getDateTime()->getTimestamp();
+				}
+			}
+		}
+		return null;
+	}
+
+	/**
 	 * @param string $userId
 	 * @param string $calId
 	 * @param string $calName
@@ -147,6 +176,7 @@ class GoogleCalendarAPIService {
 		if (is_null($ncCalId)) {
 			$ncCalId = $this->caldavBackend->createCalendar('principals/users/' . $userId, $newCalName, $params);
 		}
+		$calendarIsNew = is_null($ncCalId);
 
 		// get color list
 		$eventColors = [];
@@ -159,13 +189,29 @@ class GoogleCalendarAPIService {
 		$utcTimezone = new DateTimeZone('-0000');
 		$events = $this->getCalendarEvents($userId, $calId);
 		$nbAdded = 0;
+		$nbUpdated = 0;
 		foreach ($events as $e) {
+			$objectUri = $e['id'];
+
+			// check if we should update existing events (on existing calendars only :-)
+			if (!$calendarIsNew) {
+				// check if it already exists and if we should update it
+				$existingEvent = $this->caldavBackend->getCalendarObject($ncCalId, $objectUri);
+				if ($existingEvent !== null) {
+					$remoteUpdatedTimestamp = (new Datetime($e['updated']))->getTimestamp();
+					$localUpdatedTimestamp = $this->getLastModifiedTimestamp($existingEvent['calendardata']);
+
+					if ($localUpdatedTimestamp === null || $remoteUpdatedTimestamp <= $localUpdatedTimestamp) {
+						continue;
+					}
+				}
+			}
+
 			$calData = 'BEGIN:VCALENDAR' . "\n"
 				. 'VERSION:2.0' . "\n"
 				. 'PRODID:NextCloud Calendar' . "\n"
 				. 'BEGIN:VEVENT' . "\n";
 
-			$objectUri = $e['id'] . '-' . $e['etag'];
 			$calData .= 'UID:' . $ncCalId . '-' . $objectUri . "\n";
 			if (isset($e['colorId'], $eventColors[$e['colorId']], $eventColors[$e['colorId']]['background'])) {
 				$closestCssColor = $this->getClosestCssColor($eventColors[$e['colorId']]['background']);
@@ -254,17 +300,26 @@ class GoogleCalendarAPIService {
 				. 'END:VEVENT' . "\n"
 				. 'END:VCALENDAR';
 
-			try {
-				$this->caldavBackend->createCalendarObject($ncCalId, $objectUri, $calData);
-				$nbAdded++;
-			} catch (BadRequest $ex) {
-				if (strpos($ex->getMessage(), 'uid already exists') !== false) {
-					$this->logger->debug('Skip existing event', ['app' => Application::APP_ID]);
-				} else {
+			if ($existingEvent !== null) {
+				try {
+					$this->caldavBackend->updateCalendarObject($ncCalId, $objectUri, $calData);
+					$nbUpdated++;
+				} catch (Exception|Throwable $ex) {
+					$this->logger->warning('Error when updating calendar event ' . $ex->getMessage(), ['app' => Application::APP_ID]);
+				}
+			} else {
+				try {
+					$this->caldavBackend->createCalendarObject($ncCalId, $objectUri, $calData);
+					$nbAdded++;
+				} catch (BadRequest $ex) {
+					if (strpos($ex->getMessage(), 'uid already exists') !== false) {
+						$this->logger->debug('Skip existing event', ['app' => Application::APP_ID]);
+					} else {
+						$this->logger->warning('Error when creating calendar event "' . '<redacted>' . '" ' . $ex->getMessage(), ['app' => Application::APP_ID]);
+					}
+				} catch (Exception|Throwable $ex) {
 					$this->logger->warning('Error when creating calendar event "' . '<redacted>' . '" ' . $ex->getMessage(), ['app' => Application::APP_ID]);
 				}
-			} catch (Exception | Throwable $ex) {
-				$this->logger->warning('Error when creating calendar event "' . '<redacted>' . '" ' . $ex->getMessage(), ['app' => Application::APP_ID]);
 			}
 		}
 
@@ -274,6 +329,7 @@ class GoogleCalendarAPIService {
 		}
 		return [
 			'nbAdded' => $nbAdded,
+			'nbUpdated' => $nbUpdated,
 			'calName' => $newCalName,
 		];
 	}
