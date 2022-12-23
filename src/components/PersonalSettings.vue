@@ -159,7 +159,7 @@
 					</div>
 					<br><br>
 				</div>
-				<div v-if="nbFiles > 0"
+				<div v-if="showDrive"
 					id="google-drive">
 					<h3>{{ t('integration_google', 'Drive') }}</h3>
 					<NcCheckboxRadioSwitch v-if="!importingDrive"
@@ -203,17 +203,15 @@
 					<div class="line">
 						<label v-if="state.consider_shared_files && sharedWithMeSize > 0">
 							<FileIcon />
-							{{ n('integration_google',
-								'{nbFiles} file in Google Drive ({formSize} + {formSharedSize} shared with you)',
-								'{nbFiles} files in Google Drive ({formSize} + {formSharedSize} shared with you)',
-								nbFiles,
-								{ nbFiles, formSize: myHumanFileSize(driveSize, true), formSharedSize: myHumanFileSize(sharedWithMeSize, true) }
+							{{ t('integration_google',
+								'Your Google Drive ({formSize} + {formSharedSize} shared with you)',
+								{ formSize: myHumanFileSize(driveSize, true), formSharedSize: myHumanFileSize(sharedWithMeSize, true) }
 							)
 							}}
 						</label>
 						<label v-else>
 							<FileIcon />
-							{{ n('integration_google', '{nbFiles} file in Google Drive ({formSize})', '{nbFiles} files in Google Drive ({formSize})', nbFiles, { nbFiles, formSize: myHumanFileSize(driveSize, true) }) }}
+							{{ t('integration_google', 'Your Google Drive ({formSize})', { formSize: myHumanFileSize(driveSize, true) }) }}
 						</label>
 						<NcButton v-if="enoughSpaceForDrive && !importingDrive"
 							id="google-import-files"
@@ -324,13 +322,13 @@ export default {
 			nbImportedPhotos: 0,
 			photoImportLoop: null,
 			// drive
-			nbFiles: 0,
 			driveSize: 0,
 			gettingDriveInfo: false,
 			sharedWithMeSize: 0,
 			importingDrive: false,
 			lastDriveImportTimestamp: 0,
 			nbImportedFiles: 0,
+			driveImportedSize: 0,
 			driveImportLoop: null,
 		}
 	},
@@ -341,6 +339,12 @@ export default {
 		},
 		connected() {
 			return this.state.user_name && this.state.user_name !== ''
+		},
+		totalDriveSize() {
+			return this.driveSize + this.sharedWithMeSize
+		},
+		showDrive() {
+			return this.totalDriveSize > 0
 		},
 		selectedAddressBookName() {
 			return this.selectedAddressBook === 0
@@ -381,7 +385,7 @@ export default {
 		},
 		driveImportProgress() {
 			return this.driveSize > 0 && this.nbImportedFiles > 0
-				? parseInt(this.nbImportedFiles / this.nbFiles * 100)
+				? parseInt(this.driveImportedSize / this.totalDriveSize * 100)
 				: 0
 		},
 	},
@@ -505,9 +509,8 @@ export default {
 			const url = generateUrl('/apps/integration_google/drive-size')
 			axios.get(url)
 				.then((response) => {
-					if (response.data && response.data.usageInDrive && response.data.nbFiles) {
+					if (response.data && response.data.usageInDrive) {
 						this.driveSize = response.data.usageInDrive
-						this.nbFiles = response.data.nbFiles
 						this.sharedWithMeSize = response.data.sharedWithMeSize
 					}
 				})
@@ -740,6 +743,7 @@ export default {
 					if (response.data && Object.keys(response.data).length > 0) {
 						this.lastDriveImportTimestamp = response.data.last_drive_import_timestamp
 						this.nbImportedFiles = response.data.nb_imported_files
+						this.driveImportedSize = response.data.drive_imported_size
 						this.importingDrive = response.data.importing_drive
 						if (!this.importingDrive) {
 							clearInterval(this.driveImportLoop)
@@ -786,6 +790,7 @@ export default {
 					importing_drive: '0',
 					last_drive_import_timestamp: '0',
 					nb_imported_files: '0',
+					drive_imported_size: '0',
 				},
 			}
 			const url = generateUrl('/apps/integration_google/config')

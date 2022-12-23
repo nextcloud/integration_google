@@ -93,41 +93,35 @@ class GoogleDriveAPIService {
 			return $result;
 		}
 		$info = [
-			'usageInDrive' => $result['storageQuota']['usageInDrive'] ?? 0,
+			'usageInDrive' => (int) $result['storageQuota']['usageInDrive'],
+			'sharedWithMeSize' => 0,
 		];
-		// count files
-		$nbFiles = 0;
+		if (!$considerSharedFiles) {
+			return $info;
+		}
+		// get total size of files that are shared with me
 		$sharedWithMeSize = 0;
 		$params = [
-			'fields' => 'nextPageToken,files/name,files/ownedByMe',
+			'fields' => 'nextPageToken,files/name,files/ownedByMe,files/size',
 			'pageSize' => 1000,
-			'q' => "mimeType!='application/vnd.google-apps.folder'",
+			'q' => "mimeType!='application/vnd.google-apps.folder' and sharedWithMe = true",
 		];
-		if ($considerSharedFiles) {
-			$params['fields'] = 'nextPageToken,files/name,files/ownedByMe,files/size';
-		}
 		do {
 			$result = $this->googleApiService->request($userId, 'drive/v3/files', $params);
 			if (isset($result['error']) || !isset($result['files'])) {
 				return ['error' => $result['error'] ?? 'no files found'];
 			}
-			if ($considerSharedFiles) {
-				foreach ($result['files'] as $file) {
-					if (!$file['ownedByMe']) {
-						$sharedWithMeSize += $file['size'] ?? 0;
-					}
-				}
-				$nbFiles += count($result['files']);
-			} else {
-				foreach ($result['files'] as $file) {
-					if ($file['ownedByMe']) {
-						$nbFiles++;
-					}
+
+			foreach ($result['files'] as $file) {
+				// extra check the file is not owned by me
+				if (!$file['ownedByMe']) {
+					$sharedWithMeSize += $file['size'] ?? 0;
 				}
 			}
+
 			$params['pageToken'] = $result['nextPageToken'] ?? '';
 		} while (isset($result['nextPageToken']));
-		$info['nbFiles'] = $nbFiles;
+
 		$info['sharedWithMeSize'] = $sharedWithMeSize;
 		return $info;
 	}
@@ -155,6 +149,7 @@ class GoogleDriveAPIService {
 		}
 		$this->config->setUserValue($userId, Application::APP_ID, 'importing_drive', '1');
 		$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_files', '0');
+		$this->config->setUserValue($userId, Application::APP_ID, 'drive_imported_size', '0');
 		$this->config->setUserValue($userId, Application::APP_ID, 'last_drive_import_timestamp', '0');
 		$this->config->deleteUserValue($userId, Application::APP_ID, 'directory_progress');
 
@@ -198,10 +193,13 @@ class GoogleDriveAPIService {
 			? []
 			: json_decode($directoryProgressStr, true);
 		// import by batch of 500 Mo
-		$alreadyImported = $this->config->getUserValue($userId, Application::APP_ID, 'nb_imported_files', '0');
-		$alreadyImported = (int) $alreadyImported;
+		$alreadyImported = (int) $this->config->getUserValue($userId, Application::APP_ID, 'nb_imported_files', '0');
+		$alreadyImportedSize = (int) $this->config->getUserValue($userId, Application::APP_ID, 'drive_imported_size', '0');
 		try {
-			$result = $this->importFiles($userId, $targetPath, 500000000, $alreadyImported, $directoryProgress);
+			$result = $this->importFiles(
+				$userId, $targetPath, 500000000,
+				$alreadyImported, $alreadyImportedSize, $directoryProgress
+			);
 		} catch (Exception | Throwable $e) {
 			$result = [
 				'error' => 'Unknown job failure. ' . $e,
@@ -220,6 +218,7 @@ class GoogleDriveAPIService {
 			}
 			$this->config->setUserValue($userId, Application::APP_ID, 'importing_drive', '0');
 			$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_files', '0');
+			$this->config->setUserValue($userId, Application::APP_ID, 'drive_imported_size', '0');
 			$this->config->setUserValue($userId, Application::APP_ID, 'last_drive_import_timestamp', '0');
 			$this->config->deleteUserValue($userId, Application::APP_ID, 'directory_progress');
 		} else {
@@ -244,7 +243,8 @@ class GoogleDriveAPIService {
 	 * @throws \OC\User\NoUserException
 	 */
 	public function importFiles(string $userId, string $targetPath,
-								?int $maxDownloadSize = null, int $alreadyImported = 0, array &$directoryProgress = []): array {
+								?int $maxDownloadSize = null, int $alreadyImported = 0, int $alreadyImportedSize = 0,
+								array &$directoryProgress = []): array {
 		$considerSharedFiles = $this->config->getUserValue($userId, Application::APP_ID, 'consider_shared_files', '0') === '1';
 		// create root folder
 		$userFolder = $this->root->getUserFolder($userId);
@@ -301,7 +301,6 @@ class GoogleDriveAPIService {
 		if (isset($info['error'])) {
 			return $info;
 		}
-		// $nbFilesOnDrive = $info['nbFiles'];
 		$downloadedSize = 0;
 		$nbDownloaded = 0;
 
@@ -361,6 +360,7 @@ class GoogleDriveAPIService {
 						$nbDownloaded++;
 						$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_files', $alreadyImported + $nbDownloaded);
 						$downloadedSize += $size;
+						$this->config->setUserValue($userId, Application::APP_ID, 'drive_imported_size', $alreadyImportedSize + $downloadedSize);
 						if ($maxDownloadSize && $downloadedSize > $maxDownloadSize) {
 							return [
 								'nbDownloaded' => $nbDownloaded,

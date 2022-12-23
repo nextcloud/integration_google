@@ -100,6 +100,7 @@ class GoogleAPIController extends Controller {
 			'importing_drive' => $this->config->getUserValue($this->userId, Application::APP_ID, 'importing_drive') === '1',
 			'last_drive_import_timestamp' => (int) $this->config->getUserValue($this->userId, Application::APP_ID, 'last_drive_import_timestamp', '0'),
 			'nb_imported_files' => (int) $this->config->getUserValue($this->userId, Application::APP_ID, 'nb_imported_files', '0'),
+			'drive_imported_size' => (int) $this->config->getUserValue($this->userId, Application::APP_ID, 'drive_imported_size', '0'),
 		]);
 	}
 
