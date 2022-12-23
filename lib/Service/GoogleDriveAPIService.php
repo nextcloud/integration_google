@@ -306,6 +306,7 @@ class GoogleDriveAPIService {
 		$nbDownloaded = 0;
 
 		foreach ($directoryIdsToExplore as $dirId) {
+			$conflictingIds = $this->getFilesWithNameConflict($userId, $dirId, $considerSharedFiles);
 			$params = [
 				'pageSize' => 1000,
 				'fields' => implode(',', [
@@ -338,7 +339,7 @@ class GoogleDriveAPIService {
 						$saveFolder = $folder;
 					}
 
-					$fileName = $this->getFileName($fileItem, $userId);
+					$fileName = $this->getFileName($fileItem, $userId, in_array($fileItem['id'], $conflictingIds));
 
 					// If file already exists in folder, don't download unless timestamp is different
 					if ($saveFolder->nodeExists($fileName)) {
@@ -383,6 +384,57 @@ class GoogleDriveAPIService {
 			'targetPath' => $targetPath,
 			'finished' => true,
 		];
+	}
+
+	/**
+	 * @param string $userId
+	 * @param string $dirId
+	 * @param bool $considerSharedFiles
+	 * @return array
+	 */
+	private function getFilesWithNameConflict(string $userId, string $dirId, bool $considerSharedFiles): array {
+		$fileItems = [];
+		$params = [
+			'pageSize' => 1000,
+			'fields' => implode(',', [
+				'nextPageToken',
+				'files/id',
+				'files/name',
+				'files/parents',
+				'files/ownedByMe',
+			]),
+			'q' => "mimeType!='application/vnd.google-apps.folder' and '" . $dirId . "' in parents",
+		];
+		do {
+			$result = $this->googleApiService->request($userId, 'drive/v3/files', $params);
+			if (isset($result['error'])) {
+				return [];
+			}
+
+			$fileItems = array_merge($fileItems, $result['files']);
+
+			$params['pageToken'] = $result['nextPageToken'] ?? '';
+		} while (isset($result['nextPageToken']));
+
+		// ignore shared files
+		if (!$considerSharedFiles) {
+			$fileItems = array_filter($fileItems, static function (array $fileItem) {
+				return $fileItem['ownedByMe'];
+			});
+		}
+
+		// detect duplicates
+		$nbPerName = array_count_values(
+			array_map(static function (array $fileItem) {
+				return $fileItem['name'];
+			}, $fileItems)
+		);
+
+		return array_map(static function (array $fileItem) {
+			return $fileItem['id'];
+		}, array_filter($fileItems, static function (array $fileItem) use ($nbPerName) {
+			return $nbPerName[$fileItem['name']] > 1;
+		}));
 	}
 
 	/**
@@ -492,9 +544,10 @@ class GoogleDriveAPIService {
 	/**
 	 * @param array $fileItem
 	 * @param string $userId
+	 * @param bool $hasNameConflict
 	 * @return string name of the file to be saved
-	*/
-	private function getFileName(array $fileItem, string $userId): string {
+	 */
+	private function getFileName(array $fileItem, string $userId, bool $hasNameConflict): string {
 		$fileName = preg_replace('/\\n/', '', preg_replace('/\//', '-', $fileItem['name'] ?? 'Untitled'));
 
 		if (in_array($fileItem['mimeType'], array_values(self::DOCUMENT_MIME_TYPES))) {
@@ -513,7 +566,10 @@ class GoogleDriveAPIService {
 		}
 
 		$extension = pathinfo($fileName, PATHINFO_EXTENSION);
-		$name = pathinfo($fileName, PATHINFO_FILENAME) . '_' . substr($fileItem['id'], -6);
+		$name = pathinfo($fileName, PATHINFO_FILENAME);
+		if ($hasNameConflict) {
+			$name .= '_' . substr($fileItem['id'], -6);
+		}
 
 		return strlen($extension) ? $name . '.' . $extension : $name;
 	}
