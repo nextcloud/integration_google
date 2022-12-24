@@ -79,10 +79,7 @@ OC.L10N.register(
     "Choose where to write imported files" : "Sèbera in ue est a pònnere is archìvios importados",
     "Choose where to write imported photos" : "Sèbera in ue est a pònnere is fotos importadas",
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} fotos importadas","{amount} fotos importadas"],
-    "_{nbFiles} file in Google Drive ({formSize} + {formSharedSize} shared with you)_::_{nbFiles} files in Google Drive ({formSize} + {formSharedSize} shared with you)_" : ["{nbFiles} archìvios in Google Drive ({formSize} + {formSharedSize} cumpartzidos cun tegus)","{nbFiles} archìvios in Google Drive ({formSize} + {formSharedSize} cumpartzidos cun tegus)"],
-    "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["{nbFiles} archìvios in Google Drive ({formSize})","{nbFiles} file in Google Drive ({formSize})"],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} archìvios importados ({progress}%)","{amount} archìvios importados ({progress}%)"],
-    "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} cuntatos importados in manera curreta in {name}","{number} contatti importati correttamente in {name}"],
-    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number} eventos importados in manera curreta in {name}","{number} eventi importati correttamente in {name}"]
+    "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} cuntatos importados in manera curreta in {name}","{number} contatti importati correttamente in {name}"]
 },
 "nplurals=2; plural=(n != 1);");

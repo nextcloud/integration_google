@@ -81,10 +81,7 @@ OC.L10N.register(
     "Choose where to write imported photos" : "Kies waar geïmporteerde foto's moeten worden weggeschreven",
     "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} Google foto's (>{formSize})",">{nbPhotos} Google foto's (>{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} foto geïmporteerd","{amount} foto's geïmporteerd"],
-    "_{nbFiles} file in Google Drive ({formSize} + {formSharedSize} shared with you)_::_{nbFiles} files in Google Drive ({formSize} + {formSharedSize} shared with you)_" : ["{nbFiles} bestand in Google Drive ({formSize} + {formSharedSize} gedeeld met jou)","{nbFiles} bestanden in Google Drive ({formSize} + {formSharedSize} gedeeld met jou)"],
-    "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["{nbFiles} bestand in Google Drive ({formSize})","{nbFiles} bestanden in Google Drive ({formSize})"],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} bestand geïmporteerd ({progress}%)","{amount} bestanden geïmporteerd ({progress}%)"],
-    "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} contactpersoon succesvol geïmporteerd in {name}","{number} contactpersonen succesvol geïmporteerd in {name}"],
-    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number} afspraak succesvol geïmporteerd in {name}","{number} afspraken succesvol geïmporteerd in {name}"]
+    "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} contactpersoon succesvol geïmporteerd in {name}","{number} contactpersonen succesvol geïmporteerd in {name}"]
 },
 "nplurals=2; plural=(n != 1);");

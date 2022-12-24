@@ -73,10 +73,7 @@
     "Starting importing files in {targetPath} directory" : "S'està iniciant la importació de fitxers al directori {targetPath}",
     "Failed to start importing Google Drive" : "No s'ha pogut començar a importar Google Drive",
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} foto importada","{amount} fotos importades"],
-    "_{nbFiles} file in Google Drive ({formSize} + {formSharedSize} shared with you)_::_{nbFiles} files in Google Drive ({formSize} + {formSharedSize} shared with you)_" : ["{nbFiles} fitxer a Google Drive ({formSize} + {formSharedSize} compartit amb tu)","{nbFiles} fitxers a Google Drive ({formSize} + {formSharedSize} compartits amb tu)"],
-    "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["{nbFiles} fitxer a Google Drive ({formSize})","{nbFiles} fitxers a Google Drive ({formSize})"],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} fitxer importat ({progress}%)","{amount} fitxers importats ({progress}%)"],
-    "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} contacte s'ha importat correctament a {name}","{number} contactes s'han importat correctament a {name}"],
-    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number}'esdeveniment s'ha importat correctament a {name}","{number} esdeveniments s'han importat correctament a {name}"]
+    "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} contacte s'ha importat correctament a {name}","{number} contactes s'han importat correctament a {name}"]
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

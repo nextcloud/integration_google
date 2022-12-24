@@ -57,7 +57,6 @@ OC.L10N.register(
     "Successfully connected to Google!" : "成功连接到Google！",
     "Google connection error:" : "Google连接错误：",
     "Google options saved" : "Google 选项已保存",
-    "Failed to save Google options" : "保存 Google 选项失败",
-    "_{nbFiles} file in Google Drive ({formSize} + {formSharedSize} shared with you)_::_{nbFiles} files in Google Drive ({formSize} + {formSharedSize} shared with you)_" : ["谷歌云盘中的 {nbFiles} 文件 (与你分享了 {formSize} + {formSharedSize})"]
+    "Failed to save Google options" : "保存 Google 选项失败"
 },
 "nplurals=1; plural=0;");

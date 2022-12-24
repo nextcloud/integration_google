@@ -54,6 +54,7 @@
     "Drive" : "Drive",
     "Ignore shared files" : "略過共享的檔案",
     "Google documents import format" : "Google文件導入格式",
+    "Your Google Drive ({formSize} + {formSharedSize} shared with you)" : "您的 Google Drive（{formSize} + {formSharedSize} 與您共享）",
     "Import Google Drive files" : "導入 Google Drive 檔案",
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "您的 Google Drive 大於剩餘空間（{formSpace}）",
     "Cancel Google Drive import" : "取消 Google Drive 導入",
@@ -81,10 +82,7 @@
     "Choose where to write imported photos" : "選擇寫入導入照片的位置",
     "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} 張 Google 照片（>{formSize}）"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["導入了 {amount} 張照片"],
-    "_{nbFiles} file in Google Drive ({formSize} + {formSharedSize} shared with you)_::_{nbFiles} files in Google Drive ({formSize} + {formSharedSize} shared with you)_" : ["Google Drive 的{nbFiles}個檔案（與您共享的{formSize} + {formSharedSize}）"],
-    "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["Google Drive 的{nbFiles}個檔案（{formSize}）"],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["導入了 {amount} 個檔案（{progress}%）"],
-    "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number}位聯絡人已成功導入{name}中"],
-    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number}項活動已成功導入{name}中"]
+    "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number}位聯絡人已成功導入{name}中"]
 },"pluralForm" :"nplurals=1; plural=0;"
 }

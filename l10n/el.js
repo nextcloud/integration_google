@@ -83,10 +83,7 @@ OC.L10N.register(
     "Choose where to write imported photos" : "Επιλέξτε πού θα γράψετε τις εισαγόμενες φωτογραφίες",
     "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} φωτογραφία Google (>{formSize})",">{nbPhotos} φωτογραφίες Google (>{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["Προστέθηκε {amount} φωτογραφία","Προστέθηκαν {amount} φωτογραφίες"],
-    "_{nbFiles} file in Google Drive ({formSize} + {formSharedSize} shared with you)_::_{nbFiles} files in Google Drive ({formSize} + {formSharedSize} shared with you)_" : ["{nbFiles} αρχείο στο Google Drive ({formSize} + {formSharedSize} διαμοιράστηκε μαζί σας)","{nbFiles} αρχεία στο Google Drive ({formSize} + {formSharedSize} διαμοιράστηκαν μαζί σας)"],
-    "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["{nbFiles} αρχείο στο Google Drive ({formSize})","{nbFiles} αρχεία στο Google Drive ({formSize})"],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["Προστέθηκε {amount} αρχείο ({progress}%)","Προστέθηκαν {amount} αρχεία ({progress}%)"],
-    "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["Προστέθηκε επιτυχώς {number} επαφή σε {name}","Προστέθηκαν επιτυχώς {number} επαφές σε {name}"],
-    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["Προστέθηκε επιτυχώς {number} γεγονός σε {name}","Προστέθηκαν επιτυχώς {number} γεγονός σε {name}"]
+    "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["Προστέθηκε επιτυχώς {number} επαφή σε {name}","Προστέθηκαν επιτυχώς {number} επαφές σε {name}"]
 },
 "nplurals=2; plural=(n != 1);");

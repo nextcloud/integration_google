@@ -81,10 +81,7 @@
     "Choose where to write imported photos" : "Избери каде да ги снимите увезените фотографии",
     "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} Google фотографија (>{formSize})",">{nbPhotos} Google фотографии (>{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} фотографија увезена","{amount} фотографии увезени"],
-    "_{nbFiles} file in Google Drive ({formSize} + {formSharedSize} shared with you)_::_{nbFiles} files in Google Drive ({formSize} + {formSharedSize} shared with you)_" : ["{nbFiles} датотека во Google драјв ({formSize} + {formSharedSize} споделени со вас)","{nbFiles} датотеки во Google драјв ({formSize} + {formSharedSize} споделени со вас)"],
-    "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["{nbFiles} датотека во Google драјв ({formSize})","{nbFiles} датотеки во Google драјв ({formSize})"],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} датотека е увезена ({progress}%)","{amount} датотеки се увезени ({progress}%)"],
-    "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} контакт е успешно увезен во {name}","{number} контакти се успешно увезени во {name}"],
-    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number} настан е успешно увезен во {name}","{number} настани се успешно увезени во {name}"]
+    "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} контакт е успешно увезен во {name}","{number} контакти се успешно увезени во {name}"]
 },"pluralForm" :"nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;"
 }

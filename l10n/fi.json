@@ -81,10 +81,7 @@
     "Choose where to write imported photos" : "Valitse, mihin kuvat tuodaan",
     "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} Google-kuva (>{formSize})",">{nbPhotos} Google-kuvaa (>{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} kuva tuotu","{amount} kuvaa tuotu"],
-    "_{nbFiles} file in Google Drive ({formSize} + {formSharedSize} shared with you)_::_{nbFiles} files in Google Drive ({formSize} + {formSharedSize} shared with you)_" : ["{nbFiles} tiedosto Google Drivessä ({formSize} + {formSharedSize} jaettu kanssasi)","{nbFiles} tiedostoa Google Drivessä ({formSize} + {formSharedSize} jaettu kanssasi)"],
-    "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["{nbFiles} tiedosto Google Drivessa ({formSize})","{nbFiles} tiedostoa Google Drivessa ({formSize})"],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} tiedosto tuotu ({progress}%)","{amount} tiedostoa tuotu ({progress}%)"],
-    "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} yhteystieto tuotu kalenteriin {name}","{number} yhteystietoa tuotu kalenteriin {name}"],
-    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number} tapahtuma tuotu kalenteriin {name}","{number} tapahtumaa tuotu kalenteriin {name}"]
+    "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} yhteystieto tuotu kalenteriin {name}","{number} yhteystietoa tuotu kalenteriin {name}"]
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

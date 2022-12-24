@@ -81,10 +81,7 @@
     "Choose where to write imported photos" : "Escoge dónde guardar las fotos importadas",
     "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} Google foto (>{formSize})",">{nbPhotos} Google fotos (>{formSize})",">{nbPhotos} Google fotos (>{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} foto importada","{amount} fotos importadas","{amount} fotos importadas"],
-    "_{nbFiles} file in Google Drive ({formSize} + {formSharedSize} shared with you)_::_{nbFiles} files in Google Drive ({formSize} + {formSharedSize} shared with you)_" : ["{nbFiles} archivo en Google Drive ({formSize} + {formSharedSize} compartido contigo)","{nbFiles} archivos en Google Drive ({formSize} + {formSharedSize} compartidos contigo)","{nbFiles} archivos en Google Drive ({formSize} + {formSharedSize} compartidos contigo)"],
-    "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["{nbFiles} archivo en Google Drive ({formSize})","{nbFiles} archivos en Google Drive ({formSize})","{nbFiles} archivos en Google Drive ({formSize})"],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} archivo importado ({progress}%)","{amount} archivos importados ({progress}%)","{amount} archivos importados ({progress}%)"],
-    "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} contacto importado con éxito en {name}","{number} contactos importados con éxito en {name}","{number} contactos importados con éxito en {name}"],
-    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["{number} evento importado con éxito en {name}","{number} eventos importados con éxito en {name}","{number} eventos importados con éxito en {name}"]
+    "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} contacto importado con éxito en {name}","{number} contactos importados con éxito en {name}","{number} contactos importados con éxito en {name}"]
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }

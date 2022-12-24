@@ -83,10 +83,7 @@ OC.L10N.register(
     "Choose where to write imported photos" : "Aukeratu  non idatzi inportatutako argazkiak",
     "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} Google argazkia (>{formSize})",">{nbPhotos} Google argazkiak (>{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} argazki inportatu dira ","{amount} argazki inportatu dira "],
-    "_{nbFiles} file in Google Drive ({formSize} + {formSharedSize} shared with you)_::_{nbFiles} files in Google Drive ({formSize} + {formSharedSize} shared with you)_" : ["{nbFiles} fitxategi daude Google Driven ({formSize}) + {formSharedSize} zurekin partekatuta","{nbFiles} fitxategi daude Google Driven ({formSize}) + {formSharedSize} zurekin partekatuta)"],
-    "_{nbFiles} file in Google Drive ({formSize})_::_{nbFiles} files in Google Drive ({formSize})_" : ["Fitxategi {nbFiles} dago Google Driven ({formSize})","{nbFiles} fitxategi daude Google Driven ({formSize})"],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} fitxategi inportatu dira ({progress}%)","{amount} fitxategi inportatu dira ({progress}%)"],
-    "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["Kontaktu {number} ondo inportatu da {name}-ra","{number} kontaktu ondo inportatu dira {name}-ra"],
-    "_{number} event successfully imported in {name}_::_{number} events successfully imported in {name}_" : ["Gertaera {number} ondo inportatu da {name}-ra","{number} gertaera ondo inportatu dira {name}-ra"]
+    "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["Kontaktu {number} ondo inportatu da {name}-ra","{number} kontaktu ondo inportatu dira {name}-ra"]
 },
 "nplurals=2; plural=(n != 1);");
