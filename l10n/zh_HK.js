@@ -57,6 +57,7 @@ OC.L10N.register(
     "Ignore shared files" : "略過共享的檔案",
     "Google documents import format" : "Google文件導入格式",
     "Your Google Drive ({formSize} + {formSharedSize} shared with you)" : "您的 Google Drive（{formSize} + {formSharedSize} 與您共享）",
+    "Your Google Drive ({formSize})" : "您的 Google Drive ({formSize})",
     "Import Google Drive files" : "導入 Google Drive 檔案",
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "您的 Google Drive 大於剩餘空間（{formSpace}）",
     "Cancel Google Drive import" : "取消 Google Drive 導入",
@@ -85,6 +86,7 @@ OC.L10N.register(
     "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} 張 Google 照片（>{formSize}）"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["導入了 {amount} 張照片"],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["導入了 {amount} 個檔案（{progress}%）"],
-    "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number}位聯絡人已成功導入{name}中"]
+    "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number}位聯絡人已成功導入{name}中"],
+    "_{total} event successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_::_{total} events successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_" : ["在 {name} 中成功導入了 {total} 個活動（創建了 {nbAdded} 個，更新了 {nbUpdated} 個）"]
 },
 "nplurals=1; plural=0;");

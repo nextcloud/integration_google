@@ -56,6 +56,8 @@ OC.L10N.register(
     "Drive" : "Drive",
     "Ignore shared files" : "Freigegebene Dateien ignorieren",
     "Google documents import format" : "Google Dokumente Importformat",
+    "Your Google Drive ({formSize} + {formSharedSize} shared with you)" : "Ihr Google Drive ({formSize} + {formSharedSize} wird mit Ihnen geteilt)",
+    "Your Google Drive ({formSize})" : "Ihr Google Drive ({formSize})",
     "Import Google Drive files" : "Google Drive-Dateien importieren",
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Ihr Google Drive ist größer als der verbleibende freie Speicherplatz ({formSpace})",
     "Cancel Google Drive import" : "Google Drive-Import abbrechen",
@@ -84,6 +86,7 @@ OC.L10N.register(
     "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} Google Foto (>{formSize})",">{nbPhotos} Google Fotos (>{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} Foto importiert","{amount} Fotos importiert"],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} Datei importiert ({progress}%)","{amount} Dateien importiert ({progress}%)"],
-    "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} Kontakt erfolgreich importiert nach {name}","{number} Kontakte erfolgreich importiert nach {name}"]
+    "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} Kontakt erfolgreich importiert nach {name}","{number} Kontakte erfolgreich importiert nach {name}"],
+    "_{total} event successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_::_{total} events successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_" : ["{total} Ereignis erfolgreich in {name} importiert ({nbAdded} erstellt, {nbUpdated} aktualisiert)","{total} Ereignisse erfolgreich in {name} importiert ({nbAdded} erstellt, {nbUpdated} aktualisiert)"]
 },
 "nplurals=2; plural=(n != 1);");

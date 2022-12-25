@@ -56,6 +56,8 @@ OC.L10N.register(
     "Drive" : "Drive",
     "Ignore shared files" : "Ignorer les fichiers partagés",
     "Google documents import format" : "Format d'importation des documents Google",
+    "Your Google Drive ({formSize} + {formSharedSize} shared with you)" : "Votre Google Drive ({formSize} + {formSharedSize} partagé avec vous)",
+    "Your Google Drive ({formSize})" : "Votre Google Drive ({formSize})",
     "Import Google Drive files" : "Importer les fichiers de Google Drive",
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Votre Google Drive est plus grand que l'espace restant ({formSpace})",
     "Cancel Google Drive import" : "Annuler l'import Google Drive",
