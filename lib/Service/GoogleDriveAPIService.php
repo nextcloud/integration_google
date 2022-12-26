@@ -18,7 +18,6 @@ use OCP\Files\InvalidPathException;
 use OCP\Files\NotPermittedException;
 use OCP\IConfig;
 use OCP\Files\IRootFolder;
-use OCP\Files\FileInfo;
 use OCP\BackgroundJob\IJobList;
 use OCP\Lock\ILockingProvider;
 use Psr\Log\LoggerInterface;
@@ -143,7 +142,7 @@ class GoogleDriveAPIService {
 			$userFolder->newFolder($targetPath);
 		} else {
 			$folder = $userFolder->get($targetPath);
-			if ($folder->getType() !== FileInfo::TYPE_FOLDER) {
+			if (!($folder instanceof Folder)) {
 				return ['error' => 'Impossible to create Google Drive folder'];
 			}
 		}
@@ -252,7 +251,7 @@ class GoogleDriveAPIService {
 			$folder = $userFolder->newFolder($targetPath);
 		} else {
 			$folder = $userFolder->get($targetPath);
-			if ($folder->getType() !== FileInfo::TYPE_FOLDER) {
+			if (!($folder instanceof Folder)) {
 				return ['error' => 'Impossible to create ' . '<redacted>' . ' folder'];
 			}
 		}
@@ -475,7 +474,7 @@ class GoogleDriveAPIService {
 					$newDir = $currentFolder->newFolder($name);
 				} else {
 					$newDir = $currentFolder->get($name);
-					if ($newDir->getType() !== FileInfo::TYPE_FOLDER) {
+					if (!($newDir instanceof Folder)) {
 						return false;
 					}
 				}
