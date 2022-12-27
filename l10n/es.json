@@ -54,6 +54,8 @@
     "Drive" : "Drive",
     "Ignore shared files" : "Ignorar archivos compartidos",
     "Google documents import format" : "Formato de importación de documentos Google",
+    "Your Google Drive ({formSize} + {formSharedSize} shared with you)" : "Su Google Drive ({formSize} + {formSharedSize} compartido contigo)",
+    "Your Google Drive ({formSize})" : "Su Google Drive ({formSize})",
     "Import Google Drive files" : "Importar archivos de Google Drive",
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Tu Google Drive es mayor que tu espacio disponible ({formSpace})",
     "Cancel Google Drive import" : "Detener importación de Google Drive",
@@ -82,6 +84,7 @@
     "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} Google foto (>{formSize})",">{nbPhotos} Google fotos (>{formSize})",">{nbPhotos} Google fotos (>{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} foto importada","{amount} fotos importadas","{amount} fotos importadas"],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} archivo importado ({progress}%)","{amount} archivos importados ({progress}%)","{amount} archivos importados ({progress}%)"],
-    "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} contacto importado con éxito en {name}","{number} contactos importados con éxito en {name}","{number} contactos importados con éxito en {name}"]
+    "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} contacto importado con éxito en {name}","{number} contactos importados con éxito en {name}","{number} contactos importados con éxito en {name}"],
+    "_{total} event successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_::_{total} events successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_" : ["{total} evento fue importado exitosamente en {name} ({nbAdded} creado, {nbUpdated} actualizado)","{total} eventos fueron importados exitosamente en {name} ({nbAdded} creados, {nbUpdated} actualizados)","{total} eventos fueron importados exitosamente en {name} ({nbAdded} creados, {nbUpdated} actualizados)"]
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }
