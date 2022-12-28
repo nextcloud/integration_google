@@ -195,32 +195,23 @@ class GoogleContactsAPIService {
 			}
 			$vCard = new VCard();
 
-			$displayName = null;
-			$familyName = null;
-			$firstName = null;
+			$displayName = '';
 			// we just take first name
-			if (!isset($c['names']) || !is_array($c['names'])) {
-				$this->logger->debug('Skipping contact with no names array', ['app' => Application::APP_ID]);
-				continue;
-			}
-			foreach ($c['names'] as $n) {
-				$displayName = $n['displayName'] ?? '';
-				$familyName = $n['familyName'] ?? '';
-				$firstName = $n['givenName'] ?? '';
-				if ($displayName) {
-					$prop = $vCard->createProperty('FN', $displayName);
-					$vCard->add($prop);
+			if (isset($c['names']) && is_array($c['names'])) {
+				foreach ($c['names'] as $n) {
+					$displayName = $n['displayName'] ?? '';
+					$familyName = $n['familyName'] ?? '';
+					$firstName = $n['givenName'] ?? '';
+					if ($familyName || $firstName) {
+						$prop = $vCard->createProperty('N', [0 => $familyName, 1 => $firstName, 2 => '', 3 => '', 4 => '']);
+						$vCard->add($prop);
+					}
+					break;
 				}
-				if ($familyName || $firstName) {
-					$prop = $vCard->createProperty('N', [0 => $familyName, 1 => $firstName, 2 => '', 3 => '', 4 => '']);
-					$vCard->add($prop);
-				}
-				break;
 			}
-			// we don't want empty names
-			if (!$displayName && !$familyName && !$firstName) {
-				$this->logger->debug('Skipping contact with no displayname/familyname/firstname', ['app' => Application::APP_ID]);
-				continue;
+			if ($displayName) {
+				$prop = $vCard->createProperty('FN', $displayName);
+				$vCard->add($prop);
 			}
 
 			// notes
