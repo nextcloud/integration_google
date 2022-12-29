@@ -155,6 +155,7 @@ class GoogleContactsAPIService {
 	 * @return array
 	 */
 	public function importContacts(string $userId, ?string $uri, int $key, ?string $newAddrBookName): array {
+		$existingAddressBook = null;
 		if ($key === 0) {
 			$addressBooks = $this->contactsManager->getUserAddressBooks();
 			foreach ($addressBooks as $k => $ab) {
@@ -180,19 +181,48 @@ class GoogleContactsAPIService {
 			if (!$addressBook) {
 				return ['error' => 'no such address book'];
 			}
+			$existingAddressBook = $addressBook;
 		}
 
 		$groupsById = $this->getContactGroupsById($userId);
 		$contacts = $this->getContactList($userId);
 		$nbAdded = 0;
+		$nbUpdated = 0;
 		$totalContactNumber = 0;
 		foreach ($contacts as $k => $c) {
 			$totalContactNumber++;
-			// avoid existing contacts
-			if ($this->contactExists($c, $key)) {
-				$this->logger->debug('Skipping contact which already exists', ['contact' => $c, 'app' => Application::APP_ID]);
+
+			$googleResourceName = $c['resourceName'] ?? null;
+			if ($googleResourceName === null) {
+				$this->logger->debug('Skipping contact with no resourceName', ['contact' => $c, 'app' => Application::APP_ID]);
 				continue;
 			}
+			// contacts are not displayed in the Contacts app if there are slashes in their URI...
+			$googleResourceName = str_replace('/', '_', $googleResourceName);
+
+			// check if contact exists and needs to be updated
+			$existingContact = null;
+			if ($existingAddressBook !== null) {
+				$existingContact = $this->cdBackend->getCard($key, $googleResourceName);
+				if ($existingContact) {
+					$googleUpdateTime = $c['metadata']['sources'][0]['updateTime'] ?? null;
+					if ($googleUpdateTime === null) {
+						$googleUpdateTimestamp = 0;
+					} else {
+						try {
+							$googleUpdateTimestamp = (new Datetime($googleUpdateTime))->getTimestamp();
+						} catch (Exception | Throwable $e) {
+							$googleUpdateTimestamp = 0;
+						}
+					}
+
+					if ($googleUpdateTimestamp <= $existingContact['lastmodified']) {
+						$this->logger->debug('Skipping existing contact which is up-to-date', ['contact' => $c, 'app' => Application::APP_ID]);
+						continue;
+					}
+				}
+			}
+
 			$vCard = new VCard();
 
 			$displayName = '';
@@ -406,11 +436,20 @@ class GoogleContactsAPIService {
 				}
 			}
 
-			try {
-				$this->cdBackend->createCard($key, 'goog' . $k, $vCard->serialize());
-				$nbAdded++;
-			} catch (Throwable | Exception $e) {
-				$this->logger->warning('Error when creating contact', ['exception' => $e, 'app' => Application::APP_ID]);
+			if ($existingContact === null || $existingContact === false) {
+				try {
+					$this->cdBackend->createCard($key, $googleResourceName, $vCard->serialize());
+					$nbAdded++;
+				} catch (Throwable|Exception $e) {
+					$this->logger->warning('Error when creating contact', ['exception' => $e, 'contact' => $c, 'app' => Application::APP_ID]);
+				}
+			} else {
+				try {
+					$this->cdBackend->updateCard($key, $googleResourceName, $vCard->serialize());
+					$nbUpdated++;
+				} catch (Throwable|Exception $e) {
+					$this->logger->warning('Error when updating contact', ['exception' => $e, 'contact' => $c, 'app' => Application::APP_ID]);
+				}
 			}
 		}
 		$this->logger->debug($totalContactNumber . ' contacts seen', ['app' => Application::APP_ID]);
@@ -419,34 +458,10 @@ class GoogleContactsAPIService {
 		if (isset($contactGeneratorReturn['error'])) {
 			return $contactGeneratorReturn;
 		}
-		return ['nbAdded' => $nbAdded];
-	}
-
-	/**
-	 * @param array $contact
-	 * @param int $addressBookKey
-	 * @return bool
-	 */
-	private function contactExists(array $contact, int $addressBookKey): bool {
-		$displayName = null;
-		// $familyName = null;
-		// $firstName = null;
-		if (isset($contact['names']) && is_array($contact['names'])) {
-			foreach ($contact['names'] as $n) {
-				$displayName = $n['displayName'] ?? '';
-				// $familyName = $n['familyName'] ?? '';
-				// $firstName = $n['givenName'] ?? '';
-				break;
-			}
-			if ($displayName) {
-				$searchResult = $this->contactsManager->search($displayName, ['FN']);
-				foreach ($searchResult as $resContact) {
-					if ($resContact['FN'] === $displayName && (int)$resContact['addressbook-key'] === $addressBookKey) {
-						return true;
-					}
-				}
-			}
-		}
-		return false;
+		return [
+			'nbSeen' => $totalContactNumber,
+			'nbAdded' => $nbAdded,
+			'nbUpdated' => $nbUpdated,
+		];
 	}
 }

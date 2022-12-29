@@ -640,9 +640,17 @@ export default {
 			const url = generateUrl('/apps/integration_google/import-contacts')
 			axios.get(url, req)
 				.then((response) => {
+					const nbSeen = response.data.nbSeen
 					const nbAdded = response.data.nbAdded
+					const nbUpdated = response.data.nbUpdated
 					showSuccess(
-						this.n('integration_google', '{number} contact successfully imported in {name}', '{number} contacts successfully imported in {name}', nbAdded, { number: nbAdded, name: this.selectedAddressBookName })
+						this.n(
+							'integration_google',
+							'{nbSeen} Google contact seen. {nbAdded} added, {nbUpdated} updated in {name}',
+							'{nbSeen} Google contacts seen. {nbAdded} added, {nbUpdated} updated in {name}',
+							nbSeen,
+							{ nbAdded, nbSeen, nbUpdated, name: this.selectedAddressBookName }
+						)
 					)
 					this.showAddressBooks = false
 				})
