@@ -79,7 +79,6 @@ OC.L10N.register(
     "Choose where to write imported files" : "Escolla onde gravar os ficheiros importados",
     "Choose where to write imported photos" : "Escolla onde gravar as fotos importadas",
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} foto importada","{amount} fotos importadas"],
-    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} ficheiro importado ({progress}%)","{amount} ficheiros importados ({progress}%)"],
-    "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} contacto foi importado sactifactoriamente en {name}","{number} contactos foron importados sactifactoriamente en {name}"]
+    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} ficheiro importado ({progress}%)","{amount} ficheiros importados ({progress}%)"]
 },
 "nplurals=2; plural=(n != 1);");

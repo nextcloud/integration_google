@@ -86,7 +86,6 @@ OC.L10N.register(
     "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} Google foto (>{formSize})",">{nbPhotos} Google fotos (>{formSize})",">{nbPhotos} Google fotos (>{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} fotos importadas","{amount} foto importada","{amount} foto importada"],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} arquivo importado ({progresso}%)","{amount} arquivos importados ({progresso}%)","{amount} arquivos importados ({progresso}%)"],
-    "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} contato importado com sucesso em {name}","{number} contatos importados com sucesso em {name}","{number} contatos importados com sucesso em {name}"],
     "_{total} event successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_::_{total} events successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_" : ["{total} evento importado com sucesso em {name} ({nbAdded} criado, {nbUpdated} atualizado)","{total} eventos importados com sucesso em {name} ({nbAdded} criados, {nbUpdated} atualizados)","{total} eventos importados com sucesso em {name} ({nbAdded} criados, {nbUpdated} atualizados)"]
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

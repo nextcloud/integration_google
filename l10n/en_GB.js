@@ -86,7 +86,6 @@ OC.L10N.register(
     "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} Google photo (>{formSize})",">{nbPhotos} Google photos (>{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} photo imported","{amount} photos imported"],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} file imported ({progress}%)","{amount} files imported ({progress}%)"],
-    "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} contact successfully imported in {name}","{number} contacts successfully imported in {name}"],
     "_{total} event successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_::_{total} events successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_" : ["{total} event successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)","{total} events successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)"]
 },
 "nplurals=2; plural=(n != 1);");

@@ -81,7 +81,6 @@
     "Choose where to write imported photos" : "Изберете къде да запишете импортираните снимки",
     "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} Google снимкa (>{formSize})",">{nbPhotos} Google снимки (>{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} снимки са импортирани","{amount} снимки са импортирани"],
-    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} импортирани файлове ({progress}%)","{amount} импортирани файлове ({progress}%)"],
-    "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} контакта успешно импортирани в {name}","{number} контакта, успешно импортирани в {name}"]
+    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} импортирани файлове ({progress}%)","{amount} импортирани файлове ({progress}%)"]
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

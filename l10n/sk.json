@@ -81,7 +81,6 @@
     "Choose where to write imported photos" : "Vyberte kam zapísať importované obrázky",
     "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} Fotka Google (>{formSize})",">{nbPhotos} Fotky Google (>{formSize})",">{nbPhotos} Fotky Google (>{formSize})",">{nbPhotos} Fotky Google (>{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} importovaná fotka","{amount} importované fotky","{amount} importované fotky","{amount} importovaných fotiek"],
-    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} importovaný súbor ({progress}%)","{amount} importované súbory ({progress}%)","{amount} importované súbory ({progress}%)","{amount} importovaných súborov ({progress}%)"],
-    "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} úspešne importovaný kontakt do {name}","{number} úspešne importované kontakty do {name}","{number} úspešne importované kontakty do {name}","{number} úspešne importovaných kontaktov do {name}"]
+    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} importovaný súbor ({progress}%)","{amount} importované súbory ({progress}%)","{amount} importované súbory ({progress}%)","{amount} importovaných súborov ({progress}%)"]
 },"pluralForm" :"nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);"
 }

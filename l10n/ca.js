@@ -75,7 +75,6 @@ OC.L10N.register(
     "Starting importing files in {targetPath} directory" : "S'està iniciant la importació de fitxers al directori {targetPath}",
     "Failed to start importing Google Drive" : "No s'ha pogut començar a importar Google Drive",
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} foto importada","{amount} fotos importades"],
-    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} fitxer importat ({progress}%)","{amount} fitxers importats ({progress}%)"],
-    "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} contacte s'ha importat correctament a {name}","{number} contactes s'han importat correctament a {name}"]
+    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} fitxer importat ({progress}%)","{amount} fitxers importats ({progress}%)"]
 },
 "nplurals=2; plural=(n != 1);");

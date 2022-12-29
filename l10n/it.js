@@ -81,7 +81,6 @@ OC.L10N.register(
     "Choose where to write imported photos" : "Scegli dove scrivere le foto importate",
     "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} foto di Google (>{formSize})",">{nbPhotos} foto di Google (>{formSize})",">{nbPhotos} foto di Google (>{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} foto importata","{amount} foto importate","{amount} foto importate"],
-    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} file importato ({progress}%)","{amount} file importati ({progress}%)","{amount} file importati ({progress}%)"],
-    "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} contatto importato correttamente in {name}","{number} contatti importati correttamente in {name}","{number} contatti importati correttamente in {name}"]
+    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} file importato ({progress}%)","{amount} file importati ({progress}%)","{amount} file importati ({progress}%)"]
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

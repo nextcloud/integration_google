@@ -76,7 +76,6 @@
     "Choose where to write imported files" : "Izbor mesta za shranjevanje uvoženih datotek",
     "Choose where to write imported photos" : "Izbor mesta za shranjevanje uvoženih slik",
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} uvožena slika","{amount} uvoženi sliki","{amount} uvožene slike","{amount} uvoženih slik"],
-    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} uvožena datoteka ({progress}%)","{amount} uvoženi datoteki ({progress}%)","{amount} uvožene datoteke ({progress}%)","{amount} uvoženih datotek ({progress}%)"],
-    "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} stik je uspešno uvožen v {name}","{number} stika sta uspešno uvožena v {name}","{number} stiki so uspešno uvoženi v {name}","{number} stikov je uspešno uvoženih v {name}"]
+    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} uvožena datoteka ({progress}%)","{amount} uvoženi datoteki ({progress}%)","{amount} uvožene datoteke ({progress}%)","{amount} uvoženih datotek ({progress}%)"]
 },"pluralForm" :"nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);"
 }

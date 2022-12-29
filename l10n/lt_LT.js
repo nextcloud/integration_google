@@ -69,7 +69,6 @@ OC.L10N.register(
     "Starting importing files in {targetPath} directory" : "Pradedamas failų importavimas į {targetPath} katalogą",
     "Failed to start importing Google Drive" : "Nepavyko pradėti „Google“ disko importavimo",
     "_{amount} photo imported_::_{amount} photos imported_" : ["Importuota {amount} nuotrauka","Importuotos {amount} nuotraukos","Importuota {amount} nuotraukų","Importuota {amount} nuotrauka"],
-    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["Importuotas {amount} failas ({progress}%)","Importuoti {amount} failai ({progress}%)","Importuota {amount} failų ({progress}%)","Importuotas {amount} failas ({progress}%)"],
-    "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} adresatas sėkmingai importuotas į {name}","{number} adresatai sėkmingai importuoti į {name}","{number} adresatų sėkmingai importuota į {name}","{number} adresatas sėkmingai importuotas į {name}"]
+    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["Importuotas {amount} failas ({progress}%)","Importuoti {amount} failai ({progress}%)","Importuota {amount} failų ({progress}%)","Importuotas {amount} failas ({progress}%)"]
 },
 "nplurals=4; plural=(n % 10 == 1 && (n % 100 > 19 || n % 100 < 11) ? 0 : (n % 10 >= 2 && n % 10 <=9) && (n % 100 > 19 || n % 100 < 11) ? 1 : n % 1 != 0 ? 2: 3);");

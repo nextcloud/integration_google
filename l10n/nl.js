@@ -81,7 +81,6 @@ OC.L10N.register(
     "Choose where to write imported photos" : "Kies waar geïmporteerde foto's moeten worden weggeschreven",
     "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} Google foto's (>{formSize})",">{nbPhotos} Google foto's (>{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} foto geïmporteerd","{amount} foto's geïmporteerd"],
-    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} bestand geïmporteerd ({progress}%)","{amount} bestanden geïmporteerd ({progress}%)"],
-    "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} contactpersoon succesvol geïmporteerd in {name}","{number} contactpersonen succesvol geïmporteerd in {name}"]
+    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} bestand geïmporteerd ({progress}%)","{amount} bestanden geïmporteerd ({progress}%)"]
 },
 "nplurals=2; plural=(n != 1);");

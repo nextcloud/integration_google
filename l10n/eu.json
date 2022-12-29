@@ -81,7 +81,6 @@
     "Choose where to write imported photos" : "Aukeratu  non idatzi inportatutako argazkiak",
     "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} Google argazkia (>{formSize})",">{nbPhotos} Google argazkiak (>{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} argazki inportatu dira ","{amount} argazki inportatu dira "],
-    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} fitxategi inportatu dira ({progress}%)","{amount} fitxategi inportatu dira ({progress}%)"],
-    "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["Kontaktu {number} ondo inportatu da {name}-ra","{number} kontaktu ondo inportatu dira {name}-ra"]
+    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} fitxategi inportatu dira ({progress}%)","{amount} fitxategi inportatu dira ({progress}%)"]
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

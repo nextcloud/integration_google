@@ -83,7 +83,6 @@ OC.L10N.register(
     "Choose where to write imported photos" : "Válassza ki az importált fotók helyét",
     "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} Google fénykép (>{formSize})",">{nbPhotos} Google fénykép (>{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} fotó importálva","{amount} fotó importálva"],
-    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} fájl importálva ({progress}%)","{amount} fájl importálva ({progress}%)"],
-    "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} névjegy sikeresen importálva ide: {name}","{number} névjegy sikeresen importálva ide: {name}"]
+    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} fájl importálva ({progress}%)","{amount} fájl importálva ({progress}%)"]
 },
 "nplurals=2; plural=(n != 1);");

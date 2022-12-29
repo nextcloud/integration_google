@@ -83,7 +83,6 @@ OC.L10N.register(
     "Choose where to write imported photos" : "Избери каде да ги снимите увезените фотографии",
     "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} Google фотографија (>{formSize})",">{nbPhotos} Google фотографии (>{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} фотографија увезена","{amount} фотографии увезени"],
-    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} датотека е увезена ({progress}%)","{amount} датотеки се увезени ({progress}%)"],
-    "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} контакт е успешно увезен во {name}","{number} контакти се успешно увезени во {name}"]
+    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} датотека е увезена ({progress}%)","{amount} датотеки се увезени ({progress}%)"]
 },
 "nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;");

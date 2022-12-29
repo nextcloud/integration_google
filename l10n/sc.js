@@ -79,7 +79,6 @@ OC.L10N.register(
     "Choose where to write imported files" : "Sèbera in ue est a pònnere is archìvios importados",
     "Choose where to write imported photos" : "Sèbera in ue est a pònnere is fotos importadas",
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} fotos importadas","{amount} fotos importadas"],
-    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} archìvios importados ({progress}%)","{amount} archìvios importados ({progress}%)"],
-    "_{number} contact successfully imported in {name}_::_{number} contacts successfully imported in {name}_" : ["{number} cuntatos importados in manera curreta in {name}","{number} contatti importati correttamente in {name}"]
+    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} archìvios importados ({progress}%)","{amount} archìvios importados ({progress}%)"]
 },
 "nplurals=2; plural=(n != 1);");
