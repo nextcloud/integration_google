@@ -86,6 +86,7 @@ OC.L10N.register(
     "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} 張 Google 照片（>{formSize}）"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["導入了 {amount} 張照片"],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["導入了 {amount} 個檔案（{progress}%）"],
+    "_{nbSeen} Google contact seen. {nbAdded} added, {nbUpdated} updated in {name}_::_{nbSeen} Google contacts seen. {nbAdded} added, {nbUpdated} updated in {name}_" : ["在 {name} 已看到 {nbSeen} 個 Google 聯絡人。已添加 {nbAdded} 個 ，更新了 {nbUpdated} 個"],
     "_{total} event successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_::_{total} events successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_" : ["在 {name} 中成功導入了 {total} 個活動（創建了 {nbAdded} 個，更新了 {nbUpdated} 個）"]
 },
 "nplurals=1; plural=0;");
