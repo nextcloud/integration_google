@@ -56,6 +56,8 @@ OC.L10N.register(
     "Drive" : "Drive",
     "Ignore shared files" : "Paylaşılmış dosyalar yok sayılsın",
     "Google documents import format" : "Google belgeleri içe aktarma biçimi",
+    "Your Google Drive ({formSize} + {formSharedSize} shared with you)" : "Google Drive alanınız ({formSize} + {formSharedSize} sizinle paylaşılan)",
+    "Your Google Drive ({formSize})" : "Google Drive alanınız ({formSize})",
     "Import Google Drive files" : "Google Drive dosyalarını içe aktar",
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Google Drive depolama alanınız kalan boş alanınızdan daha büyük gibi görünüyor ({formSpace})",
     "Cancel Google Drive import" : "Google Drive içe aktarmayı iptal et",
@@ -83,6 +85,8 @@ OC.L10N.register(
     "Choose where to write imported photos" : "İçe aktarılan fotoğrafların kaydedileceği konumu seçin",
     "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} Google fotoğrafı (>{formSize})",">{nbPhotos} Google fotoğrafı (>{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} fotoğraf içe aktarıldı","{amount} fotoğraf içe aktarıldı"],
-    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} dosya içe aktarıldı ({progress}%)","{amount} dosya içe aktarıldı ({progress}%)"]
+    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} dosya içe aktarıldı ({progress}%)","{amount} dosya içe aktarıldı ({progress}%)"],
+    "_{nbSeen} Google contact seen. {nbAdded} added, {nbUpdated} updated in {name}_::_{nbSeen} Google contacts seen. {nbAdded} added, {nbUpdated} updated in {name}_" : ["{nbSeen} Google kişisi bulundu. {nbAdded} kişi eklendi, {name} içinde {nbUpdated} kişi güncellendi ","{nbSeen} Google kişisi bulundu. {nbAdded} kişi eklendi, {name} içinde {nbUpdated} kişi güncellendi "],
+    "_{total} event successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_::_{total} events successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_" : ["{total} etkinlik {name} içine aktarıldı ({nbAdded} eklendi, {nbUpdated} güncellendi)","{total} etkinlik {name} içine aktarıldı ({nbAdded} eklendi, {nbUpdated} güncellendi)"]
 },
 "nplurals=2; plural=(n > 1);");
