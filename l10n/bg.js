@@ -56,6 +56,8 @@ OC.L10N.register(
     "Drive" : "Диск",
     "Ignore shared files" : "Игнориране на споделените файлове",
     "Google documents import format" : "Формат за импортиране на документи от Google",
+    "Your Google Drive ({formSize} + {formSharedSize} shared with you)" : "Вашият Google диск({formSize} + {formSharedSize}, споделен с вас)",
+    "Your Google Drive ({formSize})" : "Вашият Google диск({formSize})",
     "Import Google Drive files" : "Импортиране на файлове от Google Диск",
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Вашият Google Диск е по-голям от оставащото ви място ({formSpace})",
     "Cancel Google Drive import" : "Отказ на импортирането от Google Диск",
@@ -83,6 +85,8 @@ OC.L10N.register(
     "Choose where to write imported photos" : "Изберете къде да запишете импортираните снимки",
     "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} Google снимкa (>{formSize})",">{nbPhotos} Google снимки (>{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} снимки са импортирани","{amount} снимки са импортирани"],
-    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} импортирани файлове ({progress}%)","{amount} импортирани файлове ({progress}%)"]
+    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} импортирани файлове ({progress}%)","{amount} импортирани файлове ({progress}%)"],
+    "_{nbSeen} Google contact seen. {nbAdded} added, {nbUpdated} updated in {name}_::_{nbSeen} Google contacts seen. {nbAdded} added, {nbUpdated} updated in {name}_" : ["{nbSeen} Видяни контакти в Google. {nbAdded} добавен, {nbUpdated} актуализиран в {name}","{nbSeen} Видян в Google контакти. {nbAdded} добавен, {nbUpdated} актуализиран в {name}"],
+    "_{total} event successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_::_{total} events successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_" : ["{total} успешно импортирани събития в {name} ({nbAdded} създадени, {nbUpdated} актуализирани)","{total} успешно импортирани събития в {name} ({nbAdded} създадени, {nbUpdated} актуализирани)"]
 },
 "nplurals=2; plural=(n != 1);");
