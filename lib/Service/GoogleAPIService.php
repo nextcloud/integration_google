@@ -277,7 +277,7 @@ class GoogleAPIService {
 				return ['error' => $this->l10n->t('Bad credentials')];
 			} else {
 				return [
-					'content' => $body,
+					'body' => $body,
 					'headers' => $response->getHeaders(),
 				];
 			}

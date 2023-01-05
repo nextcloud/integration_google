@@ -317,7 +317,7 @@ class GoogleContactsAPIService {
 								}
 							}
 
-							$b64Photo = stripslashes('data:image/' . strtolower($type) . ';base64\,') . base64_encode($photoFile['content']);
+							$b64Photo = stripslashes('data:image/' . strtolower($type) . ';base64\,') . base64_encode($photoFile['body']);
 							try {
 								$prop = $vCard->createProperty(
 									'PHOTO',
