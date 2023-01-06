@@ -248,10 +248,10 @@ class GoogleDriveAPIService {
 		// create root folder
 		$userFolder = $this->root->getUserFolder($userId);
 		if (!$userFolder->nodeExists($targetPath)) {
-			$folder = $userFolder->newFolder($targetPath);
+			$rootImportFolder = $userFolder->newFolder($targetPath);
 		} else {
-			$folder = $userFolder->get($targetPath);
-			if (!($folder instanceof Folder)) {
+			$rootImportFolder = $userFolder->get($targetPath);
+			if (!($rootImportFolder instanceof Folder)) {
 				return ['error' => 'Impossible to create ' . '<redacted>' . ' folder'];
 			}
 		}
@@ -276,6 +276,7 @@ class GoogleDriveAPIService {
 				$directoriesById[$dir['id']] = [
 					'name' => preg_replace('/\//', '-slash-', $dir['name']),
 					'parent' => (isset($dir['parents']) && count($dir['parents']) > 0) ? $dir['parents'][0] : null,
+					'modifiedTime' => $dir['modifiedTime'] ?? null,
 				];
 				// what we should explore
 				if (!array_key_exists($dir['id'], $directoryProgress)) {
@@ -291,7 +292,7 @@ class GoogleDriveAPIService {
 		}
 
 		// create directories (recursive powa)
-		if (!$this->createDirsUnder($directoriesById, $folder)) {
+		if (!$this->createDirsUnder($directoriesById, $rootImportFolder)) {
 			return ['error' => 'Impossible to create Drive directories'];
 		}
 
@@ -334,7 +335,7 @@ class GoogleDriveAPIService {
 						&& isset($directoriesById[$fileItem['parents'][0]], $directoriesById[$fileItem['parents'][0]]['node'])) {
 						$saveFolder = $directoriesById[$fileItem['parents'][0]]['node'];
 					} else {
-						$saveFolder = $folder;
+						$saveFolder = $rootImportFolder;
 					}
 
 					$fileName = $this->getFileName($fileItem, $userId, in_array($fileItem['id'], $conflictingIds));
@@ -369,13 +370,14 @@ class GoogleDriveAPIService {
 						}
 					} elseif (!$saveFolder->nodeExists($fileName)) {
 						$filePathInDrive = $dirId === 'root' ? '/' . $fileItem['name'] : $directoriesById[$dirId]['name'] . '/' . $fileItem['name'];
-						$this->logFailedDownloadsForUser($folder, $filePathInDrive);
+						$this->logFailedDownloadsForUser($rootImportFolder, $filePathInDrive);
 					}
 				}
 				$params['pageToken'] = $result['nextPageToken'] ?? '';
 			} while (isset($result['nextPageToken']));
 			// this dir was fully imported
 			$directoryProgress[$dirId] = 1;
+			$this->touchFolder($directoriesById[$dirId]);
 		}
 
 		return [
@@ -383,6 +385,14 @@ class GoogleDriveAPIService {
 			'targetPath' => $targetPath,
 			'finished' => true,
 		];
+	}
+
+	private function touchFolder(array $dirInfo): void {
+		if (isset($dirInfo['modifiedTime']) && $dirInfo['modifiedTime'] !== null) {
+			$d = new Datetime($dirInfo['modifiedTime']);
+			$ts = $d->getTimestamp();
+			$dirInfo['node']->touch($ts);
+		}
 	}
 
 	/**
