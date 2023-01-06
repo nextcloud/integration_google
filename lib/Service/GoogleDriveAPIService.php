@@ -377,9 +377,12 @@ class GoogleDriveAPIService {
 			} while (isset($result['nextPageToken']));
 			// this dir was fully imported
 			$directoryProgress[$dirId] = 1;
-			$this->touchFolder($directoriesById[$dirId]);
+			if ($dirId !== 'root') {
+				$this->touchFolder($directoriesById[$dirId]);
+			}
 		}
 
+		$this->touchRootImportFolder($userId, $rootImportFolder);
 		return [
 			'nbDownloaded' => $nbDownloaded,
 			'targetPath' => $targetPath,
@@ -387,11 +390,60 @@ class GoogleDriveAPIService {
 		];
 	}
 
+	/**
+	 * @param array $dirInfo
+	 * @return void
+	 * @throws Exception
+	 */
 	private function touchFolder(array $dirInfo): void {
 		if (isset($dirInfo['modifiedTime']) && $dirInfo['modifiedTime'] !== null) {
 			$d = new Datetime($dirInfo['modifiedTime']);
 			$ts = $d->getTimestamp();
 			$dirInfo['node']->touch($ts);
+		}
+	}
+
+	/**
+	 * @param string $userId
+	 * @param Folder $rootImportFolder
+	 * @return void
+	 * @throws InvalidPathException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	private function touchRootImportFolder(string $userId, Folder $rootImportFolder): void {
+		$maxTs = 0;
+
+		$params = [
+			'pageSize' => 1000,
+			'fields' => implode(',', [
+				'nextPageToken',
+				'files/id',
+				'files/name',
+				'files/parents',
+				'files/mimeType',
+				'files/ownedByMe',
+				'files/webContentLink',
+				'files/modifiedTime',
+			]),
+			'q' => "'root' in parents",
+		];
+		do {
+			$result = $this->googleApiService->request($userId, 'drive/v3/files', $params);
+			foreach ($result['files'] as $fileItem) {
+				if (isset($fileItem['modifiedTime'])) {
+					$d = new Datetime($fileItem['modifiedTime']);
+					$ts = $d->getTimestamp();
+					if ($ts > $maxTs) {
+						$maxTs = $ts;
+					}
+				}
+			}
+			$params['pageToken'] = $result['nextPageToken'] ?? '';
+		} while (isset($result['nextPageToken']));
+
+		if ($maxTs !== 0) {
+			$rootImportFolder->touch($maxTs);
 		}
 	}
 
