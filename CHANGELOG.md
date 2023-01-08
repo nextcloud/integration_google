@@ -6,17 +6,32 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
-## 1.0.9 – 2022-12-21
+## 1.0.9 – 2023-01-08
 ### Added
-- contact group import
+- import contact groups
   [#124](https://github.com/nextcloud/integration_google/issues/124) @zgypa
+- import contact notes
+- import contact websites
+- set last modified date of imported directories
 
 ### Changed
-- update npm pkgs, adjust to @nextcloud/vue 7.2.0
+- update npm pkgs, adjust to @nextcloud/vue 7.3.0
+- improve and speedup calendar import, update existing events if needed
+- speedup drive size calculation
+- improve contact import, update existing ones if needed
 
 ### Fixed
 - import photos/albums with slashes in their name
-[#122](https://github.com/nextcloud/integration_google/pull/122) @Gp2mv3
+  [#122](https://github.com/nextcloud/integration_google/pull/122) @Gp2mv3
+- recover after an import job is brutally stopped with a 1h timeout before everything can start again
+  [#35](https://github.com/nextcloud/integration_google/issues/35)
+  [#115](https://github.com/nextcloud/integration_google/issues/115)
+  [#116](https://github.com/nextcloud/integration_google/issues/116)
+- preserve exif data when downloading photos (all except geolocation which is stripped by google)
+  [#119](https://github.com/nextcloud/integration_google/issues/119) @Sid127
+- only add file name suffix (google file id) for duplicated names (yes, google allows multiple files with the same name in a directory)
+  [#127](https://github.com/nextcloud/integration_google/issues/127) @Mezgrman
+- don't skip contacts with no names
 
 ## 1.0.8 – 2022-08-24
 ### Added
