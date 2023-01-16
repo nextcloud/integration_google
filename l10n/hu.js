@@ -56,6 +56,8 @@ OC.L10N.register(
     "Drive" : "Google Drive",
     "Ignore shared files" : "A megosztott fájlok mellőzése",
     "Google documents import format" : "A Google dokumentumok importálási formátuma",
+    "Your Google Drive ({formSize} + {formSharedSize} shared with you)" : "Az Ön Google Drive tárhelye ({formSize} + {formSharedSize} megosztva Önnel)",
+    "Your Google Drive ({formSize})" : "Az Ön Google Drive tárhelye ({formSize})",
     "Import Google Drive files" : "Google Drive fájlok importálása",
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Google Drive-ja nagyobb, mint a fennmaradó szabad hely ({formSpace})",
     "Cancel Google Drive import" : "Google Drive importálásának törlése",
@@ -83,6 +85,8 @@ OC.L10N.register(
     "Choose where to write imported photos" : "Válassza ki az importált fotók helyét",
     "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} Google fénykép (>{formSize})",">{nbPhotos} Google fénykép (>{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} fotó importálva","{amount} fotó importálva"],
-    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} fájl importálva ({progress}%)","{amount} fájl importálva ({progress}%)"]
+    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} fájl importálva ({progress}%)","{amount} fájl importálva ({progress}%)"],
+    "_{nbSeen} Google contact seen. {nbAdded} added, {nbUpdated} updated in {name}_::_{nbSeen} Google contacts seen. {nbAdded} added, {nbUpdated} updated in {name}_" : ["{nbSeen} Google-névjegy látva. {nbAdded} hozzáadva, {nbUpdated} frissítve a következőben: {name}.","{nbSeen} Google-névjegy látva. {nbAdded} hozzáadva, {nbUpdated} frissítve a következőben: {name}."],
+    "_{total} event successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_::_{total} events successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_" : ["{total} esemény sikeresen importálva a következőbe: {name} ({nbAdded} létrehozva, {nbUpdated} frissítve)","{total} esemény sikeresen importálva a következőbe: {name} ({nbAdded} létrehozva, {nbUpdated} frissítve)"]
 },
 "nplurals=2; plural=(n != 1);");
