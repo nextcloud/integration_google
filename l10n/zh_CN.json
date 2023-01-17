@@ -27,6 +27,7 @@
     "Google admin options saved" : "Google 管理员选项已保存",
     "No Google OAuth app configured. Ask your Nextcloud administrator to configure Google connected accounts admin section." : "没有配置谷歌OAuth应用。请求你的Nextcloud管理员配置谷歌连接帐户管理部分。",
     "Authentication" : "验证",
+    "Sign in with Google" : "使用谷歌登录",
     "Connected as {user}" : "作为 {user} 已连接",
     "Disconnect from Google" : "已从Google断开连接",
     "Contacts" : "联系人",
