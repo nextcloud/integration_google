@@ -43,6 +43,23 @@ The Google Integration app is available for Nextcloud >= 22.
 The app needs some setup in the Google API Console in order to work.
 To do this, go to Nextcloud Settings > Administration > Connected accounts and follow the instructions in the "Google integration" section.
 
+After setting up the Google API, head to Nextcloud Settings > Google Synchronization.
+
+The first time coming here, you should only see one button "Sign in with Google".
+Click this, and follow the prompts.
+Give access to everything requested (the app does not handle missing permissions gracefully).
+
+## 🔥 Usage
+
+Once signed in, you can import data and change settings by going to Nextcloud Settings > Google Synchronization.
+
+This page is equivalent to [Google Integration](integration_google)
+with the exception of the buttons "Sync calendar" next to each calendar.
+- "Import calendar" is the same as [Google Integration](integration_google). It will manually import all events from the calendar once.
+- "Sync calendar" will schedule a background job to continuously synchronize all events from that calendar with your Nextcloud calendar. This job should run every time background jobs run (Nextcloud Settings > Administration > Basic settings > Background jobs).
+
+![Screenshot of the app settings page](./docs/images/settings.png)
+
 ## **🛠️ State of maintenance**
 
 While there are many things that could be done to further improve this app, the app is currently maintained with **limited effort**. This means:
