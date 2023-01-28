@@ -11,7 +11,8 @@
 
 namespace OCA\Google\Service;
 
-use DateTime;
+use Ds\Set;
+use Datetime;
 use DateTimeZone;
 use Exception;
 use Generator;
@@ -215,6 +216,11 @@ class GoogleCalendarAPIService {
 			$ncCalId = $this->caldavBackend->createCalendar('principals/users/' . $userId, $newCalName, $params);
 		}
 
+		$unseenURIs = new Set();
+		foreach ($this->caldavBackend->getCalendarObjects($ncCalId) as $e) {
+			$unseenURIs->add($e['uri']);
+		}
+
 		// get color list
 		$eventColors = [];
 		$colors = $this->googleApiService->request($userId, 'calendar/v3/colors');
@@ -227,8 +233,16 @@ class GoogleCalendarAPIService {
 		$events = $this->getCalendarEvents($userId, $calId);
 		$nbAdded = 0;
 		$nbUpdated = 0;
+
 		foreach ($events as $e) {
 			$objectUri = $e['id'];
+
+			// If this event exists in NC, remove it from the set of events to be
+			// deleted and skip importing it
+			if ($unseenURIs->contains($objectUri)) {
+				$unseenURIs->remove($objectUri);
+				continue;
+			}
 
 			$existingEvent = null;
 			// check if we should update existing events (on existing calendars only :-)
@@ -366,6 +380,12 @@ class GoogleCalendarAPIService {
 					$this->logger->warning('Error when creating calendar event "' . '<redacted>' . '" ' . $ex->getMessage(), ['app' => Application::APP_ID]);
 				}
 			}
+		}
+
+		// Anything still unseen was deleted in Google Calendar
+		// Reflect that here
+		foreach ($unseenURIs as $uri) {
+			$this->caldavBackend->deleteCalendarObject($ncCalId, $uri, $this->caldavBackend::CALENDAR_TYPE_CALENDAR, true);
 		}
 
 		$eventGeneratorReturn = $events->getReturn();
