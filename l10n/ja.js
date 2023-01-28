@@ -1,5 +1,5 @@
 OC.L10N.register(
-    "integration_google",
+    "google_synchronization",
     {
     "Error during OAuth exchanges" : "OAuth通信中のエラー",
     "Google" : "Google",

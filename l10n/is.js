@@ -1,5 +1,5 @@
 OC.L10N.register(
-    "integration_google",
+    "google_synchronization",
     {
     "Error during OAuth exchanges" : "Villa í OAuth-samskiptum",
     "OAuth access token refused" : "OAuth-aðgangsteikni hafnað",

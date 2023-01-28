@@ -33,7 +33,7 @@ class Notifier implements INotifier {
 	 * @since 17.0.0
 	 */
 	public function getID(): string {
-		return 'integration_google';
+		return 'google_synchronization';
 	}
 	/**
 	 * Human readable name describing the notifier
@@ -42,7 +42,7 @@ class Notifier implements INotifier {
 	 * @since 17.0.0
 	 */
 	public function getName(): string {
-		return $this->factory->get('integration_google')->t('Google');
+		return $this->factory->get('google_synchronization')->t('Google');
 	}
 
 	/**
@@ -53,12 +53,12 @@ class Notifier implements INotifier {
 	 * @since 9.0.0
 	 */
 	public function prepare(INotification $notification, string $languageCode): INotification {
-		if ($notification->getApp() !== 'integration_google') {
+		if ($notification->getApp() !== 'google_synchronization') {
 			// Not my app => throw
 			throw new InvalidArgumentException();
 		}
 
-		$l = $this->factory->get('integration_google', $languageCode);
+		$l = $this->factory->get('google_synchronization', $languageCode);
 
 		switch ($notification->getSubject()) {
 			case 'import_photos_finished':

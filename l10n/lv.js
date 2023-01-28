@@ -1,5 +1,5 @@
 OC.L10N.register(
-    "integration_google",
+    "google_synchronization",
     {
     "Google API settings" : "Google API iestatījumi",
     "Client ID" : "Klienta ID",

@@ -199,7 +199,7 @@ class ConfigController extends Controller {
 				$usePopup = $this->config->getAppValue(Application::APP_ID, 'use_popup', '0') === '1';
 				if ($usePopup) {
 					return new RedirectResponse(
-						$this->urlGenerator->linkToRoute('integration_google.config.popupSuccessPage', ['username' => $username])
+						$this->urlGenerator->linkToRoute('google_synchronization.config.popupSuccessPage', ['username' => $username])
 					);
 				} else {
 					return new RedirectResponse(

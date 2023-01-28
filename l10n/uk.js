@@ -1,5 +1,5 @@
 OC.L10N.register(
-    "integration_google",
+    "google_synchronization",
     {
     "Error during OAuth exchanges" : "Помилка під час обміну OAuth",
     "OAuth access token refused" : "Маркер доступу OAuth відхилено",

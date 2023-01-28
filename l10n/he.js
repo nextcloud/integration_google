@@ -1,5 +1,5 @@
 OC.L10N.register(
-    "integration_google",
+    "google_synchronization",
     {
     "Error getting OAuth access token." : "שגיאה בקבלת אסימון גישה מסוג OAuth.",
     "Error during OAuth exchanges" : "שגיאה במהלך החלפות OAuth",

@@ -1,5 +1,5 @@
 OC.L10N.register(
-    "integration_google",
+    "google_synchronization",
     {
     "Missing refresh token in Google response." : "„Google“ atsakyme trūksta įkėlimo iš naujo prieigos rakto.",
     "Error getting OAuth access token." : "Klaida gaunant „OAuth“ prieigos raktą.",

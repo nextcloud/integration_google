@@ -1,5 +1,5 @@
 OC.L10N.register(
-    "integration_google",
+    "google_synchronization",
     {
     "No logged in user" : "Nincs bejelentkezett felhasználó",
     "Missing refresh token in Google response." : "Hiányzik a frissítési token a Google válaszából.",

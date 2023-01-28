@@ -1,5 +1,5 @@
 OC.L10N.register(
-    "integration_google",
+    "google_synchronization",
     {
     "No logged in user" : "Нема најавено сметка",
     "Missing refresh token in Google response." : "Недостасув токен во Google одговорот",

@@ -2,61 +2,61 @@
 	<div id="google_prefs" class="section">
 		<h2>
 			<GoogleIcon />
-			{{ t('integration_google', 'Google integration') }}
+			{{ t('google_synchronization', 'Google Synchronization') }}
 		</h2>
 		<p class="settings-hint">
-			{{ t('integration_google', 'If you want to allow your Nextcloud users to authenticate to Google, create an OAuth application in your Google settings.') }}
-			<a href="https://console.developers.google.com/" class="external" target="_blank">{{ t('integration_google', 'Google API settings') }}</a>
+			{{ t('google_synchronization', 'If you want to allow your Nextcloud users to authenticate to Google, create an OAuth application in your Google settings.') }}
+			<a href="https://console.developers.google.com/" class="external" target="_blank">{{ t('google_synchronization', 'Google API settings') }}</a>
 			<br>
-			{{ t('integration_google', 'Go to "APIs & Services" => "Credentials" and click on "+ CREATE CREDENTIALS" -> "OAuth client ID".') }}
+			{{ t('google_synchronization', 'Go to "APIs & Services" => "Credentials" and click on "+ CREATE CREDENTIALS" -> "OAuth client ID".') }}
 			<br>
-			{{ t('integration_google', 'Set the "Application type" to "Web application" and give a name to the application.') }}
+			{{ t('google_synchronization', 'Set the "Application type" to "Web application" and give a name to the application.') }}
 		</p>
 		<br>
 		<p class="settings-hint with-icon">
 			<InformationOutlineIcon />
-			{{ t('integration_google', 'Make sure you set one "Authorized redirect URI" to') }}
+			{{ t('google_synchronization', 'Make sure you set one "Authorized redirect URI" to') }}
 			&nbsp;<strong>{{ redirect_uri }}</strong>
 		</p>
 		<br>
 		<p class="settings-hint">
-			{{ t('integration_google', 'Put the "Client ID" and "Client secret" below.') }}
+			{{ t('google_synchronization', 'Put the "Client ID" and "Client secret" below.') }}
 			<br>
-			{{ t('integration_google', 'Finally, go to "APIs & Services" => "Library" and add the following APIs: "Google Drive API", "Google Calendar API", "People API" and "Photos Library API".') }}
+			{{ t('google_synchronization', 'Finally, go to "APIs & Services" => "Library" and add the following APIs: "Google Drive API", "Google Calendar API", "People API" and "Photos Library API".') }}
 			<br>
-			{{ t('integration_google', 'Your Nextcloud users will then see a "Connect to Google" button in their personal settings.') }}
+			{{ t('google_synchronization', 'Your Nextcloud users will then see a "Connect to Google" button in their personal settings.') }}
 		</p>
 		<div class="fields">
 			<div class="line">
 				<label for="google-client-id">
 					<KeyIcon />
-					{{ t('integration_google', 'Client ID') }}
+					{{ t('google_synchronization', 'Client ID') }}
 				</label>
 				<input id="google-client-id"
 					v-model="state.client_id"
 					type="password"
 					:readonly="readonly"
-					:placeholder="t('integration_google', 'Client ID of your Google application')"
+					:placeholder="t('google_synchronization', 'Client ID of your Google application')"
 					@focus="readonly = false"
 					@input="onInput">
 			</div>
 			<div class="line">
 				<label for="google-client-secret">
 					<KeyIcon />
-					{{ t('integration_google', 'Client secret') }}
+					{{ t('google_synchronization', 'Client secret') }}
 				</label>
 				<input id="google-client-secret"
 					v-model="state.client_secret"
 					type="password"
 					:readonly="readonly"
-					:placeholder="t('integration_google', 'Client secret of your Google application')"
+					:placeholder="t('google_synchronization', 'Client secret of your Google application')"
 					@input="onInput"
 					@focus="readonly = false">
 			</div>
 			<NcCheckboxRadioSwitch
 				:checked.sync="state.use_popup"
 				@update:checked="onUsePopupChanged">
-				{{ t('integration_google', 'Use a pop-up to authenticate') }}
+				{{ t('google_synchronization', 'Use a po-pup to authenticate') }}
 			</NcCheckboxRadioSwitch>
 		</div>
 	</div>
@@ -89,10 +89,10 @@ export default {
 
 	data() {
 		return {
-			state: loadState('integration_google', 'admin-config'),
+			state: loadState('google_synchronization', 'admin-config'),
 			// to prevent some browsers to fill fields with remembered passwords
 			readonly: true,
-			redirect_uri: window.location.protocol + '//' + window.location.host + generateUrl('/apps/integration_google/oauth-redirect'),
+			redirect_uri: window.location.protocol + '//' + window.location.host + generateUrl('/apps/google_synchronization/oauth-redirect'),
 		}
 	},
 
@@ -116,14 +116,14 @@ export default {
 			const req = {
 				values,
 			}
-			const url = generateUrl('/apps/integration_google/admin-config')
+			const url = generateUrl('/apps/google_synchronization/admin-config')
 			axios.put(url, req)
 				.then((response) => {
-					showSuccess(t('integration_google', 'Google admin options saved'))
+					showSuccess(t('google_synchronization', 'Google admin options saved'))
 				})
 				.catch((error) => {
 					showError(
-						t('integration_google', 'Failed to save Google admin options')
+						t('google_synchronization', 'Failed to save Google admin options')
 						+ ': ' + error.response.request.responseText
 					)
 				})

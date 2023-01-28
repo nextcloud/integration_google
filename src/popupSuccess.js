@@ -1,6 +1,6 @@
 import { loadState } from '@nextcloud/initial-state'
 
-const state = loadState('integration_google', 'popup-data')
+const state = loadState('google_synchronization', 'popup-data')
 const username = state.user_name
 
 if (window.opener) {

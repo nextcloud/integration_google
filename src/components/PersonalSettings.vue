@@ -2,45 +2,45 @@
 	<div id="google_prefs" class="section">
 		<h2>
 			<GoogleIcon />
-			{{ t('integration_google', 'Google data migration') }}
+			{{ t('google_synchronization', 'Google Synchronization') }}
 		</h2>
 		<p v-if="!showOAuth" class="settings-hint">
-			{{ t('integration_google', 'No Google OAuth app configured. Ask your Nextcloud administrator to configure Google connected accounts admin section.') }}
+			{{ t('google_synchronization', 'No Google OAuth app configured. Ask your Nextcloud administrator to configure Google connected accounts admin section.') }}
 		</p>
 		<div v-else
 			id="google-content">
-			<h3>{{ t('integration_google', 'Authentication') }}</h3>
+			<h3>{{ t('google_synchronization', 'Authentication') }}</h3>
 			<button v-if="!connected" class="google-oauth" @click="onOAuthClick">
 				<span class="google-signin" />
-				<span>{{ t('integration_google', 'Sign in with Google') }}</span>
+				<span>{{ t('google_synchronization', 'Sign in with Google') }}</span>
 			</button>
 			<div v-else>
 				<div class="line">
 					<label class="google-connected">
 						<CheckIcon />
-						{{ t('integration_google', 'Connected as {user}', { user: state.user_name }) }}
+						{{ t('google_synchronization', 'Connected as {user}', { user: state.user_name }) }}
 					</label>
 					<NcButton @click="onLogoutClick">
 						<template #icon>
 							<CloseIcon />
 						</template>
-						{{ t('integration_google', 'Disconnect from Google') }}
+						{{ t('google_synchronization', 'Disconnect from Google') }}
 					</NcButton>
 				</div>
 				<br>
 				<div v-if="nbContacts > 0"
 					id="google-contacts">
-					<h3>{{ t('integration_google', 'Contacts') }}</h3>
+					<h3>{{ t('google_synchronization', 'Contacts') }}</h3>
 					<div class="line">
 						<label>
 							<AccountGroupIcon />
-							{{ t('integration_google', '{amount} Google contacts', { amount: nbContacts }) }}
+							{{ t('google_synchronization', '{amount} Google contacts', { amount: nbContacts }) }}
 						</label>
 						<NcButton @click="onImportContacts">
 							<template #icon>
 								<AccountMultipleIcon />
 							</template>
-							{{ t('integration_google', 'Import Google Contacts in Nextcloud') }}
+							{{ t('google_synchronization', 'Import Google Contacts in Nextcloud') }}
 						</NcButton>
 					</div>
 					<br>
@@ -48,10 +48,10 @@
 						<select v-if="showAddressBooks"
 							v-model.number="selectedAddressBook">
 							<option :value="-1">
-								{{ t('integration_google', 'Choose where to import the contacts') }}
+								{{ t('google_synchronization', 'Choose where to import the contacts') }}
 							</option>
 							<option :value="0">
-								➕ {{ t('integration_google', 'New address book') }}
+								➕ {{ t('google_synchronization', 'New address book') }}
 							</option>
 							<option v-for="(ab, k) in addressbooks" :key="k" :value="k">
 								📕 {{ ab.name }}
@@ -61,20 +61,20 @@
 							v-model="newAddressBookName"
 							type="text"
 							class="contact-input"
-							:placeholder="t('integration_google', 'address book name')">
+							:placeholder="t('google_synchronization', 'address book name')">
 						<NcButton v-if="showAddressBooks && selectedAddressBook > -1 && (selectedAddressBook > 0 || newAddressBookName)"
 							:class="{ loading: importingContacts }"
 							@click="onFinalImportContacts">
 							<template #icon>
 								<DownloadIcon />
 							</template>
-							{{ t('integration_google', 'Import in "{name}" address book', { name: selectedAddressBookName }) }}
+							{{ t('google_synchronization', 'Import in "{name}" address book', { name: selectedAddressBookName }) }}
 						</NcButton>
 						<br>
 					</div>
 				</div>
 				<div v-if="calendars.length > 0">
-					<h3>{{ t('integration_google', 'Calendars') }}</h3>
+					<h3>{{ t('google_synchronization', 'Calendars') }}</h3>
 					<div v-for="cal in calendars" :key="cal.id" class="calendar-item">
 						<label>
 							<NcAppNavigationIconBullet :color="getCalendarColor(cal)" />
@@ -86,7 +86,7 @@
 							<template #icon>
 								<CalendarIcon />
 							</template>
-							{{ t('integration_google', 'Import calendar') }}
+							{{ t('google_synchronization', 'Import calendar') }}
 						</NcButton>
 						<NcButton
 							class="calendar-button-sync"
@@ -94,28 +94,28 @@
 							<template #icon>
 								<CalendarSyncIcon />
 							</template>
-							{{ t('integration_google', 'Sync calendar') }}
+							{{ t('google_synchronization', 'Sync calendar') }}
 						</NcButton>
 					</div>
 					<br>
 				</div>
 				<div v-if="nbPhotos > 0"
 					id="google-photos">
-					<h3>{{ t('integration_google', 'Photos') }}</h3>
+					<h3>{{ t('google_synchronization', 'Photos') }}</h3>
 					<NcCheckboxRadioSwitch v-if="!importingPhotos"
 						:checked="!state.consider_shared_albums"
 						@update:checked="onPhotoConsiderSharedChange">
-						{{ t('integration_google', 'Ignore shared albums') }}
+						{{ t('google_synchronization', 'Ignore shared albums') }}
 					</NcCheckboxRadioSwitch>
 					<br>
 					<p v-if="!importingPhotos" class="settings-hint">
 						<InformationOutlineIcon />
-						{{ t('integration_google', 'Warning: Google does not provide location data in imported photos.') }}
+						{{ t('google_synchronization', 'Warning: Google does not provide location data in imported photos.') }}
 					</p>
 					<div v-if="!importingPhotos" class="line">
 						<label for="photo-output">
 							<FolderIcon />
-							{{ t('integration_google', 'Import directory') }}
+							{{ t('google_synchronization', 'Import directory') }}
 						</label>
 						<input id="photo-output"
 							:readonly="true"
@@ -131,7 +131,7 @@
 					<div class="line">
 						<label>
 							<ImageIcon />
-							{{ n('integration_google',
+							{{ n('google_synchronization',
 								'>{nbPhotos} Google photo (>{formSize})',
 								'>{nbPhotos} Google photos (>{formSize})',
 								nbPhotos,
@@ -146,15 +146,15 @@
 							<template #icon>
 								<FileImageIcon />
 							</template>
-							{{ t('integration_google', 'Import Google photos') }}
+							{{ t('google_synchronization', 'Import Google photos') }}
 						</NcButton>
 						<span v-else-if="!enoughSpaceForPhotos">
-							{{ t('integration_google', 'Your Google photo collection size is estimated to be bigger than your remaining space left ({formSpace})', { formSpace: myHumanFileSize(state.free_space) }) }}
+							{{ t('google_synchronization', 'Your Google photo collection size is estimated to be bigger than your remaining space left ({formSpace})', { formSpace: myHumanFileSize(state.free_space) }) }}
 						</span>
 					</div>
 					<div v-if="importingPhotos">
 						<br>
-						{{ n('integration_google', '{amount} photo imported', '{amount} photos imported', nbImportedPhotos, { amount: nbImportedPhotos }) }}
+						{{ n('google_synchronization', '{amount} photo imported', '{amount} photos imported', nbImportedPhotos, { amount: nbImportedPhotos }) }}
 						<br>
 						{{ lastPhotoImportDate }}
 						<br>
@@ -162,23 +162,23 @@
 							<template #icon>
 								<CloseIcon />
 							</template>
-							{{ t('integration_google', 'Cancel photo import') }}
+							{{ t('google_synchronization', 'Cancel photo import') }}
 						</NcButton>
 					</div>
 					<br><br>
 				</div>
 				<div v-if="showDrive"
 					id="google-drive">
-					<h3>{{ t('integration_google', 'Drive') }}</h3>
+					<h3>{{ t('google_synchronization', 'Drive') }}</h3>
 					<NcCheckboxRadioSwitch v-if="!importingDrive"
 						:checked="!state.consider_shared_files"
 						@update:checked="onDriveConsiderSharedChange">
-						{{ t('integration_google', 'Ignore shared files') }}
+						{{ t('google_synchronization', 'Ignore shared files') }}
 					</NcCheckboxRadioSwitch>
 					<div v-if="!importingDrive" class="line">
 						<label for="document-format">
 							<FileDocumentIcon />
-							{{ t('integration_google', 'Google documents import format') }}
+							{{ t('google_synchronization', 'Google documents import format') }}
 						</label>
 						<select id="document-format"
 							v-model="state.document_format"
@@ -195,7 +195,7 @@
 					<div v-if="!importingDrive" class="line">
 						<label for="drive-output">
 							<FolderIcon />
-							{{ t('integration_google', 'Import directory') }}
+							{{ t('google_synchronization', 'Import directory') }}
 						</label>
 						<input id="drive-output"
 							:readonly="true"
@@ -211,7 +211,7 @@
 					<div class="line">
 						<label v-if="state.consider_shared_files && sharedWithMeSize > 0">
 							<FileIcon />
-							{{ t('integration_google',
+							{{ t('google_synchronization',
 								'Your Google Drive ({formSize} + {formSharedSize} shared with you)',
 								{ formSize: myHumanFileSize(driveSize, true), formSharedSize: myHumanFileSize(sharedWithMeSize, true) }
 							)
@@ -219,7 +219,7 @@
 						</label>
 						<label v-else>
 							<FileIcon />
-							{{ t('integration_google', 'Your Google Drive ({formSize})', { formSize: myHumanFileSize(driveSize, true) }) }}
+							{{ t('google_synchronization', 'Your Google Drive ({formSize})', { formSize: myHumanFileSize(driveSize, true) }) }}
 						</label>
 						<NcButton v-if="enoughSpaceForDrive && !importingDrive"
 							id="google-import-files"
@@ -229,15 +229,15 @@
 							<template #icon>
 								<GoogleDriveIcon />
 							</template>
-							{{ t('integration_google', 'Import Google Drive files') }}
+							{{ t('google_synchronization', 'Import Google Drive files') }}
 						</NcButton>
 						<span v-else-if="!enoughSpaceForDrive">
-							{{ t('integration_google', 'Your Google Drive is bigger than your remaining space left ({formSpace})', { formSpace: myHumanFileSize(state.free_space) }) }}
+							{{ t('google_synchronization', 'Your Google Drive is bigger than your remaining space left ({formSpace})', { formSpace: myHumanFileSize(state.free_space) }) }}
 						</span>
 					</div>
 					<div v-if="importingDrive">
 						<br>
-						{{ n('integration_google', '{amount} file imported ({progress}%)', '{amount} files imported ({progress}%)', nbImportedFiles, { amount: nbImportedFiles, progress: driveImportProgress }) }}
+						{{ n('google_synchronization', '{amount} file imported ({progress}%)', '{amount} files imported ({progress}%)', nbImportedFiles, { amount: nbImportedFiles, progress: driveImportProgress }) }}
 						<br>
 						{{ lastDriveImportDate }}
 						<br>
@@ -245,7 +245,7 @@
 							<template #icon>
 								<CloseIcon />
 							</template>
-							{{ t('integration_google', 'Cancel Google Drive import') }}
+							{{ t('google_synchronization', 'Cancel Google Drive import') }}
 						</NcButton>
 					</div>
 				</div>
@@ -312,8 +312,8 @@ export default {
 
 	data() {
 		return {
-			state: loadState('integration_google', 'user-config'),
-			redirect_uri: window.location.protocol + '//' + window.location.host + generateUrl('/apps/integration_google/oauth-redirect'),
+			state: loadState('google_synchronization', 'user-config'),
+			redirect_uri: window.location.protocol + '//' + window.location.host + generateUrl('/apps/google_synchronization/oauth-redirect'),
 			// calendars
 			calendars: [],
 			importingCalendar: {},
@@ -375,9 +375,9 @@ export default {
 		},
 		lastPhotoImportDate() {
 			return this.lastPhotoImportTimestamp !== 0
-				? t('integration_google', 'Last photo import job at {date}', { date: moment.unix(this.lastPhotoImportTimestamp).format('LLL') })
-				: t('integration_google', 'Photo import background process will begin soon.') + ' '
-					+ t('integration_google', 'You can close this page. You will be notified when it finishes.')
+				? t('google_synchronization', 'Last photo import job at {date}', { date: moment.unix(this.lastPhotoImportTimestamp).format('LLL') })
+				: t('google_synchronization', 'Photo import background process will begin soon.') + ' '
+					+ t('google_synchronization', 'You can close this page. You will be notified when it finishes.')
 		},
 		photoImportProgress() {
 			return this.nbPhotos > 0 && this.nbImportedPhotos > 0
@@ -389,9 +389,9 @@ export default {
 		},
 		lastDriveImportDate() {
 			return this.lastDriveImportTimestamp !== 0
-				? t('integration_google', 'Last Google Drive import job at {date}', { date: moment.unix(this.lastDriveImportTimestamp).format('LLL') })
-				: t('integration_google', 'Google Drive background import process will begin soon.') + ' '
-					+ t('integration_google', 'You can close this page. You will be notified when it finishes.')
+				? t('google_synchronization', 'Last Google Drive import job at {date}', { date: moment.unix(this.lastDriveImportTimestamp).format('LLL') })
+				: t('google_synchronization', 'Google Drive background import process will begin soon.') + ' '
+					+ t('google_synchronization', 'You can close this page. You will be notified when it finishes.')
 		},
 		driveImportProgress() {
 			return this.driveSize > 0 && this.nbImportedFiles > 0
@@ -409,9 +409,9 @@ export default {
 		const urlParams = new URLSearchParams(paramString)
 		const ghToken = urlParams.get('googleToken')
 		if (ghToken === 'success') {
-			showSuccess(t('integration_google', 'Successfully connected to Google!'))
+			showSuccess(t('google_synchronization', 'Successfully connected to Google!'))
 		} else if (ghToken === 'error') {
-			showError(t('integration_google', 'Google connection error:') + ' ' + urlParams.get('message'))
+			showError(t('google_synchronization', 'Google connection error:') + ' ' + urlParams.get('message'))
 		}
 
 		this.loadData()
@@ -446,10 +446,10 @@ export default {
 			const req = {
 				values,
 			}
-			const url = generateUrl('/apps/integration_google/config')
+			const url = generateUrl('/apps/google_synchronization/config')
 			axios.put(url, req)
 				.then((response) => {
-					showSuccess(t('integration_google', 'Google options saved'))
+					showSuccess(t('google_synchronization', 'Google options saved'))
 					// callback
 					if (callback) {
 						callback(response)
@@ -457,7 +457,7 @@ export default {
 				})
 				.catch((error) => {
 					showError(
-						t('integration_google', 'Failed to save Google options')
+						t('google_synchronization', 'Failed to save Google options')
 						+ ': ' + error.response?.request?.responseText
 					)
 				})
@@ -490,12 +490,12 @@ export default {
 					redirect_uri: this.redirect_uri,
 				},
 			}
-			const url = generateUrl('/apps/integration_google/config')
+			const url = generateUrl('/apps/google_synchronization/config')
 			axios.put(url, req).then((response) => {
 				if (this.state.use_popup) {
 					const ssoWindow = window.open(
 						requestUrl,
-						t('integration_google', 'Sign in with Google'),
+						t('google_synchronization', 'Sign in with Google'),
 						'toolbar=no, menubar=no, width=600, height=700'
 					)
 					ssoWindow.focus()
@@ -509,14 +509,14 @@ export default {
 				}
 			}).catch((error) => {
 				showError(
-					t('integration_google', 'Failed to save Google OAuth state')
+					t('google_synchronization', 'Failed to save Google OAuth state')
 					+ ': ' + error.response?.request?.responseText
 				)
 			})
 		},
 		getGoogleDriveInfo() {
 			this.gettingDriveInfo = true
-			const url = generateUrl('/apps/integration_google/drive-size')
+			const url = generateUrl('/apps/google_synchronization/drive-size')
 			axios.get(url)
 				.then((response) => {
 					if (response.data && response.data.usageInDrive) {
@@ -526,7 +526,7 @@ export default {
 				})
 				.catch((error) => {
 					showError(
-						t('integration_google', 'Failed to get Google Drive information')
+						t('google_synchronization', 'Failed to get Google Drive information')
 						+ ': ' + error.response?.request?.responseText
 					)
 				})
@@ -535,7 +535,7 @@ export default {
 				})
 		},
 		getGoogleCalendarList() {
-			const url = generateUrl('/apps/integration_google/calendars')
+			const url = generateUrl('/apps/google_synchronization/calendars')
 			axios.get(url)
 				.then((response) => {
 					if (response.data && response.data.length && response.data.length > 0) {
@@ -544,7 +544,7 @@ export default {
 				})
 				.catch((error) => {
 					showError(
-						t('integration_google', 'Failed to get calendar list')
+						t('google_synchronization', 'Failed to get calendar list')
 						+ ': ' + error.response?.request?.responseText
 					)
 				})
@@ -560,7 +560,7 @@ export default {
 				: '0082c9'
 		},
 		getPhotoImportValues(launchLoop = false) {
-			const url = generateUrl('/apps/integration_google/import-photos-info')
+			const url = generateUrl('/apps/google_synchronization/import-photos-info')
 			axios.get(url)
 				.then((response) => {
 					if (response.data && Object.keys(response.data).length > 0) {
@@ -583,7 +583,7 @@ export default {
 		},
 		getNbGooglePhotos() {
 			this.gettingPhotoInfo = true
-			const url = generateUrl('/apps/integration_google/photo-number')
+			const url = generateUrl('/apps/google_synchronization/photo-number')
 			axios.get(url)
 				.then((response) => {
 					if (response.data && Object.keys(response.data).length > 0) {
@@ -592,7 +592,7 @@ export default {
 				})
 				.catch((error) => {
 					showError(
-						t('integration_google', 'Failed to get number of Google photos')
+						t('google_synchronization', 'Failed to get number of Google photos')
 						+ ': ' + error.response?.request?.responseText
 					)
 				})
@@ -601,7 +601,7 @@ export default {
 				})
 		},
 		getNbGoogleContacts() {
-			const url = generateUrl('/apps/integration_google/contact-number')
+			const url = generateUrl('/apps/google_synchronization/contact-number')
 			axios.get(url)
 				.then((response) => {
 					if (response.data && Object.keys(response.data).length > 0) {
@@ -610,7 +610,7 @@ export default {
 				})
 				.catch((error) => {
 					showError(
-						t('integration_google', 'Failed to get number of Google contacts')
+						t('google_synchronization', 'Failed to get number of Google contacts')
 						+ ': ' + error.response?.request?.responseText
 					)
 				})
@@ -618,7 +618,7 @@ export default {
 				})
 		},
 		getLocalAddressBooks() {
-			const url = generateUrl('/apps/integration_google/local-addressbooks')
+			const url = generateUrl('/apps/google_synchronization/local-addressbooks')
 			axios.get(url)
 				.then((response) => {
 					if (response.data && Object.keys(response.data).length > 0) {
@@ -627,7 +627,7 @@ export default {
 				})
 				.catch((error) => {
 					showError(
-						t('integration_google', 'Failed to get address book list')
+						t('google_synchronization', 'Failed to get address book list')
 						+ ': ' + error.response?.request?.responseText
 					)
 				})
@@ -647,7 +647,7 @@ export default {
 					newAddressBookName: this.selectedAddressBook > 0 ? null : this.newAddressBookName,
 				},
 			}
-			const url = generateUrl('/apps/integration_google/import-contacts')
+			const url = generateUrl('/apps/google_synchronization/import-contacts')
 			axios.get(url, req)
 				.then((response) => {
 					const nbSeen = response.data.nbSeen
@@ -655,7 +655,7 @@ export default {
 					const nbUpdated = response.data.nbUpdated
 					showSuccess(
 						this.n(
-							'integration_google',
+							'google_synchronization',
 							'{nbSeen} Google contact seen. {nbAdded} added, {nbUpdated} updated in {name}',
 							'{nbSeen} Google contacts seen. {nbAdded} added, {nbUpdated} updated in {name}',
 							nbSeen,
@@ -666,7 +666,7 @@ export default {
 				})
 				.catch((error) => {
 					showError(
-						t('integration_google', 'Failed to get address book list')
+						t('google_synchronization', 'Failed to get address book list')
 						+ ': ' + error.response?.request?.responseText
 					)
 				})
@@ -684,7 +684,7 @@ export default {
 					color: cal.backgroundColor || '#0082c9',
 				},
 			}
-			const url = generateUrl('/apps/integration_google/import-calendar')
+			const url = generateUrl('/apps/google_synchronization/import-calendar')
 			axios.get(url, req)
 				.then((response) => {
 					const nbAdded = response.data.nbAdded
@@ -693,7 +693,7 @@ export default {
 					const calName = response.data.calName
 					showSuccess(
 						this.n(
-							'integration_google',
+							'google_synchronization',
 							'{total} event successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)',
 							'{total} events successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)',
 							total,
@@ -703,7 +703,7 @@ export default {
 				})
 				.catch((error) => {
 					showError(
-						t('integration_google', 'Failed to import Google calendar')
+						t('google_synchronization', 'Failed to import Google calendar')
 						+ ': ' + error.response?.request?.responseText
 					)
 				})
@@ -720,17 +720,17 @@ export default {
 					color: cal.backgroundColor || '#0082c9',
 				},
 			}
-			const url = generateUrl('/apps/integration_google/sync-calendar')
+			const url = generateUrl('/apps/google_synchronization/sync-calendar')
 			axios.get(url, req)
 				.then((_response) => {
 					showSuccess(
-						this.n('integration_google', 'Successfully registered background job', 'Successfully registered background job', 1)
+						this.n('google_synchronization', 'Successfully registered background job', 'Successfully registered background job', 1)
 					)
 				})
 				.catch((error) => {
 					console.error('Failed to register background job', error)
 					showError(
-						t('integration_google', 'Failed to register background job')
+						t('google_synchronization', 'Failed to register background job')
 						+ ': ' + error.response?.request?.responseText
 					)
 				})
@@ -740,18 +740,18 @@ export default {
 				params: {
 				},
 			}
-			const url = generateUrl('/apps/integration_google/import-photos')
+			const url = generateUrl('/apps/google_synchronization/import-photos')
 			axios.get(url, req)
 				.then((response) => {
 					const targetPath = response.data.targetPath
 					showSuccess(
-						t('integration_google', 'Starting importing photos in {targetPath} directory', { targetPath })
+						t('google_synchronization', 'Starting importing photos in {targetPath} directory', { targetPath })
 					)
 					this.getPhotoImportValues(true)
 				})
 				.catch((error) => {
 					showError(
-						t('integration_google', 'Failed to start importing Google photos')
+						t('google_synchronization', 'Failed to start importing Google photos')
 						+ ': ' + error.response?.request?.responseText
 					)
 				})
@@ -768,7 +768,7 @@ export default {
 					nb_imported_photos: '0',
 				},
 			}
-			const url = generateUrl('/apps/integration_google/config')
+			const url = generateUrl('/apps/google_synchronization/config')
 			axios.put(url, req)
 				.then((response) => {
 				})
@@ -779,7 +779,7 @@ export default {
 				})
 		},
 		getDriveImportValues(launchLoop = false) {
-			const url = generateUrl('/apps/integration_google/import-files-info')
+			const url = generateUrl('/apps/google_synchronization/import-files-info')
 			axios.get(url)
 				.then((response) => {
 					if (response.data && Object.keys(response.data).length > 0) {
@@ -806,18 +806,18 @@ export default {
 				params: {
 				},
 			}
-			const url = generateUrl('/apps/integration_google/import-files')
+			const url = generateUrl('/apps/google_synchronization/import-files')
 			axios.get(url, req)
 				.then((response) => {
 					const targetPath = response.data.targetPath
 					showSuccess(
-						t('integration_google', 'Starting importing files in {targetPath} directory', { targetPath })
+						t('google_synchronization', 'Starting importing files in {targetPath} directory', { targetPath })
 					)
 					this.getDriveImportValues(true)
 				})
 				.catch((error) => {
 					showError(
-						t('integration_google', 'Failed to start importing Google Drive')
+						t('google_synchronization', 'Failed to start importing Google Drive')
 						+ ': ' + error.response?.request?.responseText
 					)
 				})
@@ -835,7 +835,7 @@ export default {
 					drive_imported_size: '0',
 				},
 			}
-			const url = generateUrl('/apps/integration_google/config')
+			const url = generateUrl('/apps/google_synchronization/config')
 			axios.put(url, req)
 				.then((response) => {
 				})
@@ -861,7 +861,7 @@ export default {
 		},
 		onDriveOutputChange() {
 			OC.dialogs.filepicker(
-				t('integration_google', 'Choose where to write imported files'),
+				t('google_synchronization', 'Choose where to write imported files'),
 				(targetPath) => {
 					if (targetPath === '') {
 						targetPath = '/'
@@ -880,7 +880,7 @@ export default {
 		},
 		onPhotoOutputChange() {
 			OC.dialogs.filepicker(
-				t('integration_google', 'Choose where to write imported photos'),
+				t('google_synchronization', 'Choose where to write imported photos'),
 				(targetPath) => {
 					if (targetPath === '') {
 						targetPath = '/'

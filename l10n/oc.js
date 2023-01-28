@@ -1,5 +1,5 @@
 OC.L10N.register(
-    "integration_google",
+    "google_synchronization",
     {
     "Bad credentials" : "Marrits identificants",
     "Connected accounts" : "Comptes connectats",
