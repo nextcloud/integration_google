@@ -1,4 +1,4 @@
-app_name=integration_google
+app_name=google_synchronization
 app_version=$(version)
 project_dir=.
 build_dir=/tmp/build

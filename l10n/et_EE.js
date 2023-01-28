@@ -1,5 +1,5 @@
 OC.L10N.register(
-    "integration_google",
+    "google_synchronization",
     {
     "Client ID" : "Kliendi ID",
     "Client secret" : "Kliendi salasõna",

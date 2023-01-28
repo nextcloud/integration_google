@@ -1,20 +1,20 @@
 <?xml version="1.0"?>
 <info>
-    <id>integration_google</id>
-    <name>Google integration</name>
+    <id>google_synchronization</id>
+    <name>Google Synchronization</name>
     <summary>Import Google data into Nextcloud</summary>
-    <description><![CDATA[Google integration allows you to automatically import your Google calendars, contacts, photos and files into Nextcloud.]]></description>
+    <description><![CDATA[Google Synchronization automatically keeps your Nextcloud calendar up to date with your Google Calendar.]]></description>
     <version>1.0.9</version>
     <licence>agpl</licence>
     <author>Julien Veyssier</author>
     <namespace>Google</namespace>
     <documentation>
-        <developer>https://github.com/nextcloud/integration_google</developer>
+        <developer>https://github.com/MarcelRobitaille/nextcloud_google_synchronization</developer>
     </documentation>
     <category>integration</category>
-    <website>https://github.com/nextcloud/integration_google</website>
-    <bugs>https://github.com/nextcloud/integration_google/issues</bugs>
-    <screenshot>https://github.com/nextcloud/integration_google/raw/master/img/screenshot1.jpg</screenshot>
+    <website>https://github.com/MarcelRobitaille/nextcloud_google_synchronization</website>
+    <bugs>https://github.com/MarcelRobitaille/nextcloud_google_synchronization/issues</bugs>
+    <screenshot>https://github.com/MarcelRobitaille/nextcloud_google_synchronization/raw/master/img/screenshot1.jpg</screenshot>
     <dependencies>
         <nextcloud min-version="22" max-version="26"/>
     </dependencies>

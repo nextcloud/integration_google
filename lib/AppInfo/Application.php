@@ -24,7 +24,7 @@ use OCA\Google\Notification\Notifier;
  */
 class Application extends App implements IBootstrap {
 
-    public const APP_ID = 'integration_google';
+    public const APP_ID = 'google_synchronization';
 	// consider that a job is not running anymore after N seconds
 	public const IMPORT_JOB_TIMEOUT = 3600;
 

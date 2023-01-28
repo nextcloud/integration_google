@@ -1,5 +1,5 @@
 OC.L10N.register(
-    "integration_google",
+    "google_synchronization",
     {
     "Client ID" : "معرف العميل",
     "Authentication" : "المصادقة",

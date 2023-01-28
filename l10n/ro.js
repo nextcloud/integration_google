@@ -1,5 +1,5 @@
 OC.L10N.register(
-    "integration_google",
+    "google_synchronization",
     {
     "Error during OAuth exchanges" : "Eroare în schimbarea OAuth",
     "OAuth access token refused" : "Token-ul OAuth a fost refuzat",

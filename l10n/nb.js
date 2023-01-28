@@ -1,5 +1,5 @@
 OC.L10N.register(
-    "integration_google",
+    "google_synchronization",
     {
     "Error during OAuth exchanges" : "Feil ved utveksling av OAuth",
     "OAuth access token refused" : "OAuth access token ble avslått",

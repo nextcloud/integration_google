@@ -1,5 +1,5 @@
 OC.L10N.register(
-    "integration_google",
+    "google_synchronization",
     {
     "Error during OAuth exchanges" : "OAuth 交換時發生錯誤",
     "OAuth access token refused" : "OAuth 存取權杖被拒絕",

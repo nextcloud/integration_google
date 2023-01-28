@@ -1,5 +1,5 @@
 OC.L10N.register(
-    "integration_google",
+    "google_synchronization",
     {
     "Connected accounts" : "Forbundne konti",
     "Client ID" : "Klient-ID",

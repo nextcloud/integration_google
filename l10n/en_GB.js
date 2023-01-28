@@ -1,5 +1,5 @@
 OC.L10N.register(
-    "integration_google",
+    "google_synchronization",
     {
     "Missing refresh token in Google response." : "Missing refresh token in Google response.",
     "Error getting OAuth access token." : "Error getting OAuth access token.",

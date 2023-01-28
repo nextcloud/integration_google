@@ -193,7 +193,7 @@ class GoogleCalendarAPIService {
 		$this->logger->debug("Starting calendar import of $calId", ['app' => $this->appName]);
 
 		$lockFile = sys_get_temp_dir() .
-			"/nextcloud_integration_google_calendar_import_$calId.lock";
+			"/nextcloud_google_synchronization_calendar_import_$calId.lock";
 
 		if (file_exists($lockFile)) {
 			throw new Exception('Could not acquire lock');

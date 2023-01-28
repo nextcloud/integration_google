@@ -1,5 +1,5 @@
 OC.L10N.register(
-    "integration_google",
+    "google_synchronization",
     {
     "Google" : "ගූගල්",
     "Connected accounts" : "සම්බන්ධිත ගිණුම්",

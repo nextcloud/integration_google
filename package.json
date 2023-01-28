@@ -1,7 +1,7 @@
 {
-	"name": "integration_google",
+	"name": "google_synchronization",
 	"version": "0.0.1",
-	"description": "Google integration",
+	"description": "A Nextcloud app to continuously synchronize Google Calendar",
 	"main": "index.js",
 	"directories": {
 		"test": "tests"
@@ -17,7 +17,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/nextcloud/integration_google"
+		"url": "https://github.com/MarcelRobitaille/nextcloud_google_synchronization"
 	},
 	"keywords": [
 		"google"
@@ -25,9 +25,9 @@
 	"author": "Julien Veyssier",
 	"license": "AGPL-3.0",
 	"bugs": {
-		"url": "https://github.com/nextcloud/integration_google/issues"
+		"url": "https://github.com/MarcelRobitaille/nextcloud_google_synchronization/issues"
 	},
-	"homepage": "https://github.com/nextcloud/integration_google",
+	"homepage": "https://github.com/MarcelRobitaille/nextcloud_google_synchronization",
 	"browserslist": [
 		"extends @nextcloud/browserslist-config"
 	],

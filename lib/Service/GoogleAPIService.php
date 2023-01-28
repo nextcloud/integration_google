@@ -117,7 +117,7 @@ class GoogleAPIService {
 				'timeout' => 0,
 				'headers' => [
 					'Authorization' => 'Bearer ' . $accessToken,
-					'User-Agent' => 'Nextcloud Google integration'
+					'User-Agent' => 'Nextcloud Google Synchronization'
 				],
 			];
 
@@ -194,7 +194,7 @@ class GoogleAPIService {
 			$url = 'https://oauth2.googleapis.com/token';
 			$options = [
 				'headers' => [
-					'User-Agent' => 'Nextcloud Google integration'
+					'User-Agent' => 'Nextcloud Google Synchronization'
 				],
 			];
 
@@ -247,7 +247,7 @@ class GoogleAPIService {
 				'timeout' => 0,
 				'headers' => [
 					'Authorization' => 'Bearer ' . $accessToken,
-					'User-Agent' => 'Nextcloud Google integration'
+					'User-Agent' => 'Nextcloud Google Synchronization'
 				],
 			];
 
@@ -311,7 +311,7 @@ class GoogleAPIService {
 				'timeout' => 0,
 				'headers' => [
 					'Authorization' => 'Bearer ' . $accessToken,
-					'User-Agent' => 'Nextcloud Google integration'
+					'User-Agent' => 'Nextcloud Google Synchronization'
 				],
 			];
 
