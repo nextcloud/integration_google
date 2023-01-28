@@ -17,6 +17,7 @@ As such, all functionality of [Google Integration](integration_google)
 is still implemented, so you can still import Contacts, Photos, Drive manually.
 However, currently, **only Google Calendar background synchronization is supported**.
 Please let me know if you would like to continuously synchronize other services.
+This also means that this app should not be used at the same time as [Google Integration](integration_google).
 
 This is a one-way synchronization.
 Events from Google Calendar are imported into Nextcloud,
