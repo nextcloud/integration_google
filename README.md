@@ -1,16 +1,36 @@
-# Google integration in Nextcloud
+# Google Synchronization
 
-**This is a fork!!** Please see [the upstream](https://github.com/MarcelRobitaille/nextcloud_google_synchronization) or [the issue that prompted this fork](https://github.com/MarcelRobitaille/nextcloud_google_synchronization/issues/77).
+**This is a fork of the [Google Integration](integration_google) app**
 
-This fork tries to fix two problems I had with the Google integration:
-1. It only syncs stuff when you click the import button. It doesn't keep the imported stuff up to date
-1. It only adds new data, it doesn't delete outdated data. Anytime someone on my team would reschedule something in our Google Calendar, I would have it multiple times in my Nextcloud calendar.
+**Use at your own risk. This app is still in early development. Users are effectively beta testers.**
 
-I have fixed both of these, at least for the Calendar (the only integration I use).
+If all you need to do is import all of your data from Google once and permanently migrate to Nextcloud (lucky you),
+you should use the [Google Integration](integration_google) app.
 
-**USE AT YOUR OWN RISK!!** This is my first Nextcloud app and it is definitely not production-ready. For instance, I blindly add a new background job without checking if it already exists. I don't do logging correctly.
+However, if you're like me, you're part of a team or group that has shared a Google Calendar with you,
+and you would like to keep it up to date with your Nextcloud calendar.
+That's exactly what this app does.
 
-🇬 Google integration allows you to automatically import your Google calendars, contacts, photos and files into Nextcloud.
+This is a fork of [Google Integration](integration_google)
+that creates a background task that will periodically import all changes from Google Calendar to your Nextcloud calendar.
+As such, all functionality of [Google Integration](integration_google)
+is still implemented, so you can still import Contacts, Photos, Drive manually.
+However, currently, **only Google Calendar background synchronization is supported**.
+Please let me know if you would like to continuously synchronize other services.
+
+This is a one-way synchronization.
+Events from Google Calendar are imported into Nextcloud,
+but events from Nextcloud are not sent to Google.
+
+This App supports:
+1. **New events**: Adding a new event in Google Calendar will create a new event in Nextcloud Calendar
+1. **Modified events**: Modifying an event in Google Calendar will modify the event in Nextcloud Calendar
+1. **Deleted events**: Well, you get it by now
+1. **Calendars you own**
+1. **Calendars that have been shared with you**
+
+
+[integration_google]: https://github.com/nextcloud/integration_google
 
 ## 🚀 Installation
 
@@ -34,3 +54,12 @@ While there are many things that could be done to further improve this app, the 
 We would be more than excited if you would like to collaborate with us. We will merge pull requests for new features and fixes. We also would love to welcome co-maintainers.
 
 If there is a strong business case for any development of this app, we will consider your wishes for our roadmap. Please [contact your account manager](https://nextcloud.com/enterprise/) to talk about the possibilities.
+
+## Development guide
+
+1. Setup Nextcloud development environment (such as [nextcloud-docker-dev](https://github.com/juliushaertl/nextcloud-docker-dev))
+1. Install the files for this app in the development environment (I like to modify the `nextcloud-docker-dev` `docker-compose.yml` file and add a volume like this: `- ../google_synchronization:/var/www/html/apps/google_synchronization:ro`. Please read that project's README for alternative methods.)
+1. Install PHP dependencies (install [Composer](https://getcomposer.org/), run `composer install`)
+1. Install Node dependencies (install [Node.js](https://nodejs.org/en/), run `npm install`)
+1. Build JavaScript bundle: `npm run dev` or `npm run watch`
+1. Enable the app. Go to the apps page in your development version of Nextcloud, find "Google Synchronization", and click "Enable"
