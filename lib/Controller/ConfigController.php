@@ -203,7 +203,7 @@ class ConfigController extends Controller {
 					);
 				} else {
 					return new RedirectResponse(
-						$this->urlGenerator->linkToRoute('settings.PersonalSettings.index', ['section' => 'migration']) .
+						$this->urlGenerator->linkToRoute('settings.PersonalSettings.index', ['section' => 'google_synchronization']) .
 						'?googleToken=success'
 					);
 				}
@@ -217,7 +217,7 @@ class ConfigController extends Controller {
 			$result = $this->l->t('Error during OAuth exchanges');
 		}
 		return new RedirectResponse(
-			$this->urlGenerator->linkToRoute('settings.PersonalSettings.index', ['section' => 'migration']) .
+			$this->urlGenerator->linkToRoute('settings.PersonalSettings.index', ['section' => 'google_synchronization']) .
 			'?googleToken=error&message=' . urlencode($result)
 		);
 	}
