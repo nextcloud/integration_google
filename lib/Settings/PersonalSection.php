@@ -25,7 +25,7 @@ class PersonalSection implements IIconSection {
 	 * @returns string
 	 */
 	public function getID(): string {
-		return 'migration'; //or a generic id if feasible
+		return 'google_synchronization'; //or a generic id if feasible
 	}
 
 	/**

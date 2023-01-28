@@ -108,7 +108,7 @@ class Personal implements ISettings {
 	}
 
 	public function getSection(): string {
-		return 'migration';
+		return 'google_synchronization';
 	}
 
 	public function getPriority(): int {
