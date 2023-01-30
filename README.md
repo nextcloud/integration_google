@@ -68,3 +68,15 @@ with the exception of the buttons "Sync calendar" next to each calendar.
 1. Install Node dependencies (install [Node.js](https://nodejs.org/en/), run `npm install`)
 1. Build JavaScript bundle: `npm run dev` or `npm run watch`
 1. Enable the app. Go to the apps page in your development version of Nextcloud, find "Google Synchronization", and click "Enable"
+
+### Creating a release
+
+```
+git tag -a <version>
+# Update package.json
+make build
+version=<version> make appstore  # will create a tar.gz in /tmp/build
+```
+
+This fork will add a digit after the upstream version number it's based on.
+For example, the first release based on `v1.0.9` will be `v1.0.9.0`.
