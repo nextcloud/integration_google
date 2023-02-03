@@ -2,6 +2,7 @@ OC.L10N.register(
     "integration_google",
     {
     "Bad credentials" : "Marrits identificants",
+    "Connected accounts" : "Comptes connectats",
     "Client ID" : "ID client",
     "Authentication" : "Autentificacion",
     "Connected as {user}" : "Connectat coma {user}",
