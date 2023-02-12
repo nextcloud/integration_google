@@ -56,6 +56,8 @@ OC.L10N.register(
     "Drive" : "Gidatu",
     "Ignore shared files" : "Baztertu partekatako fitxategiak",
     "Google documents import format" : "Google dokumentuen inportatze-formatua",
+    "Your Google Drive ({formSize} + {formSharedSize} shared with you)" : "Zure Google Drivek ({formSize} + {formSharedSize} zurekin partekatuta)",
+    "Your Google Drive ({formSize})" : "Zure Google Drive ({formSize})",
     "Import Google Drive files" : "Inportatu Google Drive fitxategiak",
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Zure Google Drive handiagoa da daukazun leku librea baino ({formSpace})",
     "Cancel Google Drive import" : "Ezeztatu Google Drive inportatzea",
@@ -83,6 +85,8 @@ OC.L10N.register(
     "Choose where to write imported photos" : "Aukeratu  non idatzi inportatutako argazkiak",
     "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} Google argazkia (>{formSize})",">{nbPhotos} Google argazkiak (>{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} argazki inportatu dira ","{amount} argazki inportatu dira "],
-    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} fitxategi inportatu dira ({progress}%)","{amount} fitxategi inportatu dira ({progress}%)"]
+    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} fitxategi inportatu dira ({progress}%)","{amount} fitxategi inportatu dira ({progress}%)"],
+    "_{nbSeen} Google contact seen. {nbAdded} added, {nbUpdated} updated in {name}_::_{nbSeen} Google contacts seen. {nbAdded} added, {nbUpdated} updated in {name}_" : ["{nbSeen} Google-ko kontaktuak ikusi dira. {nbAdded} gehitu da, {nbUpdated} eguneratu {name}-n","{nbSeen} Google-ko kontaktuak ikusi dira. {nbAdded} gehitu da, {nbUpdated} eguneratu {name}-n"],
+    "_{total} event successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_::_{total} events successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_" : ["{total} gertaerak behar bezala inportatu dira {name}-n ({nbAdded} sortu da, {nbUpdated} eguneratu)","{total} gertaerak behar bezala inportatu dira {name}-n ({nbAdded} sortu da, {nbUpdated} eguneratu)"]
 },
 "nplurals=2; plural=(n != 1);");
