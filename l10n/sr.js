@@ -5,6 +5,7 @@ OC.L10N.register(
     "Client secret" : "Тајна клијента",
     "Authentication" : "Провера идентитета",
     "Contacts" : "Контакти",
+    "Calendars" : "Календари",
     "Import calendar" : "Увези календар",
     "Photos" : "Фотографије"
 },
