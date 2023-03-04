@@ -1,6 +1,9 @@
 OC.L10N.register(
     "integration_google",
     {
+    "Error during OAuth exchanges" : "Грешко приликом OAuth размена",
+    "OAuth access token refused" : "Одбијен је OAuth приступни жетон",
+    "Bad credentials" : "Лоши креденцијали",
     "Client ID" : "ID клијента",
     "Client secret" : "Тајна клијента",
     "Authentication" : "Провера идентитета",
