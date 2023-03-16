@@ -2,6 +2,8 @@ OC.L10N.register(
     "integration_google",
     {
     "Client ID" : "ID khách hàng",
+    "Authentication" : "Xác thực",
+    "Connected as {user}" : "Kết nối bởi {user}",
     "Contacts" : "Liên hệ",
     "Calendars" : "Lịch",
     "Import calendar" : "Nhập lịch biểu",
