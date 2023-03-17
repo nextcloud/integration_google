@@ -7,6 +7,7 @@ OC.L10N.register(
     "Client ID" : "ID клијента",
     "Client secret" : "Тајна клијента",
     "Authentication" : "Провера идентитета",
+    "Sign in with Google" : "Пријави се са Google",
     "Contacts" : "Контакти",
     "Calendars" : "Календари",
     "Import calendar" : "Увези календар",
