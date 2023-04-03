@@ -89,7 +89,7 @@ class Notifier implements INotifier {
 			$p = $notification->getSubjectParameters();
 			$nbImported = (int) ($p['nbImported'] ?? 0);
 			$targetPath = $p['targetPath'];
-			$content = $l->n('%s photo was imported from Google.', '%s photos were imported from Google.', $nbImported, [$nbImported]);
+			$content = $l->n('%n photo was imported from Google.', '%n photos were imported from Google.', $nbImported);
 
 			$notification->setParsedSubject($content)
 				->setIcon($this->url->getAbsoluteURL($this->url->imagePath(Application::APP_ID, 'app-dark.svg')))
@@ -100,7 +100,7 @@ class Notifier implements INotifier {
 			$p = $notification->getSubjectParameters();
 			$nbImported = (int) ($p['nbImported'] ?? 0);
 			$targetPath = $p['targetPath'];
-			$content = $l->n('%s file was imported from Google Drive.', '%s files were imported from Google Drive.', $nbImported, [$nbImported]);
+			$content = $l->n('%n file was imported from Google Drive.', '%n files were imported from Google Drive.', $nbImported);
 
 			$notification->setParsedSubject($content)
 				->setIcon($this->url->getAbsoluteURL($this->url->imagePath(Application::APP_ID, 'app-dark.svg')))
