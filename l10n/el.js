@@ -5,8 +5,6 @@ OC.L10N.register(
     "Error getting OAuth access token." : "Σφάλμα κατά τη λήψη αναγνωριστικού OAuth.",
     "Error during OAuth exchanges" : "Σφάλμα κατά την ανταλλαγή OAuth",
     "Google" : "Google",
-    "_%s photo was imported from Google._::_%s photos were imported from Google._" : ["Θα εισαχθεί από τη Google %s φωτογραφία.","Θα εισαχθούν από τη Google %s φωτογραφίες."],
-    "_%s file was imported from Google Drive._::_%s files were imported from Google Drive._" : ["Θα εισαχθεί από το Google Drive %s αρχείο.","Θα εισαχθούν από το Google Drive %s αρχεία."],
     "OAuth access token refused" : "Το διακριτικό πρόσβασης OAuth απορρίφθηκε",
     "Bad credentials" : "Εσφαλμένα διαπιστευτήρια",
     "Google Calendar import" : "Εισαγωγή ημερολογίου Google",

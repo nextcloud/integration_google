@@ -3,8 +3,6 @@
     "Error getting OAuth access token." : "Erreur lors de l'obtention du jeton d'accès OAuth.",
     "Error during OAuth exchanges" : "Erreur lors des échanges OAuth",
     "Google" : "Google",
-    "_%s photo was imported from Google._::_%s photos were imported from Google._" : ["%s photo importée depuis Google.","%s photos importées depuis Google.","%s photos importées depuis Google."],
-    "_%s file was imported from Google Drive._::_%s files were imported from Google Drive._" : ["%s fichier a été importé depuis Google Drive.","%s fichiers ont été importés depuis Google Drive.","%s fichiers ont été importés depuis Google Drive."],
     "OAuth access token refused" : "Jeton d'accès OAuth refusé",
     "Bad credentials" : "Identifiants incorrects",
     "Google Calendar import" : "Importation de Google Agenda",

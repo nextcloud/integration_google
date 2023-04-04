@@ -5,8 +5,6 @@ OC.L10N.register(
     "Error getting OAuth access token." : "Klaida gaunant „OAuth“ prieigos raktą.",
     "Error during OAuth exchanges" : "Klaida „OAuth“ apsikeitimo metu",
     "Google" : "„Google“",
-    "_%s photo was imported from Google._::_%s photos were imported from Google._" : ["Iš „Google“ buvo importuota %s nuotrauka.","Iš „Google“ buvo importuotos %s nuotraukos.","Iš „Google“ buvo importuota %s nuotraukų.","Iš „Google“ buvo importuota %s nuotrauka."],
-    "_%s file was imported from Google Drive._::_%s files were imported from Google Drive._" : ["Iš „Google“ disko buvo importuotas %s failas.","Iš „Google“ disko buvo importuoti %s failai.","Iš „Google“ disko buvo importuota %s failų.","Iš „Google“ disko buvo importuotas %s failas."],
     "OAuth access token refused" : "„OAuth“ prieigos raktas atmestas",
     "Bad credentials" : "Blogi prisijungimo duomenys",
     "Google Calendar import" : "„Google“ kalendoriaus importavimas",

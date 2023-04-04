@@ -5,8 +5,6 @@ OC.L10N.register(
     "Error getting OAuth access token." : "Pogreška pri dohvaćanju tokena za pristup OAuth.",
     "Error during OAuth exchanges" : "Pogreška tijekom razmjene radi autentifikacije OAuth",
     "Google" : "Google",
-    "_%s photo was imported from Google._::_%s photos were imported from Google._" : ["%s fotografija uvezena s Googlea.","%s fotografije uvezene s Googlea.","%s fotografija uvezenih s Googlea."],
-    "_%s file was imported from Google Drive._::_%s files were imported from Google Drive._" : ["%s datoteka uvezena iz sustava Google Drive.","%s datoteke uvezene iz sustava Google Drive.","%s datoteka uvezenih iz sustava Google Drive."],
     "OAuth access token refused" : "Odbijen token za pristup OAuth",
     "Bad credentials" : "Pogrešne vjerodajnice",
     "Google Calendar import" : "Uvoz iz sustava Google Calendar",

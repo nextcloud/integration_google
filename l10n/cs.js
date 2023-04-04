@@ -5,8 +5,6 @@ OC.L10N.register(
     "Error getting OAuth access token." : "Chyba při získávání OAuth přístupového tokenu.",
     "Error during OAuth exchanges" : "Chyba při výměnách informací v rámci OAuth",
     "Google" : "Google",
-    "_%s photo was imported from Google._::_%s photos were imported from Google._" : ["Z Google byla importována %s fotka.","Z Google byla importovány %s fotky.","Z Google bylo importováno %s fotek.","Z Google byla importovány %s fotky."],
-    "_%s file was imported from Google Drive._::_%s files were imported from Google Drive._" : ["%s soubor importován z Google Drive.","%s soubory importovány z Google Drive.","%s souborů importováno z Google Drive.","%s souborů importováno z Google Drive."],
     "OAuth access token refused" : "OAuth přístupový token odmítnut",
     "Bad credentials" : "Nesprávné přihlašovací údaje",
     "Google Calendar import" : "Import Google Kalendáře",

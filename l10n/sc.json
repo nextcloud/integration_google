@@ -3,8 +3,6 @@
     "Error getting OAuth access token." : "Errore recuperende su token de intrada OAuth.",
     "Error during OAuth exchanges" : "Errore in is negotziatziones OAuth ",
     "Google" : "Google",
-    "_%s photo was imported from Google._::_%s photos were imported from Google._" : ["%s fotos importadas dae Google.","%s fotos importadas dae Google."],
-    "_%s file was imported from Google Drive._::_%s files were imported from Google Drive._" : ["%s archìvios importados dae Google Drive.","%sarchìvios importados dae Google Drive. "],
     "OAuth access token refused" : "Token de intrada OAuth refudadu",
     "Bad credentials" : "Credentziales non bàlidas",
     "Google Calendar import" : "Importatzione de Google Calendar ",

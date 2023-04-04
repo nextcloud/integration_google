@@ -3,8 +3,6 @@
     "Error getting OAuth access token." : "Virhe haettaessa OAuth-käyttöpolettia.",
     "Error during OAuth exchanges" : "Virhe OAuth-tunnistautumisessa",
     "Google" : "Google",
-    "_%s photo was imported from Google._::_%s photos were imported from Google._" : ["%s kuva tuotiin Googlesta.","%s kuvaa tuotiin Googlesta."],
-    "_%s file was imported from Google Drive._::_%s files were imported from Google Drive._" : ["%s tiedosto tuotiin Google Drivesta.","%s tiedostoa tuotiin Google Drivesta."],
     "OAuth access token refused" : "OAuth-valtuutus hylätty",
     "Bad credentials" : "Virheelliset kirjautumistiedot",
     "Google Calendar import" : "Google-kalenterin tuonti",

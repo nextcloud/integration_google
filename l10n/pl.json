@@ -3,8 +3,6 @@
     "Error getting OAuth access token." : "Błąd podczas pobierania tokena dostępu OAuth.",
     "Error during OAuth exchanges" : "Błąd podczas zamiany OAuth",
     "Google" : "Google",
-    "_%s photo was imported from Google._::_%s photos were imported from Google._" : ["Zaimportowano %s zdjęcie z Google.","Zaimportowano %s zdjęcia z Google.","Zaimportowano %s zdjęć z Google.","Zaimportowano %s zdjęć z Google."],
-    "_%s file was imported from Google Drive._::_%s files were imported from Google Drive._" : ["Zaimportowano %s plik z Dysku Google.","Zaimportowano %s pliki z Dysku Google.","Zaimportowano %s plików z Dysku Google.","Zaimportowano %s plików z Dysku Google."],
     "OAuth access token refused" : "Odmowa tokena dostępu OAuth",
     "Bad credentials" : "Złe poświadczenia",
     "Google Calendar import" : "Import Kalendarza Google",

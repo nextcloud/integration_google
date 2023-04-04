@@ -5,8 +5,6 @@ OC.L10N.register(
     "Error getting OAuth access token." : "Errore durante il recupero del token di accesso OAuth.",
     "Error during OAuth exchanges" : "Errore durante le negoziazioni OAuth",
     "Google" : "Google",
-    "_%s photo was imported from Google._::_%s photos were imported from Google._" : ["%s foto è stata importata da Google.","%s foto sono state importate da Google.","%s foto sono state importate da Google."],
-    "_%s file was imported from Google Drive._::_%s files were imported from Google Drive._" : ["%s file è stato importato da Google Drive.","%s file sono stati importati da Google Drive.","%s file sono stati importati da Google Drive."],
     "OAuth access token refused" : "Token di accesso OAuth rifiutato",
     "Bad credentials" : "Credenziali non valide",
     "Google Calendar import" : "Importazione Google Calendar",

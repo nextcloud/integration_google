@@ -3,8 +3,6 @@
     "Error getting OAuth access token." : "Fehler beim Abrufen des OAuth-Zugriffstokens",
     "Error during OAuth exchanges" : "Fehler beim OAuth-Austausch",
     "Google" : "Google",
-    "_%s photo was imported from Google._::_%s photos were imported from Google._" : ["%s Foto wurde von Google importiert.","%s Fotos wurden von Google importiert."],
-    "_%s file was imported from Google Drive._::_%s files were imported from Google Drive._" : [" %s Foto wurde von Google importiert.","%s Fotos wurden von Google importiert."],
     "OAuth access token refused" : "OAuth-Zugriffstoken abgelehnt",
     "Bad credentials" : "Falsche Anmeldeinformationen",
     "Google Calendar import" : "Google Kalender importieren",

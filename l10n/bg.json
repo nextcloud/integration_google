@@ -3,8 +3,6 @@
     "Error getting OAuth access token." : "Грешка при получаване на маркер за достъп на OAuth.",
     "Error during OAuth exchanges" : "Грешка по време на обмен на OAuth",
     "Google" : "Google",
-    "_%s photo was imported from Google._::_%s photos were imported from Google._" : ["%sснимки бяха импортирани от Google. ","%s снимки бяха импортирани от Google."],
-    "_%s file was imported from Google Drive._::_%s files were imported from Google Drive._" : ["%sфайлове бяха импортирани от Google Диск. ","%s файлове бяха импортирани от Google Диск."],
     "OAuth access token refused" : " Маркерът за достъп OAuth е отказан",
     "Bad credentials" : "Лоши идентификационни данни",
     "Google Calendar import" : "Импортиране на Google Календар",

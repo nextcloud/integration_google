@@ -3,8 +3,6 @@
     "Error getting OAuth access token." : " Napaka med pridobivanjem žetona OAuth za dostop",
     "Error during OAuth exchanges" : " Napaka med izmenjavo podatkov OAuth",
     "Google" : "Google",
-    "_%s photo was imported from Google._::_%s photos were imported from Google._" : ["Iz programa Google Photos je bila uvožena %s slika.","Iz programa Google Photos sta bili uvoženi %s sliki.","Iz programa Google Photos so bile uvožene %s slike.","Iz programa Google Photos je bilo uvoženih %s slik."],
-    "_%s file was imported from Google Drive._::_%s files were imported from Google Drive._" : ["Iz oblaka Google Drive je bila uvožena %s slika.","Iz oblaka Google Drive sta bili uvoženi %s sliki.","Iz oblaka Google Drive so bile uvožene %s slike.","Iz oblaka Google Drive je bilo uvoženih %s slik."],
     "OAuth access token refused" : "Žeton OAuth za dostop je bil zavrnjen",
     "Bad credentials" : "Neustrezna poverila",
     "Google Calendar import" : "Uvoz koledarja Google",

@@ -3,8 +3,6 @@
     "Error getting OAuth access token." : "OAuth erişim kodu alınırken sorun çıktı.",
     "Error during OAuth exchanges" : "OAuth takasında sorun çıktı",
     "Google" : "Google",
-    "_%s photo was imported from Google._::_%s photos were imported from Google._" : ["%s fotoğraf Google üzerinden içe aktarıldı.","%s fotoğraf Google üzerinden içe aktarıldı."],
-    "_%s file was imported from Google Drive._::_%s files were imported from Google Drive._" : ["%s dosya Google Drive üzerinden içe aktarıldı.","%s dosya Google Drive üzerinden içe aktarıldı."],
     "OAuth access token refused" : "OAuth erişim kodu reddedildi",
     "Bad credentials" : "Kimlik doğrulama bilgileri hatalı",
     "Google Calendar import" : "Google Takvim içe aktarma",

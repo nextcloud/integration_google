@@ -3,8 +3,6 @@
     "Error getting OAuth access token." : "Errorea OAuth sarbide tokena eskuratzean.",
     "Error during OAuth exchanges" : "Errorea OAuth trukeak egitean",
     "Google" : "Google",
-    "_%s photo was imported from Google._::_%s photos were imported from Google._" : ["Argazki %s inportatu da Google-tik.","%s argazki inportatu dira Google-tik."],
-    "_%s file was imported from Google Drive._::_%s files were imported from Google Drive._" : ["Fitxategi %s inportatu da Google Drive-tik.","%s fitxategi inportatu dira Google Drive-tik."],
     "OAuth access token refused" : "OAuth sarbide tokena ukatua izan da",
     "Bad credentials" : "Kredentzial okerrak",
     "Google Calendar import" : "Google Calendar inportatzea",

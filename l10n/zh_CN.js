@@ -5,8 +5,6 @@ OC.L10N.register(
     "Error getting OAuth access token." : "获取 OAuth 访问令牌出错",
     "Error during OAuth exchanges" : "交换 OAuth 时出错",
     "Google" : "谷歌",
-    "_%s photo was imported from Google._::_%s photos were imported from Google._" : ["从Google 导入了 %s 张照片"],
-    "_%s file was imported from Google Drive._::_%s files were imported from Google Drive._" : ["从 Google 导入了 %s 个文件 "],
     "OAuth access token refused" : "OAuth 访问令牌拒绝",
     "Bad credentials" : "认证出错",
     "Google Calendar import" : "导入 Google 日历",

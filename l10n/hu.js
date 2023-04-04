@@ -5,8 +5,6 @@ OC.L10N.register(
     "Error getting OAuth access token." : "Hiba történt az OAuth hozzáférési token lekérése során.",
     "Error during OAuth exchanges" : "Hiba történt az OAuth üzenetváltás során",
     "Google" : "Google",
-    "_%s photo was imported from Google._::_%s photos were imported from Google._" : ["%s fotó importáltva a Google-ból.","%s fotó importáltva a Google-ból."],
-    "_%s file was imported from Google Drive._::_%s files were imported from Google Drive._" : ["%s fájl importálva a Google Driveból.","%s fájl importálva a Google Driveból."],
     "OAuth access token refused" : "Az OAuth hozzáférési token lekérése visszautasítva",
     "Bad credentials" : "Hibás hitelesítő adatok",
     "Google Calendar import" : "Google Calendar importálás",
