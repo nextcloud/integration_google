@@ -5,6 +5,8 @@ OC.L10N.register(
     "Error getting OAuth access token." : "取得 OAuth 存取權杖時發生錯誤。",
     "Error during OAuth exchanges" : "OAuth 交換時發生錯誤",
     "Google" : "Google",
+    "_%n photo was imported from Google._::_%n photos were imported from Google._" : ["從 Google 匯入了 %n 張照片。"],
+    "_%n file was imported from Google Drive._::_%n files were imported from Google Drive._" : ["從 Google Drive 匯入了 %n 個檔案。"],
     "OAuth access token refused" : "OAuth 存取權杖被拒絕",
     "Bad credentials" : "錯誤的身分驗證",
     "Google Calendar import" : "匯入 Google 日曆",

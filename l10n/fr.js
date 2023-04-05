@@ -5,6 +5,8 @@ OC.L10N.register(
     "Error getting OAuth access token." : "Erreur lors de l'obtention du jeton d'accès OAuth.",
     "Error during OAuth exchanges" : "Erreur lors des échanges OAuth",
     "Google" : "Google",
+    "_%n photo was imported from Google._::_%n photos were imported from Google._" : ["%n photo a été importée depuis Google.","%n photos ont été importées depuis Google.","%n photos ont été importées depuis Google."],
+    "_%n file was imported from Google Drive._::_%n files were imported from Google Drive._" : ["%n fichier a été importé depuis Google Drive.","%n fichiers ont été importés depuis Google Drive.","%n fichiers ont été importés depuis Google Drive."],
     "OAuth access token refused" : "Jeton d'accès OAuth refusé",
     "Bad credentials" : "Identifiants incorrects",
     "Google Calendar import" : "Importation de Google Agenda",
