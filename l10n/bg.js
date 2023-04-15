@@ -5,6 +5,8 @@ OC.L10N.register(
     "Error getting OAuth access token." : "Грешка при получаване на маркер за достъп на OAuth.",
     "Error during OAuth exchanges" : "Грешка по време на обмен на OAuth",
     "Google" : "Google",
+    "_%n photo was imported from Google._::_%n photos were imported from Google._" : ["%n от снимка бяха импортирани от Google. ","%n снимки бяха импортирани от Google."],
+    "_%n file was imported from Google Drive._::_%n files were imported from Google Drive._" : ["%n от файлове бяха импортирани от Google Диск.","%n от файлове бяха импортирани от Google Диск."],
     "OAuth access token refused" : " Маркерът за достъп OAuth е отказан",
     "Bad credentials" : "Лоши идентификационни данни",
     "Google Calendar import" : "Импортиране на Google Календар",

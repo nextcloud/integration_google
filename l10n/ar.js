@@ -1,6 +1,10 @@
 OC.L10N.register(
     "integration_google",
     {
+    "Error during OAuth exchanges" : "خطأ أثناء تبادل OAuth.",
+    "OAuth access token refused" : "أمارة token مرفوضة",
+    "Bad credentials" : "رموز التعريف غير صحيحة",
+    "Connected accounts" : "حسابات مترابطة",
     "Client ID" : "معرف العميل",
     "Authentication" : "المصادقة",
     "Contacts" : "المُراسِلون",
