@@ -1,7 +1,7 @@
 { "translations": {
     "Missing refresh token in Google response." : "Google yanıtında yenileme kodu eksik.",
     "Error getting OAuth access token." : "OAuth erişim kodu alınırken sorun çıktı.",
-    "Error during OAuth exchanges" : "OAuth takasında sorun çıktı",
+    "Error during OAuth exchanges" : "OAuth alış verişinde sorun çıktı",
     "Google" : "Google",
     "_%n photo was imported from Google._::_%n photos were imported from Google._" : ["%n fotoğraf Google üzerinden içe aktarıldı.","%n fotoğraf Google üzerinden içe aktarıldı."],
     "_%n file was imported from Google Drive._::_%n files were imported from Google Drive._" : ["%n dosya Google Drive üzerinden içe aktarıldı.","%n dosya Google Drive üzerinden içe aktarıldı."],
