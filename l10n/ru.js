@@ -31,6 +31,7 @@ OC.L10N.register(
     "Google data migration" : "Перенос данных в Google",
     "No Google OAuth app configured. Ask your Nextcloud administrator to configure Google connected accounts admin section." : "Не настроено приложение Google OAuth. Попросите администратора Nextcloud настроить раздел администрирования подключенных учетных записей Google.",
     "Authentication" : "Аутентификация",
+    "Sign in with Google" : "Войти через Google",
     "Connected as {user}" : "Подключено под именем {user}",
     "Disconnect from Google" : "Отключить от Google",
     "Contacts" : "Контакты",
@@ -76,6 +77,7 @@ OC.L10N.register(
     "Failed to start importing Google Drive" : "Не удалось начать импорт Google Drive",
     "Choose where to write imported files" : "Выберите, куда сохранять импортированные файлы",
     "Choose where to write imported photos" : "Выберите, куда сохранять импортированные фотографии",
+    "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} Google фотография (>{formSize})",">{nbPhotos} Google фотографии (>{formSize})",">{nbPhotos} Google фотографии (>{formSize})",">{nbPhotos} Google фотографии (>{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["Импортирована одна фотография","Импортировано {amount} фотографии","Импортировано {amount} фотографий","Импортировано {amount} фотографии"],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} файл импортирован ({progress}%)","{amount} файла импортировано ({progress}%)","{amount} файлов импортировано ({progress}%)","{amount} файлов импортировано ({progress}%)"]
 },
