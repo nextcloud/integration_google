@@ -7,6 +7,7 @@ OC.L10N.register(
     "Client ID" : "Ідентифікатор клієнта",
     "Client secret" : "Ключ клієнта",
     "Authentication" : "Автентифікація",
+    "Sign in with Google" : "Увійдіть за допомогою Google",
     "Contacts" : "Контакти",
     "New address book" : "Нова адресна книга",
     "Calendars" : "Календарі",
