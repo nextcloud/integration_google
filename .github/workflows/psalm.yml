@@ -8,6 +8,8 @@ name: Static analysis
 on:
   pull_request:
   push:
+    paths:
+      - 'lib/**'
     branches:
       - master
       - main
