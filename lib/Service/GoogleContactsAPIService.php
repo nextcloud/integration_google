@@ -14,43 +14,25 @@ namespace OCA\Google\Service;
 use Datetime;
 use Exception;
 use Generator;
+use OCA\DAV\CardDAV\CardDavBackend;
 use OCA\Google\AppInfo\Application;
 use OCP\Contacts\IManager as IContactManager;
-use Sabre\VObject\Component\VCard;
-use OCA\DAV\CardDAV\CardDavBackend;
 use Psr\Log\LoggerInterface;
+use Sabre\VObject\Component\VCard;
 use Throwable;
 
+/**
+ * Service to make requests to Google v3 (JSON) API
+ */
 class GoogleContactsAPIService {
-	/**
-	 * @var LoggerInterface
-	 */
-	private $logger;
-	/**
-	 * @var IContactManager
-	 */
-	private $contactsManager;
-	/**
-	 * @var CardDavBackend
-	 */
-	private $cdBackend;
-	/**
-	 * @var GoogleAPIService
-	 */
-	private $googleApiService;
 
-	/**
-	 * Service to make requests to Google v3 (JSON) API
-	 */
-	public function __construct (string $appName,
-								LoggerInterface $logger,
-								IContactManager $contactsManager,
-								CardDavBackend $cdBackend,
-								GoogleAPIService $googleApiService) {
-		$this->logger = $logger;
-		$this->contactsManager = $contactsManager;
-		$this->cdBackend = $cdBackend;
-		$this->googleApiService = $googleApiService;
+	public function __construct(
+		string $appName,
+		private LoggerInterface $logger,
+		private IContactManager $contactsManager,
+		private CardDavBackend $cdBackend,
+		private GoogleAPIService $googleApiService
+	) {
 	}
 
 	/**
@@ -59,7 +41,7 @@ class GoogleContactsAPIService {
 	 * @param string $userId
 	 * @return array
 	 */
-	public function getContactGroupsById(string $userId): array	{
+	public function getContactGroupsById(string $userId): array {
 		$groups = [];
 		$params = [
 			'pageSize' => 100,

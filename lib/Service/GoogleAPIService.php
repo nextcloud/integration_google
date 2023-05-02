@@ -13,53 +13,30 @@ namespace OCA\Google\Service;
 
 use DateTime;
 use Exception;
-use OCP\IL10N;
-use OCP\IConfig;
-use OCP\Http\Client\IClientService;
 use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Exception\ConnectException;
-use Psr\Log\LoggerInterface;
-use OCP\Notification\IManager as INotificationManager;
-
+use GuzzleHttp\Exception\ServerException;
 use OCA\Google\AppInfo\Application;
+use OCP\Http\Client\IClientService;
+use OCP\IConfig;
+use OCP\IL10N;
+use OCP\Notification\IManager as INotificationManager;
+use Psr\Log\LoggerInterface;
 use Throwable;
 
+/**
+ * Service to make requests to Google v3 (JSON) API
+ */
 class GoogleAPIService {
-	/**
-	 * @var LoggerInterface
-	 */
-	private $logger;
-	/**
-	 * @var IL10N
-	 */
-	private $l10n;
-	/**
-	 * @var IConfig
-	 */
-	private $config;
-	/**
-	 * @var INotificationManager
-	 */
-	private $notificationManager;
-	/**
-	 * @var \OCP\Http\Client\IClient
-	 */
-	private $client;
 
-	/**
-	 * Service to make requests to Google v3 (JSON) API
-	 */
-	public function __construct (string $appName,
-								LoggerInterface $logger,
-								IL10N $l10n,
-								IConfig $config,
-								INotificationManager $notificationManager,
-								IClientService $clientService) {
-		$this->logger = $logger;
-		$this->l10n = $l10n;
-		$this->config = $config;
-		$this->notificationManager = $notificationManager;
+	public function __construct(
+		string $appName,
+		private LoggerInterface $logger,
+		private IL10N $l10n,
+		private IConfig $config,
+		private INotificationManager $notificationManager,
+		IClientService $clientService
+	) {
 		$this->client = $clientService->newClient();
 	}
 
@@ -71,12 +48,11 @@ class GoogleAPIService {
 	private function buildUrl(string $baseUrl, array $params = []): string {
 		$paramsContent = http_build_query($params);
 		if (strpos($baseUrl, '?') !== false) {
-        	$baseUrl .= '&'. $paramsContent;
-        } else {
+			$baseUrl .= '&'. $paramsContent;
+		} else {
 			$baseUrl .= '?' . $paramsContent;
 		}
 		return $baseUrl;
-
 	}
 	/**
 	 * @param string $userId
@@ -106,8 +82,10 @@ class GoogleAPIService {
 	 * @param ?string $baseUrl
 	 * @return array
 	 */
-	public function request(string $userId, string $endPoint, array $params = [],
-							string $method = 'GET', ?string $baseUrl = null): array {
+	public function request(
+		string $userId, string $endPoint, array $params = [],
+		string $method = 'GET', ?string $baseUrl = null
+	): array {
 		$this->checkTokenExpiration($userId);
 		$accessToken = $this->config->getUserValue($userId, Application::APP_ID, 'token');
 		try {
@@ -137,11 +115,11 @@ class GoogleAPIService {
 
 			if ($method === 'GET') {
 				$response = $this->client->get($url, $options);
-			} else if ($method === 'POST') {
+			} elseif ($method === 'POST') {
 				$response = $this->client->post($url, $options);
-			} else if ($method === 'PUT') {
+			} elseif ($method === 'PUT') {
 				$response = $this->client->put($url, $options);
-			} else if ($method === 'DELETE') {
+			} elseif ($method === 'DELETE') {
 				$response = $this->client->delete($url, $options);
 			} else {
 				return ['error' => 'Bad HTTP method'];
@@ -208,11 +186,11 @@ class GoogleAPIService {
 
 			if ($method === 'GET') {
 				$response = $this->client->get($url, $options);
-			} else if ($method === 'POST') {
+			} elseif ($method === 'POST') {
 				$response = $this->client->post($url, $options);
-			} else if ($method === 'PUT') {
+			} elseif ($method === 'PUT') {
 				$response = $this->client->put($url, $options);
-			} else if ($method === 'DELETE') {
+			} elseif ($method === 'DELETE') {
 				$response = $this->client->delete($url, $options);
 			} else {
 				return ['error' => 'Bad HTTP method'];
@@ -261,11 +239,11 @@ class GoogleAPIService {
 
 			if ($method === 'GET') {
 				$response = $this->client->get($url, $options);
-			} else if ($method === 'POST') {
+			} elseif ($method === 'POST') {
 				$response = $this->client->post($url, $options);
-			} else if ($method === 'PUT') {
+			} elseif ($method === 'PUT') {
 				$response = $this->client->put($url, $options);
-			} else if ($method === 'DELETE') {
+			} elseif ($method === 'DELETE') {
 				$response = $this->client->delete($url, $options);
 			} else {
 				return ['error' => 'Bad HTTP method'];
@@ -325,11 +303,11 @@ class GoogleAPIService {
 
 			if ($method === 'GET') {
 				$response = $this->client->get($url, $options);
-			} else if ($method === 'POST') {
+			} elseif ($method === 'POST') {
 				$response = $this->client->post($url, $options);
-			} else if ($method === 'PUT') {
+			} elseif ($method === 'PUT') {
 				$response = $this->client->put($url, $options);
-			} else if ($method === 'DELETE') {
+			} elseif ($method === 'DELETE') {
 				$response = $this->client->delete($url, $options);
 			} else {
 				return ['error' => 'Bad HTTP method'];

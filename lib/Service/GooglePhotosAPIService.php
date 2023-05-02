@@ -13,61 +13,33 @@ namespace OCA\Google\Service;
 
 use Datetime;
 use Exception;
-use OCP\Files\Folder;
-use OCP\IConfig;
-use OCP\Files\IRootFolder;
-use OCP\Files\FileInfo;
-use OCP\Lock\ILockingProvider;
-use OCP\Lock\LockedException;
-use OCP\BackgroundJob\IJobList;
-use Psr\Log\LoggerInterface;
-
 use OCA\Google\AppInfo\Application;
 use OCA\Google\BackgroundJob\ImportPhotosJob;
+use OCP\BackgroundJob\IJobList;
+use OCP\Files\FileInfo;
+use OCP\Files\Folder;
+use OCP\Files\IRootFolder;
+use OCP\IConfig;
+use OCP\Lock\ILockingProvider;
+use OCP\Lock\LockedException;
+use Psr\Log\LoggerInterface;
+
 use Throwable;
 
+/**
+ * Service to make requests to Google v3 (JSON) API
+ */
 class GooglePhotosAPIService {
-	/**
-	 * @var LoggerInterface
-	 */
-	private $logger;
-	/**
-	 * @var IConfig
-	 */
-	private $config;
-	/**
-	 * @var IRootFolder
-	 */
-	private $root;
-	/**
-	 * @var IJobList
-	 */
-	private $jobList;
-	/**
-	 * @var GoogleAPIService
-	 */
-	private $googleApiService;
-	/**
-	 * @var UserScopeService
-	 */
-	private $userScopeService;
 
-	/**
-	 * Service to make requests to Google v3 (JSON) API
-	 */
-	public function __construct (string $appName,
-								LoggerInterface $logger,
-								IConfig $config,
-								IRootFolder $root,
-								IJobList $jobList,
-								UserScopeService $userScopeService,
-								GoogleAPIService $googleApiService) {
-		$this->logger = $logger;
-		$this->config = $config;
-		$this->root = $root;
-		$this->jobList = $jobList;
-		$this->googleApiService = $googleApiService;
-		$this->userScopeService = $userScopeService;
+	public function __construct(
+		string $appName,
+		private LoggerInterface $logger,
+		private IConfig $config,
+		private IRootFolder $root,
+		private IJobList $jobList,
+		private UserScopeService $userScopeService,
+		private GoogleAPIService $googleApiService
+	) {
 	}
 
 	/**
@@ -236,8 +208,10 @@ class GooglePhotosAPIService {
 	 * @param int $alreadyImported
 	 * @return array
 	 */
-	public function importPhotos(string $userId, string $targetPath,
-								?int $maxDownloadSize = null, int $alreadyImported = 0): array {
+	public function importPhotos(
+		string $userId, string $targetPath,
+		?int $maxDownloadSize = null, int $alreadyImported = 0
+	): array {
 		// create root folder
 		$userFolder = $this->root->getUserFolder($userId);
 		if (!$userFolder->nodeExists($targetPath)) {

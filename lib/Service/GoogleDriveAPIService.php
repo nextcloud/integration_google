@@ -13,46 +13,24 @@ namespace OCA\Google\Service;
 
 use Datetime;
 use Exception;
-use OCP\Files\Folder;
-use OCP\Files\InvalidPathException;
-use OCP\Files\NotPermittedException;
-use OCP\IConfig;
-use OCP\Files\IRootFolder;
-use OCP\BackgroundJob\IJobList;
-use OCP\Lock\ILockingProvider;
-use Psr\Log\LoggerInterface;
-use OCP\Files\NotFoundException;
-use OCP\Lock\LockedException;
-
+use OC\User\NoUserException;
 use OCA\Google\AppInfo\Application;
 use OCA\Google\BackgroundJob\ImportDriveJob;
+use OCP\BackgroundJob\IJobList;
+use OCP\Files\Folder;
+use OCP\Files\InvalidPathException;
+use OCP\Files\IRootFolder;
+use OCP\Files\NotFoundException;
+use OCP\Files\NotPermittedException;
+use OCP\IConfig;
+use OCP\Lock\ILockingProvider;
+use OCP\Lock\LockedException;
+use OCP\PreConditionNotMetException;
+use Psr\Log\LoggerInterface;
+
 use Throwable;
 
 class GoogleDriveAPIService {
-	/**
-	 * @var LoggerInterface
-	 */
-	private $logger;
-	/**
-	 * @var IConfig
-	 */
-	private $config;
-	/**
-	 * @var IRootFolder
-	 */
-	private $root;
-	/**
-	 * @var IJobList
-	 */
-	private $jobList;
-	/**
-	 * @var GoogleAPIService
-	 */
-	private $googleApiService;
-	/**
-	 * @var UserScopeService
-	 */
-	private $userScopeService;
 
 	private const DOCUMENT_MIME_TYPES = [
 		'document' => 'application/vnd.google-apps.document',
@@ -63,13 +41,15 @@ class GoogleDriveAPIService {
 	/**
 	 * Service to make requests to Google v3 (JSON) API
 	 */
-	public function __construct (string $appName,
-								LoggerInterface $logger,
-								IConfig $config,
-								IRootFolder $root,
-								IJobList $jobList,
-								UserScopeService $userScopeService,
-								GoogleAPIService $googleApiService) {
+	public function __construct(
+		string $appName,
+		private LoggerInterface $logger,
+		private IConfig $config,
+		private IRootFolder $root,
+		private IJobList $jobList,
+		private UserScopeService $userScopeService,
+		private GoogleAPIService $googleApiService
+	) {
 		$this->logger = $logger;
 		$this->config = $config;
 		$this->root = $root;
@@ -234,16 +214,21 @@ class GoogleDriveAPIService {
 	 * @param string $targetPath
 	 * @param ?int $maxDownloadSize
 	 * @param int $alreadyImported
+	 * @param int $alreadyImportedSize
 	 * @param array $directoryProgress
 	 * @return array
+	 * @throws InvalidPathException
+	 * @throws LockedException
 	 * @throws NotFoundException
-	 * @throws \OCP\Files\NotPermittedException
-	 * @throws \OCP\PreConditionNotMetException
-	 * @throws \OC\User\NoUserException
+	 * @throws NotPermittedException
+	 * @throws PreConditionNotMetException
+	 * @throws NoUserException
 	 */
-	public function importFiles(string $userId, string $targetPath,
-								?int $maxDownloadSize = null, int $alreadyImported = 0, int $alreadyImportedSize = 0,
-								array &$directoryProgress = []): array {
+	public function importFiles(
+		string $userId, string $targetPath,
+		?int $maxDownloadSize = null, int $alreadyImported = 0, int $alreadyImportedSize = 0,
+		array &$directoryProgress = []
+	): array {
 		$considerSharedFiles = $this->config->getUserValue($userId, Application::APP_ID, 'consider_shared_files', '0') === '1';
 		// create root folder
 		$userFolder = $this->root->getUserFolder($userId);
@@ -529,7 +514,7 @@ class GoogleDriveAPIService {
 		foreach ($directoriesById as $id => $dir) {
 			$parentId = $dir['parent'];
 			// create dir if we are on top OR if its parent is current dir
-			if ( ($currentFolderId === '' && !array_key_exists($parentId, $directoriesById))
+			if (($currentFolderId === '' && !array_key_exists($parentId, $directoriesById))
 				|| $parentId === $currentFolderId) {
 				$name = $dir['name'];
 				if (!$currentFolder->nodeExists($name)) {
@@ -565,8 +550,10 @@ class GoogleDriveAPIService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	 private function downloadAndSaveFile(Folder $saveFolder, string $fileName, string $userId,
-										  string $fileUrl, array $fileItem, array $params = []): ?int {
+	private function downloadAndSaveFile(
+		Folder $saveFolder, string $fileName, string $userId,
+		string $fileUrl, array $fileItem, array $params = []
+	): ?int {
 		try {
 			$savedFile = $saveFolder->newFile($fileName);
 		} catch (NotPermittedException $e) {
@@ -600,7 +587,7 @@ class GoogleDriveAPIService {
 			}
 		}
 		return null;
-	 }
+	}
 
 	/**
 	 * @param array $fileItem
@@ -638,7 +625,7 @@ class GoogleDriveAPIService {
 	/**
 	 * @param string $userId
 	 * @return string User's preferred document format
-	*/
+	 */
 	private function getUserDocumentFormat(string $userId): string {
 		$documentFormat = $this->config->getUserValue($userId, Application::APP_ID, 'document_format', 'openxml');
 		if (!in_array($documentFormat, ['openxml', 'opendoc'])) {
@@ -651,7 +638,7 @@ class GoogleDriveAPIService {
 	 * @param string $mimeType
 	 * @param string $documentFormat
 	 * @return array Request parameters for document
-	*/
+	 */
 	private function getDocumentRequestParams(string $mimeType, string $documentFormat): array {
 		$params = [];
 		switch ($mimeType) {

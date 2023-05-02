@@ -11,63 +11,31 @@
 
 namespace OCA\Google\Controller;
 
-use OCP\IConfig;
-use OCP\IRequest;
-use OCP\AppFramework\Http\DataResponse;
-use OCP\AppFramework\Controller;
-
-use OCA\Google\Service\GooglePhotosAPIService;
+use OCA\Google\AppInfo\Application;
+use OCA\Google\Service\GoogleCalendarAPIService;
 use OCA\Google\Service\GoogleContactsAPIService;
 use OCA\Google\Service\GoogleDriveAPIService;
-use OCA\Google\Service\GoogleCalendarAPIService;
-use OCA\Google\AppInfo\Application;
+use OCA\Google\Service\GooglePhotosAPIService;
+use OCP\AppFramework\Controller;
+use OCP\AppFramework\Http\DataResponse;
+use OCP\IConfig;
+use OCP\IRequest;
 
 class GoogleAPIController extends Controller {
 
-	/**
-	 * @var IConfig
-	 */
-	private $config;
-	/**
-	 * @var GooglePhotosAPIService
-	 */
-	private $googlePhotosAPIService;
-	/**
-	 * @var GoogleContactsAPIService
-	 */
-	private $googleContactsAPIService;
-	/**
-	 * @var GoogleDriveAPIService
-	 */
-	private $googleDriveAPIService;
-	/**
-	 * @var GoogleCalendarAPIService
-	 */
-	private $googleCalendarAPIService;
-	/**
-	 * @var string|null
-	 */
-	private $userId;
-	/**
-	 * @var string
-	 */
-	private $accessToken;
+	private string $accessToken;
 
-	public function __construct(string $appName,
-								IRequest $request,
-								IConfig $config,
-								GooglePhotosAPIService $googlePhotosAPIService,
-								GoogleContactsAPIService $googleContactsAPIService,
-								GoogleDriveAPIService $googleDriveAPIService,
-								GoogleCalendarAPIService $googleCalendarAPIService,
-								?string $userId) {
+	public function __construct(
+		string $appName,
+		IRequest $request,
+		private IConfig $config,
+		private GooglePhotosAPIService $googlePhotosAPIService,
+		private GoogleContactsAPIService $googleContactsAPIService,
+		private GoogleDriveAPIService $googleDriveAPIService,
+		private GoogleCalendarAPIService $googleCalendarAPIService,
+		private ?string $userId
+	) {
 		parent::__construct($appName, $request);
-		$this->config = $config;
-		$this->googlePhotosAPIService = $googlePhotosAPIService;
-		$this->googleContactsAPIService = $googleContactsAPIService;
-		$this->googleDriveAPIService = $googleDriveAPIService;
-		$this->googleCalendarAPIService = $googleCalendarAPIService;
-		$this->userId = $userId;
 		$this->accessToken = $this->config->getUserValue($this->userId, Application::APP_ID, 'token');
 	}
 

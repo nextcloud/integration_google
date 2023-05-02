@@ -15,50 +15,32 @@ use Datetime;
 use DateTimeZone;
 use Exception;
 use Generator;
+use OCA\DAV\CalDAV\CalDavBackend;
 use OCA\Google\AppInfo\Application;
 use OCP\IL10N;
-use OCA\DAV\CalDAV\CalDavBackend;
-use Sabre\DAV\Exception\BadRequest;
-use Psr\Log\LoggerInterface;
-
-require_once __DIR__ . '/../../vendor/autoload.php';
 use Ortic\ColorConverter\Color;
 use Ortic\ColorConverter\Colors\Named;
+use Psr\Log\LoggerInterface;
+use Sabre\DAV\Exception\BadRequest;
 use Sabre\VObject\Component\VCalendar;
 use Sabre\VObject\Component\VEvent;
 use Sabre\VObject\Reader;
 use Throwable;
 
-class GoogleCalendarAPIService {
-	/**
-	 * @var LoggerInterface
-	 */
-	private $logger;
-	/**
-	 * @var IL10N
-	 */
-	private $l10n;
-	/**
-	 * @var CalDavBackend
-	 */
-	private $caldavBackend;
-	/**
-	 * @var GoogleAPIService
-	 */
-	private $googleApiService;
+require_once __DIR__ . '/../../vendor/autoload.php';
 
-	/**
-	 * Service to make requests to Google v3 (JSON) API
-	 */
-	public function __construct (string $appName,
-								LoggerInterface $logger,
-								IL10N $l10n,
-								CalDavBackend $caldavBackend,
-								GoogleAPIService $googleApiService) {
-		$this->logger = $logger;
-		$this->l10n = $l10n;
-		$this->caldavBackend = $caldavBackend;
-		$this->googleApiService = $googleApiService;
+/**
+ * Service to make requests to Google v3 (JSON) API
+ */
+class GoogleCalendarAPIService {
+
+	public function __construct(
+		string $appName,
+		private LoggerInterface $logger,
+		private IL10N $l10n,
+		private CalDavBackend $caldavBackend,
+		private GoogleAPIService $googleApiService
+	) {
 	}
 
 	/**
