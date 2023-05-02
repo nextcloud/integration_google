@@ -126,14 +126,16 @@ class ConfigController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 *
+	 * @NoCSRFRequired 
+
 	 * Receive oauth code and get oauth access token
 	 *
 	 * @param string $code request code to use when requesting oauth token
 	 * @param string $state value that was sent with original GET request. Used to check auth redirection is valid
 	 * @param string $scope scopes allowed by user
-	 * @param ?string $error
+	 * @param string $error
+	 *
 	 * @return RedirectResponse to user settings
 	 */
 	public function oauthRedirect(string $code = '', string $state = '', string $scope = '', string $error = ''): RedirectResponse {

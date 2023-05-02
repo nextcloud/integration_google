@@ -27,6 +27,9 @@ class ImportPhotosJob extends QueuedJob {
 		parent::__construct($timeFactory);
 	}
 
+	/**
+	 * @return void
+	 */
 	public function run($arguments) {
 		$userId = $arguments['user_id'];
 		$this->service->importPhotosJob($userId);

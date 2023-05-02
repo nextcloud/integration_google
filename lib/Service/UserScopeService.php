@@ -23,6 +23,7 @@
 
 namespace OCA\Google\Service;
 
+use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IUserSession;
 
@@ -32,8 +33,6 @@ class UserScopeService {
 		private IUserSession $userSession,
 		private IUserManager $userManager
 	) {
-		$this->userSession = $userSession;
-		$this->userManager = $userManager;
 	}
 
 	/**
@@ -47,6 +46,7 @@ class UserScopeService {
 			return;
 		}
 
+		/** @var null|IUser $user */
 		$user = $this->userManager->get($uid);
 		if ($user === null) {
 			throw new \InvalidArgumentException('No user found for the uid ' . $uid);
