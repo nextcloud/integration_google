@@ -2,11 +2,14 @@
 
 namespace OCA\Google\Settings;
 
+use OC\User\NoUserException;
 use OCA\Google\AppInfo\Application;
 use OCA\Google\Service\GoogleAPIService;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Services\IInitialState;
 use OCP\Files\IRootFolder;
+use OCP\Files\NotFoundException;
+use OCP\Files\NotPermittedException;
 use OCP\IConfig;
 use OCP\IUserManager;
 use OCP\Settings\ISettings;
@@ -25,8 +28,14 @@ class Personal implements ISettings {
 
 	/**
 	 * @return TemplateResponse
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 * @throws NoUserException
 	 */
 	public function getForm(): TemplateResponse {
+		if ($this->userId === null) {
+			return new TemplateResponse(Application::APP_ID, 'personalSettings');
+		}
 		$userName = $this->config->getUserValue($this->userId, Application::APP_ID, 'user_name');
 		$driveOutputDir = $this->config->getUserValue($this->userId, Application::APP_ID, 'drive_output_dir', '/Google Drive');
 		$driveOutputDir = $driveOutputDir ?: '/Google Drive';
@@ -52,7 +61,7 @@ class Personal implements ISettings {
 		// make a request to potentially refresh the token before the settings page is loaded
 		$accessToken = $this->config->getUserValue($this->userId, Application::APP_ID, 'token');
 		if ($accessToken) {
-			$info = $this->googleAPIService->request($this->userId, 'oauth2/v1/userinfo', ['alt' => 'json']);
+			$this->googleAPIService->request($this->userId, 'oauth2/v1/userinfo', ['alt' => 'json']);
 		}
 
 		// Get scopes of user
