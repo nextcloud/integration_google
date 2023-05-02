@@ -1,56 +1,26 @@
 <?php
-namespace OCA\Google\Settings;
 
-use OCP\AppFramework\Http\TemplateResponse;
-use OCP\AppFramework\Services\IInitialState;
-use OCP\IConfig;
-use OCP\Settings\ISettings;
-use OCP\IUserManager;
-use OCP\Files\IRootFolder;
+namespace OCA\Google\Settings;
 
 use OCA\Google\AppInfo\Application;
 use OCA\Google\Service\GoogleAPIService;
+use OCP\AppFramework\Http\TemplateResponse;
+use OCP\AppFramework\Services\IInitialState;
+use OCP\Files\IRootFolder;
+use OCP\IConfig;
+use OCP\IUserManager;
+use OCP\Settings\ISettings;
 
 class Personal implements ISettings {
 
-	/**
-	 * @var IConfig
-	 */
-	private $config;
-	/**
-	 * @var IRootFolder
-	 */
-	private $root;
-	/**
-	 * @var IUserManager
-	 */
-	private $userManager;
-	/**
-	 * @var IInitialState
-	 */
-	private $initialStateService;
-	/**
-	 * @var string|null
-	 */
-	private $userId;
-	/**
-	 * @var GoogleAPIService
-	 */
-	private $googleAPIService;
-
 	public function __construct(
-								IConfig $config,
-								IRootFolder $root,
-								IUserManager $userManager,
-								IInitialState $initialStateService,
-								GoogleAPIService $googleAPIService,
-								?string $userId) {
-		$this->config = $config;
-		$this->root = $root;
-		$this->userManager = $userManager;
-		$this->initialStateService = $initialStateService;
-		$this->userId = $userId;
-		$this->googleAPIService = $googleAPIService;
+		private IConfig $config,
+		private IRootFolder $root,
+		private IUserManager $userManager,
+		private IInitialState $initialStateService,
+		private GoogleAPIService $googleAPIService,
+		private ?string $userId
+	) {
 	}
 
 	/**
