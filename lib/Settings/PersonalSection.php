@@ -43,9 +43,9 @@ class PersonalSection implements IIconSection {
 	}
 
 	/**
-	 * @return ?string The relative path to a an icon describing the section
+	 * @return string The relative path to a an icon describing the section
 	 */
-	public function getIcon(): ?string {
+	public function getIcon(): string {
 		return $this->urlGenerator->imagePath('core', 'actions/download.svg');
 	}
 }

@@ -364,7 +364,7 @@ class GooglePhotosAPIService {
 	 * @param string $userId
 	 * @param array $photo
 	 * @param Folder $albumFolder
-	 * @return ?int downloaded size, null if already existing
+	 * @return int|null downloaded size, null if already existing
 	 * @throws \OCP\Files\InvalidPathException
 	 * @throws \OCP\Files\NotFoundException
 	 * @throws \OCP\Files\NotPermittedException
@@ -399,7 +399,7 @@ class GooglePhotosAPIService {
 					$savedFile->touch();
 				}
 				$stat = $savedFile->stat();
-				return $stat['size'] ?? 0;
+				return (int) ($stat['size'] ?? 0);
 			} else {
 				$this->logger->warning('Google API error downloading photo ' . '<redacted>' . ' : ' . $res['error'], ['app' => Application::APP_ID]);
 				if ($savedFile->isDeletable()) {

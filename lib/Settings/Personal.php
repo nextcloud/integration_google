@@ -55,6 +55,7 @@ class Personal implements ISettings {
 
 		// get free space
 		$userFolder = $this->root->getUserFolder($this->userId);
+		/** @var bool|float|int $freeSpace */
 		$freeSpace = $userFolder->getStorage()->free_space('/');
 		$user = $this->userManager->get($this->userId);
 
@@ -66,6 +67,7 @@ class Personal implements ISettings {
 
 		// Get scopes of user
 		$userScopesString = $this->config->getUserValue($this->userId, Application::APP_ID, 'user_scopes', '{}');
+		/** @var bool|null|array $userScopes */
 		$userScopes = json_decode($userScopesString);
 		if (!is_array($userScopes)) {
 			$userScopes = ['nothing' => 'nothing'];

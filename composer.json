@@ -13,7 +13,7 @@
         "friendsofphp/php-cs-fixer": "^3",
         "nextcloud/coding-standard": "^1",
         "psalm/phar": "^4.3",
-        "nextcloud/ocp": "dev-master"
+        "nextcloud/ocp": "v26.0.0.x-dev"
     },
     "config": {
         "platform": {

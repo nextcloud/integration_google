@@ -275,7 +275,7 @@ class GoogleAPIService {
 	 * @param resource $resource
 	 * @param array $params Query parameters (key/val pairs)
 	 * @param string $method HTTP query method
-	 * @return array
+	 * @return string[]
 	 */
 	public function simpleDownload(string $userId, string $url, $resource, array $params = [], string $method = 'GET'): array {
 		$this->checkTokenExpiration($userId);
