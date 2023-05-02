@@ -86,8 +86,11 @@ class Personal implements ISettings {
 		}
 
 		// Get scopes of user
-		$userScopes = $this->config->getUserValue($this->userId, Application::APP_ID, 'user_scopes', '{}');
-		$userScopes = json_decode($userScopes);
+		$userScopesString = $this->config->getUserValue($this->userId, Application::APP_ID, 'user_scopes', '{}');
+		$userScopes = json_decode($userScopesString);
+		if (!is_array($userScopes)) {
+			$userScopes = ['nothing' => 'nothing'];
+		}
 
 		$userConfig = [
 			'client_id' => $clientID,
@@ -95,7 +98,7 @@ class Personal implements ISettings {
 			'use_popup' => ($usePopup === '1'),
 			'user_name' => $userName,
 			'free_space' => $freeSpace,
-			'user_quota' => $user->getQuota(),
+			'user_quota' => $user === null ? '' : $user->getQuota(),
 			'consider_shared_files' => $considerSharedFiles,
 			'consider_shared_albums' => $considerSharedAlbums,
 			'document_format' => $documentFormat,

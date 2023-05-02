@@ -43,14 +43,13 @@ class UserScopeService {
 		$this->userManager = $userManager;
 	}
 
-    /**
-     * Set a valid user in IUserSession since lots of server logic is relying on obtaining
-     * the current acting user from that
-     *
-     * @param $uid
-     * @throws \InvalidArgumentException
-     */
-    public function setUserScope(string $uid = null) {
+	/**
+	 * Set a valid user in IUserSession since lots of server logic is relying on obtaining
+	 * the current acting user from that
+	 *
+	 * @param string|null $uid
+	 */
+    public function setUserScope(string $uid = null): void {
         if ($uid === null) {
             return;
         }
@@ -70,7 +69,7 @@ class UserScopeService {
      *
      * @param string $owner
      */
-    public function setFilesystemScope(string $owner) {
+    public function setFilesystemScope(string $owner): void {
         \OC_Util::tearDownFS();
         \OC_Util::setupFS($owner);
     }
