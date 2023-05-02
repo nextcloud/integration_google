@@ -23,10 +23,7 @@ jobs:
     strategy:
       matrix:
         php-versions: [ '8.0', '8.1', '8.2' ]
-        server-versions: ['v25.0.0', 'v26.0.0', 'dev-master' ]
-        include:
-          - php-versions: 7.4
-            server-versions: v24.0.0
+        server-versions: ['v26.0.0', 'dev-master' ]
 
     name: Nextcloud
     steps:
