@@ -11,7 +11,7 @@
 
 namespace OCA\Google\Service;
 
-use Datetime;
+use DateTime;
 use Exception;
 use OCA\Google\AppInfo\Application;
 use OCA\Google\BackgroundJob\ImportPhotosJob;
@@ -157,7 +157,7 @@ class GooglePhotosAPIService {
 			return;
 		}
 		$jobRunning = $this->config->getUserValue($userId, Application::APP_ID, 'photo_import_running', '0') === '1';
-		$nowTs = (new Datetime())->getTimestamp();
+		$nowTs = (new DateTime())->getTimestamp();
 		if ($jobRunning) {
 			$lastJobStart = $this->config->getUserValue($userId, Application::APP_ID, 'photo_import_job_last_start');
 			if ($lastJobStart !== '' && ($nowTs - intval($lastJobStart) < Application::IMPORT_JOB_TIMEOUT)) {
@@ -194,7 +194,7 @@ class GooglePhotosAPIService {
 				$this->logger->error('Google Photo import error: ' . $result['error'], ['app' => Application::APP_ID]);
 			}
 		} else {
-			$ts = (new Datetime())->getTimestamp();
+			$ts = (new DateTime())->getTimestamp();
 			$this->config->setUserValue($userId, Application::APP_ID, 'last_import_timestamp', $ts);
 			$this->jobList->add(ImportPhotosJob::class, ['user_id' => $userId]);
 		}
@@ -392,14 +392,14 @@ class GooglePhotosAPIService {
 					fclose($resource);
 				}
 				if (isset($photo['mediaMetadata']['creationTime'])) {
-					$d = new Datetime($photo['mediaMetadata']['creationTime']);
+					$d = new DateTime($photo['mediaMetadata']['creationTime']);
 					$ts = $d->getTimestamp();
 					$savedFile->touch($ts);
 				} else {
 					$savedFile->touch();
 				}
 				$stat = $savedFile->stat();
-				return (int) ($stat['size'] ?? 0);
+				return intval($stat['size'] ?? 0);
 			} else {
 				$this->logger->warning('Google API error downloading photo ' . '<redacted>' . ' : ' . $res['error'], ['app' => Application::APP_ID]);
 				if ($savedFile->isDeletable()) {

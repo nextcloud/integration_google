@@ -10,6 +10,7 @@ use OCP\AppFramework\Services\IInitialState;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
 use OCP\Files\NotPermittedException;
+use OCP\Files\Storage\IStorage;
 use OCP\IConfig;
 use OCP\IUserManager;
 use OCP\Settings\ISettings;
@@ -55,6 +56,7 @@ class Personal implements ISettings {
 
 		// get free space
 		$userFolder = $this->root->getUserFolder($this->userId);
+		/** @var IStorage $storage */
 		$storage = $userFolder->getStorage();
 		$freeSpace = $storage->free_space('/');
 		$user = $this->userManager->get($this->userId);
