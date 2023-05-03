@@ -55,8 +55,8 @@ class Personal implements ISettings {
 
 		// get free space
 		$userFolder = $this->root->getUserFolder($this->userId);
-		/** @var bool|float|int $freeSpace */
-		$freeSpace = $userFolder->getStorage()->free_space('/');
+		$storage = $userFolder->getStorage();
+		$freeSpace = $storage->free_space('/');
 		$user = $this->userManager->get($this->userId);
 
 		// make a request to potentially refresh the token before the settings page is loaded

@@ -46,7 +46,6 @@ class UserScopeService {
 			return;
 		}
 
-		/** @var null|IUser $user */
 		$user = $this->userManager->get($uid);
 		if ($user === null) {
 			throw new \InvalidArgumentException('No user found for the uid ' . $uid);
