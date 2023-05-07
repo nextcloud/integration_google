@@ -25,6 +25,7 @@ OC.L10N.register(
     "Failed to save Google admin options" : "Nepavyko įrašyti „Google“ administratoriaus parinkčių",
     "Google data migration" : "„Google“ duomenų perkėlimas",
     "Authentication" : "Tapatybės nustatymas",
+    "Sign in with Google" : "Prisijungti naudojant „Google“",
     "Connected as {user}" : "Prisijungta kaip {user}",
     "Disconnect from Google" : "Atsijungti nuo „Google“",
     "Contacts" : "Adresatai",
