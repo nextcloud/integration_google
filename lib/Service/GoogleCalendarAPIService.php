@@ -11,54 +11,36 @@
 
 namespace OCA\Google\Service;
 
-use Datetime;
+use DateTime;
 use DateTimeZone;
 use Exception;
 use Generator;
+use OCA\DAV\CalDAV\CalDavBackend;
 use OCA\Google\AppInfo\Application;
 use OCP\IL10N;
-use OCA\DAV\CalDAV\CalDavBackend;
-use Sabre\DAV\Exception\BadRequest;
-use Psr\Log\LoggerInterface;
-
-require_once __DIR__ . '/../../vendor/autoload.php';
 use Ortic\ColorConverter\Color;
 use Ortic\ColorConverter\Colors\Named;
+use Psr\Log\LoggerInterface;
+use Sabre\DAV\Exception\BadRequest;
 use Sabre\VObject\Component\VCalendar;
 use Sabre\VObject\Component\VEvent;
 use Sabre\VObject\Reader;
 use Throwable;
 
-class GoogleCalendarAPIService {
-	/**
-	 * @var LoggerInterface
-	 */
-	private $logger;
-	/**
-	 * @var IL10N
-	 */
-	private $l10n;
-	/**
-	 * @var CalDavBackend
-	 */
-	private $caldavBackend;
-	/**
-	 * @var GoogleAPIService
-	 */
-	private $googleApiService;
+require_once __DIR__ . '/../../vendor/autoload.php';
 
-	/**
-	 * Service to make requests to Google v3 (JSON) API
-	 */
-	public function __construct (string $appName,
-								LoggerInterface $logger,
-								IL10N $l10n,
-								CalDavBackend $caldavBackend,
-								GoogleAPIService $googleApiService) {
-		$this->logger = $logger;
-		$this->l10n = $l10n;
-		$this->caldavBackend = $caldavBackend;
-		$this->googleApiService = $googleApiService;
+/**
+ * Service to make requests to Google v3 (JSON) API
+ */
+class GoogleCalendarAPIService {
+
+	public function __construct(
+		string $appName,
+		private LoggerInterface $logger,
+		private IL10N $l10n,
+		private CalDavBackend $caldavBackend,
+		private GoogleAPIService $googleApiService
+	) {
 	}
 
 	/**
@@ -90,6 +72,7 @@ class GoogleCalendarAPIService {
 	 * @return string closest CSS color name
 	 */
 	private function getClosestCssColor(string $hexColor): string {
+		/** @var Color $color */
 		$color = Color::fromString($hexColor);
 		$rbgColor = [
 			'r' => $color->getRed(),
@@ -98,6 +81,7 @@ class GoogleCalendarAPIService {
 		];
 		// init
 		$closestColor = 'black';
+		/** @var Color $color */
 		$black = Color::fromString(Named::CSS_COLORS['black']);
 		$rgbBlack = [
 			'r' => $black->getRed(),
@@ -107,6 +91,7 @@ class GoogleCalendarAPIService {
 		$closestDiff = $this->colorDiff($rbgColor, $rgbBlack);
 
 		foreach (Named::CSS_COLORS as $name => $hex) {
+			/** @var Color $color */
 			$c = Color::fromString($hex);
 			$rgb = [
 				'r' => $c->getRed(),
@@ -124,12 +109,15 @@ class GoogleCalendarAPIService {
 	}
 
 	/**
-	 * @param array $rgb1 first color
-	 * @param array $rgb2 second color
+	 * @param array{r:int, g:int, b:int} $rgb1 first color
+	 * @param array{r:int, g:int, b:int} $rgb2 second color
+	 *
 	 * @return int the distance between colors
+	 *
+	 * @psalm-return 0|float|positive-int
 	 */
-	private function colorDiff(array $rgb1, array $rgb2): int {
-		return abs($rgb1['r'] - $rgb2['r']) + abs($rgb1['g'] - $rgb2['g']) + abs($rgb1['b'] - $rgb2['b']);
+	private function colorDiff(array $rgb1, array $rgb2): int|float {
+		return (int) (abs($rgb1['r'] - $rgb2['r']) + abs($rgb1['g'] - $rgb2['g']) + abs($rgb1['b'] - $rgb2['b']));
 	}
 
 	/**
@@ -149,7 +137,7 @@ class GoogleCalendarAPIService {
 			if (isset($event->{'LAST-MODIFIED'})) {
 				$lastMod = $event->{'LAST-MODIFIED'};
 				if (is_string($lastMod)) {
-					return (new Datetime($lastMod))->getTimestamp();
+					return (new DateTime($lastMod))->getTimestamp();
 				} elseif ($lastMod instanceof \Sabre\VObject\Property\ICalendar\DateTime) {
 					return $lastMod->getDateTime()->getTimestamp();
 				}
@@ -213,7 +201,7 @@ class GoogleCalendarAPIService {
 				// check if it already exists and if we should update it
 				$existingEvent = $this->caldavBackend->getCalendarObject($ncCalId, $objectUri);
 				if ($existingEvent !== null) {
-					$remoteEventUpdatedTimestamp = (new Datetime($e['updated']))->getTimestamp();
+					$remoteEventUpdatedTimestamp = (new DateTime($e['updated']))->getTimestamp();
 
 					$localEventUpdatedTimestamp = $existingEvent['lastmodified'] ?? 0;
 					if ($remoteEventUpdatedTimestamp <= $localEventUpdatedTimestamp) {
@@ -254,13 +242,13 @@ class GoogleCalendarAPIService {
 			$calData .= isset($e['status']) ? ('STATUS:' . strtoupper(str_replace("\n", '\n', $e['status'])) . "\n") : '';
 
 			if (isset($e['created'])) {
-				$created = new Datetime($e['created']);
+				$created = new DateTime($e['created']);
 				$created->setTimezone($utcTimezone);
 				$calData .= 'CREATED:' . $created->format('Ymd\THis\Z') . "\n";
 			}
 
 			if (isset($e['updated'])) {
-				$updated = new Datetime($e['updated']);
+				$updated = new DateTime($e['updated']);
 				$updated->setTimezone($utcTimezone);
 				$calData .= 'LAST-MODIFIED:' . $updated->format('Ymd\THis\Z') . "\n";
 			}
@@ -302,15 +290,15 @@ class GoogleCalendarAPIService {
 
 			if (isset($e['start'], $e['start']['date'], $e['end'], $e['end']['date'])) {
 				// whole days
-				$start = new Datetime($e['start']['date']);
+				$start = new DateTime($e['start']['date']);
 				$calData .= 'DTSTART;VALUE=DATE:' . $start->format('Ymd') . "\n";
-				$end = new Datetime($e['end']['date']);
+				$end = new DateTime($e['end']['date']);
 				$calData .= 'DTEND;VALUE=DATE:' . $end->format('Ymd') . "\n";
 			} elseif (isset($e['start']['dateTime']) && isset($e['end']['dateTime'])) {
-				$start = new Datetime($e['start']['dateTime']);
+				$start = new DateTime($e['start']['dateTime']);
 				$start->setTimezone($utcTimezone);
 				$calData .= 'DTSTART;VALUE=DATE-TIME:' . $start->format('Ymd\THis\Z') . "\n";
-				$end = new Datetime($e['end']['dateTime']);
+				$end = new DateTime($e['end']['dateTime']);
 				$end->setTimezone($utcTimezone);
 				$calData .= 'DTEND;VALUE=DATE-TIME:' . $end->format('Ymd\THis\Z') . "\n";
 			} else {

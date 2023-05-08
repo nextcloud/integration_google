@@ -11,48 +11,27 @@
 
 namespace OCA\Google\Service;
 
-use Datetime;
+use DateTime;
 use Exception;
-use OCP\Files\Folder;
-use OCP\Files\InvalidPathException;
-use OCP\Files\NotPermittedException;
-use OCP\IConfig;
-use OCP\Files\IRootFolder;
-use OCP\BackgroundJob\IJobList;
-use OCP\Lock\ILockingProvider;
-use Psr\Log\LoggerInterface;
-use OCP\Files\NotFoundException;
-use OCP\Lock\LockedException;
-
+use OC\User\NoUserException;
 use OCA\Google\AppInfo\Application;
 use OCA\Google\BackgroundJob\ImportDriveJob;
+use OCP\BackgroundJob\IJobList;
+use OCP\Files\File;
+use OCP\Files\Folder;
+use OCP\Files\InvalidPathException;
+use OCP\Files\IRootFolder;
+use OCP\Files\NotFoundException;
+use OCP\Files\NotPermittedException;
+use OCP\IConfig;
+use OCP\Lock\ILockingProvider;
+use OCP\Lock\LockedException;
+use OCP\PreConditionNotMetException;
+use Psr\Log\LoggerInterface;
+
 use Throwable;
 
 class GoogleDriveAPIService {
-	/**
-	 * @var LoggerInterface
-	 */
-	private $logger;
-	/**
-	 * @var IConfig
-	 */
-	private $config;
-	/**
-	 * @var IRootFolder
-	 */
-	private $root;
-	/**
-	 * @var IJobList
-	 */
-	private $jobList;
-	/**
-	 * @var GoogleAPIService
-	 */
-	private $googleApiService;
-	/**
-	 * @var UserScopeService
-	 */
-	private $userScopeService;
 
 	private const DOCUMENT_MIME_TYPES = [
 		'document' => 'application/vnd.google-apps.document',
@@ -63,13 +42,15 @@ class GoogleDriveAPIService {
 	/**
 	 * Service to make requests to Google v3 (JSON) API
 	 */
-	public function __construct (string $appName,
-								LoggerInterface $logger,
-								IConfig $config,
-								IRootFolder $root,
-								IJobList $jobList,
-								UserScopeService $userScopeService,
-								GoogleAPIService $googleApiService) {
+	public function __construct(
+		string $appName,
+		private LoggerInterface $logger,
+		private IConfig $config,
+		private IRootFolder $root,
+		private IJobList $jobList,
+		private UserScopeService $userScopeService,
+		private GoogleAPIService $googleApiService
+	) {
 		$this->logger = $logger;
 		$this->config = $config;
 		$this->root = $root;
@@ -172,7 +153,7 @@ class GoogleDriveAPIService {
 			return;
 		}
 		$jobRunning = $this->config->getUserValue($userId, Application::APP_ID, 'drive_import_running', '0') === '1';
-		$nowTs = (new Datetime())->getTimestamp();
+		$nowTs = (new DateTime())->getTimestamp();
 		if ($jobRunning) {
 			$lastJobStart = $this->config->getUserValue($userId, Application::APP_ID, 'drive_import_job_last_start');
 			if ($lastJobStart !== '' && ($nowTs - intval($lastJobStart) < Application::IMPORT_JOB_TIMEOUT)) {
@@ -222,7 +203,7 @@ class GoogleDriveAPIService {
 			$this->config->deleteUserValue($userId, Application::APP_ID, 'directory_progress');
 		} else {
 			$this->config->setUserValue($userId, Application::APP_ID, 'directory_progress', json_encode($directoryProgress));
-			$ts = (new Datetime())->getTimestamp();
+			$ts = (new DateTime())->getTimestamp();
 			$this->config->setUserValue($userId, Application::APP_ID, 'last_drive_import_timestamp', $ts);
 			$this->jobList->add(ImportDriveJob::class, ['user_id' => $userId]);
 		}
@@ -234,16 +215,21 @@ class GoogleDriveAPIService {
 	 * @param string $targetPath
 	 * @param ?int $maxDownloadSize
 	 * @param int $alreadyImported
+	 * @param int $alreadyImportedSize
 	 * @param array $directoryProgress
 	 * @return array
+	 * @throws InvalidPathException
+	 * @throws LockedException
 	 * @throws NotFoundException
-	 * @throws \OCP\Files\NotPermittedException
-	 * @throws \OCP\PreConditionNotMetException
-	 * @throws \OC\User\NoUserException
+	 * @throws NotPermittedException
+	 * @throws PreConditionNotMetException
+	 * @throws NoUserException
 	 */
-	public function importFiles(string $userId, string $targetPath,
-								?int $maxDownloadSize = null, int $alreadyImported = 0, int $alreadyImportedSize = 0,
-								array &$directoryProgress = []): array {
+	public function importFiles(
+		string $userId, string $targetPath,
+		?int $maxDownloadSize = null, int $alreadyImported = 0, int $alreadyImportedSize = 0,
+		array &$directoryProgress = []
+	): array {
 		$considerSharedFiles = $this->config->getUserValue($userId, Application::APP_ID, 'consider_shared_files', '0') === '1';
 		// create root folder
 		$userFolder = $this->root->getUserFolder($userId);
@@ -344,7 +330,7 @@ class GoogleDriveAPIService {
 					if ($saveFolder->nodeExists($fileName)) {
 						$savedFile = $saveFolder->get($fileName);
 						$timestampOnFile = $savedFile->getMtime();
-						$d = new Datetime($fileItem['modifiedTime']);
+						$d = new DateTime($fileItem['modifiedTime']);
 						$timestampOnDrive = $d->getTimestamp();
 
 						if ($timestampOnFile < $timestampOnDrive) {
@@ -397,7 +383,7 @@ class GoogleDriveAPIService {
 	 */
 	private function touchFolder(array $dirInfo): void {
 		if (isset($dirInfo['modifiedTime']) && $dirInfo['modifiedTime'] !== null) {
-			$d = new Datetime($dirInfo['modifiedTime']);
+			$d = new DateTime($dirInfo['modifiedTime']);
 			$ts = $d->getTimestamp();
 			$dirInfo['node']->touch($ts);
 		}
@@ -432,7 +418,7 @@ class GoogleDriveAPIService {
 			$result = $this->googleApiService->request($userId, 'drive/v3/files', $params);
 			foreach ($result['files'] as $fileItem) {
 				if (isset($fileItem['modifiedTime'])) {
-					$d = new Datetime($fileItem['modifiedTime']);
+					$d = new DateTime($fileItem['modifiedTime']);
 					$ts = $d->getTimestamp();
 					if ($ts > $maxTs) {
 						$maxTs = $ts;
@@ -511,6 +497,10 @@ class GoogleDriveAPIService {
 			$logFile = $folder->newFile('failed-downloads.md');
 		}
 
+		if (!$logFile instanceof File) {
+			return;
+		}
+
 		$stream = $logFile->fopen('a');
 		fwrite($stream, '1. Failed to download file: ' . $fileName . PHP_EOL);
 		fclose($stream);
@@ -529,7 +519,7 @@ class GoogleDriveAPIService {
 		foreach ($directoriesById as $id => $dir) {
 			$parentId = $dir['parent'];
 			// create dir if we are on top OR if its parent is current dir
-			if ( ($currentFolderId === '' && !array_key_exists($parentId, $directoriesById))
+			if (($currentFolderId === '' && !array_key_exists($parentId, $directoriesById))
 				|| $parentId === $currentFolderId) {
 				$name = $dir['name'];
 				if (!$currentFolder->nodeExists($name)) {
@@ -565,8 +555,10 @@ class GoogleDriveAPIService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	 private function downloadAndSaveFile(Folder $saveFolder, string $fileName, string $userId,
-										  string $fileUrl, array $fileItem, array $params = []): ?int {
+	private function downloadAndSaveFile(
+		Folder $saveFolder, string $fileName, string $userId,
+		string $fileUrl, array $fileItem, array $params = []
+	): ?int {
 		try {
 			$savedFile = $saveFolder->newFile($fileName);
 		} catch (NotPermittedException $e) {
@@ -578,6 +570,9 @@ class GoogleDriveAPIService {
 		} catch (LockedException $e) {
 			return null;
 		}
+		if ($resource === false) {
+			return null;
+		}
 
 		$res = $this->googleApiService->simpleDownload($userId, $fileUrl, $resource, $params);
 		if (!isset($res['error'])) {
@@ -585,7 +580,7 @@ class GoogleDriveAPIService {
 				fclose($resource);
 			}
 			if (isset($fileItem['modifiedTime'])) {
-				$d = new Datetime($fileItem['modifiedTime']);
+				$d = new DateTime($fileItem['modifiedTime']);
 				$ts = $d->getTimestamp();
 				$savedFile->touch($ts);
 			} else {
@@ -600,7 +595,7 @@ class GoogleDriveAPIService {
 			}
 		}
 		return null;
-	 }
+	}
 
 	/**
 	 * @param array $fileItem
@@ -638,7 +633,7 @@ class GoogleDriveAPIService {
 	/**
 	 * @param string $userId
 	 * @return string User's preferred document format
-	*/
+	 */
 	private function getUserDocumentFormat(string $userId): string {
 		$documentFormat = $this->config->getUserValue($userId, Application::APP_ID, 'document_format', 'openxml');
 		if (!in_array($documentFormat, ['openxml', 'opendoc'])) {
@@ -651,7 +646,7 @@ class GoogleDriveAPIService {
 	 * @param string $mimeType
 	 * @param string $documentFormat
 	 * @return array Request parameters for document
-	*/
+	 */
 	private function getDocumentRequestParams(string $mimeType, string $documentFormat): array {
 		$params = [];
 		switch ($mimeType) {

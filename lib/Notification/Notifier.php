@@ -12,42 +12,18 @@
 namespace OCA\Google\Notification;
 
 use InvalidArgumentException;
+use OCA\Google\AppInfo\Application;
 use OCP\IURLGenerator;
-use OCP\IUserManager;
 use OCP\L10N\IFactory;
-use OCP\Notification\IManager as INotificationManager;
 use OCP\Notification\INotification;
 use OCP\Notification\INotifier;
-use OCA\Google\AppInfo\Application;
 
 class Notifier implements INotifier {
 
-	/** @var IFactory */
-	protected $factory;
-
-	/** @var IUserManager */
-	protected $userManager;
-
-	/** @var INotificationManager */
-	protected $notificationManager;
-
-	/** @var IURLGenerator */
-	protected $url;
-
-	/**
-	 * @param IFactory $factory
-	 * @param IUserManager $userManager
-	 * @param INotificationManager $notificationManager
-	 * @param IURLGenerator $urlGenerator
-	 */
-	public function __construct(IFactory $factory,
-								IUserManager $userManager,
-								INotificationManager $notificationManager,
-								IURLGenerator $urlGenerator) {
-		$this->factory = $factory;
-		$this->userManager = $userManager;
-		$this->notificationManager = $notificationManager;
-		$this->url = $urlGenerator;
+	public function __construct(
+		private IFactory $factory,
+		private IURLGenerator $url
+	) {
 	}
 
 	/**
@@ -85,31 +61,33 @@ class Notifier implements INotifier {
 		$l = $this->factory->get('integration_google', $languageCode);
 
 		switch ($notification->getSubject()) {
-		case 'import_photos_finished':
-			$p = $notification->getSubjectParameters();
-			$nbImported = (int) ($p['nbImported'] ?? 0);
-			$targetPath = $p['targetPath'];
-			$content = $l->n('%n photo was imported from Google.', '%n photos were imported from Google.', $nbImported);
+			case 'import_photos_finished':
+				/** @var array{nbImported?:string, targetPath: string} $p */
+				$p = $notification->getSubjectParameters();
+				$nbImported = (int) ($p['nbImported'] ?? 0);
+				$targetPath = $p['targetPath'];
+				$content = $l->n('%n photo was imported from Google.', '%n photos were imported from Google.', $nbImported);
 
-			$notification->setParsedSubject($content)
-				->setIcon($this->url->getAbsoluteURL($this->url->imagePath(Application::APP_ID, 'app-dark.svg')))
-				->setLink($this->url->linkToRouteAbsolute('files.view.index', ['dir' => $targetPath]));
-			return $notification;
+				$notification->setParsedSubject($content)
+					->setIcon($this->url->getAbsoluteURL($this->url->imagePath(Application::APP_ID, 'app-dark.svg')))
+					->setLink($this->url->linkToRouteAbsolute('files.view.index', ['dir' => $targetPath]));
+				return $notification;
 
-		case 'import_drive_finished':
-			$p = $notification->getSubjectParameters();
-			$nbImported = (int) ($p['nbImported'] ?? 0);
-			$targetPath = $p['targetPath'];
-			$content = $l->n('%n file was imported from Google Drive.', '%n files were imported from Google Drive.', $nbImported);
+			case 'import_drive_finished':
+				/** @var array{nbImported?:string, targetPath: string} $p */
+				$p = $notification->getSubjectParameters();
+				$nbImported = (int) ($p['nbImported'] ?? 0);
+				$targetPath = $p['targetPath'];
+				$content = $l->n('%n file was imported from Google Drive.', '%n files were imported from Google Drive.', $nbImported);
 
-			$notification->setParsedSubject($content)
-				->setIcon($this->url->getAbsoluteURL($this->url->imagePath(Application::APP_ID, 'app-dark.svg')))
-				->setLink($this->url->linkToRouteAbsolute('files.view.index', ['dir' => $targetPath]));
-			return $notification;
+				$notification->setParsedSubject($content)
+					->setIcon($this->url->getAbsoluteURL($this->url->imagePath(Application::APP_ID, 'app-dark.svg')))
+					->setLink($this->url->linkToRouteAbsolute('files.view.index', ['dir' => $targetPath]));
+				return $notification;
 
-		default:
-			// Unknown subject => Unknown notification => throw
-			throw new InvalidArgumentException();
+			default:
+				// Unknown subject => Unknown notification => throw
+				throw new InvalidArgumentException();
 		}
 	}
 }

@@ -11,63 +11,35 @@
 
 namespace OCA\Google\Service;
 
-use Datetime;
+use DateTime;
 use Exception;
-use OCP\Files\Folder;
-use OCP\IConfig;
-use OCP\Files\IRootFolder;
-use OCP\Files\FileInfo;
-use OCP\Lock\ILockingProvider;
-use OCP\Lock\LockedException;
-use OCP\BackgroundJob\IJobList;
-use Psr\Log\LoggerInterface;
-
 use OCA\Google\AppInfo\Application;
 use OCA\Google\BackgroundJob\ImportPhotosJob;
+use OCP\BackgroundJob\IJobList;
+use OCP\Files\FileInfo;
+use OCP\Files\Folder;
+use OCP\Files\IRootFolder;
+use OCP\IConfig;
+use OCP\Lock\ILockingProvider;
+use OCP\Lock\LockedException;
+use Psr\Log\LoggerInterface;
+
 use Throwable;
 
+/**
+ * Service to make requests to Google v3 (JSON) API
+ */
 class GooglePhotosAPIService {
-	/**
-	 * @var LoggerInterface
-	 */
-	private $logger;
-	/**
-	 * @var IConfig
-	 */
-	private $config;
-	/**
-	 * @var IRootFolder
-	 */
-	private $root;
-	/**
-	 * @var IJobList
-	 */
-	private $jobList;
-	/**
-	 * @var GoogleAPIService
-	 */
-	private $googleApiService;
-	/**
-	 * @var UserScopeService
-	 */
-	private $userScopeService;
 
-	/**
-	 * Service to make requests to Google v3 (JSON) API
-	 */
-	public function __construct (string $appName,
-								LoggerInterface $logger,
-								IConfig $config,
-								IRootFolder $root,
-								IJobList $jobList,
-								UserScopeService $userScopeService,
-								GoogleAPIService $googleApiService) {
-		$this->logger = $logger;
-		$this->config = $config;
-		$this->root = $root;
-		$this->jobList = $jobList;
-		$this->googleApiService = $googleApiService;
-		$this->userScopeService = $userScopeService;
+	public function __construct(
+		string $appName,
+		private LoggerInterface $logger,
+		private IConfig $config,
+		private IRootFolder $root,
+		private IJobList $jobList,
+		private UserScopeService $userScopeService,
+		private GoogleAPIService $googleApiService
+	) {
 	}
 
 	/**
@@ -185,7 +157,7 @@ class GooglePhotosAPIService {
 			return;
 		}
 		$jobRunning = $this->config->getUserValue($userId, Application::APP_ID, 'photo_import_running', '0') === '1';
-		$nowTs = (new Datetime())->getTimestamp();
+		$nowTs = (new DateTime())->getTimestamp();
 		if ($jobRunning) {
 			$lastJobStart = $this->config->getUserValue($userId, Application::APP_ID, 'photo_import_job_last_start');
 			if ($lastJobStart !== '' && ($nowTs - intval($lastJobStart) < Application::IMPORT_JOB_TIMEOUT)) {
@@ -222,7 +194,7 @@ class GooglePhotosAPIService {
 				$this->logger->error('Google Photo import error: ' . $result['error'], ['app' => Application::APP_ID]);
 			}
 		} else {
-			$ts = (new Datetime())->getTimestamp();
+			$ts = (new DateTime())->getTimestamp();
 			$this->config->setUserValue($userId, Application::APP_ID, 'last_import_timestamp', $ts);
 			$this->jobList->add(ImportPhotosJob::class, ['user_id' => $userId]);
 		}
@@ -236,15 +208,17 @@ class GooglePhotosAPIService {
 	 * @param int $alreadyImported
 	 * @return array
 	 */
-	public function importPhotos(string $userId, string $targetPath,
-								?int $maxDownloadSize = null, int $alreadyImported = 0): array {
+	public function importPhotos(
+		string $userId, string $targetPath,
+		?int $maxDownloadSize = null, int $alreadyImported = 0
+	): array {
 		// create root folder
 		$userFolder = $this->root->getUserFolder($userId);
 		if (!$userFolder->nodeExists($targetPath)) {
 			$folder = $userFolder->newFolder($targetPath);
 		} else {
 			$folder = $userFolder->get($targetPath);
-			if ($folder->getType() !== FileInfo::TYPE_FOLDER) {
+			if (!$folder instanceof Folder) {
 				return ['error' => 'Impossible to create Google folder'];
 			}
 		}
@@ -390,7 +364,7 @@ class GooglePhotosAPIService {
 	 * @param string $userId
 	 * @param array $photo
 	 * @param Folder $albumFolder
-	 * @return ?int downloaded size, null if already existing
+	 * @return int|null downloaded size, null if already existing
 	 * @throws \OCP\Files\InvalidPathException
 	 * @throws \OCP\Files\NotFoundException
 	 * @throws \OCP\Files\NotPermittedException
@@ -412,20 +386,24 @@ class GooglePhotosAPIService {
 				$this->logger->warning('Google Photo, error opening target file ' . '<redacted>' . ' : file is locked', ['app' => Application::APP_ID]);
 				return null;
 			}
+			if ($resource === false) {
+				$this->logger->warning('Google Photo, error opening target file ' . '<redacted>', ['app' => Application::APP_ID]);
+				return null;
+			}
 			$res = $this->googleApiService->simpleDownload($userId, $photoUrl, $resource);
 			if (!isset($res['error'])) {
 				if (is_resource($resource)) {
 					fclose($resource);
 				}
 				if (isset($photo['mediaMetadata']['creationTime'])) {
-					$d = new Datetime($photo['mediaMetadata']['creationTime']);
+					$d = new DateTime($photo['mediaMetadata']['creationTime']);
 					$ts = $d->getTimestamp();
 					$savedFile->touch($ts);
 				} else {
 					$savedFile->touch();
 				}
 				$stat = $savedFile->stat();
-				return $stat['size'] ?? 0;
+				return intval($stat['size'] ?? 0);
 			} else {
 				$this->logger->warning('Google API error downloading photo ' . '<redacted>' . ' : ' . $res['error'], ['app' => Application::APP_ID]);
 				if ($savedFile->isDeletable()) {

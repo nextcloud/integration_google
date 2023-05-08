@@ -23,55 +23,45 @@
 
 namespace OCA\Google\Service;
 
-
 use OCP\IUserManager;
 use OCP\IUserSession;
 
 class UserScopeService {
 
-	/**
-	 * @var IUserSession
-	 */
-	private $userSession;
-	/**
-	 * @var IUserManager
-	 */
-	private $userManager;
-
-	public function __construct(IUserSession $userSession, IUserManager $userManager) {
-		$this->userSession = $userSession;
-		$this->userManager = $userManager;
+	public function __construct(
+		private IUserSession $userSession,
+		private IUserManager $userManager
+	) {
 	}
 
-    /**
-     * Set a valid user in IUserSession since lots of server logic is relying on obtaining
-     * the current acting user from that
-     *
-     * @param $uid
-     * @throws \InvalidArgumentException
-     */
-    public function setUserScope(string $uid = null) {
-        if ($uid === null) {
-            return;
-        }
+	/**
+	 * Set a valid user in IUserSession since lots of server logic is relying on obtaining
+	 * the current acting user from that
+	 *
+	 * @param string|null $uid
+	 */
+	public function setUserScope(string $uid = null): void {
+		if ($uid === null) {
+			return;
+		}
 
-        $user = $this->userManager->get($uid);
-        if ($user === null) {
-            throw new \InvalidArgumentException('No user found for the uid ' . $uid);
-        }
-        $this->userSession->setUser($user);
-    }
+		$user = $this->userManager->get($uid);
+		if ($user === null) {
+			throw new \InvalidArgumentException('No user found for the uid ' . $uid);
+		}
+		$this->userSession->setUser($user);
+	}
 
-    /**
-     * Setup the FS which is needed to emit hooks
-     *
-     * This is required for versioning/activity as the legacy filesystem hooks
-     * are not emitted if filesystem operations are executed though \OCP\Files\Node\File
-     *
-     * @param string $owner
-     */
-    public function setFilesystemScope(string $owner) {
-        \OC_Util::tearDownFS();
-        \OC_Util::setupFS($owner);
-    }
+	/**
+	 * Setup the FS which is needed to emit hooks
+	 *
+	 * This is required for versioning/activity as the legacy filesystem hooks
+	 * are not emitted if filesystem operations are executed though \OCP\Files\Node\File
+	 *
+	 * @param string $owner
+	 */
+	public function setFilesystemScope(string $owner): void {
+		\OC_Util::tearDownFS();
+		\OC_Util::setupFS($owner);
+	}
 }

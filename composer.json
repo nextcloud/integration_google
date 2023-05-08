@@ -1,5 +1,23 @@
 {
     "require": {
+        "php": ">=8.0",
         "ortic/color-converter": "^0.1.0"
+    },
+    "scripts": {
+        "lint": "find . -name \\*.php -not -path './vendor/*' -print0 | xargs -0 -n1 php -l",
+        "cs:check": "php-cs-fixer fix --dry-run --diff",
+        "cs:fix": "php-cs-fixer fix",
+        "psalm": "psalm.phar"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3",
+        "nextcloud/coding-standard": "^1",
+        "psalm/phar": "^5.10.0",
+        "nextcloud/ocp": "dev-master"
+    },
+    "config": {
+        "platform": {
+            "php": "8.0"
+        }
     }
 }

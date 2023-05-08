@@ -13,53 +13,33 @@ namespace OCA\Google\Service;
 
 use DateTime;
 use Exception;
-use OCP\IL10N;
-use OCP\IConfig;
-use OCP\Http\Client\IClientService;
 use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Exception\ConnectException;
-use Psr\Log\LoggerInterface;
-use OCP\Notification\IManager as INotificationManager;
-
+use GuzzleHttp\Exception\ServerException;
 use OCA\Google\AppInfo\Application;
+use OCP\Http\Client\IClientService;
+use OCP\Http\Client\IResponse;
+use OCP\IConfig;
+use OCP\IL10N;
+use OCP\Notification\IManager as INotificationManager;
+use Psr\Log\LoggerInterface;
 use Throwable;
 
+/**
+ * Service to make requests to Google v3 (JSON) API
+ */
 class GoogleAPIService {
-	/**
-	 * @var LoggerInterface
-	 */
-	private $logger;
-	/**
-	 * @var IL10N
-	 */
-	private $l10n;
-	/**
-	 * @var IConfig
-	 */
-	private $config;
-	/**
-	 * @var INotificationManager
-	 */
-	private $notificationManager;
-	/**
-	 * @var \OCP\Http\Client\IClient
-	 */
-	private $client;
 
-	/**
-	 * Service to make requests to Google v3 (JSON) API
-	 */
-	public function __construct (string $appName,
-								LoggerInterface $logger,
-								IL10N $l10n,
-								IConfig $config,
-								INotificationManager $notificationManager,
-								IClientService $clientService) {
-		$this->logger = $logger;
-		$this->l10n = $l10n;
-		$this->config = $config;
-		$this->notificationManager = $notificationManager;
+	private \OCP\Http\Client\IClient $client;
+
+	public function __construct(
+		string $appName,
+		private LoggerInterface $logger,
+		private IL10N $l10n,
+		private IConfig $config,
+		private INotificationManager $notificationManager,
+		IClientService $clientService
+	) {
 		$this->client = $clientService->newClient();
 	}
 
@@ -71,12 +51,11 @@ class GoogleAPIService {
 	private function buildUrl(string $baseUrl, array $params = []): string {
 		$paramsContent = http_build_query($params);
 		if (strpos($baseUrl, '?') !== false) {
-        	$baseUrl .= '&'. $paramsContent;
-        } else {
+			$baseUrl .= '&'. $paramsContent;
+		} else {
 			$baseUrl .= '?' . $paramsContent;
 		}
 		return $baseUrl;
-
 	}
 	/**
 	 * @param string $userId
@@ -106,8 +85,10 @@ class GoogleAPIService {
 	 * @param ?string $baseUrl
 	 * @return array
 	 */
-	public function request(string $userId, string $endPoint, array $params = [],
-							string $method = 'GET', ?string $baseUrl = null): array {
+	public function request(
+		string $userId, string $endPoint, array $params = [],
+		string $method = 'GET', ?string $baseUrl = null
+	): array {
 		$this->checkTokenExpiration($userId);
 		$accessToken = $this->config->getUserValue($userId, Application::APP_ID, 'token');
 		try {
@@ -137,17 +118,21 @@ class GoogleAPIService {
 
 			if ($method === 'GET') {
 				$response = $this->client->get($url, $options);
-			} else if ($method === 'POST') {
+			} elseif ($method === 'POST') {
 				$response = $this->client->post($url, $options);
-			} else if ($method === 'PUT') {
+			} elseif ($method === 'PUT') {
 				$response = $this->client->put($url, $options);
-			} else if ($method === 'DELETE') {
+			} elseif ($method === 'DELETE') {
 				$response = $this->client->delete($url, $options);
 			} else {
 				return ['error' => 'Bad HTTP method'];
 			}
 			$body = $response->getBody();
 			$respCode = $response->getStatusCode();
+
+			if (is_resource($body)) {
+				$body = stream_get_contents($body);
+			}
 
 			if ($respCode >= 400) {
 				$this->logger->debug(
@@ -164,6 +149,7 @@ class GoogleAPIService {
 				return json_decode($body, true);
 			}
 		} catch (ServerException | ClientException $e) {
+			/** @var IResponse $response */
 			$response = $e->getResponse();
 			$body = (string) $response->getBody();
 			$this->logger->warning(
@@ -208,11 +194,11 @@ class GoogleAPIService {
 
 			if ($method === 'GET') {
 				$response = $this->client->get($url, $options);
-			} else if ($method === 'POST') {
+			} elseif ($method === 'POST') {
 				$response = $this->client->post($url, $options);
-			} else if ($method === 'PUT') {
+			} elseif ($method === 'PUT') {
 				$response = $this->client->put($url, $options);
-			} else if ($method === 'DELETE') {
+			} elseif ($method === 'DELETE') {
 				$response = $this->client->delete($url, $options);
 			} else {
 				return ['error' => 'Bad HTTP method'];
@@ -261,11 +247,11 @@ class GoogleAPIService {
 
 			if ($method === 'GET') {
 				$response = $this->client->get($url, $options);
-			} else if ($method === 'POST') {
+			} elseif ($method === 'POST') {
 				$response = $this->client->post($url, $options);
-			} else if ($method === 'PUT') {
+			} elseif ($method === 'PUT') {
 				$response = $this->client->put($url, $options);
-			} else if ($method === 'DELETE') {
+			} elseif ($method === 'DELETE') {
 				$response = $this->client->delete($url, $options);
 			} else {
 				return ['error' => 'Bad HTTP method'];
@@ -297,7 +283,7 @@ class GoogleAPIService {
 	 * @param resource $resource
 	 * @param array $params Query parameters (key/val pairs)
 	 * @param string $method HTTP query method
-	 * @return array
+	 * @return string[]
 	 */
 	public function simpleDownload(string $userId, string $url, $resource, array $params = [], string $method = 'GET'): array {
 		$this->checkTokenExpiration($userId);
@@ -325,11 +311,11 @@ class GoogleAPIService {
 
 			if ($method === 'GET') {
 				$response = $this->client->get($url, $options);
-			} else if ($method === 'POST') {
+			} elseif ($method === 'POST') {
 				$response = $this->client->post($url, $options);
-			} else if ($method === 'PUT') {
+			} elseif ($method === 'PUT') {
 				$response = $this->client->put($url, $options);
-			} else if ($method === 'DELETE') {
+			} elseif ($method === 'DELETE') {
 				$response = $this->client->delete($url, $options);
 			} else {
 				return ['error' => 'Bad HTTP method'];
@@ -337,10 +323,14 @@ class GoogleAPIService {
 			$respCode = $response->getStatusCode();
 
 			$body = $response->getBody();
-			while (!feof($body)) {
-				// write ~5 MB chunks
-				$chunk = fread($body, 5000000);
-				fwrite($resource, $chunk);
+			if (is_resource($body)) {
+				while (!feof($body)) {
+					// write ~5 MB chunks
+					$chunk = fread($body, 5000000);
+					fwrite($resource, $chunk);
+				}
+			} else {
+				fwrite($resource, $body);
 			}
 
 			if ($respCode >= 400) {
@@ -363,7 +353,7 @@ class GoogleAPIService {
 		$refreshToken = $this->config->getUserValue($userId, Application::APP_ID, 'refresh_token');
 		$expireAt = $this->config->getUserValue($userId, Application::APP_ID, 'token_expires_at');
 		if ($refreshToken !== '' && $expireAt !== '') {
-			$nowTs = (new Datetime())->getTimestamp();
+			$nowTs = (new DateTime())->getTimestamp();
 			$expireAt = (int) $expireAt;
 			// if token expires in less than 2 minutes or has already expired
 			if ($nowTs > $expireAt - 120) {
@@ -388,7 +378,7 @@ class GoogleAPIService {
 			$this->logger->debug('Google access token successfully refreshed', ['app' => Application::APP_ID]);
 			$this->config->setUserValue($userId, Application::APP_ID, 'token', $result['access_token']);
 			if (isset($result['expires_in'])) {
-				$nowTs = (new Datetime())->getTimestamp();
+				$nowTs = (new DateTime())->getTimestamp();
 				$expiresAt = $nowTs + (int) $result['expires_in'];
 				$this->config->setUserValue($userId, Application::APP_ID, 'token_expires_at', $expiresAt);
 			}

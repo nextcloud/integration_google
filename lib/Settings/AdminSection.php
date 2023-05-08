@@ -1,22 +1,17 @@
 <?php
+
 namespace OCA\Google\Settings;
 
-use OCP\IURLGenerator;
 use OCP\IL10N;
+use OCP\IURLGenerator;
 use OCP\Settings\IIconSection;
 
 class AdminSection implements IIconSection {
 
-	/** @var IL10N */
-	private $l;
-
-	/** @var IURLGenerator */
-	private $urlGenerator;
-
-	public function __construct(IURLGenerator $urlGenerator,
-								IL10N $l) {
-		$this->l = $l;
-		$this->urlGenerator = $urlGenerator;
+	public function __construct(
+		private IURLGenerator $urlGenerator,
+		private IL10N $l
+	) {
 	}
 
 	/**
@@ -47,10 +42,7 @@ class AdminSection implements IIconSection {
 		return 80;
 	}
 
-	/**
-	 * @return ?string The relative path to a an icon describing the section
-	 */
-	public function getIcon(): ?string {
+	public function getIcon(): string {
 		return $this->urlGenerator->imagePath('core', 'categories/integration.svg');
 	}
 

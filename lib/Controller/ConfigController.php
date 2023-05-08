@@ -13,88 +13,55 @@ namespace OCA\Google\Controller;
 
 use DateTime;
 use Exception;
+use OCA\Google\AppInfo\Application;
+use OCA\Google\Service\GoogleAPIService;
+use OCP\AppFramework\Controller;
+use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Services\IInitialState;
-use OCP\IURLGenerator;
+use OCP\Constants;
+use OCP\Contacts\IManager as IContactManager;
 use OCP\IConfig;
 use OCP\IL10N;
-use OCP\Contacts\IManager as IContactManager;
-use OCP\Constants;
-
 use OCP\IRequest;
-use OCP\AppFramework\Http\RedirectResponse;
-use OCP\AppFramework\Http\DataResponse;
-use OCP\AppFramework\Controller;
-
-use OCA\Google\Service\GoogleAPIService;
-use OCA\Google\AppInfo\Application;
+use OCP\IURLGenerator;
 use Throwable;
 
 class ConfigController extends Controller {
 
-	/**
-	 * @var IConfig
-	 */
-	private $config;
-	/**
-	 * @var IURLGenerator
-	 */
-	private $urlGenerator;
-	/**
-	 * @var IL10N
-	 */
-	private $l;
-	/**
-	 * @var IContactManager
-	 */
-	private $contactsManager;
-	/**
-	 * @var GoogleAPIService
-	 */
-	private $googleApiService;
-	/**
-	 * @var string|null
-	 */
-	private $userId;
+	public const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.readonly';
+	public const CONTACTS_SCOPE = 'https://www.googleapis.com/auth/contacts.readonly';
+	public const CALENDAR_SCOPE = 'https://www.googleapis.com/auth/calendar.readonly';
+	public const CALENDAR_EVENTS_SCOPE = 'https://www.googleapis.com/auth/calendar.events.readonly';
+	public const PHOTOS_SCOPE = 'https://www.googleapis.com/auth/photoslibrary.readonly';
 
-	const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.readonly';
-	const CONTACTS_SCOPE = 'https://www.googleapis.com/auth/contacts.readonly';
-	const CALENDAR_SCOPE = 'https://www.googleapis.com/auth/calendar.readonly';
-	const CALENDAR_EVENTS_SCOPE = 'https://www.googleapis.com/auth/calendar.events.readonly';
-	const PHOTOS_SCOPE = 'https://www.googleapis.com/auth/photoslibrary.readonly';
-	/**
-	 * @var IInitialState
-	 */
-	private $initialStateService;
-
-	public function __construct($appName,
-								IRequest $request,
-								IConfig $config,
-								IURLGenerator $urlGenerator,
-								IL10N $l,
-								IContactManager $contactsManager,
-								IInitialState $initialStateService,
-								GoogleAPIService $googleApiService,
-								?string $userId) {
+	public function __construct(
+		string $appName,
+		IRequest $request,
+		private IConfig $config,
+		private IURLGenerator $urlGenerator,
+		private IL10N $l,
+		private IContactManager $contactsManager,
+		private IInitialState $initialStateService,
+		private GoogleAPIService $googleApiService,
+		private ?string $userId
+	) {
 		parent::__construct($appName, $request);
-		$this->request = $request;
-		$this->config = $config;
-		$this->urlGenerator = $urlGenerator;
-		$this->l = $l;
-		$this->contactsManager = $contactsManager;
-		$this->googleApiService = $googleApiService;
-		$this->userId = $userId;
-		$this->initialStateService = $initialStateService;
 	}
 
 	/**
 	 * @NoAdminRequired
 	 * Set config values
 	 *
-	 * @param array $values key/value pairs to store in user preferences
+	 * @param array<string,string> $values key/value pairs to store in user preferences
 	 * @return DataResponse
 	 */
 	public function setConfig(array $values): DataResponse {
+		if ($this->userId === null) {
+			return new DataResponse([], Http::STATUS_BAD_REQUEST);
+		}
 		foreach ($values as $key => $value) {
 			$this->config->setUserValue($this->userId, Application::APP_ID, $key, $value);
 		}
@@ -114,7 +81,7 @@ class ConfigController extends Controller {
 	/**
 	 * Set admin config values
 	 *
-	 * @param array $values key/value pairs to store in app config
+	 * @param array<string,string> $values key/value pairs to store in app config
 	 * @return DataResponse
 	 */
 	public function setAdminConfig(array $values): DataResponse {
@@ -133,9 +100,9 @@ class ConfigController extends Controller {
 	public function getLocalAddressBooks(): DataResponse {
 		$addressBooks = $this->contactsManager->getUserAddressBooks();
 		$result = [];
-		foreach ($addressBooks as $k => $ab) {
+		foreach ($addressBooks as $ab) {
 			try {
-				$canEdit = ($ab->getPermissions() & Constants::PERMISSION_CREATE) ? true : false;
+				$canEdit = (bool)(((int)$ab->getPermissions()) & Constants::PERMISSION_CREATE);
 				if ($ab->getUri() !== 'system' && $canEdit) {
 					$result[$ab->getKey()] = [
 						'uri' => $ab->getUri(),
@@ -170,16 +137,24 @@ class ConfigController extends Controller {
 	 * @param string $code request code to use when requesting oauth token
 	 * @param string $state value that was sent with original GET request. Used to check auth redirection is valid
 	 * @param string $scope scopes allowed by user
-	 * @param ?string $error
+	 * @param string $error
+	 *
 	 * @return RedirectResponse to user settings
 	 */
-	public function oauthRedirect(string $code = '', string $state = '',  string $scope = '', string $error = ''): RedirectResponse {
+	public function oauthRedirect(string $code = '', string $state = '', string $scope = '', string $error = ''): RedirectResponse {
+		if ($this->userId === null) {
+			return new RedirectResponse(
+				$this->urlGenerator->linkToRoute('settings.PersonalSettings.index', ['section' => 'migration']) .
+				'?googleToken=error&message=' . urlencode($this->l->t('No logged in user'))
+			);
+		}
+
 		$configState = $this->config->getUserValue($this->userId, Application::APP_ID, 'oauth_state');
 		$clientID = $this->config->getAppValue(Application::APP_ID, 'client_id');
 		$clientSecret = $this->config->getAppValue(Application::APP_ID, 'client_secret');
 
 		// Store given scopes in space-separated string
-		$scopes =  explode(' ', $scope);
+		$scopes = explode(' ', $scope);
 
 		$scopesArray = [
 			'can_access_drive' => in_array(self::DRIVE_SCOPE, $scopes) ? 1 : 0,
@@ -190,11 +165,12 @@ class ConfigController extends Controller {
 
 		$this->config->setUserValue($this->userId, Application::APP_ID, 'user_scopes', json_encode($scopesArray));
 
-        // anyway, reset state
-        $this->config->setUserValue($this->userId, Application::APP_ID, 'oauth_state', '');
+		// anyway, reset state
+		$this->config->setUserValue($this->userId, Application::APP_ID, 'oauth_state', '');
 
 		if ($clientID && $clientSecret && $configState !== '' && $configState === $state) {
 			$redirect_uri = $this->config->getUserValue($this->userId, Application::APP_ID, 'redirect_uri');
+			/** @var array{access_token?:string, refresh_token?:string, expires_in?:string, error?:string} $result */
 			$result = $this->googleApiService->requestOAuthAccessToken([
 				'client_id' => $clientID,
 				'client_secret' => $clientSecret,
@@ -206,9 +182,9 @@ class ConfigController extends Controller {
 				$accessToken = $result['access_token'];
 				$refreshToken = $result['refresh_token'];
 				if (isset($result['expires_in'])) {
-					$nowTs = (new Datetime())->getTimestamp();
+					$nowTs = (new DateTime())->getTimestamp();
 					$expiresAt = $nowTs + (int) $result['expires_in'];
-					$this->config->setUserValue($this->userId, Application::APP_ID, 'token_expires_at', $expiresAt);
+					$this->config->setUserValue($this->userId, Application::APP_ID, 'token_expires_at', (string)$expiresAt);
 				}
 				$this->config->setUserValue($this->userId, Application::APP_ID, 'token', $accessToken);
 				$this->config->setUserValue($this->userId, Application::APP_ID, 'refresh_token', $refreshToken);
@@ -243,6 +219,10 @@ class ConfigController extends Controller {
 	 * @return string
 	 */
 	private function storeUserInfo(): string {
+		if ($this->userId === null) {
+			return '';
+		}
+		/** @var array{id?:string, name?:string} $info */
 		$info = $this->googleApiService->request($this->userId, 'oauth2/v1/userinfo', ['alt' => 'json']);
 		if (isset($info['name'], $info['id'])) {
 			$this->config->setUserValue($this->userId, Application::APP_ID, 'user_id', $info['id']);
