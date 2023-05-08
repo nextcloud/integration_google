@@ -30,9 +30,9 @@ use Throwable;
  */
 class GoogleAPIService {
 
-    private \OCP\Http\Client\IClient $client;
+	private \OCP\Http\Client\IClient $client;
 
-    public function __construct(
+	public function __construct(
 		string $appName,
 		private LoggerInterface $logger,
 		private IL10N $l10n,
@@ -130,9 +130,9 @@ class GoogleAPIService {
 			$body = $response->getBody();
 			$respCode = $response->getStatusCode();
 
-            if (is_resource($body)) {
-                $body = stream_get_contents($body);
-            }
+			if (is_resource($body)) {
+				$body = stream_get_contents($body);
+			}
 
 			if ($respCode >= 400) {
 				$this->logger->debug(
@@ -149,7 +149,7 @@ class GoogleAPIService {
 				return json_decode($body, true);
 			}
 		} catch (ServerException | ClientException $e) {
-            /** @var IResponse $response */
+			/** @var IResponse $response */
 			$response = $e->getResponse();
 			$body = (string) $response->getBody();
 			$this->logger->warning(
@@ -323,15 +323,15 @@ class GoogleAPIService {
 			$respCode = $response->getStatusCode();
 
 			$body = $response->getBody();
-            if (is_resource($body)) {
-                while (!feof($body)) {
-                    // write ~5 MB chunks
-                    $chunk = fread($body, 5000000);
-                    fwrite($resource, $chunk);
-                }
-            }else{
-                fwrite($resource, $body);
-            }
+			if (is_resource($body)) {
+				while (!feof($body)) {
+					// write ~5 MB chunks
+					$chunk = fread($body, 5000000);
+					fwrite($resource, $chunk);
+				}
+			} else {
+				fwrite($resource, $body);
+			}
 
 			if ($respCode >= 400) {
 				return ['error' => $this->l10n->t('Bad credentials')];

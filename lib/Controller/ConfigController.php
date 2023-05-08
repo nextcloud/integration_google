@@ -170,8 +170,8 @@ class ConfigController extends Controller {
 
 		if ($clientID && $clientSecret && $configState !== '' && $configState === $state) {
 			$redirect_uri = $this->config->getUserValue($this->userId, Application::APP_ID, 'redirect_uri');
-            /** @var array{access_token?:string, refresh_token?:string, expires_in?:string, error?:string} $result */
-            $result = $this->googleApiService->requestOAuthAccessToken([
+			/** @var array{access_token?:string, refresh_token?:string, expires_in?:string, error?:string} $result */
+			$result = $this->googleApiService->requestOAuthAccessToken([
 				'client_id' => $clientID,
 				'client_secret' => $clientSecret,
 				'grant_type' => 'authorization_code',
@@ -219,10 +219,10 @@ class ConfigController extends Controller {
 	 * @return string
 	 */
 	private function storeUserInfo(): string {
-        if ($this->userId === null) {
-            return '';
-        }
-        /** @var array{id?:string, name?:string} $info */
+		if ($this->userId === null) {
+			return '';
+		}
+		/** @var array{id?:string, name?:string} $info */
 		$info = $this->googleApiService->request($this->userId, 'oauth2/v1/userinfo', ['alt' => 'json']);
 		if (isset($info['name'], $info['id'])) {
 			$this->config->setUserValue($this->userId, Application::APP_ID, 'user_id', $info['id']);

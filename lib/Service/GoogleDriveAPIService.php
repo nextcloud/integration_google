@@ -497,9 +497,9 @@ class GoogleDriveAPIService {
 			$logFile = $folder->newFile('failed-downloads.md');
 		}
 
-        if (!$logFile instanceof File) {
-            return;
-        }
+		if (!$logFile instanceof File) {
+			return;
+		}
 
 		$stream = $logFile->fopen('a');
 		fwrite($stream, '1. Failed to download file: ' . $fileName . PHP_EOL);
@@ -570,9 +570,9 @@ class GoogleDriveAPIService {
 		} catch (LockedException $e) {
 			return null;
 		}
-        if ($resource === false) {
-            return null;
-        }
+		if ($resource === false) {
+			return null;
+		}
 
 		$res = $this->googleApiService->simpleDownload($userId, $fileUrl, $resource, $params);
 		if (!isset($res['error'])) {

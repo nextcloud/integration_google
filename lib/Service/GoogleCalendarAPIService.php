@@ -72,7 +72,7 @@ class GoogleCalendarAPIService {
 	 * @return string closest CSS color name
 	 */
 	private function getClosestCssColor(string $hexColor): string {
-        /** @var Color $color */
+		/** @var Color $color */
 		$color = Color::fromString($hexColor);
 		$rbgColor = [
 			'r' => $color->getRed(),
@@ -81,7 +81,7 @@ class GoogleCalendarAPIService {
 		];
 		// init
 		$closestColor = 'black';
-        /** @var Color $color */
+		/** @var Color $color */
 		$black = Color::fromString(Named::CSS_COLORS['black']);
 		$rgbBlack = [
 			'r' => $black->getRed(),
@@ -91,7 +91,7 @@ class GoogleCalendarAPIService {
 		$closestDiff = $this->colorDiff($rbgColor, $rgbBlack);
 
 		foreach (Named::CSS_COLORS as $name => $hex) {
-            /** @var Color $color */
+			/** @var Color $color */
 			$c = Color::fromString($hex);
 			$rgb = [
 				'r' => $c->getRed(),

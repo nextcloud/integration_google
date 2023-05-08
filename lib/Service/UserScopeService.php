@@ -23,7 +23,6 @@
 
 namespace OCA\Google\Service;
 
-use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IUserSession;
 
