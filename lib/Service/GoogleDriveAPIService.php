@@ -11,12 +11,13 @@
 
 namespace OCA\Google\Service;
 
-use Datetime;
+use DateTime;
 use Exception;
 use OC\User\NoUserException;
 use OCA\Google\AppInfo\Application;
 use OCA\Google\BackgroundJob\ImportDriveJob;
 use OCP\BackgroundJob\IJobList;
+use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\Files\InvalidPathException;
 use OCP\Files\IRootFolder;
@@ -152,7 +153,7 @@ class GoogleDriveAPIService {
 			return;
 		}
 		$jobRunning = $this->config->getUserValue($userId, Application::APP_ID, 'drive_import_running', '0') === '1';
-		$nowTs = (new Datetime())->getTimestamp();
+		$nowTs = (new DateTime())->getTimestamp();
 		if ($jobRunning) {
 			$lastJobStart = $this->config->getUserValue($userId, Application::APP_ID, 'drive_import_job_last_start');
 			if ($lastJobStart !== '' && ($nowTs - intval($lastJobStart) < Application::IMPORT_JOB_TIMEOUT)) {
@@ -202,7 +203,7 @@ class GoogleDriveAPIService {
 			$this->config->deleteUserValue($userId, Application::APP_ID, 'directory_progress');
 		} else {
 			$this->config->setUserValue($userId, Application::APP_ID, 'directory_progress', json_encode($directoryProgress));
-			$ts = (new Datetime())->getTimestamp();
+			$ts = (new DateTime())->getTimestamp();
 			$this->config->setUserValue($userId, Application::APP_ID, 'last_drive_import_timestamp', $ts);
 			$this->jobList->add(ImportDriveJob::class, ['user_id' => $userId]);
 		}
@@ -329,7 +330,7 @@ class GoogleDriveAPIService {
 					if ($saveFolder->nodeExists($fileName)) {
 						$savedFile = $saveFolder->get($fileName);
 						$timestampOnFile = $savedFile->getMtime();
-						$d = new Datetime($fileItem['modifiedTime']);
+						$d = new DateTime($fileItem['modifiedTime']);
 						$timestampOnDrive = $d->getTimestamp();
 
 						if ($timestampOnFile < $timestampOnDrive) {
@@ -382,7 +383,7 @@ class GoogleDriveAPIService {
 	 */
 	private function touchFolder(array $dirInfo): void {
 		if (isset($dirInfo['modifiedTime']) && $dirInfo['modifiedTime'] !== null) {
-			$d = new Datetime($dirInfo['modifiedTime']);
+			$d = new DateTime($dirInfo['modifiedTime']);
 			$ts = $d->getTimestamp();
 			$dirInfo['node']->touch($ts);
 		}
@@ -417,7 +418,7 @@ class GoogleDriveAPIService {
 			$result = $this->googleApiService->request($userId, 'drive/v3/files', $params);
 			foreach ($result['files'] as $fileItem) {
 				if (isset($fileItem['modifiedTime'])) {
-					$d = new Datetime($fileItem['modifiedTime']);
+					$d = new DateTime($fileItem['modifiedTime']);
 					$ts = $d->getTimestamp();
 					if ($ts > $maxTs) {
 						$maxTs = $ts;
@@ -496,6 +497,10 @@ class GoogleDriveAPIService {
 			$logFile = $folder->newFile('failed-downloads.md');
 		}
 
+        if (!$logFile instanceof File) {
+            return;
+        }
+
 		$stream = $logFile->fopen('a');
 		fwrite($stream, '1. Failed to download file: ' . $fileName . PHP_EOL);
 		fclose($stream);
@@ -565,6 +570,9 @@ class GoogleDriveAPIService {
 		} catch (LockedException $e) {
 			return null;
 		}
+        if ($resource === false) {
+            return null;
+        }
 
 		$res = $this->googleApiService->simpleDownload($userId, $fileUrl, $resource, $params);
 		if (!isset($res['error'])) {
@@ -572,7 +580,7 @@ class GoogleDriveAPIService {
 				fclose($resource);
 			}
 			if (isset($fileItem['modifiedTime'])) {
-				$d = new Datetime($fileItem['modifiedTime']);
+				$d = new DateTime($fileItem['modifiedTime']);
 				$ts = $d->getTimestamp();
 				$savedFile->touch($ts);
 			} else {

@@ -46,7 +46,7 @@ class GoogleAPIController extends Controller {
 	 */
 	public function getImportPhotosInformation(): DataResponse {
 		if ($this->accessToken === '') {
-			return new DataResponse(null, 400);
+			return new DataResponse([], 400);
 		}
 		return new DataResponse([
 			'importing_photos' => $this->config->getUserValue($this->userId, Application::APP_ID, 'importing_photos') === '1',
@@ -62,7 +62,7 @@ class GoogleAPIController extends Controller {
 	 */
 	public function getImportDriveInformation(): DataResponse {
 		if ($this->accessToken === '') {
-			return new DataResponse(null, 400);
+			return new DataResponse([], 400);
 		}
 		return new DataResponse([
 			'importing_drive' => $this->config->getUserValue($this->userId, Application::APP_ID, 'importing_drive') === '1',
@@ -78,9 +78,10 @@ class GoogleAPIController extends Controller {
 	 * @return DataResponse
 	 */
 	public function getPhotoNumber(): DataResponse {
-		if ($this->accessToken === '') {
-			return new DataResponse(null, 400);
+		if ($this->accessToken === '' || $this->userId === null) {
+			return new DataResponse([], 400);
 		}
+        /** @var array{error?:string} $result */
 		$result = $this->googlePhotosAPIService->getPhotoNumber($this->userId);
 		if (isset($result['error'])) {
 			$response = new DataResponse($result['error'], 401);
@@ -96,9 +97,10 @@ class GoogleAPIController extends Controller {
 	 * @return DataResponse
 	 */
 	public function getContactNumber(): DataResponse {
-		if ($this->accessToken === '') {
-			return new DataResponse(null, 400);
+		if ($this->accessToken === '' || $this->userId === null) {
+			return new DataResponse([], 400);
 		}
+        /** @var array{error?:string} $result */
 		$result = $this->googleContactsAPIService->getContactNumber($this->userId);
 		if (isset($result['error'])) {
 			$response = new DataResponse($result['error'], 401);
@@ -114,9 +116,10 @@ class GoogleAPIController extends Controller {
 	 * @return DataResponse
 	 */
 	public function getCalendarList(): DataResponse {
-		if ($this->accessToken === '') {
-			return new DataResponse(null, 400);
-		}
+        if ($this->accessToken === '' || $this->userId === null) {
+            return new DataResponse([], 400);
+        }
+        /** @var array{error?:string} $result */
 		$result = $this->googleCalendarAPIService->getCalendarList($this->userId);
 		if (isset($result['error'])) {
 			$response = new DataResponse($result['error'], 401);
@@ -132,9 +135,10 @@ class GoogleAPIController extends Controller {
 	 * @return DataResponse
 	 */
 	public function getDriveSize(): DataResponse {
-		if ($this->accessToken === '') {
-			return new DataResponse(null, 400);
-		}
+        if ($this->accessToken === '' || $this->userId === null) {
+            return new DataResponse([], 400);
+        }
+        /** @var array{error?:string} $result */
 		$result = $this->googleDriveAPIService->getDriveSize($this->userId);
 		if (isset($result['error'])) {
 			$response = new DataResponse($result['error'], 401);
@@ -150,9 +154,10 @@ class GoogleAPIController extends Controller {
 	 * @return DataResponse
 	 */
 	public function importPhotos(): DataResponse {
-		if ($this->accessToken === '') {
-			return new DataResponse(null, 400);
-		}
+        if ($this->accessToken === '' || $this->userId === null) {
+            return new DataResponse([], 400);
+        }
+        /** @var array{error?:string} $result */
 		$result = $this->googlePhotosAPIService->startImportPhotos($this->userId);
 		if (isset($result['error'])) {
 			$response = new DataResponse($result['error'], 401);
@@ -168,9 +173,10 @@ class GoogleAPIController extends Controller {
 	 * @return DataResponse
 	 */
 	public function importDrive(): DataResponse {
-		if ($this->accessToken === '') {
-			return new DataResponse(null, 400);
-		}
+        if ($this->accessToken === '' || $this->userId === null) {
+            return new DataResponse([], 400);
+        }
+        /** @var array{error?:string} $result */
 		$result = $this->googleDriveAPIService->startImportDrive($this->userId);
 		if (isset($result['error'])) {
 			$response = new DataResponse($result['error'], 401);
@@ -189,9 +195,10 @@ class GoogleAPIController extends Controller {
 	 * @return DataResponse
 	 */
 	public function importCalendar(string $calId, string $calName, ?string $color = null): DataResponse {
-		if ($this->accessToken === '') {
-			return new DataResponse('', 400);
-		}
+        if ($this->accessToken === '' || $this->userId === null) {
+            return new DataResponse([], 400);
+        }
+        /** @var array{error?:string} $result */
 		$result = $this->googleCalendarAPIService->importCalendar($this->userId, $calId, $calName, $color);
 		if (isset($result['error'])) {
 			$response = new DataResponse($result['error'], 401);
@@ -210,9 +217,10 @@ class GoogleAPIController extends Controller {
 	 * @return DataResponse
 	 */
 	public function importContacts(?string $uri = '', int $key = 0, ?string $newAddressBookName = ''): DataResponse {
-		if ($this->accessToken === '') {
-			return new DataResponse(null, 400);
-		}
+        if ($this->accessToken === '' || $this->userId === null) {
+            return new DataResponse([], 400);
+        }
+        /** @var array{error?:string} $result */
 		$result = $this->googleContactsAPIService->importContacts($this->userId, $uri, $key, $newAddressBookName);
 		if (isset($result['error'])) {
 			$response = new DataResponse($result['error'], 401);

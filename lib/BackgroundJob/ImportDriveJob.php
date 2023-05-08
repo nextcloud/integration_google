@@ -28,10 +28,11 @@ class ImportDriveJob extends QueuedJob {
 	}
 
 	/**
+	 * @param array{user_id:string} $argument
 	 * @return void
 	 */
-	public function run($arguments) {
-		$userId = $arguments['user_id'];
+	public function run($argument) {
+		$userId = $argument['user_id'];
 		$this->service->importDriveJob($userId);
 	}
 }

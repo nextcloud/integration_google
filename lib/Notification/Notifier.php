@@ -62,6 +62,7 @@ class Notifier implements INotifier {
 
 		switch ($notification->getSubject()) {
 			case 'import_photos_finished':
+                /** @var array{nbImported?:string, targetPath: string} $p */
 				$p = $notification->getSubjectParameters();
 				$nbImported = (int) ($p['nbImported'] ?? 0);
 				$targetPath = $p['targetPath'];
@@ -73,6 +74,7 @@ class Notifier implements INotifier {
 				return $notification;
 
 			case 'import_drive_finished':
+                /** @var array{nbImported?:string, targetPath: string} $p */
 				$p = $notification->getSubjectParameters();
 				$nbImported = (int) ($p['nbImported'] ?? 0);
 				$targetPath = $p['targetPath'];

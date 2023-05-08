@@ -18,6 +18,7 @@ use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\ServerException;
 use OCA\Google\AppInfo\Application;
 use OCP\Http\Client\IClientService;
+use OCP\Http\Client\IResponse;
 use OCP\IConfig;
 use OCP\IL10N;
 use OCP\Notification\IManager as INotificationManager;
@@ -29,7 +30,9 @@ use Throwable;
  */
 class GoogleAPIService {
 
-	public function __construct(
+    private \OCP\Http\Client\IClient $client;
+
+    public function __construct(
 		string $appName,
 		private LoggerInterface $logger,
 		private IL10N $l10n,
@@ -127,6 +130,10 @@ class GoogleAPIService {
 			$body = $response->getBody();
 			$respCode = $response->getStatusCode();
 
+            if (is_resource($body)) {
+                $body = stream_get_contents($body);
+            }
+
 			if ($respCode >= 400) {
 				$this->logger->debug(
 					'Google API request 400 FAILURE, method '.$method.', URL: ' . $url . ' , body: ' . $body,
@@ -142,6 +149,7 @@ class GoogleAPIService {
 				return json_decode($body, true);
 			}
 		} catch (ServerException | ClientException $e) {
+            /** @var IResponse $response */
 			$response = $e->getResponse();
 			$body = (string) $response->getBody();
 			$this->logger->warning(
@@ -315,11 +323,15 @@ class GoogleAPIService {
 			$respCode = $response->getStatusCode();
 
 			$body = $response->getBody();
-			while (!feof($body)) {
-				// write ~5 MB chunks
-				$chunk = fread($body, 5000000);
-				fwrite($resource, $chunk);
-			}
+            if (is_resource($body)) {
+                while (!feof($body)) {
+                    // write ~5 MB chunks
+                    $chunk = fread($body, 5000000);
+                    fwrite($resource, $chunk);
+                }
+            }else{
+                fwrite($resource, $body);
+            }
 
 			if ($respCode >= 400) {
 				return ['error' => $this->l10n->t('Bad credentials')];
@@ -341,7 +353,7 @@ class GoogleAPIService {
 		$refreshToken = $this->config->getUserValue($userId, Application::APP_ID, 'refresh_token');
 		$expireAt = $this->config->getUserValue($userId, Application::APP_ID, 'token_expires_at');
 		if ($refreshToken !== '' && $expireAt !== '') {
-			$nowTs = (new Datetime())->getTimestamp();
+			$nowTs = (new DateTime())->getTimestamp();
 			$expireAt = (int) $expireAt;
 			// if token expires in less than 2 minutes or has already expired
 			if ($nowTs > $expireAt - 120) {
@@ -366,7 +378,7 @@ class GoogleAPIService {
 			$this->logger->debug('Google access token successfully refreshed', ['app' => Application::APP_ID]);
 			$this->config->setUserValue($userId, Application::APP_ID, 'token', $result['access_token']);
 			if (isset($result['expires_in'])) {
-				$nowTs = (new Datetime())->getTimestamp();
+				$nowTs = (new DateTime())->getTimestamp();
 				$expiresAt = $nowTs + (int) $result['expires_in'];
 				$this->config->setUserValue($userId, Application::APP_ID, 'token_expires_at', $expiresAt);
 			}

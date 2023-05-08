@@ -11,7 +11,7 @@
 
 namespace OCA\Google\Service;
 
-use Datetime;
+use DateTime;
 use Exception;
 use Generator;
 use OCA\DAV\CardDAV\CardDavBackend;
@@ -192,7 +192,7 @@ class GoogleContactsAPIService {
 						$googleUpdateTimestamp = 0;
 					} else {
 						try {
-							$googleUpdateTimestamp = (new Datetime($googleUpdateTime))->getTimestamp();
+							$googleUpdateTimestamp = (new DateTime($googleUpdateTime))->getTimestamp();
 						} catch (Exception | Throwable $e) {
 							$googleUpdateTimestamp = 0;
 						}
@@ -343,7 +343,7 @@ class GoogleContactsAPIService {
 			if (isset($c['birthdays']) && is_array($c['birthdays'])) {
 				foreach ($c['birthdays'] as $birthday) {
 					if (isset($birthday['date'], $birthday['date']['year'], $birthday['date']['month'], $birthday['date']['day'])) {
-						$date = new Datetime($birthday['date']['year'] . '-' . $birthday['date']['month'] . '-' . $birthday['date']['day']);
+						$date = new DateTime($birthday['date']['year'] . '-' . $birthday['date']['month'] . '-' . $birthday['date']['day']);
 						$strDate = $date->format('Ymd');
 
 						$type = ['VALUE' => 'DATE'];

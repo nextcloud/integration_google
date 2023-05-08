@@ -218,7 +218,7 @@ class GooglePhotosAPIService {
 			$folder = $userFolder->newFolder($targetPath);
 		} else {
 			$folder = $userFolder->get($targetPath);
-			if ($folder->getType() !== FileInfo::TYPE_FOLDER) {
+			if (!$folder instanceof Folder) {
 				return ['error' => 'Impossible to create Google folder'];
 			}
 		}
@@ -386,6 +386,10 @@ class GooglePhotosAPIService {
 				$this->logger->warning('Google Photo, error opening target file ' . '<redacted>' . ' : file is locked', ['app' => Application::APP_ID]);
 				return null;
 			}
+            if ($resource === false) {
+                $this->logger->warning('Google Photo, error opening target file ' . '<redacted>', ['app' => Application::APP_ID]);
+                return null;
+            }
 			$res = $this->googleApiService->simpleDownload($userId, $photoUrl, $resource);
 			if (!isset($res['error'])) {
 				if (is_resource($resource)) {
