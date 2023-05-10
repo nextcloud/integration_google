@@ -4,7 +4,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [2.0.0] - 2023-05-10
+
+### Breaking changes
+
+- Drop support for Nextcloud 22
+- Drop support for Nextcloud 23
+- Drop support for Nextcloud 24
+- Drop support for Netxcloud 25
+- Drop support for PHP <8.0
+
+### Fixed
+ - fix plural translation in notifier
+ - Fix(l10n): 🔠 Update translations from Transifex
 
 ## 1.0.9 – 2023-01-08
 ### Added
