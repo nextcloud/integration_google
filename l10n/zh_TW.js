@@ -1,6 +1,7 @@
 OC.L10N.register(
     "integration_google",
     {
+    "No logged in user" : "無已登入的使用者",
     "Missing refresh token in Google response." : "Google 回應中缺少重新整理權杖。",
     "Error getting OAuth access token." : "取得 OAuth 存取權杖時發生錯誤",
     "Error during OAuth exchanges" : "OAuth 交換時發生錯誤",

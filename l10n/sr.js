@@ -1,6 +1,7 @@
 OC.L10N.register(
     "integration_google",
     {
+    "No logged in user" : "Није пријављен ниједан корисник",
     "Missing refresh token in Google response." : "У Google одговору недостаје жетон за освежавање.",
     "Error getting OAuth access token." : "Грешка при добијању OAuth приступног жетона.",
     "Error during OAuth exchanges" : "Грешко приликом OAuth размена",

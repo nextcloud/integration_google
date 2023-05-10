@@ -1,6 +1,7 @@
 OC.L10N.register(
     "integration_google",
     {
+    "No logged in user" : "No logged in user",
     "Missing refresh token in Google response." : "Missing refresh token in Google response.",
     "Error getting OAuth access token." : "Error getting OAuth access token.",
     "Error during OAuth exchanges" : "Error during OAuth exchanges",
