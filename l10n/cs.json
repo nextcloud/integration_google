@@ -1,4 +1,5 @@
 { "translations": {
+    "No logged in user" : "Nepřihlášený uživatel",
     "Missing refresh token in Google response." : "V odpovědi ze služeb Google chybí obnovovací token.",
     "Error getting OAuth access token." : "Chyba při získávání OAuth přístupového tokenu.",
     "Error during OAuth exchanges" : "Chyba při výměnách informací v rámci OAuth",
