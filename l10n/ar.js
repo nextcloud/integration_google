@@ -6,6 +6,7 @@ OC.L10N.register(
     "Bad credentials" : "رموز التعريف غير صحيحة",
     "Connected accounts" : "حسابات مترابطة",
     "Client ID" : "معرف العميل",
+    "Client secret" : "كلمة سر العميل",
     "Use a popup to authenticate" : "استخدم النافذة المنبثقة للتعريف عن نفسك ",
     "Authentication" : "المصادقة",
     "Connected as {user}" : "متصل بصفته {user}",
