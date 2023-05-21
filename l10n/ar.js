@@ -3,7 +3,7 @@ OC.L10N.register(
     {
     "Error during OAuth exchanges" : "خطأ أثناء تبادل OAuth.",
     "OAuth access token refused" : "أمارة token مرفوضة",
-    "Bad credentials" : "رموز التعريف غير صحيحة",
+    "Bad credentials" : "معلومات تسجيل الدخول غير صحيحة",
     "Connected accounts" : "حسابات مترابطة",
     "Client ID" : "معرف العميل",
     "Client secret" : "كلمة سر العميل",

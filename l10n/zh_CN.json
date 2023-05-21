@@ -19,10 +19,12 @@
     "Put the \"Client ID\" and \"Client secret\" below." : "请在下方输入\"客户端ID\"和\"客户端密码\"。",
     "Finally, go to \"APIs & Services\" => \"Library\" and add the following APIs: \"Google Drive API\", \"Google Calendar API\", \"People API\" and \"Photos Library API\"." : "最后，转到“API & Services”=>“Library”，添加以下API:“谷歌云盘 API”、“谷歌日历 API”、“People API”和“Photos Library API”。",
     "Your Nextcloud users will then see a \"Connect to Google\" button in their personal settings." : "然后，你的Nextcloud用户将在他们的个人设置中看到一个“连接到谷歌”按钮。 ",
-    "Client ID" : "客户端 ID",
-    "Client ID of your Google application" : "谷歌应用程序的客户端ID ",
+    "Client ID" : "客户端ID",
+    "Client ID of your Google application" : "您的Google应用程序的客户端ID ",
     "Client secret" : "客户端 secret",
+    "Use a popup to authenticate" : "使用弹出窗口进行验证",
     "Google admin options saved" : "Google 管理员选项已保存",
+    "Failed to save Google admin options" : "保存Google管理员选项失败",
     "No Google OAuth app configured. Ask your Nextcloud administrator to configure Google connected accounts admin section." : "没有配置谷歌OAuth应用。请求你的Nextcloud管理员配置谷歌连接帐户管理部分。",
     "Authentication" : "验证",
     "Sign in with Google" : "使用谷歌登录",
@@ -54,6 +56,15 @@
     "Successfully connected to Google!" : "成功连接到Google！",
     "Google connection error:" : "Google连接错误：",
     "Google options saved" : "Google 选项已保存",
-    "Failed to save Google options" : "保存 Google 选项失败"
+    "Failed to save Google options" : "保存Google选项失败",
+    "Failed to save Google OAuth state" : "保存Google OAuth状态失败",
+    "Failed to get Google Drive information" : "无法获取Google云端硬盘信息",
+    "Failed to get calendar list" : "获取日历列表失败",
+    "Failed to get number of Google photos" : "无法获取Google照片数量",
+    "Failed to get number of Google contacts" : "无法获取Google联系人数量",
+    "Failed to get address book list" : "获取通讯录列表失败",
+    "Failed to import Google calendar" : "导入Google日历失败",
+    "Failed to start importing Google photos" : "无法开始导入Google照片",
+    "Failed to start importing Google Drive" : "无法开始导入Google云端硬盘"
 },"pluralForm" :"nplurals=1; plural=0;"
 }
