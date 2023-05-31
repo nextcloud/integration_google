@@ -70,7 +70,7 @@ class Personal implements ISettings {
 		// Get scopes of user
 		$userScopesString = $this->config->getUserValue($this->userId, Application::APP_ID, 'user_scopes', '{}');
 		/** @var bool|null|array $userScopes */
-		$userScopes = json_decode($userScopesString);
+		$userScopes = json_decode($userScopesString, true);
 		if (!is_array($userScopes)) {
 			$userScopes = ['nothing' => 'nothing'];
 		}
