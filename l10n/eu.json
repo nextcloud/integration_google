@@ -11,7 +11,6 @@
     "Data migration" : "Datu migrazioa",
     "Google integration" : "Google integrazioa",
     "Import Google data into Nextcloud" : "Inportatu Google datuak Nextcloudera",
-    "Google integration allows you to automatically import your Google calendars, contacts, photos and files into Nextcloud." : "Google integrazioak zure Googleko egutegiak, kontaktuak, argazkiak eta fitxategiak  Nextcloudera automatikoki inportatzen baimentzen dizu.",
     "If you want to allow your Nextcloud users to authenticate to Google, create an OAuth application in your Google settings." : "Zure Nextcloud erabiltzaileei Google-rekin autentifikatzeko aukera eman nahi badiezu, sortu OAuth aplikazio bat zure Google ezarpenetan.",
     "Google API settings" : "Google API ezapenak",
     "Go to \"APIs & Services\" => \"Credentials\" and click on \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\"." : "Zoaz \"APIs & Services\" => \"Credentials\" atalera eta egin klik \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\" aukeran.",

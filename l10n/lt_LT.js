@@ -13,7 +13,6 @@ OC.L10N.register(
     "Data migration" : "Duomenų perkėlimas",
     "Google integration" : "„Google“ integracija",
     "Import Google data into Nextcloud" : "Importuoti „Google“ duomenis į Nextcloud",
-    "Google integration allows you to automatically import your Google calendars, contacts, photos and files into Nextcloud." : "„Google“ integracija jums leidžia automatiškai importuoti į Nextcloud savo „Google“ kalendorius, adresatus, nuotraukas bei failus.",
     "If you want to allow your Nextcloud users to authenticate to Google, create an OAuth application in your Google settings." : "Jei norite leisti savo Nextcloud naudotojams nustatinėti savo tapatybę „Google“ sistemoje, tuomet „Google“ nustatymuose sukurkite „OAuth“ programą.",
     "Google API settings" : "„Google“ API nustatymai",
     "Your Nextcloud users will then see a \"Connect to Google\" button in their personal settings." : "Tuomet jūsų Nextcloud naudotojai savo asmeniniuose nustatymuose matys mygtuką „Prisijungti prie „Google““",

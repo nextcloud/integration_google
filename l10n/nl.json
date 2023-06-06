@@ -11,7 +11,6 @@
     "Data migration" : "Gegevensmigratie",
     "Google integration" : "Google integratie",
     "Import Google data into Nextcloud" : "Importeren Google data in Nextcloud",
-    "Google integration allows you to automatically import your Google calendars, contacts, photos and files into Nextcloud." : "Google integratie laat je automatisch je Google agenda's, contactpersonen, foto's en bestanden importeren in Nextcloud.",
     "If you want to allow your Nextcloud users to authenticate to Google, create an OAuth application in your Google settings." : "Als je wilt dat je Nextcloud-gebruikers bij Google kunnen authentiseren, maak dan een OAuth-applicatie aan in je Google-instellingen.",
     "Google API settings" : "Google API instellingen",
     "Go to \"APIs & Services\" => \"Credentials\" and click on \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\"." : "Ga naar \"APIs & Services\" => \"Credentials\" en klik op \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\".",

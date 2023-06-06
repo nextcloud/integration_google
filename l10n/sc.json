@@ -11,7 +11,6 @@
     "Data migration" : "Tramudadura de datos",
     "Google integration" : "Integratzione Google",
     "Import Google data into Nextcloud" : "Importa is datos de Google in Nextcloud",
-    "Google integration allows you to automatically import your Google calendars, contacts, photos and files into Nextcloud." : "S'integratzione de Google ti permitet de importare in manera automàtica is calendàrios tuos, is cuntatos, is fotos e is archìvios de Google in Nextcloud.",
     "If you want to allow your Nextcloud users to authenticate to Google, create an OAuth application in your Google settings." : "Si cheres cunsentire a is utentes tuos de Nextcloud de s'autenticare in Google, crea un'aplicatzione OAuth in is impostatziones de Google.",
     "Google API settings" : "Impostatziones Google API",
     "Go to \"APIs & Services\" => \"Credentials\" and click on \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\"." : "Bae a \"APIs & Servìtzios\" => \"Credentziales\" e incarca subra de \"+ CREA CREDENTZIALES\" -> \"OAuth client ID\".",
