@@ -16,6 +16,7 @@ OC.L10N.register(
     "Data migration" : "Data migration",
     "Google integration" : "Google integration",
     "Import Google data into Nextcloud" : "Import Google data into Nextcloud",
+    "Google integration allows you to automatically migrate your Google calendars, contacts, photos and files into Nextcloud." : "Google integration allows you to automatically migrate your Google calendars, contacts, photos and files into Nextcloud.",
     "If you want to allow your Nextcloud users to authenticate to Google, create an OAuth application in your Google settings." : "If you want to allow your Nextcloud users to authenticate to Google, create an OAuth application in your Google settings.",
     "Google API settings" : "Google API settings",
     "Go to \"APIs & Services\" => \"Credentials\" and click on \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\"." : "Go to \"APIs & Services\" => \"Credentials\" and click on \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\".",
