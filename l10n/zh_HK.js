@@ -16,6 +16,7 @@ OC.L10N.register(
     "Data migration" : "數據遷移",
     "Google integration" : "Google 整合",
     "Import Google data into Nextcloud" : "將 Google 數據匯入 Nextcloud",
+    "Google integration allows you to automatically migrate your Google calendars, contacts, photos and files into Nextcloud." : "Google 整合讓您自動將 Google Calendar，Contacts，Photos 和 Doc 遷移至 Nextcloud。",
     "If you want to allow your Nextcloud users to authenticate to Google, create an OAuth application in your Google settings." : "如欲允許您的 Nextcloud 用戶向 Google 進行身份驗證，請在您的 Google 設置中創建一個 OAuth 應用程式。",
     "Google API settings" : "Google API 設定",
     "Go to \"APIs & Services\" => \"Credentials\" and click on \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\"." : "前往 \"APIs & Services\" => \"Credentials\" 然後單擊 \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\"。",

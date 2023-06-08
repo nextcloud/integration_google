@@ -14,6 +14,7 @@
     "Data migration" : "Veri aktarma",
     "Google integration" : "Google bütünleştirmesi",
     "Import Google data into Nextcloud" : "Google verilerini Nextcloud içine aktar",
+    "Google integration allows you to automatically migrate your Google calendars, contacts, photos and files into Nextcloud." : "Google bütünleştirmesi, Google takvimlerinizi, kişilerinizi, fotoğraflarınızı ve dosyalarınızı otomatik olarak Nextcloud üzerine aktarmanızı sağlar.",
     "If you want to allow your Nextcloud users to authenticate to Google, create an OAuth application in your Google settings." : "Nextcloud kullanıcılarınızın Google kimlik doğrulaması için OAuth uygulamasını kullanmak istiyorsanız, Google yönetici ayarlarınızdan bir uygulama oluşturun.",
     "Google API settings" : "Google API ayarları",
     "Go to \"APIs & Services\" => \"Credentials\" and click on \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\"." : "\"API ve hizmetler\" => \"Kimlik bilgileri\" bölümüne gidip \"+ KİMLİK BİLGİSİ OLUŞTUR\" -> \"OAuth istemci kimliği\" üzerine tıklayın.",
