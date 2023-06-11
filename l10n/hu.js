@@ -1,6 +1,7 @@
 OC.L10N.register(
     "integration_google",
     {
+    "No logged in user" : "Nincs bejelentkezett felhasználó",
     "Missing refresh token in Google response." : "Hiányzik a frissítési token a Google válaszából.",
     "Error getting OAuth access token." : "Hiba történt az OAuth hozzáférési token lekérése során.",
     "Error during OAuth exchanges" : "Hiba történt az OAuth üzenetváltás során",
@@ -15,6 +16,7 @@ OC.L10N.register(
     "Data migration" : "Adatköltöztetés",
     "Google integration" : "Google integráció",
     "Import Google data into Nextcloud" : "Google adatok importálása a Nextcloudba",
+    "Google integration allows you to automatically migrate your Google calendars, contacts, photos and files into Nextcloud." : "A Google integráció lehetővé teszi a Google naptárak, névjegyek, fényképek és fájlok automatikus átköltöztetését a Nextcloudba.",
     "If you want to allow your Nextcloud users to authenticate to Google, create an OAuth application in your Google settings." : "Ha szeretné, hogy a Nextcloud felhasználók hitelesítsék magukat a Google rendszerében, hozzon létre egy OAuth alkalmazást a Google beállításaiban.",
     "Google API settings" : "Google API beállítások",
     "Go to \"APIs & Services\" => \"Credentials\" and click on \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\"." : "Ugorjon az „API-k és szolgáltatások” => „Hitelesítő adatok” oldalra, és kattintson a „+ HITELESÍTŐ ADATOK LÉTREHOZÁSA” -> \"OAuth kliensazonosító\" elemre.",

@@ -6,7 +6,7 @@ OC.L10N.register(
     "Bad credentials" : "Погані облікові дані",
     "Client ID" : "Ідентифікатор клієнта",
     "Client secret" : "Ключ клієнта",
-    "Authentication" : "Автентифікація",
+    "Authentication" : "Авторизація",
     "Sign in with Google" : "Увійдіть за допомогою Google",
     "Contacts" : "Контакти",
     "New address book" : "Нова адресна книга",
