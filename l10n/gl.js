@@ -1,6 +1,7 @@
 OC.L10N.register(
     "integration_google",
     {
+    "No logged in user" : "Non hai ningún usuario conectado",
     "Missing refresh token in Google response." : "Falta un testemuño de actualización na resposta de Google.",
     "Error getting OAuth access token." : "Produciuse un erro ao obter o testemuño de acceso OAuth.",
     "Error during OAuth exchanges" : "Produciuse un erro durante os intercambios de OAuth",
@@ -44,7 +45,7 @@ OC.L10N.register(
     "Calendars" : "Calendarios",
     "Import calendar" : "Importar o calendario",
     "Photos" : "Fotos",
-    "Ignore shared albums" : "Ignorar os albums compartidos",
+    "Ignore shared albums" : "Ignorar os álbums compartidos",
     "Warning: Google does not provide location data in imported photos." : "Advertencia: Google non fornece os datos de localización nas fotos importadas.",
     "Import directory" : "Importar directorio",
     "Import Google photos" : "Importar as fotos de Google",
@@ -54,7 +55,7 @@ OC.L10N.register(
     "Ignore shared files" : "Ignorar os ficheiros compartidos",
     "Google documents import format" : "Formato de importación de documentos de Google",
     "Your Google Drive ({formSize} + {formSharedSize} shared with you)" : "O seu Google Drive ({formSize} + {formSharedSize} compartido con vostede)",
-    "Your Google Drive ({formSize})" : "O teu Google Drive ({formSize})",
+    "Your Google Drive ({formSize})" : "O seu Google Drive ({formSize})",
     "Import Google Drive files" : "Importar os ficheiros de Google Drive",
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "O seu Google Drive é máis grande que o espazo que lle queda libre ({formSpace})",
     "Cancel Google Drive import" : "Cancelar a importación de Google Drive",
