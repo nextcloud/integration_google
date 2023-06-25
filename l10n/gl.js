@@ -64,7 +64,7 @@ OC.L10N.register(
     "You can close this page. You will be notified when it finishes." : "Pode pechar esta páxina. Recibirá unha notificación cando remate.",
     "Google Drive background import process will begin soon." : "O proceso de importación de Google Drive en segundo plano logo vai comezar.",
     "Last Google Drive import job at {date}" : "Último traballo de importación de Google Drive o {date}",
-    "Successfully connected to Google!" : "Conectou satisfactoriamente con Google.",
+    "Successfully connected to Google!" : "Conectou satisfactoriamente con Google!",
     "Google connection error:" : "Produciuse un erro na conexión co Google:",
     "Google options saved" : "Gardáronse as opcións de Google",
     "Failed to save Google options" : "Produciuse un fallo ao gardar as opcións de Moodle.",
