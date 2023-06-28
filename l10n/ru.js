@@ -55,7 +55,7 @@ OC.L10N.register(
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Ваш Google Drive больше, чем оставшееся свободное место ({formSpace})",
     "Cancel Google Drive import" : "Отменить импорт Google Drive",
     "Photo import background process will begin soon." : "Скоро будет запущен импорт фотографий в фоне.",
-    "Last photo import job at {date}" : "Последняя работа по импорту фотографий на {дата}",
+    "Last photo import job at {date}" : "Последняя работа по импорту фотографий на {date}",
     "You can close this page. You will be notified when it finishes." : "Вы можете закрыть эту страницу. Вы будете уведомлены, когда процесс завершится.",
     "Google Drive background import process will begin soon." : "Скоро будет запущен импорт с Google Диска в фоне.",
     "Last Google Drive import job at {date}" : "Последний импорт Google Drive в {date}",
