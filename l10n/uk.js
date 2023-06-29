@@ -4,6 +4,7 @@ OC.L10N.register(
     "Error during OAuth exchanges" : "Помилка під час обміну OAuth",
     "OAuth access token refused" : "Маркер доступу OAuth відхилено",
     "Bad credentials" : "Погані облікові дані",
+    "Connected accounts" : "Підключені облікові записи",
     "Client ID" : "Ідентифікатор клієнта",
     "Client secret" : "Ключ клієнта",
     "Authentication" : "Авторизація",
