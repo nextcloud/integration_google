@@ -5,6 +5,7 @@ OC.L10N.register(
     "Client secret" : "Kliendi salasõna",
     "Authentication" : "Autentimine",
     "Contacts" : "Kontaktid",
+    "Calendars" : "Kalendrid",
     "Import calendar" : "Impordi kalender",
     "Photos" : "Fotod",
     "Drive" : "Sõit"
