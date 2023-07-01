@@ -5,6 +5,7 @@ OC.L10N.register(
     "OAuth access token refused" : "أمارة token مرفوضة",
     "Bad credentials" : "معلومات تسجيل الدخول غير صحيحة",
     "Connected accounts" : "حسابات مترابطة",
+    "Google integration allows you to automatically migrate your Google calendars, contacts, photos and files into Nextcloud." : "يتيح لك التكامل مع جوجل ترحيل تقاويم جوجل وجهات الاتصال والصور والملفات تلقائيًا إلى نكست كلود.",
     "Client ID" : "معرف العميل",
     "Client secret" : "كلمة سر العميل",
     "Use a popup to authenticate" : "استخدم النافذة المنبثقة للتعريف عن نفسك ",
