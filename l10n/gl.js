@@ -81,7 +81,7 @@ OC.L10N.register(
     "Failed to start importing Google Drive" : "Produciuse un fallo ao comezar a importar dende Google Drive",
     "Choose where to write imported files" : "Escolla onde gravar os ficheiros importados",
     "Choose where to write imported photos" : "Escolla onde gravar as fotos importadas",
-    "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} Foto Google (>{formSize})",">{nbPhotos} Fotos Google (>{formSize})"],
+    "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} Foto Google (>{formSize})",">{nbPhotos} Photos de Google (>{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} foto importada","{amount} fotos importadas"],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} ficheiro importado ({progress}%)","{amount} ficheiros importados ({progress}%)"],
     "_{nbSeen} Google contact seen. {nbAdded} added, {nbUpdated} updated in {name}_::_{nbSeen} Google contacts seen. {nbAdded} added, {nbUpdated} updated in {name}_" : ["Viuse {nbSeen} contacto de Google. {nbAdded} engadido, {nbUpdated} actualizado en {name}"," Víronse {nbSeen} contactos de Google. {nbAdded} engadidos, {nbUpdated} actualizados en {name}"],
