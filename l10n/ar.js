@@ -81,6 +81,8 @@ OC.L10N.register(
     "Starting importing files in {targetPath} directory" : "بدء استيراد الملفات إلى الدليل {targetPath} ",
     "Failed to start importing Google Drive" : "تعذّر البدء في استيراد قوقل درايف Google Drive",
     "Choose where to write imported files" : "حدِّد إلى أين ستتم كتابة الملفات المستوردة",
-    "Choose where to write imported photos" : "حدِّد إلى أين ستتم كتابة الصور المستوردة"
+    "Choose where to write imported photos" : "حدِّد إلى أين ستتم كتابة الصور المستوردة",
+    "_{amount} photo imported_::_{amount} photos imported_" : ["تم استيراد {amount} صور","تم استيراد {amount} صورة","تم استيراد {amount} صور","تم استيراد {amount} صور","تم استيراد {amount} صور","تم استيراد {amount} صور"],
+    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} ملفات تم استيرادها ({progress}%)","{amount} ملف تم استيراده ({progress}%)","{amount} ملفات تم استيرادها ({progress}%)","{amount} ملفات تم استيرادها ({progress}%)","{amount} ملفات تم استيرادها ({progress}%)","{amount}  ملفات تم استيرادها ({progress}%)"]
 },
 "nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;");
