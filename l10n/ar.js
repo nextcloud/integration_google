@@ -82,6 +82,7 @@ OC.L10N.register(
     "Failed to start importing Google Drive" : "تعذّر البدء في استيراد قوقل درايف Google Drive",
     "Choose where to write imported files" : "حدِّد إلى أين ستتم كتابة الملفات المستوردة",
     "Choose where to write imported photos" : "حدِّد إلى أين ستتم كتابة الصور المستوردة",
+    "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : ["> {nbPhotos} صور جوجل (> {formSize})","> {nbPhotos} صورة جوجل (> {formSize})","> {nbPhotos} صور جوجل (> {formSize})","> {nbPhotos} صور جوجل (> {formSize})","> {nbPhotos} صور جوجل (> {formSize})","> {nbPhotos} صور جوجل (> {formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["تم استيراد {amount} صور","تم استيراد {amount} صورة","تم استيراد {amount} صور","تم استيراد {amount} صور","تم استيراد {amount} صور","تم استيراد {amount} صور"],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} ملفات تم استيرادها ({progress}%)","{amount} ملف تم استيراده ({progress}%)","{amount} ملفات تم استيرادها ({progress}%)","{amount} ملفات تم استيرادها ({progress}%)","{amount} ملفات تم استيرادها ({progress}%)","{amount}  ملفات تم استيرادها ({progress}%)"]
 },
