@@ -31,7 +31,7 @@
     "Google admin options saved" : "Gardáronse as opcións de administración de Google",
     "Failed to save Google admin options" : "Produciuse un fallo ao gardar as opcións de administración de Google.",
     "Google data migration" : "Migración de datos de Google",
-    "No Google OAuth app configured. Ask your Nextcloud administrator to configure Google connected accounts admin section." : "Non foi configurada ningunha aplicación de Google OAuth. Pídalle a súa administración do Nextcloud que configure a sección de administración de contas conectadas a Google.",
+    "No Google OAuth app configured. Ask your Nextcloud administrator to configure Google connected accounts admin section." : "Non foi configurada ningunha aplicación de Google OAuth. Pídalle a súa administración de Nextcloud que configure a sección de administración de contas conectadas a Google.",
     "Authentication" : "Autenticación",
     "Sign in with Google" : "Acceda con Google",
     "Connected as {user}" : "Conectado como {user}",

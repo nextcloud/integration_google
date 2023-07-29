@@ -28,7 +28,7 @@ OC.L10N.register(
     "Client ID" : "Client-ID",
     "Client ID of your Google application" : "Client-ID der Google-Anwendung",
     "Client secret" : "Geheime Zeichenkette des Clients",
-    "Client secret of your Google application" : "Client-Geheimnis der Google-Anwendung",
+    "Client secret of your Google application" : "Geheime Zeichenkette des Clients der Google-Anwendung",
     "Use a popup to authenticate" : "Popup zur Authentifizierung verwenden",
     "Google admin options saved" : "Google-Adiministrator-Einstellungen gespeichert",
     "Failed to save Google admin options" : "Fehler beim Speichern der Google-Administrator-Einstellungen",
