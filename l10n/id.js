@@ -7,7 +7,6 @@ OC.L10N.register(
     "Connected accounts" : "Akun terhubung",
     "Client ID" : "ID Klien",
     "Client secret" : "Rahasia klien",
-    "Use a popup to authenticate" : "Gunakan sembulan untuk mengautentikasi",
     "Authentication" : "Otentikasi",
     "Connected as {user}" : "Terhubung sebagai {user}",
     "Contacts" : "Kontak",

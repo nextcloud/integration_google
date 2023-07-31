@@ -28,7 +28,6 @@ OC.L10N.register(
     "Client ID of your Google application" : "Google-sovelluksesi Client ID",
     "Client secret" : "Asiakassalaisuus",
     "Client secret of your Google application" : "Google-sovelluksesi Client secret",
-    "Use a popup to authenticate" : "Käytä ponnahdusikkunaa tunnistautumista varten",
     "Google admin options saved" : "Googlen ylläpitoasetukset tallennettu",
     "Failed to save Google admin options" : "Googlen ylläpitoasetusten tallennus epäonnistui",
     "Google data migration" : "Google-tietojen migraatio",

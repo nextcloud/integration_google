@@ -29,7 +29,6 @@ OC.L10N.register(
     "Client ID of your Google application" : "您 Google 應用程式的客戶端 ID",
     "Client secret" : "客戶端密碼",
     "Client secret of your Google application" : "您 Google 應用程式的客戶端密碼",
-    "Use a popup to authenticate" : "使用彈出窗口進行身份驗證",
     "Google admin options saved" : "已儲存 Google 管理員選項",
     "Failed to save Google admin options" : "儲存 Google 管理選項失敗",
     "Google data migration" : "Google 數據遷移",

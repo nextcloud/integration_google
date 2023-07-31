@@ -29,7 +29,6 @@ OC.L10N.register(
     "Client ID of your Google application" : "ID de cliente de tu aplicación de Google",
     "Client secret" : "Secreto de cliente",
     "Client secret of your Google application" : "Secreto de cliente de tu aplicación de Google",
-    "Use a popup to authenticate" : "Usa una ventana emergente para autenticar",
     "Google admin options saved" : "Opciones de administración de Google guardadas.",
     "Failed to save Google admin options" : "Fallo al crear las opciones de administración de Google",
     "Google data migration" : "Migración de datos de Google",

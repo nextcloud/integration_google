@@ -23,7 +23,6 @@ OC.L10N.register(
     "Client ID" : "客户端ID",
     "Client ID of your Google application" : "您的Google应用程序的客户端ID ",
     "Client secret" : "客户端 secret",
-    "Use a popup to authenticate" : "使用弹出窗口进行验证",
     "Google admin options saved" : "Google 管理员选项已保存",
     "Failed to save Google admin options" : "保存Google管理员选项失败",
     "No Google OAuth app configured. Ask your Nextcloud administrator to configure Google connected accounts admin section." : "没有配置Google OAuth应用。请求你的Nextcloud管理员配置谷歌连接帐户管理部分。",

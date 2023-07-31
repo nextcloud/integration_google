@@ -29,7 +29,6 @@ OC.L10N.register(
     "Client ID of your Google application" : "A Google alkalmazás kliensazonosítója",
     "Client secret" : "Klienstitok",
     "Client secret of your Google application" : "A Google alkalmazás klienstitka",
-    "Use a popup to authenticate" : "Felugró ablak használata a hitelesítéshez",
     "Google admin options saved" : "A Google rendszergazdai beállításai mentve",
     "Failed to save Google admin options" : "A Google rendszergazdai beállításainak mentése sikertelen",
     "Google data migration" : "Google adatköltöztetés",
