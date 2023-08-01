@@ -29,6 +29,7 @@ OC.L10N.register(
     "Client ID of your Google application" : "مُعرِّف العميل Client ID لتطبيقاتك من قوقل",
     "Client secret" : "كلمة سر العميل Client secret",
     "Client secret of your Google application" : "كلمة سر العميل Client secret لتطبيقاتك من قوقل",
+    "Use a pop-up to authenticate" : "استعمل النافذة المنبثقة لتحقيق هويتك",
     "Google admin options saved" : "تمّ حفظ خيارات مُشرِف قوقل",
     "Failed to save Google admin options" : "تعذّر حفظ خيارات مُشرِف قوقل",
     "Google data migration" : "ترحيل بيانات قوقل",

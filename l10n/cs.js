@@ -29,6 +29,7 @@ OC.L10N.register(
     "Client ID of your Google application" : "Identif. klienta vaší Google aplikace",
     "Client secret" : "Tajemství klienta",
     "Client secret of your Google application" : "Tajemství klienta vaší Google aplikace",
+    "Use a pop-up to authenticate" : "Ověřte se ve vyskakovacím okně",
     "Google admin options saved" : "Předvolby správy pro Google uloženy",
     "Failed to save Google admin options" : "Nepodařilo se uložit předvolby správy pro Google",
     "Google data migration" : "Přestěhování dat z Google",
