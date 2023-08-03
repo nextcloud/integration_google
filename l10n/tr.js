@@ -29,6 +29,7 @@ OC.L10N.register(
     "Client ID of your Google application" : "Google uygulamanızın istemci kimliği",
     "Client secret" : "İstemci sırrı",
     "Client secret of your Google application" : "Google uygulamanızın istemci sırrı",
+    "Use a pop-up to authenticate" : "Kimlik doğrulaması için açılan pencere kullanılsın",
     "Google admin options saved" : "Google yönetici ayarları kaydedildi",
     "Failed to save Google admin options" : "Google yönetici ayarları kaydedilemedi.",
     "Google data migration" : "Google veri aktarımı",
