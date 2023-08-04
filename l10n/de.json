@@ -58,7 +58,7 @@
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Dein Google Drive ist größer als der verbleibende Speicherplatz ({formSpace})",
     "Cancel Google Drive import" : "Google Drive-Import abbrechen",
     "Photo import background process will begin soon." : "Hntergrund-Prozess des Fotoimports wird bald beginnen.",
-    "Last photo import job at {date}" : "Letzter Fotoimport-Auftrag am {date}",
+    "Last photo import job at {date}" : "Letzter Fotoimport am {date}",
     "You can close this page. You will be notified when it finishes." : "Du kannst diese Seite schließen. Du wirst darüber informiert, sobald der Prozess beendet ist.",
     "Google Drive background import process will begin soon." : "Prozess der Google Drive-Importierung wird bald beginnen.",
     "Last Google Drive import job at {date}" : "Letzter Google-Drive-Import am {date} ",
