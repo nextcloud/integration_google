@@ -9,6 +9,7 @@ OC.L10N.register(
     "Client ID" : "شناسه مشتری",
     "Client secret" : "رمز مشتری",
     "Authentication" : "احراز هویت",
+    "Connected as {user}" : "متصل به عنوان {user}",
     "Contacts" : "مخاطبین",
     "Calendars" : "تقویم‌ها",
     "Photos" : "عکس ها",
