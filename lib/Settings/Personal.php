@@ -40,6 +40,7 @@ class Personal implements ISettings {
 		$userName = $this->config->getUserValue($this->userId, Application::APP_ID, 'user_name');
 		$driveOutputDir = $this->config->getUserValue($this->userId, Application::APP_ID, 'drive_output_dir', '/Google Drive');
 		$driveOutputDir = $driveOutputDir ?: '/Google Drive';
+		$driveRemoteRoot = $this->config->getUserValue($this->userId, Application::APP_ID, 'drive_remote_root', '');
 		$photoOutputDir = $this->config->getUserValue($this->userId, Application::APP_ID, 'photo_output_dir', '/Google Photos');
 		$photoOutputDir = $photoOutputDir ?: '/Google Photos';
 		$considerSharedFiles = $this->config->getUserValue($this->userId, Application::APP_ID, 'consider_shared_files', '0') === '1';
@@ -86,6 +87,7 @@ class Personal implements ISettings {
 			'consider_shared_albums' => $considerSharedAlbums,
 			'document_format' => $documentFormat,
 			'drive_output_dir' => $driveOutputDir,
+            'drive_remote_root' => $driveRemoteRoot,
 			'photo_output_dir' => $photoOutputDir,
 			'user_scopes' => $userScopes,
 		];

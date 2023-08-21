@@ -200,6 +200,17 @@
 						</NcButton>
 						<br><br>
 					</div>
+					<div v-if="!importingDrive" class="line">
+						<label for="document-format">
+							<FolderIcon />
+							{{ t('integration_google', 'Remote Folder ID/URL (advanced)') }}
+						</label>
+						<input id="drive-remote-folder"
+							v-model="state.drive_remote_root"
+							:placeholder="t('integration_google', 'Optional')"
+							@input="onDriveRemoteRootInput">
+						<br><br>
+					</div>
 					<div class="line">
 						<label v-if="state.consider_shared_files && sharedWithMeSize > 0">
 							<FileIcon />
@@ -272,7 +283,7 @@ import { showSuccess, showError } from '@nextcloud/dialogs'
 import NcAppNavigationIconBullet from '@nextcloud/vue/dist/Components/NcAppNavigationIconBullet.js'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
 import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
-import { humanFileSize } from '../utils.js'
+import { delay, humanFileSize } from '../utils.js'
 
 export default {
 	name: 'PersonalSettings',
@@ -768,6 +779,10 @@ export default {
 				})
 		},
 		onImportDrive() {
+			// ensure that drive_remote_root is saved
+			this.saveOptions({
+				drive_remote_root: this.state.drive_remote_root,
+			})
 			const req = {
 				params: {
 				},
@@ -840,6 +855,14 @@ export default {
 				true
 			)
 		},
+		onDriveRemoteRootInput() {
+			const that = this
+			delay(() => {
+				that.saveOptions({
+					drive_remote_root: this.state.drive_remote_root,
+				})
+			}, 1000)()
+		},
 		onPhotoOutputChange() {
 			OC.dialogs.filepicker(
 				t('integration_google', 'Choose where to write imported photos'),
@@ -902,6 +925,9 @@ export default {
 		&#google-import-files {
 			height: 34px;
 		}
+	}
+	#drive-remote-folder{
+		min-width: 300px;
 	}
 
 	#google-contacts {

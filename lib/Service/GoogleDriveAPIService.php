@@ -117,6 +117,31 @@ class GoogleDriveAPIService {
 		if ($alreadyImporting) {
 			return ['targetPath' => $targetPath];
 		}
+		// check if remote folder provided by user exist
+		$remoteRoot = trim($this->config->getUserValue($userId, Application::APP_ID, 'drive_remote_root'));
+		if (!empty($remoteRoot)) {
+			// Since URLs like https://drive.google.com/drive/folders/1ALnoF950u6Pq_yVF59vCQMryNBj6XZeE?usp=drive_link
+			// or just IDs like 1ALnoF950u6Pq_yVF59vCQMryNBj6XZeE
+			// are accepted let's normalize to just ID here
+			if (filter_var($remoteRoot, FILTER_VALIDATE_URL)) {
+				$path = parse_url($remoteRoot, PHP_URL_PATH);
+				$pathFragments = explode('/', $path);
+				$remoteRoot = end($pathFragments);
+			}
+			$params = [
+				'fields' => 'mimeType',
+			];
+			$result = $this->googleApiService->request($userId, 'drive/v3/files/' . rawurlencode($remoteRoot), $params);
+			if (isset($result['error'])
+				|| !isset($result['mimeType'])
+				|| $result['mimeType'] !== 'application/vnd.google-apps.folder'
+			) {
+				$this->logger->error("cannot find remote root folder, result: " . var_export($result, true));
+				return ['error' => 'Cannot find remote folder'];
+			}
+		}
+		$this->config->setUserValue($userId, Application::APP_ID, 'drive_remote_root', $remoteRoot);
+
 		// create root folder
 		$userFolder = $this->root->getUserFolder($userId);
 		if (!$userFolder->nodeExists($targetPath)) {
@@ -242,6 +267,10 @@ class GoogleDriveAPIService {
 			}
 		}
 
+		$remoteRoot = $this->config->getUserValue($userId, Application::APP_ID, 'drive_remote_root');
+		$remoteRoot=$remoteRoot?:'root';
+        $directoriesByParentId=[];
+
 		$directoriesById = [];
 		$directoryIdsToExplore = [];
 		$params = [
@@ -259,24 +288,60 @@ class GoogleDriveAPIService {
 				if (!$considerSharedFiles && !$dir['ownedByMe']) {
 					continue;
 				}
-				$directoriesById[$dir['id']] = [
-					'name' => preg_replace('/\//', '-slash-', $dir['name']),
-					'parent' => (isset($dir['parents']) && count($dir['parents']) > 0) ? $dir['parents'][0] : null,
-					'modifiedTime' => $dir['modifiedTime'] ?? null,
-				];
-				// what we should explore
-				if (!array_key_exists($dir['id'], $directoryProgress)) {
-					$directoryIdsToExplore[] = $dir['id'];
-				}
+
+                $parentId = (isset($dir['parents']) && count($dir['parents']) > 0) ? $dir['parents'][0] : null;
+                $dirData = [
+                    'name' => preg_replace('/\//', '-slash-', $dir['name']),
+                    'parent' => $parentId,
+                    'modifiedTime' => $dir['modifiedTime'] ?? null,
+                ];
+
+                if ($remoteRoot === 'root') {
+
+                    $directoriesById[$dir['id']] = $dirData;
+
+                    // what we should explore
+                    if (!array_key_exists($dir['id'], $directoryProgress)) {
+                        $directoryIdsToExplore[] = $dir['id'];
+                    }
+
+                } elseif (!empty($parentId)) {
+                    // we build a temp object and filter in the while loop below
+                    if (!isset($directoriesByParentId[$parentId])) {
+                        $directoriesByParentId[$parentId] = [];
+                    }
+                    $directoriesByParentId[$parentId][$dir['id']] = $dirData;
+                }
 			}
 			$params['pageToken'] = $result['nextPageToken'] ?? '';
 		} while (isset($result['nextPageToken']));
 
-		// add root if it has not been imported yet
-		if (!array_key_exists('root', $directoryProgress)) {
-			$directoryIdsToExplore[] = 'root';
-		}
-
+        // add root if it has not been imported yet
+        if (!array_key_exists($remoteRoot, $directoryProgress)) {
+            $directoryIdsToExplore[] = $remoteRoot;
+        }
+        if ($remoteRoot !== 'root') {
+            // build $directoriesById by filtering $directoriesByParentId
+            $stack = [$remoteRoot];
+            $stackLen = count($stack);
+            $i = 0;
+            while ($i < $stackLen) {
+                $parentId = $stack[$i];
+                if (isset($directoriesByParentId[$parentId])) {
+                    $dirs = $directoriesByParentId[$parentId];
+                    foreach ($dirs as $dirId => $dirData) {
+                        $directoriesById[$dirId] = $dirData;
+                        // what we should explore
+                        if (!array_key_exists($dirId, $directoryProgress)) {
+                            $directoryIdsToExplore[] = $dirId;
+                        }
+                        $stack[] = $dirId;
+                        ++$stackLen;
+                    }
+                }
+                $i++;
+            }
+        }
 		// create directories (recursive powa)
 		if (!$this->createDirsUnder($directoriesById, $rootImportFolder)) {
 			return ['error' => 'Impossible to create Drive directories'];
@@ -355,7 +420,7 @@ class GoogleDriveAPIService {
 							];
 						}
 					} elseif (!$saveFolder->nodeExists($fileName)) {
-						$filePathInDrive = $dirId === 'root' ? '/' . $fileItem['name'] : $directoriesById[$dirId]['name'] . '/' . $fileItem['name'];
+						$filePathInDrive = $dirId === $remoteRoot ? '/' . $fileItem['name'] : $directoriesById[$dirId]['name'] . '/' . $fileItem['name'];
 						$this->logFailedDownloadsForUser($rootImportFolder, $filePathInDrive);
 					}
 				}
@@ -363,12 +428,12 @@ class GoogleDriveAPIService {
 			} while (isset($result['nextPageToken']));
 			// this dir was fully imported
 			$directoryProgress[$dirId] = 1;
-			if ($dirId !== 'root') {
+			if ($dirId !== $remoteRoot) {
 				$this->touchFolder($directoriesById[$dirId]);
 			}
 		}
 
-		$this->touchRootImportFolder($userId, $rootImportFolder);
+		$this->touchRootImportFolder($userId, $rootImportFolder,$remoteRoot);
 		return [
 			'nbDownloaded' => $nbDownloaded,
 			'targetPath' => $targetPath,
@@ -397,7 +462,7 @@ class GoogleDriveAPIService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	private function touchRootImportFolder(string $userId, Folder $rootImportFolder): void {
+	private function touchRootImportFolder(string $userId, Folder $rootImportFolder, string $remoteRoot): void {
 		$maxTs = 0;
 
 		$params = [
@@ -412,7 +477,7 @@ class GoogleDriveAPIService {
 				'files/webContentLink',
 				'files/modifiedTime',
 			]),
-			'q' => "'root' in parents",
+			'q' => "'".$remoteRoot."' in parents",
 		];
 		do {
 			$result = $this->googleApiService->request($userId, 'drive/v3/files', $params);
