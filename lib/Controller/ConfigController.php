@@ -74,6 +74,13 @@ class ConfigController extends Controller {
 			$this->config->deleteUserValue($this->userId, Application::APP_ID, 'token_expires_at');
 			$this->config->deleteUserValue($this->userId, Application::APP_ID, 'token');
 			$result['user_name'] = '';
+		}else{
+			if (isset($values['drive_output_dir'])) {
+				/** @var \OCP\Files\IRootFolder $root */
+				$root = \OC::$server->get(\OCP\Files\IRootFolder::class);
+				$userRoot = $root->getUserFolder($this->userId);
+				$result['free_space'] = \OCA\Google\Settings\Personal::getFreeSpace($userRoot, $values['drive_output_dir']);
+			}
 		}
 		return new DataResponse($result);
 	}
