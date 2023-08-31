@@ -25,6 +25,7 @@ OC.L10N.register(
     "Client ID of your Google application" : "Zure Google aplikazioaren Bezero IDa",
     "Client secret" : "Bezeroaren sekretua",
     "Client secret of your Google application" : "Zure Google aplikazioaren bezero-sekretua",
+    "Use a pop-up to authenticate" : "Erabili pop-up bat autentifikatzeko",
     "Google admin options saved" : "Google administratzaile aukerak ondo gorde dira",
     "Failed to save Google admin options" : "Google administratzaile aukerak gordetzeak huts egin du",
     "Google data migration" : "Google datuen migratzea",
