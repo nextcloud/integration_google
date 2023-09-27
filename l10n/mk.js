@@ -1,10 +1,13 @@
 OC.L10N.register(
     "integration_google",
     {
+    "No logged in user" : "Нема најавено сметка",
     "Missing refresh token in Google response." : "Недостасув токен во Google одговорот",
     "Error getting OAuth access token." : "Грешка при добивање на OAuth пристапен токен",
     "Error during OAuth exchanges" : "Грешка при размена на податоци со OAuth ",
     "Google" : "Google",
+    "_%n photo was imported from Google._::_%n photos were imported from Google._" : ["%s фотографија е увезена од Google.","%s фотографии се увезени од Google."],
+    "_%n file was imported from Google Drive._::_%n files were imported from Google Drive._" : ["%s датотека е увезена од Google Drive.","%s датотеки се увезени од Google Drive."],
     "OAuth access token refused" : "Одбиен OAuth пристапен токен ",
     "Bad credentials" : "Неточни акредитиви",
     "Google Calendar import" : "Увоз на Google календар",
@@ -13,6 +16,7 @@ OC.L10N.register(
     "Data migration" : "Мигрирање на податоци",
     "Google integration" : "Google интеграција",
     "Import Google data into Nextcloud" : "Увоз на Google податоци во вашиот профил",
+    "Google integration allows you to automatically migrate your Google calendars, contacts, photos and files into Nextcloud." : "Google интеграцијата ви овозможува автоматско додавање на календарот, контактите, фотографиите и податоците од Google во вашиот профил.",
     "If you want to allow your Nextcloud users to authenticate to Google, create an OAuth application in your Google settings." : "Доколку сакате да им ивозможите на вашите корисници да се пријават со Google, креирајте OAuth апликација во вашите Google параматри.",
     "Google API settings" : "Google API параметри",
     "Go to \"APIs & Services\" => \"Credentials\" and click on \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\"." : "Одете во \"APIs & Services\" => \"Credentials\" и кликнете на \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\".",
@@ -25,6 +29,7 @@ OC.L10N.register(
     "Client ID of your Google application" : "Клиент ИД на вашата Google апликација",
     "Client secret" : "Тајна на клиент",
     "Client secret of your Google application" : "Клиент тајна на вашата Google апликација",
+    "Use a pop-up to authenticate" : "Користи скокачки прозор за автентификација",
     "Google admin options saved" : "Зачувани се Google административни параметри",
     "Failed to save Google admin options" : "Неуспешно зачувување на Google административни параметри",
     "Google data migration" : "Мигрирање на податоци од Google",
@@ -52,6 +57,8 @@ OC.L10N.register(
     "Drive" : "Драјв",
     "Ignore shared files" : "Игнорирај ги споделените датотеки",
     "Google documents import format" : "Формат на увезените Google документи",
+    "Your Google Drive ({formSize} + {formSharedSize} shared with you)" : "Вашиот Google Drive ({formSize} + {formSharedSize} споделени со вас)",
+    "Your Google Drive ({formSize})" : "Вашиот Google Drive ({formSize})",
     "Import Google Drive files" : "Увези Google драјв податоци",
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Вашиот Google Драјв е поголем одколку што имате слободно место ({formSpace})",
     "Cancel Google Drive import" : "Прекини увоз на Google драјв податоци",
@@ -79,6 +86,8 @@ OC.L10N.register(
     "Choose where to write imported photos" : "Избери каде да ги снимите увезените фотографии",
     "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} Google фотографија (>{formSize})",">{nbPhotos} Google фотографии (>{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} фотографија увезена","{amount} фотографии увезени"],
-    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} датотека е увезена ({progress}%)","{amount} датотеки се увезени ({progress}%)"]
+    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} датотека е увезена ({progress}%)","{amount} датотеки се увезени ({progress}%)"],
+    "_{nbSeen} Google contact seen. {nbAdded} added, {nbUpdated} updated in {name}_::_{nbSeen} Google contacts seen. {nbAdded} added, {nbUpdated} updated in {name}_" : ["{nbSeen} Google контакт е детектиран {nbAdded} додаден, {nbUpdated} ажуриран во {name}","{nbSeen} Google контакти се детектирани. {nbAdded} додадени, {nbUpdated} ажурирани во {name}"],
+    "_{total} event successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_::_{total} events successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_" : ["{total} настан е успешно увезен во {name} ({nbAdded} креиран, {nbUpdated} ажуриран)","{total} настани се успешно увезени во {name} ({nbAdded} креирани, {nbUpdated} ажурирани)"]
 },
 "nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;");
