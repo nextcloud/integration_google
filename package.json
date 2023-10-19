@@ -1,59 +1,59 @@
 {
-	"name": "integration_google",
-	"version": "2.0.2",
-	"description": "Google integration",
-	"main": "index.js",
-	"directories": {
-		"test": "tests"
-	},
-	"scripts": {
-		"build": "NODE_ENV=production webpack --progress --config webpack.js",
-		"dev": "NODE_ENV=development webpack --progress --config webpack.js",
-		"watch": "NODE_ENV=development webpack --progress --watch --config webpack.js",
-		"lint": "eslint --ext .js,.vue src",
-		"lint:fix": "eslint --ext .js,.vue src --fix",
-		"stylelint": "stylelint src/**/*.vue src/**/*.scss src/**/*.css",
-		"stylelint:fix": "stylelint src/**/*.vue src/**/*.scss src/**/*.css --fix"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/nextcloud/integration_google"
-	},
-	"keywords": [
-		"google"
-	],
-	"author": "Julien Veyssier",
-	"license": "AGPL-3.0",
-	"bugs": {
-		"url": "https://github.com/nextcloud/integration_google/issues"
-	},
-	"homepage": "https://github.com/nextcloud/integration_google",
-	"browserslist": [
-		"extends @nextcloud/browserslist-config"
-	],
-	"engines": {
-		"node": "^16.0.0",
-		"npm": "^7.0.0 || ^8.0.0"
-	},
-	"dependencies": {
-		"@nextcloud/auth": "^2.0.0",
-		"@nextcloud/axios": "^2.0.0",
-		"@nextcloud/dialogs": "^3.1.2",
-		"@nextcloud/initial-state": "^2.0.0",
-		"@nextcloud/l10n": "^1.4.0",
-		"@nextcloud/moment": "^1.1.1",
-		"@nextcloud/router": "^2.0.0",
-		"@nextcloud/vue": "^7.2.0",
-		"vue": "^2.6.14",
-		"vue-material-design-icons": "^5.1.2"
-	},
-	"devDependencies": {
-		"@nextcloud/babel-config": "^1.0.0",
-		"@nextcloud/browserslist-config": "^2.2.0",
-		"@nextcloud/eslint-config": "^8.0.0",
-		"@nextcloud/stylelint-config": "^2.1.2",
-		"@nextcloud/webpack-vue-config": "^5.2.1",
-		"eslint-webpack-plugin": "^3.2.0",
-		"stylelint-webpack-plugin": "^3.3.0"
-	}
+  "name": "integration_google",
+  "version": "2.0.2",
+  "description": "Google integration",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "build": "NODE_ENV=production webpack --progress --config webpack.js",
+    "dev": "NODE_ENV=development webpack --progress --config webpack.js",
+    "watch": "NODE_ENV=development webpack --progress --watch --config webpack.js",
+    "lint": "eslint --ext .js,.vue src",
+    "lint:fix": "eslint --ext .js,.vue src --fix",
+    "stylelint": "stylelint src/**/*.vue src/**/*.scss src/**/*.css",
+    "stylelint:fix": "stylelint src/**/*.vue src/**/*.scss src/**/*.css --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nextcloud/integration_google"
+  },
+  "keywords": [
+    "google"
+  ],
+  "author": "Julien Veyssier",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/nextcloud/integration_google/issues"
+  },
+  "homepage": "https://github.com/nextcloud/integration_google",
+  "browserslist": [
+    "extends @nextcloud/browserslist-config"
+  ],
+  "engines": {
+    "node": "^20.0.0",
+    "npm": "^9.0.0"
+  },
+  "dependencies": {
+    "@nextcloud/auth": "^2.0.0",
+    "@nextcloud/axios": "^2.0.0",
+    "@nextcloud/dialogs": "^3.1.2",
+    "@nextcloud/initial-state": "^2.0.0",
+    "@nextcloud/l10n": "^1.4.0",
+    "@nextcloud/moment": "^1.1.1",
+    "@nextcloud/router": "^2.0.0",
+    "@nextcloud/vue": "^7.2.0",
+    "vue": "^2.6.14",
+    "vue-material-design-icons": "^5.1.2"
+  },
+  "devDependencies": {
+    "@nextcloud/babel-config": "^1.0.0",
+    "@nextcloud/browserslist-config": "^2.2.0",
+    "@nextcloud/eslint-config": "^8.0.0",
+    "@nextcloud/stylelint-config": "^2.1.2",
+    "@nextcloud/webpack-vue-config": "^5.2.1",
+    "eslint-webpack-plugin": "^3.2.0",
+    "stylelint-webpack-plugin": "^3.3.0"
+  }
 }
