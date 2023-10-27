@@ -48,7 +48,7 @@ jobs:
 
       - name: Install deps + nextcloud OCP
         run: |
-          composer remove --dev nextcloud/ocp:${{ matrix.server-versions }} --update-with-all-dependencies
+          composer remove --dev nextcloud/ocp --update-with-all-dependencies
           composer require --dev nextcloud/ocp:${{ matrix.server-versions }} --update-with-all-dependencies
 
       - name: Run coding standards check
