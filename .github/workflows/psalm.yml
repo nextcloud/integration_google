@@ -46,11 +46,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Install dependencies
-        run: composer i
-
-      - name: Install nextcloud OCP
-        run: composer require --dev nextcloud/ocp:${{ matrix.server-versions }} --update-with-all-dependencies
+      - name: Install deps + nextcloud OCP
+        run: |
+          composer remove --dev nextcloud/ocp:${{ matrix.server-versions }} --update-with-all-dependencies
+          composer require --dev nextcloud/ocp:${{ matrix.server-versions }} --update-with-all-dependencies
 
       - name: Run coding standards check
         run: composer run psalm
