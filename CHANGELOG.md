@@ -4,11 +4,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.1.0] - 2023-05-31
+
+### Changed
+
+ - Add support for Nextcloud 28
+
+### Fixed
+
+ - Fix(l10n): Update translations from Transifex
+
 ## [2.0.2] - 2023-05-31
 
 ### Fixed
 - fix build
-
 
 ## [2.0.1] - 2023-05-31
 
