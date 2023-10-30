@@ -416,6 +416,7 @@
   <file src="lib/Service/GoogleDriveAPIService.php">
     <DocblockTypeContradiction>
       <code>$resource === false</code>
+      <code>$stream === false</code>
     </DocblockTypeContradiction>
     <InvalidArgument>
       <code>$alreadyImported + $nbDownloaded</code>
