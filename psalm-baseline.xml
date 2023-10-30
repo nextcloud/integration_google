@@ -13,6 +13,10 @@
     <MixedArgument>
       <code><![CDATA[$result['access_token']]]></code>
     </MixedArgument>
+    <PossiblyFalseArgument>
+      <code>$stream</code>
+      <code>$stream</code>
+    </PossiblyFalseArgument>
     <MixedInferredReturnType>
       <code>array</code>
       <code>array</code>
