@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="5.11.0@c9b192ab8400fdaf04b2b13d110575adc879aa90">
+<files psalm-version="5.15.0@5c774aca4746caf3d239d9c8cadb9f882ca29352">
   <file src="lib/Service/GoogleAPIService.php">
     <InvalidArgument>
       <code>$expiresAt</code>
@@ -181,6 +181,17 @@
       <code>max($lastModifieds)</code>
       <code>max($lastModifieds)</code>
     </MixedReturnStatement>
+    <PossiblyInvalidArgument>
+      <code><![CDATA[str_replace("\n", '\n', $e['description'])]]></code>
+      <code><![CDATA[str_replace("\n", '\n', $e['location'])]]></code>
+      <code><![CDATA[str_replace("\n", '\n', $e['status'])]]></code>
+      <code><![CDATA[str_replace("\n", '\n', $e['summary'])]]></code>
+    </PossiblyInvalidArgument>
+    <PossiblyInvalidCast>
+      <code><![CDATA[str_replace("\n", '\n', $e['description'])]]></code>
+      <code><![CDATA[str_replace("\n", '\n', $e['location'])]]></code>
+      <code><![CDATA[str_replace("\n", '\n', $e['summary'])]]></code>
+    </PossiblyInvalidCast>
     <RedundantCast>
       <code><![CDATA[(int) (abs($rgb1['r'] - $rgb2['r']) + abs($rgb1['g'] - $rgb2['g']) + abs($rgb1['b'] - $rgb2['b']))]]></code>
     </RedundantCast>
@@ -399,6 +410,9 @@
     </UnusedVariable>
   </file>
   <file src="lib/Service/GoogleDriveAPIService.php">
+    <DocblockTypeContradiction>
+      <code>$resource === false</code>
+    </DocblockTypeContradiction>
     <InvalidArgument>
       <code>$alreadyImported + $nbDownloaded</code>
       <code>$alreadyImportedSize + $downloadedSize</code>
@@ -513,10 +527,6 @@
       <code><![CDATA[$stat['size'] ?? 0]]></code>
       <code><![CDATA[$stat['size'] ?? 0]]></code>
     </MixedReturnStatement>
-    <PossiblyFalseArgument>
-      <code>$stream</code>
-      <code>$stream</code>
-    </PossiblyFalseArgument>
     <RedundantConditionGivenDocblockType>
       <code>is_resource($resource)</code>
     </RedundantConditionGivenDocblockType>
@@ -528,6 +538,9 @@
     <ArgumentTypeCoercion>
       <code>$albumFolder</code>
     </ArgumentTypeCoercion>
+    <DocblockTypeContradiction>
+      <code>$resource === false</code>
+    </DocblockTypeContradiction>
     <InvalidArgument>
       <code>$alreadyImported + $nbDownloaded</code>
       <code>$alreadyImported + $nbDownloaded</code>
