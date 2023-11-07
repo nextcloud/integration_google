@@ -1,7 +1,8 @@
 OC.L10N.register(
     "integration_google",
     {
-    "Missing refresh token in Google response." : "Le token de rafraichissement est manquant dans la réponse de Google.",
+    "No logged in user" : "Aucun utilisateur connecté",
+    "Missing refresh token in Google response." : "Le jeton de rafraîchissement est manquant dans la réponse de Google.",
     "Error getting OAuth access token." : "Erreur lors de l'obtention du jeton d'accès OAuth.",
     "Error during OAuth exchanges" : "Erreur lors des échanges OAuth",
     "Google" : "Google",
@@ -10,7 +11,7 @@ OC.L10N.register(
     "OAuth access token refused" : "Jeton d'accès OAuth refusé",
     "Bad credentials" : "Identifiants incorrects",
     "Google Calendar import" : "Importation de Google Agenda",
-    "Private event" : "Evénement privé",
+    "Private event" : "Événement privé",
     "Connected accounts" : "Comptes connectés",
     "Data migration" : "Migration des données",
     "Google integration" : "Intégration de Google",
