@@ -28,7 +28,7 @@ OC.L10N.register(
     "Client secret" : "Geheime Zeichenkette des Clients",
     "Client secret of your Google application" : "Client-Geheimnis der  Google-Anwendung",
     "Google admin options saved" : "Google-Adiministrator-Einstellungen gespeichert",
-    "Failed to save Google admin options" : "Fehler beim Speichern der Google Verwaltungseinstellungen",
+    "Failed to save Google admin options" : "Fehler beim Speichern der Google-Verwaltungseinstellungen",
     "Google data migration" : "Google Datenmigration",
     "No Google OAuth app configured. Ask your Nextcloud administrator to configure Google connected accounts admin section." : "Google OAuth-App nicht konfiguriert. Bitte deinen Nextcloud-Administrator, den Administraionsbereich für verbundene Google-Konten zu konfigurieren.",
     "Authentication" : "Authentifizierung",
