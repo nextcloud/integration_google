@@ -214,8 +214,11 @@ class GoogleContactsAPIService {
 					$displayName = $n['displayName'] ?? '';
 					$familyName = $n['familyName'] ?? '';
 					$firstName = $n['givenName'] ?? '';
-					if ($familyName || $firstName) {
-						$prop = $vCard->createProperty('N', [0 => $familyName, 1 => $firstName, 2 => '', 3 => '', 4 => '']);
+					$additionalName = $n['middleName'] ?? '';
+					$prefix = $n['honorificPrefix'] ?? '';
+					$suffix = $n['honorificSuffix'] ?? '';
+					if ($familyName || $firstName || $additionalName || $prefix || $suffix) {
+						$prop = $vCard->createProperty('N', [0 => $familyName, 1 => $firstName, 2 => $additionalName, 3 => $prefix, 4 => $suffix]);
 						$vCard->add($prop);
 					}
 					break;
