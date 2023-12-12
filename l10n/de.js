@@ -1,6 +1,7 @@
 OC.L10N.register(
     "integration_google",
     {
+    "No logged in user" : "Kein angemeldeter Benutzer",
     "Missing refresh token in Google response." : "Fehlender Refresh-Token in der Google-Antwort.",
     "Error getting OAuth access token." : "Fehler beim Abrufen des OAuth-Zugriffstokens",
     "Error during OAuth exchanges" : "Fehler beim OAuth-Austausch",
@@ -15,6 +16,7 @@ OC.L10N.register(
     "Data migration" : "Datenmigration",
     "Google integration" : "Google-Einbindung",
     "Import Google data into Nextcloud" : "Google-Daten in Nextcloud importieren",
+    "Google integration allows you to automatically migrate your Google calendars, contacts, photos and files into Nextcloud." : "Die Google-Einbindung hilft dir, deine Google-Kalender, Kontakte, Fotos und Dateien automatisch zu Nextcloud zu migrieren.",
     "If you want to allow your Nextcloud users to authenticate to Google, create an OAuth application in your Google settings." : "Wenn du deinen Benutzern erlauben willst, sich bei Google zu authentifizieren, erstelle eine OAuth-Anwendung in deinen Google Einstellungen.",
     "Google API settings" : "Google-API-Einstellungen",
     "Go to \"APIs & Services\" => \"Credentials\" and click on \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\"." : "Wechsele zu \"API & Dienste\" => \"Anmeldeinformationen\" und klicke auf \"+ ANMELDEINFORMATIONEN ERSTELLEN\" -> \"OAuth Client-ID\"",
@@ -27,6 +29,7 @@ OC.L10N.register(
     "Client ID of your Google application" : "Client-ID der Google-Anwendung",
     "Client secret" : "Geheime Zeichenkette des Clients",
     "Client secret of your Google application" : "Client-Geheimnis der  Google-Anwendung",
+    "Use a pop-up to authenticate" : "Pop-up zur Authentifizierung verwenden",
     "Google admin options saved" : "Google-Adiministrator-Einstellungen gespeichert",
     "Failed to save Google admin options" : "Fehler beim Speichern der Google-Verwaltungseinstellungen",
     "Google data migration" : "Google Datenmigration",
