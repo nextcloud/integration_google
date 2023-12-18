@@ -22,7 +22,7 @@ OC.L10N.register(
     "Go to \"APIs & Services\" => \"Credentials\" and click on \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\"." : "\"API ve hizmetler\" => \"Kimlik bilgileri\" bölümüne gidip \"+ KİMLİK BİLGİSİ OLUŞTUR\" -> \"OAuth istemci kimliği\" üzerine tıklayın.",
     "Set the \"Application type\" to \"Web application\" and give a name to the application." : "\"Uygulama türü\" olarak \"Web uygulaması\" seçin ve uygulamanıza bir ad verin.",
     "Make sure you set one \"Authorized redirect URI\" to" : "\"İzin verilen yönlendirme adresini\" şuna ayarladığınızdan emin olun",
-    "Put the \"Client ID\" and \"Client secret\" below." : "\"Müşteri kodu\" ve \"Müşteri sırrı\" bilgilerini aşağıya ekleyin.",
+    "Put the \"Client ID\" and \"Client secret\" below." : "\"İstemci kimliği\" ve \"İstemci parolası\" bilgilerini aşağıya ekleyin.",
     "Finally, go to \"APIs & Services\" => \"Library\" and add the following APIs: \"Google Drive API\", \"Google Calendar API\", \"People API\" and \"Photos Library API\"." : "Son olarak \"API ve hizmetler\" => \"Kitaplık\" bölümüne gidin ve şu API uygulamalarını ekleyin: \"Google Drive API\", \"Google Calendar API\", \"People API\" ve \"Photos Library API\".",
     "Your Nextcloud users will then see a \"Connect to Google\" button in their personal settings." : "Bundan sonra Nextcloud kullanıcılarınız kişisel ayarlarında \"Google bağlantısı kur\" seçeneğini görecek.",
     "Client ID" : "İstemci kimliği",
