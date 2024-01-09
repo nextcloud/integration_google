@@ -442,7 +442,7 @@ export default {
 					showSuccess(t('integration_google', 'Google options saved'))
 					// callback
 					if (callback) {
-						callback()
+						callback(response)
 					}
 				})
 				.catch((error) => {
@@ -833,7 +833,11 @@ export default {
 						targetPath = '/'
 					}
 					this.state.drive_output_dir = targetPath
-					this.saveOptions({ drive_output_dir: this.state.drive_output_dir })
+					this.saveOptions({ drive_output_dir: this.state.drive_output_dir }, (response) => {
+						if (response.data && response.data.free_space) {
+							this.state.free_space = response.data.free_space
+						}
+					})
 				},
 				false,
 				'httpd/unix-directory',

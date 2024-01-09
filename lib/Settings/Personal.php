@@ -56,9 +56,7 @@ class Personal implements ISettings {
 
 		// get free space
 		$userFolder = $this->root->getUserFolder($this->userId);
-		/** @var IStorage $storage */
-		$storage = $userFolder->getStorage();
-		$freeSpace = $storage->free_space('/');
+		$freeSpace = self::getFreeSpace($userFolder, $driveOutputDir);
 		$user = $this->userManager->get($this->userId);
 
 		// make a request to potentially refresh the token before the settings page is loaded
@@ -99,5 +97,15 @@ class Personal implements ISettings {
 
 	public function getPriority(): int {
 		return 10;
+	}
+
+	public static function getFreeSpace(\OCP\Files\Folder $userRoot, string $outputDir) {
+		try {
+			// OutputDir can be on an external storage which can have more free space
+			$freeSpace = $userRoot->get($outputDir)->getStorage()->free_space('/');
+		} catch (\Throwable $e) {
+			$freeSpace = false;
+		}
+		return $freeSpace !== false && $freeSpace > 0 ? $freeSpace : $userRoot->getStorage()->free_space('/');
 	}
 }
