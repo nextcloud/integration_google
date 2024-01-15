@@ -22,7 +22,7 @@ OC.L10N.register(
     "Go to \"APIs & Services\" => \"Credentials\" and click on \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\"." : "Wechsele zu \"API & Dienste\" => \"Anmeldeinformationen\" und klicke auf \"+ ANMELDEINFORMATIONEN ERSTELLEN\" -> \"OAuth Client-ID\"",
     "Set the \"Application type\" to \"Web application\" and give a name to the application." : "Setze den \"Anwendungstyp\" auf \"Webanwendung\" und gib der Anwendung einen Namen.",
     "Make sure you set one \"Authorized redirect URI\" to" : "Stelle sicher, dass eine \"Autorisierte Weiterleitungs-URI\" gesetzt ist auf",
-    "Put the \"Client ID\" and \"Client secret\" below." : "Gebe unten die \"Client ID\" und \"Client-Geheimnis\" ein.",
+    "Put the \"Client ID\" and \"Client secret\" below." : "Gib unten die \"Client ID\" und \"Client-Geheimnis\" ein.",
     "Finally, go to \"APIs & Services\" => \"Library\" and add the following APIs: \"Google Drive API\", \"Google Calendar API\", \"People API\" and \"Photos Library API\"." : "Abschließend gehe zu \"API & Dienste\" =>\"Bibliothek\" und fügen die folgenden APIs hinzu: \"Google Calendar API\", \"People API\" und \"Photos Library API\".",
     "Your Nextcloud users will then see a \"Connect to Google\" button in their personal settings." : "Deine Nextcloud-Nutzer sehen dann in ihren persönlichen Einstellungen die Schaltfläche \"Mit Google verbinden\".",
     "Client ID" : "Client-ID",
