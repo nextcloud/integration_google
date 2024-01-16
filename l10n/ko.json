@@ -6,6 +6,7 @@
     "Client ID" : "클라이언트 ID",
     "Client secret" : "클라이언트 비밀 값",
     "Authentication" : "인증",
+    "Sign in with Google" : "구글 계정으로 로그인",
     "Connected as {user}" : "[user]로 연결됨",
     "Contacts" : "연락처",
     "Calendars" : "달력",
