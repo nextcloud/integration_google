@@ -5,6 +5,7 @@ OC.L10N.register(
     "Client ID" : "Klient-ID",
     "Client secret" : "Klient hemmelighed",
     "Authentication" : "Godkendelse",
+    "Sign in with Google" : "Log ind med Google",
     "Connected as {user}" : "Forbundet som {user}",
     "Contacts" : "Kontakter",
     "Calendars" : "Kalendere",
