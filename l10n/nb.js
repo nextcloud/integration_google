@@ -9,6 +9,7 @@ OC.L10N.register(
     "Client secret" : "Klient-hemmelighet",
     "Use a pop-up to authenticate" : "Bruk en popup for å autentisere",
     "Authentication" : "Autentisering",
+    "Sign in with Google" : "Logg på med Google",
     "Connected as {user}" : "Tilkoblet som {user}",
     "Contacts" : "Kontakter",
     "Calendars" : "Kalendere",
