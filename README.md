@@ -82,6 +82,28 @@ If there is a strong business case for any development of this app, we will cons
 1. Build JavaScript bundle: `npm run dev` or `npm run watch`
 1. Enable the app. Go to the apps page in your development version of Nextcloud, find "Google Synchronization", and click "Enable"
 
+### Logging
+
+The easiest way I've found for simple logging is just to append to a file in `/tmp`.
+1. Add some logs:
+    ```php
+    file_put_contents("/tmp/bal", "Hello world", FILE_APPEND);
+    ```
+1. Connect to the container (if you're using `nextcloud-docker-dev`):
+    ```
+    docker exec -it master_stable28_1 bash
+    ```
+1. Tail the log file:
+    ```
+    tail -f /tmp/blah
+    ```
+
+This is unorthodox, but easier than using the Nextcloud logging mechanism.
+- Only shows you your messages
+- Don't have to figure out how to view the official logs
+- Don't have to deal with JSON
+- Don't have to instantiate the logger everywhere in the code
+
 ### Creating a release
 
 ```
