@@ -1,7 +1,8 @@
 {
     "require": {
         "php": ">=8.0.0",
-        "ortic/color-converter": "^0.1.0"
+        "ortic/color-converter": "^0.1.0",
+        "php-ds/php-ds": "^1.5"
     },
     "scripts": {
         "lint": "find . -name \\*.php -not -path './vendor/*' -print0 | xargs -0 -n1 php -l",
