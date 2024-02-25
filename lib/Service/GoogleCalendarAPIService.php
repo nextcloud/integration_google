@@ -12,7 +12,7 @@
 namespace OCA\Google\Service;
 
 use Ds\Set;
-use Datetime;
+use DateTime;
 use DateTimeZone;
 use Exception;
 use Generator;
