@@ -59,12 +59,35 @@
 				{{ t('google_synchronization', 'Use a po-pup to authenticate') }}
 			</NcCheckboxRadioSwitch>
 		</div>
+		<br>
+		<hr>
+		<br>
+		<p class="settings-hint">
+			{{ t('google_synchronization', 'Delete all background synchronization jobs. This may be needed after upgrading the app.') }}
+		</p>
+		<br>
+		<p class="settings-hint with-icon">
+			<AlertOutlineIcon />
+			{{ t('google_synchronization', 'This will delete Calendar synchronization jobs for all users!') }}
+		</p>
+		<br>
+		<div class="fields">
+			<NcButton
+				class="calendar-button-sync"
+				@click="onDeleteJobs(cal)">
+				<template #icon>
+					<DeleteIcon />
+				</template>
+				{{ t('google_synchronization', 'Delete all background jobs') }}
+			</NcButton>
+		</div>
 	</div>
 </template>
 
 <script>
 import KeyIcon from 'vue-material-design-icons/Key.vue'
 import InformationOutlineIcon from 'vue-material-design-icons/InformationOutline.vue'
+import AlertOutlineIcon from 'vue-material-design-icons/AlertOutline.vue'
 
 import GoogleIcon from './icons/GoogleIcon.vue'
 
@@ -73,7 +96,9 @@ import { generateUrl } from '@nextcloud/router'
 import axios from '@nextcloud/axios'
 import { delay } from '../utils.js'
 import { showSuccess, showError } from '@nextcloud/dialogs'
+import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
+import DeleteIcon from 'vue-material-design-icons/Delete.vue'
 
 export default {
 	name: 'AdminSettings',
@@ -81,8 +106,11 @@ export default {
 	components: {
 		GoogleIcon,
 		NcCheckboxRadioSwitch,
+		NcButton,
 		KeyIcon,
+		DeleteIcon,
 		InformationOutlineIcon,
+		AlertOutlineIcon,
 	},
 
 	props: [],
@@ -112,13 +140,28 @@ export default {
 				})
 			}, 2000)()
 		},
+		onDeleteJobs() {
+			axios.delete(generateUrl('/apps/google_synchronization/reset-sync-calendar'))
+				.then(() => {
+					showSuccess(
+						this.n('google_synchronization', 'Successfully deleted background jobs', 'Successfully deleted background jobs', 1)
+					)
+				})
+				.catch((error) => {
+					console.error('Failed to delete background jobs', error)
+					showError(
+						t('google_synchronization', 'Failed to delete background jobs')
+						+ ': ' + error.response?.request?.responseText
+					)
+				})
+		},
 		saveOptions(values) {
 			const req = {
 				values,
 			}
 			const url = generateUrl('/apps/google_synchronization/admin-config')
 			axios.put(url, req)
-				.then((response) => {
+				.then(() => {
 					showSuccess(t('google_synchronization', 'Google admin options saved'))
 				})
 				.catch((error) => {

@@ -104,6 +104,12 @@ This is unorthodox, but easier than using the Nextcloud logging mechanism.
 - Don't have to deal with JSON
 - Don't have to instantiate the logger everywhere in the code
 
+### Database
+
+1. `sudo docker exec -it master_database-mysql_1 bash`
+1. `mysql -u nextcloud -d nextcloud -p`
+
+
 ### Creating a release
 
 ```

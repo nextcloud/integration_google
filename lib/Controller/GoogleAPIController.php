@@ -227,6 +227,11 @@ class GoogleAPIController extends Controller {
 		return $response;
 	}
 
+	public function resetRegisteredSyncCalendar(): DataResponse {
+		$this->googleCalendarAPIService->resetRegisteredSyncCalendar();
+		return new DataResponse('OK', 200);
+	}
+
 	/**
 	 * @NoAdminRequired
 	 *
