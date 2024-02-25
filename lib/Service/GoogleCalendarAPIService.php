@@ -238,10 +238,9 @@ class GoogleCalendarAPIService {
 			$objectUri = $e['id'];
 
 			// If this event exists in NC, remove it from the set of events to be
-			// deleted and skip importing it
+			// deleted. Continue processing it, it could have been updated.
 			if ($unseenURIs->contains($objectUri)) {
 				$unseenURIs->remove($objectUri);
-				continue;
 			}
 
 			$existingEvent = null;
@@ -251,18 +250,10 @@ class GoogleCalendarAPIService {
 				$existingEvent = $this->caldavBackend->getCalendarObject($ncCalId, $objectUri);
 				if ($existingEvent !== null) {
 					$remoteEventUpdatedTimestamp = (new DateTime($e['updated']))->getTimestamp();
-
-					$localEventUpdatedTimestamp = $existingEvent['lastmodified'] ?? 0;
-					if ($remoteEventUpdatedTimestamp <= $localEventUpdatedTimestamp) {
+					$localEventUpdatedTimestamp = $this->getEventLastModifiedTimestamp($existingEvent['calendardata']);
+					if ($localEventUpdatedTimestamp !== null && $remoteEventUpdatedTimestamp <= $localEventUpdatedTimestamp) {
 						continue;
 					}
-
-					//// in case we don't trust the calendar object's 'lastmodified' attr,
-					//// we can check the event real modification date in the ical data
-					//$localEventUpdatedTimestamp = $this->getEventLastModifiedTimestamp($existingEvent['calendardata']);
-					//if ($localEventUpdatedTimestamp === null || $remoteEventUpdatedTimestamp <= $localEventUpdatedTimestamp) {
-					//	continue;
-					//}
 				}
 			}
 
