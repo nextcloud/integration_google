@@ -407,12 +407,24 @@ class GoogleCalendarAPIService {
 	 * @return array
 	 */
 	public function registerSyncCalendar(string $userId, string $calId, string $calName, ?string $color = null): void {
-		$this->jobList->add(ImportCalendarJob::class, [
+		$argument = [
 			'user_id' => $userId,
 			'cal_id' => $calId,
 			'cal_name' => $calName,
 			'color' => $color,
-		]);
+		];
+
+		foreach ($this->jobList->getJobsIterator(ImportCalendarJob::class, null, 0) as $job) {
+			$id = $job->getId();
+			$args = $job->getArgument();
+
+			if ($args["user_id"] == $argument["user_id"] && $args["cal_id"] == $argument["cal_id"]) {
+				$job->setArgument($argument);
+				return;
+			}
+		}
+
+		$this->jobList->add(ImportCalendarJob::class, $argument);
 	}
 
 	/**
