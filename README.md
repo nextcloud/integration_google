@@ -112,12 +112,27 @@ This is unorthodox, but easier than using the Nextcloud logging mechanism.
 
 ### Creating a release
 
-```
-git tag -a <version>
-# Update package.json
-make build
-version=<version> make appstore  # will create a tar.gz in /tmp/build
-```
-
 This fork will add a digit after the upstream version number it's based on.
 For example, the first release based on `v1.0.9` will be `v1.0.9.0`.
+
+#### Packaging a release
+
+1. Update `CHANGELOG.md`, `appinfo/info.xml`, and `package.json` with the new version
+1. Create a Git tag
+1. Run the following:
+    ```
+    make build
+    version=<version> make appstore  # will create a tar.gz in ./build/artifacts/appstore/*.tar.gz
+    ```
+
+#### Publishing a release
+
+1. Create a GitHub release and attach the tar.gz
+1. Obtain a signature of the archive:
+    ```
+    openssl dgst -sha512 -sign ~/.nextcloud/certificates/google_synchronization.key \
+        build/artifacts/appstore/*.tar.gz | openssl base64
+    ```
+1. Go to https://apps.nextcloud.com/developer/apps/releases/new. Paste the signature and the link to the file from the GitHub release.
+
+[Relevant guide](https://nextcloudappstore.readthedocs.io/en/latest/developer.html#uploading-an-app-release)
