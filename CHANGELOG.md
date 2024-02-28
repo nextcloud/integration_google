@@ -4,11 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [2.1.0] - 2023-05-31
+## [2.1.0-1] - 2024-02-28
 
 ### Changed
 
  - Add support for Nextcloud 28
+ - Fix bugs related to synchronization features
+ - Add ability to unregister background sync and show the current
+   sync status in the UI
+ - Add a button to unregister all jobs from the admin dashboard
 
 ### Fixed
 
