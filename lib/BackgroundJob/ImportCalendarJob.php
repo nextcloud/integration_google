@@ -2,8 +2,8 @@
 
 namespace OCA\Google\BackgroundJob;
 
-use \OCP\BackgroundJob\TimedJob;
 use \OCP\AppFramework\Utility\ITimeFactory;
+use \OCP\BackgroundJob\TimedJob;
 
 use OCA\Google\Service\GoogleCalendarAPIService;
 

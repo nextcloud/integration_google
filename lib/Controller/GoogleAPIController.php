@@ -128,7 +128,7 @@ class GoogleAPIController extends Controller {
 		if (isset($result['error'])) {
 			$response = new DataResponse($result['error'], 401);
 		} else {
-			foreach ($result as $key=>$cal) {
+			foreach ($result as $key => $cal) {
 				$isJobRegistered = $this->googleCalendarAPIService->
 					isJobRegisteredForCalendar($this->userId, $cal["id"]);
 				$calId = $cal["id"];

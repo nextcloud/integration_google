@@ -74,7 +74,7 @@ class ConfigController extends Controller {
 			$this->config->deleteUserValue($this->userId, Application::APP_ID, 'token_expires_at');
 			$this->config->deleteUserValue($this->userId, Application::APP_ID, 'token');
 			$result['user_name'] = '';
-		}else{
+		} else {
 			if (isset($values['drive_output_dir'])) {
 				/** @var \OCP\Files\IRootFolder $root */
 				$root = \OC::$server->get(\OCP\Files\IRootFolder::class);

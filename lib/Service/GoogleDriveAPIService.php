@@ -503,10 +503,10 @@ class GoogleDriveAPIService {
 
 		$stream = $logFile->fopen('a');
 		if ($stream === false) {
-            $this->logger->error('Could not open log file');
-            return;
-        }
-        fwrite($stream, '1. Failed to download file: ' . $fileName . PHP_EOL);
+			$this->logger->error('Could not open log file');
+			return;
+		}
+		fwrite($stream, '1. Failed to download file: ' . $fileName . PHP_EOL);
 		fclose($stream);
 	}
 

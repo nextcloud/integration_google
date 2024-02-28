@@ -10,7 +10,6 @@ use OCP\AppFramework\Services\IInitialState;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
 use OCP\Files\NotPermittedException;
-use OCP\Files\Storage\IStorage;
 use OCP\IConfig;
 use OCP\IUserManager;
 use OCP\Settings\ISettings;
