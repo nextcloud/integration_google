@@ -88,14 +88,12 @@
 							</template>
 							{{ t('google_synchronization', 'Import calendar') }}
 						</NcButton>
-						<NcButton
-							class="calendar-button-sync"
-							@click="onCalendarSync(cal)">
-							<template #icon>
-								<CalendarSyncIcon />
-							</template>
+						<NcCheckboxRadioSwitch
+							:checked="cal.isJobRegistered"
+							:loading="loadingSyncCalendar[cal.id]"
+							@update:checked="onCalendarSyncChange(cal)">
 							{{ t('google_synchronization', 'Sync calendar') }}
-						</NcButton>
+						</NcCheckboxRadioSwitch>
 					</div>
 					<br>
 				</div>
@@ -263,7 +261,6 @@ import FileIcon from 'vue-material-design-icons/File.vue'
 import FolderIcon from 'vue-material-design-icons/Folder.vue'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
 import CalendarIcon from 'vue-material-design-icons/Calendar.vue'
-import CalendarSyncIcon from 'vue-material-design-icons/CalendarSync.vue'
 import FileImageIcon from 'vue-material-design-icons/FileImage.vue'
 import ImageIcon from 'vue-material-design-icons/Image.vue'
 import DownloadIcon from 'vue-material-design-icons/Download.vue'
@@ -297,7 +294,6 @@ export default {
 		AccountMultipleIcon,
 		DownloadIcon,
 		CalendarIcon,
-		CalendarSyncIcon,
 		FileImageIcon,
 		ImageIcon,
 		FolderIcon,
@@ -317,6 +313,7 @@ export default {
 			// calendars
 			calendars: [],
 			importingCalendar: {},
+			loadingSyncCalendar: {},
 			// contacts
 			addressbooks: [],
 			nbContacts: 0,
@@ -711,28 +708,38 @@ export default {
 					this.$set(this.importingCalendar, calId, false)
 				})
 		},
-		onCalendarSync(cal) {
+		onCalendarSyncChange(cal) {
+			const desiredState = !cal.isJobRegistered
 			const calId = cal.id
 			const req = {
 				params: {
 					calId,
+					desiredState,
 					calName: this.getCalendarLabel(cal),
 					color: cal.backgroundColor || '#0082c9',
 				},
 			}
-			const url = generateUrl('/apps/google_synchronization/sync-calendar')
+			this.$set(this.loadingSyncCalendar, calId, true)
+			const actionMessage = `${desiredState ? '' : 'un'}register`
+			const successMessage = `Successfully ${actionMessage}ed background job`
+			const errorMessage = `Failed to ${actionMessage} background job`
+			const url = generateUrl('/apps/google_synchronization/set-sync-calendar')
 			axios.get(url, req)
 				.then((_response) => {
+					cal.isJobRegistered = desiredState
 					showSuccess(
-						this.n('google_synchronization', 'Successfully registered background job', 'Successfully registered background job', 1)
+						this.n('google_synchronization', successMessage, successMessage, 1)
 					)
 				})
 				.catch((error) => {
-					console.error('Failed to register background job', error)
+					console.error(errorMessage, error)
 					showError(
-						t('google_synchronization', 'Failed to register background job')
+						t('google_synchronization', errorMessage)
 						+ ': ' + error.response?.request?.responseText
 					)
+				})
+				.finally(() => {
+					this.$set(this.loadingSyncCalendar, calId, false)
 				})
 		},
 		onImportPhotos() {
@@ -908,6 +915,7 @@ export default {
 	.line {
 		display: flex;
 		align-items: center;
+		gap: 20px;
 
 		label {
 			width: 300px;
@@ -920,6 +928,7 @@ export default {
 
 	.calendar-item {
 		display: flex;
+		gap: 20px;
 		align-items: center;
 		margin: 8px 0;
 		label {
@@ -997,6 +1006,10 @@ h2,
 	padding: 0;
 	height: 12px;
 	margin: 0 8px 0 10px;
+}
+
+.sync-checkbox {
+	margin-left: 20px;
 }
 
 </style>

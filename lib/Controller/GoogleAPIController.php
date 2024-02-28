@@ -124,6 +124,12 @@ class GoogleAPIController extends Controller {
 		if (isset($result['error'])) {
 			$response = new DataResponse($result['error'], 401);
 		} else {
+			foreach ($result as $key=>$cal) {
+				$isJobRegistered = $this->googleCalendarAPIService->
+					isJobRegisteredForCalendar($this->userId, $cal["id"]);
+				$calId = $cal["id"];
+				$result[$key]["isJobRegistered"] = $isJobRegistered;
+			}
 			$response = new DataResponse($result);
 		}
 		return $response;
@@ -208,7 +214,6 @@ class GoogleAPIController extends Controller {
 		return $response;
 	}
 
-
 	/**
 	 * @NoAdminRequired
 	 *
@@ -227,6 +232,48 @@ class GoogleAPIController extends Controller {
 		return $response;
 	}
 
+	/**
+	 * @NoAdminRequired
+	 *
+	 * @param string $calId
+	 * @param string $calName
+	 * @param ?string $color
+	 * @return DataResponse
+	 */
+	public function unregisterSyncCalendar(string $calId): DataResponse {
+
+		$accessToken = $this->accessToken;
+		$userId = $this->userId;
+
+
+		$result = $this->googleCalendarAPIService->unregisterSyncCalendar(
+			$this->userId, $calId);
+		$response = new DataResponse($result, 200);
+		return $response;
+	}
+
+	/**
+	 * @NoAdminRequired
+	 *
+	 * @param string $calId
+	 * @param string $calName
+	 * @param bool $desiredState
+	 * @param ?string $color
+	 * @return DataResponse
+	 */
+	public function setSyncCalendar(string $calId, bool $desiredState, string $calName, ?string $color = null): DataResponse {
+
+
+		if ($this->accessToken === '') {
+			return new DataResponse('', 400);
+		}
+
+		if (true == $desiredState) {
+			return $this->registerSyncCalendar($calId, $calName, $color);
+		} else {
+			return $this->unregisterSyncCalendar($calId);
+		}
+	}
 	public function resetRegisteredSyncCalendar(): DataResponse {
 		$this->googleCalendarAPIService->resetRegisteredSyncCalendar();
 		return new DataResponse('OK', 200);

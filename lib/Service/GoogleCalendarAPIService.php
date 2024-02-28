@@ -398,6 +398,24 @@ class GoogleCalendarAPIService {
 	}
 
 	/**
+	 * Check if a background job is registered.
+	 * @param string $userId The user id of the job.
+	 * @param string $calId The calendar id of the job.
+	 * @return Whether the job with the given parameters is registered.
+	 */
+	public function isJobRegisteredForCalendar(string $userId, string $calId): bool {
+		foreach ($this->jobList->getJobsIterator(ImportCalendarJob::class, null, 0) as $job) {
+			$args = $job->getArgument();
+
+			if ($args["user_id"] == $userId && $args["cal_id"] == $calId) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * Register a calendar to periodically be synced and kept up to date in the
 	 * background
 	 * @param string $userId
@@ -425,6 +443,28 @@ class GoogleCalendarAPIService {
 		}
 
 		$this->jobList->add(ImportCalendarJob::class, $argument);
+	}
+
+	/**
+	 * Unregister a calendar to periodically be synced and kept up to date in the
+	 * background
+	 * @param string $userId
+	 * @param string $calId
+	 * @param string $calName
+	 * @param ?string $color
+	 * @return array
+	 */
+	public function unregisterSyncCalendar(string $userId, string $calId): void {
+
+		foreach ($this->jobList->getJobsIterator(ImportCalendarJob::class, null, 0) as $job) {
+			$id = $job->getId();
+			$args = $job->getArgument();
+
+			if ($args["user_id"] == $userId && $args["cal_id"] == $calId) {
+				$this->jobList->remove($job, $args);
+				return;
+			}
+		}
 	}
 
 	/**
