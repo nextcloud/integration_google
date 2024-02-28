@@ -19,7 +19,9 @@ use OCA\Google\Service\GooglePhotosAPIService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IConfig;
+use OCP\IGroupManager;
 use OCP\IRequest;
+use OCP\IUserSession;
 
 class GoogleAPIController extends Controller {
 
@@ -28,8 +30,10 @@ class GoogleAPIController extends Controller {
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		private IConfig $config,
 		private GooglePhotosAPIService $googlePhotosAPIService,
+		private IConfig $config,
+		private IGroupManager $groupManager,
+		private IUserSession $userSession,
 		private GoogleContactsAPIService $googleContactsAPIService,
 		private GoogleDriveAPIService $googleDriveAPIService,
 		private GoogleCalendarAPIService $googleCalendarAPIService,
@@ -274,7 +278,15 @@ class GoogleAPIController extends Controller {
 			return $this->unregisterSyncCalendar($calId);
 		}
 	}
+
+	/**
+	 * @return DataResponse
+	 */
 	public function resetRegisteredSyncCalendar(): DataResponse {
+		if (!$this->userSession->isLoggedIn() || !$this->groupManager->isAdmin($this->userSession->getUser()->getUID())) {
+			return new DataResponse('You must be a server admin to perform this action.', 401);
+		}
+
 		$this->googleCalendarAPIService->resetRegisteredSyncCalendar();
 		return new DataResponse('OK', 200);
 	}
