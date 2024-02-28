@@ -17,7 +17,7 @@ class ImportCalendarJob extends TimedJob {
 		parent::setInterval(1);
 	}
 
-	protected function run($arguments) {
+	protected function run($arguments): void {
 		echo(date("Y-m-d H:i:s") . ' Importing ' . $arguments['cal_name'] . '...');
 		$result = $this->service->safeImportCalendar(
 			$arguments['user_id'],
