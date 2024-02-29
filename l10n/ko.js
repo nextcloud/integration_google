@@ -7,6 +7,7 @@ OC.L10N.register(
     "Connected accounts" : "계정 연결됨",
     "Client ID" : "클라이언트 ID",
     "Client secret" : "클라이언트 비밀 값",
+    "No Google OAuth app configured. Ask your Nextcloud administrator to configure Google connected accounts admin section." : "설정된 Google OAuth 앱이 없습니다. 이 Nextcloud 관리자에게 Google 계정 연결을 설정하도록 요청하십시오.",
     "Authentication" : "인증",
     "Sign in with Google" : "구글 계정으로 로그인",
     "Connected as {user}" : "[user]로 연결됨",
