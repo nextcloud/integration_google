@@ -39,7 +39,7 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 class GoogleCalendarAPIService {
 
 	public function __construct(
-		string $appName,
+		protected string $appName,
 		private LoggerInterface $logger,
 		private IL10N $l10n,
 		private CalDavBackend $caldavBackend,
