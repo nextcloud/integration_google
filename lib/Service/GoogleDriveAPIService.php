@@ -19,6 +19,7 @@ use OCA\Google\BackgroundJob\ImportDriveJob;
 use OCP\BackgroundJob\IJobList;
 use OCP\Files\File;
 use OCP\Files\Folder;
+use OCP\Files\ForbiddenException;
 use OCP\Files\InvalidPathException;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
@@ -312,51 +313,57 @@ class GoogleDriveAPIService {
 					return $result;
 				}
 				foreach ($result['files'] as $fileItem) {
-					// ignore shared files
-					if (!$considerSharedFiles && !$fileItem['ownedByMe']) {
-						continue;
-					}
-
-					if (isset($fileItem['parents']) && count($fileItem['parents']) > 0
-						&& isset($directoriesById[$fileItem['parents'][0]], $directoriesById[$fileItem['parents'][0]]['node'])) {
-						$saveFolder = $directoriesById[$fileItem['parents'][0]]['node'];
-					} else {
-						$saveFolder = $rootImportFolder;
-					}
-
-					$fileName = $this->getFileName($fileItem, $userId, in_array($fileItem['id'], $conflictingIds));
-
-					// If file already exists in folder, don't download unless timestamp is different
-					if ($saveFolder->nodeExists($fileName)) {
-						$savedFile = $saveFolder->get($fileName);
-						$timestampOnFile = $savedFile->getMtime();
-						$d = new DateTime($fileItem['modifiedTime']);
-						$timestampOnDrive = $d->getTimestamp();
-
-						if ($timestampOnFile < $timestampOnDrive) {
-							$savedFile->delete();
-						} else {
+					try {
+						// ignore shared files
+						if (!$considerSharedFiles && !$fileItem['ownedByMe']) {
 							continue;
 						}
-					}
 
-					$size = $this->getFile($userId, $fileItem, $saveFolder, $fileName);
-
-					if (!is_null($size)) {
-						$nbDownloaded++;
-						$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_files', $alreadyImported + $nbDownloaded);
-						$downloadedSize += $size;
-						$this->config->setUserValue($userId, Application::APP_ID, 'drive_imported_size', $alreadyImportedSize + $downloadedSize);
-						if ($maxDownloadSize && $downloadedSize > $maxDownloadSize) {
-							return [
-								'nbDownloaded' => $nbDownloaded,
-								'targetPath' => $targetPath,
-								'finished' => false,
-							];
+						if (isset($fileItem['parents']) && count($fileItem['parents']) > 0
+							&& isset($directoriesById[$fileItem['parents'][0]], $directoriesById[$fileItem['parents'][0]]['node'])) {
+							$saveFolder = $directoriesById[$fileItem['parents'][0]]['node'];
+						} else {
+							$saveFolder = $rootImportFolder;
 						}
-					} elseif (!$saveFolder->nodeExists($fileName)) {
-						$filePathInDrive = $dirId === 'root' ? '/' . $fileItem['name'] : $directoriesById[$dirId]['name'] . '/' . $fileItem['name'];
-						$this->logFailedDownloadsForUser($rootImportFolder, $filePathInDrive);
+
+						$fileName = $this->getFileName($fileItem, $userId, in_array($fileItem['id'], $conflictingIds));
+
+						// If file already exists in folder, don't download unless timestamp is different
+						if ($saveFolder->nodeExists($fileName)) {
+							$savedFile = $saveFolder->get($fileName);
+							$timestampOnFile = $savedFile->getMtime();
+							$d = new DateTime($fileItem['modifiedTime']);
+							$timestampOnDrive = $d->getTimestamp();
+
+							if ($timestampOnFile < $timestampOnDrive) {
+								$savedFile->delete();
+							} else {
+								continue;
+							}
+						}
+
+						$size = $this->getFile($userId, $fileItem, $saveFolder, $fileName);
+
+						if (!is_null($size)) {
+							$nbDownloaded++;
+							$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_files', $alreadyImported + $nbDownloaded);
+							$downloadedSize += $size;
+							$this->config->setUserValue($userId, Application::APP_ID, 'drive_imported_size', $alreadyImportedSize + $downloadedSize);
+							if ($maxDownloadSize && $downloadedSize > $maxDownloadSize) {
+								return [
+									'nbDownloaded' => $nbDownloaded,
+									'targetPath' => $targetPath,
+									'finished' => false,
+								];
+							}
+						} elseif (!$saveFolder->nodeExists($fileName)) {
+							$filePathInDrive = $dirId === 'root' ? '/' . $fileItem['name'] : $directoriesById[$dirId]['name'] . '/' . $fileItem['name'];
+							$this->logFailedDownloadsForUser($rootImportFolder, $filePathInDrive);
+						}
+					} catch (\Throwable $e) {
+						$this->logger->warning('Error while importing file', ['exception' => $e]);
+						$this->logger->debug('Skipping file ' . $fileItem['id']);
+						continue;
 					}
 				}
 				$params['pageToken'] = $result['nextPageToken'] ?? '';
