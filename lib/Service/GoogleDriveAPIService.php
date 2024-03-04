@@ -168,6 +168,20 @@ class GoogleDriveAPIService {
 		// import batch of files
 		$targetPath = $this->config->getUserValue($userId, Application::APP_ID, 'drive_output_dir', '/Google Drive');
 		$targetPath = $targetPath ?: '/Google Drive';
+
+		try {
+			$targetNode = $this->root->getUserFolder($userId)->get($targetPath);
+			if ($targetNode->isShared()) {
+				$this->logger->error('Target path ' . $targetPath . 'is shared, resorting to user root folder');
+				$targetPath = '/';
+			}
+		} catch (NotFoundException) {
+			// noop, folder doesn't exist
+		} catch (NotPermittedException) {
+			$this->logger->error('Cannot determine if target path ' . $targetPath . 'is shared, resorting to root folder');
+			$targetPath = '/';
+		}
+
 		// get progress
 		$directoryProgressStr = $this->config->getUserValue($userId, Application::APP_ID, 'directory_progress', '[]');
 		$directoryProgress = ($directoryProgressStr === '' || $directoryProgressStr === '[]')
