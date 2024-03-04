@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.2.0] - 2024-03-04
+
+### New
+
+- Adding prefix, suffix and middle name to contacts
+- Add support for Nextcloud 29
+
+### Fixed
+ - fix(GoogleDriveAPIService): Make sure target path is not a shared folder
+ - fix(GoogleCalendarAPIService): Sanitize calendar name
+ - fix(GoogleDriveAPIService): Don't break if a file causes hiccups
+ - Fix(l10n): Update translations from Transifex
+
 ## [2.1.0] - 2023-05-31
 
 ### Changed
