@@ -329,7 +329,7 @@ class GoogleDriveAPIService {
 						$fileName = $this->getFileName($fileItem, $userId, in_array($fileItem['id'], $conflictingIds));
 
 						// If file already exists in folder, don't download unless timestamp is different
-						if ($saveFolder->nodeExists($fileName)) {
+						if ($saveFolder->nodeExists($fileName) === true) {
 							$savedFile = $saveFolder->get($fileName);
 							$timestampOnFile = $savedFile->getMtime();
 							$d = new DateTime($fileItem['modifiedTime']);
@@ -349,7 +349,7 @@ class GoogleDriveAPIService {
 							$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_files', $alreadyImported + $nbDownloaded);
 							$downloadedSize += $size;
 							$this->config->setUserValue($userId, Application::APP_ID, 'drive_imported_size', $alreadyImportedSize + $downloadedSize);
-							if ($maxDownloadSize && $downloadedSize > $maxDownloadSize) {
+							if ($maxDownloadSize !== null && $downloadedSize > $maxDownloadSize) {
 								return [
 									'nbDownloaded' => $nbDownloaded,
 									'targetPath' => $targetPath,
@@ -362,7 +362,7 @@ class GoogleDriveAPIService {
 						}
 					} catch (\Throwable $e) {
 						$this->logger->warning('Error while importing file', ['exception' => $e]);
-						$this->logger->debug('Skipping file ' . $fileItem['id']);
+						$this->logger->debug('Skipping file ' . strval($fileItem['id']));
 						continue;
 					}
 				}
@@ -692,11 +692,11 @@ class GoogleDriveAPIService {
 			$documentFormat = $this->getUserDocumentFormat($userId);
 			// potentially a doc
 			$params = $this->getDocumentRequestParams($fileItem['mimeType'], $documentFormat);
-			$fileUrl = 'https://www.googleapis.com/drive/v3/files/' . urlencode($fileItem['id']) . '/export';
+			$fileUrl = 'https://www.googleapis.com/drive/v3/files/' . urlencode((string) $fileItem['id']) . '/export';
 			return $this->downloadAndSaveFile($saveFolder, $fileName, $userId, $fileUrl, $fileItem, $params);
 		} elseif (isset($fileItem['webContentLink'])) {
 			// classic file
-			$fileUrl = 'https://www.googleapis.com/drive/v3/files/' . urlencode($fileItem['id']) . '?alt=media';
+			$fileUrl = 'https://www.googleapis.com/drive/v3/files/' . urlencode((string) $fileItem['id']) . '?alt=media';
 			return $this->downloadAndSaveFile($saveFolder, $fileName, $userId, $fileUrl, $fileItem);
 		}
 		return null;
