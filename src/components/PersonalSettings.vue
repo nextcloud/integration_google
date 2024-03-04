@@ -278,7 +278,7 @@ import { showSuccess, showError } from '@nextcloud/dialogs'
 import NcAppNavigationIconBullet from '@nextcloud/vue/dist/Components/NcAppNavigationIconBullet.js'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
 import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
-import { humanFileSize } from '../utils.js'
+import { humanFileSize, showServerError } from '../utils.js'
 
 export default {
 	name: 'PersonalSettings',
@@ -453,12 +453,10 @@ export default {
 					}
 				})
 				.catch((error) => {
-					showError(
-						t('google_synchronization', 'Failed to save Google options')
-						+ ': ' + error.response?.request?.responseText
+					showServerError(
+						error,
+						t('google_synchronization', 'Failed to save Google options'),
 					)
-				})
-				.then(() => {
 				})
 		},
 		onOAuthClick() {
@@ -505,9 +503,9 @@ export default {
 					window.location.replace(requestUrl)
 				}
 			}).catch((error) => {
-				showError(
-					t('google_synchronization', 'Failed to save Google OAuth state')
-					+ ': ' + error.response?.request?.responseText
+				showServerError(
+					error,
+					t('google_synchronization', 'Failed to save Google OAuth state'),
 				)
 			})
 		},
@@ -522,9 +520,9 @@ export default {
 					}
 				})
 				.catch((error) => {
-					showError(
-						t('google_synchronization', 'Failed to get Google Drive information')
-						+ ': ' + error.response?.request?.responseText
+					showServerError(
+						error,
+						t('google_synchronization', 'Failed to get Google Drive information'),
 					)
 				})
 				.then(() => {
@@ -540,12 +538,10 @@ export default {
 					}
 				})
 				.catch((error) => {
-					showError(
-						t('google_synchronization', 'Failed to get calendar list')
-						+ ': ' + error.response?.request?.responseText
+					showServerError(
+						error,
+						t('google_synchronization', 'Failed to get calendar list'),
 					)
-				})
-				.then(() => {
 				})
 		},
 		getCalendarLabel(cal) {
@@ -588,9 +584,9 @@ export default {
 					}
 				})
 				.catch((error) => {
-					showError(
+					showServerError(
+						error,
 						t('google_synchronization', 'Failed to get number of Google photos')
-						+ ': ' + error.response?.request?.responseText
 					)
 				})
 				.then(() => {
@@ -606,9 +602,9 @@ export default {
 					}
 				})
 				.catch((error) => {
-					showError(
-						t('google_synchronization', 'Failed to get number of Google contacts')
-						+ ': ' + error.response?.request?.responseText
+					showServerError(
+						error,
+						t('google_synchronization', 'Failed to get number of Google contacts'),
 					)
 				})
 				.then(() => {
@@ -623,12 +619,10 @@ export default {
 					}
 				})
 				.catch((error) => {
-					showError(
-						t('google_synchronization', 'Failed to get address book list')
-						+ ': ' + error.response?.request?.responseText
+					showServerError(
+						error,
+						t('google_synchronization', 'Failed to get address book list'),
 					)
-				})
-				.then(() => {
 				})
 		},
 		onImportContacts() {
@@ -662,9 +656,9 @@ export default {
 					this.showAddressBooks = false
 				})
 				.catch((error) => {
-					showError(
-						t('google_synchronization', 'Failed to get address book list')
-						+ ': ' + error.response?.request?.responseText
+					showServerError(
+						error,
+						t('google_synchronization', 'Failed to get address book list'),
 					)
 				})
 				.then(() => {
@@ -699,9 +693,9 @@ export default {
 					)
 				})
 				.catch((error) => {
-					showError(
-						t('google_synchronization', 'Failed to import Google calendar')
-						+ ': ' + error.response?.request?.responseText
+					showServerError(
+						error,
+						t('google_synchronization', 'Failed to import Google calendar'),
 					)
 				})
 				.then(() => {
@@ -733,9 +727,9 @@ export default {
 				})
 				.catch((error) => {
 					console.error(errorMessage, error)
-					showError(
-						t('google_synchronization', errorMessage)
-						+ ': ' + error.response?.request?.responseText
+					showServerError(
+						error,
+						t('google_synchronization', errorMessage),
 					)
 				})
 				.finally(() => {
@@ -757,9 +751,9 @@ export default {
 					this.getPhotoImportValues(true)
 				})
 				.catch((error) => {
-					showError(
-						t('google_synchronization', 'Failed to start importing Google photos')
-						+ ': ' + error.response?.request?.responseText
+					showServerError(
+						error,
+						t('google_synchronization', 'Failed to start importing Google photos'),
 					)
 				})
 				.then(() => {
@@ -823,12 +817,10 @@ export default {
 					this.getDriveImportValues(true)
 				})
 				.catch((error) => {
-					showError(
-						t('google_synchronization', 'Failed to start importing Google Drive')
-						+ ': ' + error.response?.request?.responseText
+					showServerError(
+						error,
+						t('google_synchronization', 'Failed to start importing Google Drive'),
 					)
-				})
-				.then(() => {
 				})
 		},
 		onCancelDriveImport() {

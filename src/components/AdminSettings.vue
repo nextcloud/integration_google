@@ -94,8 +94,8 @@ import GoogleIcon from './icons/GoogleIcon.vue'
 import { loadState } from '@nextcloud/initial-state'
 import { generateUrl } from '@nextcloud/router'
 import axios from '@nextcloud/axios'
-import { delay } from '../utils.js'
-import { showSuccess, showError } from '@nextcloud/dialogs'
+import { delay, showServerError } from '../utils.js'
+import { showSuccess } from '@nextcloud/dialogs'
 import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
 import DeleteIcon from 'vue-material-design-icons/Delete.vue'
@@ -149,9 +149,9 @@ export default {
 				})
 				.catch((error) => {
 					console.error('Failed to delete background jobs', error)
-					showError(
-						t('google_synchronization', 'Failed to delete background jobs')
-						+ ': ' + error.response?.request?.responseText
+					showServerError(
+						error,
+						t('google_synchronization', 'Failed to delete background jobs'),
 					)
 				})
 		},
@@ -165,12 +165,10 @@ export default {
 					showSuccess(t('google_synchronization', 'Google admin options saved'))
 				})
 				.catch((error) => {
-					showError(
-						t('google_synchronization', 'Failed to save Google admin options')
-						+ ': ' + error.response.request.responseText
+					showServerError(
+						error,
+						t('google_synchronization', 'Failed to save Google admin options'),
 					)
-				})
-				.then(() => {
 				})
 		},
 	},

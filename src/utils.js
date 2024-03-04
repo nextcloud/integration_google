@@ -1,3 +1,5 @@
+import { showError } from '@nextcloud/dialogs'
+
 let mytimer = 0
 export function delay(callback, ms) {
 	return function() {
@@ -33,4 +35,28 @@ export function humanFileSize(bytes, approx = false, si = false, dp = 1) {
 	} else {
 		return bytes.toFixed(dp) + ' ' + units[u]
 	}
+}
+
+function getDetails(error) {
+	try {
+		const html = error.response?.request?.responseText
+		if (!html) {
+			return ''
+		}
+
+		const parser = new DOMParser()
+		const htmlDoc = parser.parseFromString(html, 'text/html')
+		const details = t('google_synchronization', 'Details')
+		return `<details><summary>${details}</summary>${htmlDoc.querySelector('main').innerHTML}</details>`
+	} catch (e) {
+		return ''
+	}
+}
+
+export function showServerError(error, message) {
+	showError(`
+		<div style="padding: 10px;">
+			<h2>${message}: ${error.message}</h2>
+			${getDetails(error)}
+		</div>`, { isHTML: true })
 }
