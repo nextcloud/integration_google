@@ -192,6 +192,7 @@ class GoogleCalendarAPIService {
 		$events = $this->getCalendarEvents($userId, $calId);
 		$nbAdded = 0;
 		$nbUpdated = 0;
+		/** @var array{id: string, start?: array{date?: string, dateTime?: string}, end?: array{date?: string, dateTime?: string}, colorId?: string, summary?: string, visibility?: string, sequence?: string, location?: string, description?: string, status?: string, created?: string, updated?: string, reminders?: array{useDefault?: bool, overrides?: list{array{minutes?: string, hours?: string, days?: string, weeks?: string}}}, recurrence?: list<string>} $e */
 		foreach ($events as $e) {
 			$objectUri = $e['id'];
 
@@ -201,6 +202,9 @@ class GoogleCalendarAPIService {
 				// check if it already exists and if we should update it
 				$existingEvent = $this->caldavBackend->getCalendarObject($ncCalId, $objectUri);
 				if ($existingEvent !== null) {
+					if (!isset($e['updated'])) {
+						continue;
+					}
 					$remoteEventUpdatedTimestamp = (new DateTime($e['updated']))->getTimestamp();
 
 					$localEventUpdatedTimestamp = $existingEvent['lastmodified'] ?? 0;
@@ -229,7 +233,7 @@ class GoogleCalendarAPIService {
 			}
 			$calData .= isset($e['summary'])
 				? ('SUMMARY:' . substr(str_replace("\n", '\n', $e['summary']), 0, 250) . "\n")
-				: ($e['visibility'] ?? '' === 'private'
+				: (($e['visibility'] ?? '') === 'private'
 					? ('SUMMARY:' . $this->l10n->t('Private event') . "\n")
 					: '');
 			$calData .= isset($e['sequence']) ? ('SEQUENCE:' . $e['sequence'] . "\n") : '';

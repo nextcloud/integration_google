@@ -210,6 +210,7 @@ class GoogleContactsAPIService {
 			$displayName = '';
 			// we just take first name
 			if (isset($c['names']) && is_array($c['names'])) {
+				/** @var array{displayName?: string, familyName?: string, givenName?: string, middleName?: string, honorificPrefix?: string, honorificSuffix?: string } $n */
 				foreach ($c['names'] as $n) {
 					$displayName = $n['displayName'] ?? '';
 					$familyName = $n['familyName'] ?? '';
@@ -324,6 +325,7 @@ class GoogleContactsAPIService {
 
 			// address
 			if (isset($c['addresses']) && is_array($c['addresses'])) {
+				/** @var array{streetAddress?: string, extendedAddress?: string, postalCode?: string, city?: string, type?: string, country?: string, poBox?: string} $address */
 				foreach ($c['addresses'] as $address) {
 					$streetAddress = $address['streetAddress'] ?? '';
 					$extendedAddress = $address['extendedAddress'] ?? '';
@@ -380,6 +382,7 @@ class GoogleContactsAPIService {
 			}
 
 			if (isset($c['emailAddresses']) && is_array($c['emailAddresses'])) {
+				/** @var array{value?: string, type?: string} $email */
 				foreach ($c['emailAddresses'] as $email) {
 					if (isset($email['value'])) {
 						$addrType = $email['type'] ?? '';
@@ -405,6 +408,7 @@ class GoogleContactsAPIService {
 
 			// we just take first org
 			if (isset($c['organizations']) && is_array($c['organizations'])) {
+				/** @var array{title?: string, name?: string} $org */
 				foreach ($c['organizations'] as $org) {
 					$name = $org['name'] ?? '';
 					if ($name) {

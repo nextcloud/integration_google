@@ -76,8 +76,7 @@ class ConfigController extends Controller {
 			$result['user_name'] = '';
 		}else{
 			if (isset($values['drive_output_dir'])) {
-				/** @var \OCP\Files\IRootFolder $root */
-				$root = \OC::$server->get(\OCP\Files\IRootFolder::class);
+				$root = \OCP\Server::get(\OCP\Files\IRootFolder::class);
 				$userRoot = $root->getUserFolder($this->userId);
 				$result['free_space'] = \OCA\Google\Settings\Personal::getFreeSpace($userRoot, $values['drive_output_dir']);
 			}
