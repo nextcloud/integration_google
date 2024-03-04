@@ -341,6 +341,10 @@
     </UnusedVariable>
   </file>
   <file src="lib/Service/GoogleDriveAPIService.php">
+    <DocblockTypeContradiction>
+      <code><![CDATA[$resource === false]]></code>
+      <code><![CDATA[$stream === false]]></code>
+    </DocblockTypeContradiction>
     <InvalidArgument>
       <code><![CDATA[$alreadyImported + $nbDownloaded]]></code>
       <code><![CDATA[$alreadyImportedSize + $downloadedSize]]></code>
@@ -462,6 +466,9 @@
     <ArgumentTypeCoercion>
       <code><![CDATA[$albumFolder]]></code>
     </ArgumentTypeCoercion>
+    <DocblockTypeContradiction>
+      <code><![CDATA[$resource === false]]></code>
+    </DocblockTypeContradiction>
     <InvalidArgument>
       <code><![CDATA[$alreadyImported + $nbDownloaded]]></code>
       <code><![CDATA[$alreadyImported + $nbDownloaded]]></code>
