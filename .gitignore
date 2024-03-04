@@ -7,3 +7,6 @@ js/
 .*.sw*
 node_modules
 /vendor/
+build
+.php-cs-fixer.cache
+.phpactor.json
