@@ -173,7 +173,7 @@ class GoogleCalendarAPIService {
 			$params['{http://apple.com/ns/ical/}calendar-color'] = $color;
 		}
 
-		$newCalName = trim($calName) . ' (' . $this->l10n->t('Google Calendar import') .')';
+		$newCalName = urlencode(trim($calName) . ' (' . $this->l10n->t('Google Calendar import') .')');
 		$ncCalId = $this->calendarExists($userId, $newCalName);
 		$calendarIsNew = is_null($ncCalId);
 		if (is_null($ncCalId)) {
