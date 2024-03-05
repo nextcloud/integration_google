@@ -5,7 +5,7 @@
 **Use at your own risk. This app is still in early development. Users are effectively beta testers.**
 
 If all you need to do is import all of your data from Google once and permanently migrate to Nextcloud (lucky you),
-you should use the [Google Integration](integration_google) app.
+you should use the [Google Integration](integration_google) app (of which this app is a fork).
 
 However, if you're like me, you're part of a team or group that has shared a Google Calendar with you,
 and you would like to keep it up to date with your Nextcloud calendar.
@@ -30,6 +30,10 @@ This App supports:
 1. **Calendars you own**
 1. **Calendars that have been shared with you**
 
+## ⚠️ Disclaimers
+
+- **If you own the Google Calendar**, you are probably better off **NOT** using this app and instead copying the private ical address and importing it into Nextcloud Calendar as a read-only subscription. This fork was created because I was part of a team and I did not own the Google Calendar in order to get this private address.
+- This app only synchronizes events **from Google to Nextcloud**, it does **NOT** synchronize events from your Nextcloud Calendar into your Google Calendar.
 
 [integration_google]: https://github.com/nextcloud/integration_google
 
