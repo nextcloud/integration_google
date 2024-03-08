@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.1.0-2-nightly] - 2024-03-08
+
+### Changed
+
+ - Improve error messages in browser popup
+ - Possible appName fix
+ - Documentation and related changes
+
+
 ## [2.1.0-1] - 2024-02-28
 
 ### Changed

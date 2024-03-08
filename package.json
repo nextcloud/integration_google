@@ -1,6 +1,6 @@
 {
 	"name": "google_synchronization",
-	"version": "2.1.0-1",
+	"version": "2.1.0-2-nightly",
 	"description": "A Nextcloud app to continuously synchronize Google Calendar",
 	"main": "index.js",
 	"directories": {
