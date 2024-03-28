@@ -23,7 +23,7 @@ jobs:
     strategy:
       matrix:
         php-versions: [ '8.1', '8.2' ]
-        server-versions: [ 'v26.x.x', 'v27.1.x', 'dev-stable28', 'dev-master' ]
+        server-versions: [ 'v26.x.x', 'v27.1.x', 'dev-stable28', 'dev-stable29', 'dev-master' ]
         include:
           - php-versions: '8.0'
             server-versions: 'v26.x.x'
@@ -31,6 +31,8 @@ jobs:
             server-versions: 'v27.1.x'
           - php-versions: '8.3'
             server-versions: 'dev-stable28'
+          - php-versions: '8.3'
+            server-versions: 'dev-stable29'
           - php-versions: '8.3'
             server-versions: 'dev-master'
       fail-fast: false
