@@ -1,5 +1,5 @@
 name: Feature Request
-description: Create a feature request for integration_google
+description: Create a feature request for google_synchronization
 labels: ['enhancement']
 body:
   - type: markdown

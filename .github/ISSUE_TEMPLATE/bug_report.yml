@@ -1,5 +1,5 @@
 name: Bug Report
-description: Create a bug report for integration_google
+description: Create a bug report for synchronization_google
 labels: ['bug']
 body:
   - type: markdown
@@ -7,7 +7,7 @@ body:
       value: Thanks for taking the time to file a bug report! Please fill out this form as completely as possible.
   - type: input
     attributes:
-      label: Which version of integration_google are you using?
+      label: Which version of synchronization_google are you using?
       description: 'Please specify the exact version instead of "latest". For example: 2.0.2'
     validations:
       required: true

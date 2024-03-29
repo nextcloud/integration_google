@@ -9,7 +9,7 @@ jobs:
     name: Build, upload and release in the appstore
     environment: release
     env:
-      APP_ID: integration_google
+      APP_ID: google_synchronization
     runs-on: ubuntu-latest
     steps:
       - name: Use Node 16
