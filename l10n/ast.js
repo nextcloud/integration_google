@@ -2,6 +2,7 @@ OC.L10N.register(
     "integration_google",
     {
     "Google" : "Google",
+    "Data migration" : "Migración de los datos",
     "Client ID" : "ID de veceru",
     "Client secret" : "Secretu de veceru",
     "Authentication" : "Autenticación",
