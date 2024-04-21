@@ -64,6 +64,21 @@ with the exception of the buttons "Sync calendar" next to each calendar.
 
 ![Screenshot of the app settings page](./docs/images/settings.png)
 
+## Versioning
+
+The following table shows the version of this app compared to the upstream version it's based on.
+I was previously using the 3 semver digits to show the upstream version and `-n` to show how many releases I had made to this fork on top of that,
+but it caused my releases to not be installable through the Nextcloud UI.
+Going forward, I will use a semver version and I will keep this table up to date to show the version it's based on.
+This also allows me to decide for myself if my releases are major, minor, or patch.
+
+| Google Synchronization version | Google Integration version |
+| ------------------------------ | -------------------------- |
+| 2.1.1                          | 2.1.0                      |
+| 2.1.0-2-nightly                | 2.1.0                      |
+| 2.1.0-1                        | 2.1.0                      |
+| 1.0.9.0                        | 1.0.9                      |
+
 ## **🛠️ State of maintenance**
 
 While there are many things that could be done to further improve this app, the app is currently maintained with **limited effort**. This means:
@@ -115,9 +130,6 @@ This is unorthodox, but easier than using the Nextcloud logging mechanism.
 
 
 ### Creating a release
-
-This fork will add a digit after the upstream version number it's based on.
-For example, the first release based on `v1.0.9` will be `v1.0.9.0`.
 
 #### Packaging a release
 
