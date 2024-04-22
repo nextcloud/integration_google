@@ -1,23 +1,23 @@
 # Google Synchronization
 
-**This is a fork of the [Google Integration](integration_google) app**
+**This is a fork of the [Google Integration][integration_google] app**
 
 **Use at your own risk. This app is still in early development. Users are effectively beta testers.**
 
 If all you need to do is import all of your data from Google once and permanently migrate to Nextcloud (lucky you),
-you should use the [Google Integration](integration_google) app (of which this app is a fork).
+you should use the [Google Integration][integration_google] app (of which this app is a fork).
 
 However, if you're like me, you're part of a team or group that has shared a Google Calendar with you,
 and you would like to keep it up to date with your Nextcloud calendar.
 That's exactly what this app does.
 
-This is a fork of [Google Integration](integration_google)
+This is a fork of [Google Integration][integration_google]
 that creates a background task that will periodically import all changes from Google Calendar to your Nextcloud calendar.
-As such, all functionality of [Google Integration](integration_google)
+As such, all functionality of [Google Integration][integration_google]
 is still implemented, so you can still import Contacts, Photos, Drive manually.
 However, currently, **only Google Calendar background synchronization is supported**.
 Please let me know if you would like to continuously synchronize other services.
-This also means that this app should not be used at the same time as [Google Integration](integration_google).
+This also means that this app should not be used at the same time as [Google Integration][integration_google].
 
 This is a one-way synchronization.
 Events from Google Calendar are imported into Nextcloud,
@@ -57,9 +57,9 @@ Give access to everything requested (the app does not handle missing permissions
 
 Once signed in, you can import data and change settings by going to Nextcloud Settings > Google Synchronization.
 
-This page is equivalent to [Google Integration](integration_google)
+This page is equivalent to [Google Integration][integration_google]
 with the exception of the buttons "Sync calendar" next to each calendar.
-- "Import calendar" is the same as [Google Integration](integration_google). It will manually import all events from the calendar once.
+- "Import calendar" is the same as [Google Integration][integration_google]. It will manually import all events from the calendar once.
 - "Sync calendar" will schedule a background job to continuously synchronize all events from that calendar with your Nextcloud calendar. This job should run every time background jobs run (Nextcloud Settings > Administration > Basic settings > Background jobs).
 
 ![Screenshot of the app settings page](./docs/images/settings.png)
