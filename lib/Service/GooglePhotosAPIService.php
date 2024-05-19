@@ -162,6 +162,7 @@ class GooglePhotosAPIService {
 			$lastJobStart = $this->config->getUserValue($userId, Application::APP_ID, 'photo_import_job_last_start');
 			if ($lastJobStart !== '' && ($nowTs - intval($lastJobStart) < Application::IMPORT_JOB_TIMEOUT)) {
 				// last job has started less than an hour ago => we consider it can still be running
+				$this->jobList->add(ImportPhotosJob::class, ['user_id' => $userId]);
 				return;
 			}
 		}
