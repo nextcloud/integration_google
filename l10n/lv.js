@@ -6,7 +6,8 @@ OC.L10N.register(
     "Authentication" : "Autentifikācija",
     "Contacts" : "Kontakti",
     "Import calendar" : "Importēt kalendāru",
-    "Photos" : "Bildes",
+    "Photos" : "Fotoattēli",
+    "Import Google photos" : "Ievietot Google fotoattēlus",
     "Drive" : "Braukt"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);");
