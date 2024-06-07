@@ -4,6 +4,7 @@ OC.L10N.register(
     "Client ID" : "Aitheantas Cliant",
     "Client secret" : "Rún an chliaint",
     "Authentication" : "Fíordheimhniú",
+    "Sign in with Google" : "Sínigh isteach le Google",
     "Contacts" : "Teagmhálaithe",
     "Calendars" : "Féilirí",
     "Import calendar" : "Iompórtáil féilire",
