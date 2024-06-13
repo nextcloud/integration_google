@@ -1,6 +1,9 @@
 OC.L10N.register(
     "integration_google",
     {
+    "Error during OAuth exchanges" : "Earráid le linn malartuithe OAuth",
+    "OAuth access token refused" : "Diúltaíodh comhartha rochtana OAuth",
+    "Bad credentials" : "Dintiúir dona",
     "Client ID" : "Aitheantas Cliant",
     "Client secret" : "Rún an chliaint",
     "Authentication" : "Fíordheimhniú",
