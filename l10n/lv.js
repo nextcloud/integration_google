@@ -5,6 +5,7 @@ OC.L10N.register(
     "Client ID" : "Klienta ID",
     "Authentication" : "Autentifikācija",
     "Contacts" : "Kontakti",
+    "Calendars" : "Kalendāri",
     "Import calendar" : "Importēt kalendāru",
     "Photos" : "Fotoattēli",
     "Import Google photos" : "Ievietot Google fotoattēlus",
