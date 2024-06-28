@@ -45,9 +45,9 @@ The Google Integration app is available for Nextcloud >= 22.
 ## 🔧 Setup
 
 The app needs some setup in the Google API Console in order to work.
-To do this, go to Nextcloud Settings > Administration > Connected accounts and follow the instructions in the "Google integration" section.
+To do this, go to Nextcloud Settings > Administration > Connected accounts and follow the instructions in the "Google Synchronization" section.
 
-After setting up the Google API, head to Nextcloud Settings > Google Synchronization.
+After setting up the Google API, head to Nextcloud Settings > Data Migration.
 
 The first time coming here, you should only see one button "Sign in with Google".
 Click this, and follow the prompts.
