@@ -41,22 +41,32 @@ function getDetails(error) {
 	try {
 		const html = error.response?.request?.responseText
 		if (!html) {
-			return ''
+			throw Error('Not an HTML response')
 		}
 
 		const parser = new DOMParser()
 		const htmlDoc = parser.parseFromString(html, 'text/html')
-		const details = t('google_synchronization', 'Details')
-		return `<details><summary>${details}</summary>${htmlDoc.querySelector('main').innerHTML}</details>`
+		return htmlDoc.querySelector('main').innerHTML
 	} catch (e) {
-		return ''
+		const json = JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
+		return `<pre><code>${json}</code></pre>`
 	}
 }
 
 export function showServerError(error, message) {
+	// In the worst case, I can instruct people to dig through the browser console
+	// in GitHub issues.
+	console.error(error)
+
+	const summary = t('google_synchronization', 'Details')
+	const details = getDetails(error)
+
 	showError(`
 		<div style="padding: 10px;">
 			<h2>${message}: ${error.message}</h2>
-			${getDetails(error)}
+			<details>
+				<summary>${summary}</summary>
+				${details}
+			</details>
 		</div>`, { isHTML: true })
 }

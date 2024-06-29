@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [unreleased] - 2024-06-29
+
+### Changed
+
+ - Further improve error messages in browser popup
+
 ## [2.1.1] - 2024-04-21
 
 ### Changed
