@@ -5,6 +5,7 @@ OC.L10N.register(
     "Client secret" : "Secreto del cliente",
     "Authentication" : "Autenticación",
     "Contacts" : "Contactos",
+    "Calendars" : "Calendarios",
     "Import calendar" : "Importar calendario",
     "Photos" : "Fotos"
 },
