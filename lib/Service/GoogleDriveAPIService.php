@@ -19,6 +19,7 @@ use OCA\Google\BackgroundJob\ImportDriveJob;
 use OCP\BackgroundJob\IJobList;
 use OCP\Files\File;
 use OCP\Files\Folder;
+use OCP\Files\ForbiddenException;
 use OCP\Files\InvalidPathException;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
@@ -167,6 +168,20 @@ class GoogleDriveAPIService {
 		// import batch of files
 		$targetPath = $this->config->getUserValue($userId, Application::APP_ID, 'drive_output_dir', '/Google Drive');
 		$targetPath = $targetPath ?: '/Google Drive';
+
+		try {
+			$targetNode = $this->root->getUserFolder($userId)->get($targetPath);
+			if ($targetNode->isShared()) {
+				$this->logger->error('Target path ' . $targetPath . 'is shared, resorting to user root folder');
+				$targetPath = '/';
+			}
+		} catch (NotFoundException) {
+			// noop, folder doesn't exist
+		} catch (NotPermittedException) {
+			$this->logger->error('Cannot determine if target path ' . $targetPath . 'is shared, resorting to root folder');
+			$targetPath = '/';
+		}
+
 		// get progress
 		$directoryProgressStr = $this->config->getUserValue($userId, Application::APP_ID, 'directory_progress', '[]');
 		$directoryProgress = ($directoryProgressStr === '' || $directoryProgressStr === '[]')
@@ -312,51 +327,57 @@ class GoogleDriveAPIService {
 					return $result;
 				}
 				foreach ($result['files'] as $fileItem) {
-					// ignore shared files
-					if (!$considerSharedFiles && !$fileItem['ownedByMe']) {
-						continue;
-					}
-
-					if (isset($fileItem['parents']) && count($fileItem['parents']) > 0
-						&& isset($directoriesById[$fileItem['parents'][0]], $directoriesById[$fileItem['parents'][0]]['node'])) {
-						$saveFolder = $directoriesById[$fileItem['parents'][0]]['node'];
-					} else {
-						$saveFolder = $rootImportFolder;
-					}
-
-					$fileName = $this->getFileName($fileItem, $userId, in_array($fileItem['id'], $conflictingIds));
-
-					// If file already exists in folder, don't download unless timestamp is different
-					if ($saveFolder->nodeExists($fileName)) {
-						$savedFile = $saveFolder->get($fileName);
-						$timestampOnFile = $savedFile->getMtime();
-						$d = new DateTime($fileItem['modifiedTime']);
-						$timestampOnDrive = $d->getTimestamp();
-
-						if ($timestampOnFile < $timestampOnDrive) {
-							$savedFile->delete();
-						} else {
+					try {
+						// ignore shared files
+						if (!$considerSharedFiles && !$fileItem['ownedByMe']) {
 							continue;
 						}
-					}
 
-					$size = $this->getFile($userId, $fileItem, $saveFolder, $fileName);
-
-					if (!is_null($size)) {
-						$nbDownloaded++;
-						$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_files', $alreadyImported + $nbDownloaded);
-						$downloadedSize += $size;
-						$this->config->setUserValue($userId, Application::APP_ID, 'drive_imported_size', $alreadyImportedSize + $downloadedSize);
-						if ($maxDownloadSize && $downloadedSize > $maxDownloadSize) {
-							return [
-								'nbDownloaded' => $nbDownloaded,
-								'targetPath' => $targetPath,
-								'finished' => false,
-							];
+						if (isset($fileItem['parents']) && count($fileItem['parents']) > 0
+							&& isset($directoriesById[$fileItem['parents'][0]], $directoriesById[$fileItem['parents'][0]]['node'])) {
+							$saveFolder = $directoriesById[$fileItem['parents'][0]]['node'];
+						} else {
+							$saveFolder = $rootImportFolder;
 						}
-					} elseif (!$saveFolder->nodeExists($fileName)) {
-						$filePathInDrive = $dirId === 'root' ? '/' . $fileItem['name'] : $directoriesById[$dirId]['name'] . '/' . $fileItem['name'];
-						$this->logFailedDownloadsForUser($rootImportFolder, $filePathInDrive);
+
+						$fileName = $this->getFileName($fileItem, $userId, in_array($fileItem['id'], $conflictingIds));
+
+						// If file already exists in folder, don't download unless timestamp is different
+						if ($saveFolder->nodeExists($fileName) === true) {
+							$savedFile = $saveFolder->get($fileName);
+							$timestampOnFile = $savedFile->getMtime();
+							$d = new DateTime($fileItem['modifiedTime']);
+							$timestampOnDrive = $d->getTimestamp();
+
+							if ($timestampOnFile < $timestampOnDrive) {
+								$savedFile->delete();
+							} else {
+								continue;
+							}
+						}
+
+						$size = $this->getFile($userId, $fileItem, $saveFolder, $fileName);
+
+						if (!is_null($size)) {
+							$nbDownloaded++;
+							$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_files', $alreadyImported + $nbDownloaded);
+							$downloadedSize += $size;
+							$this->config->setUserValue($userId, Application::APP_ID, 'drive_imported_size', $alreadyImportedSize + $downloadedSize);
+							if ($maxDownloadSize !== null && $downloadedSize > $maxDownloadSize) {
+								return [
+									'nbDownloaded' => $nbDownloaded,
+									'targetPath' => $targetPath,
+									'finished' => false,
+								];
+							}
+						} elseif (!$saveFolder->nodeExists($fileName)) {
+							$filePathInDrive = $dirId === 'root' ? '/' . $fileItem['name'] : $directoriesById[$dirId]['name'] . '/' . $fileItem['name'];
+							$this->logFailedDownloadsForUser($rootImportFolder, $filePathInDrive);
+						}
+					} catch (\Throwable $e) {
+						$this->logger->warning('Error while importing file', ['exception' => $e]);
+						$this->logger->debug('Skipping file ' . strval($fileItem['id']));
+						continue;
 					}
 				}
 				$params['pageToken'] = $result['nextPageToken'] ?? '';
@@ -685,11 +706,11 @@ class GoogleDriveAPIService {
 			$documentFormat = $this->getUserDocumentFormat($userId);
 			// potentially a doc
 			$params = $this->getDocumentRequestParams($fileItem['mimeType'], $documentFormat);
-			$fileUrl = 'https://www.googleapis.com/drive/v3/files/' . urlencode($fileItem['id']) . '/export';
+			$fileUrl = 'https://www.googleapis.com/drive/v3/files/' . urlencode((string) $fileItem['id']) . '/export';
 			return $this->downloadAndSaveFile($saveFolder, $fileName, $userId, $fileUrl, $fileItem, $params);
 		} elseif (isset($fileItem['webContentLink'])) {
 			// classic file
-			$fileUrl = 'https://www.googleapis.com/drive/v3/files/' . urlencode($fileItem['id']) . '?alt=media';
+			$fileUrl = 'https://www.googleapis.com/drive/v3/files/' . urlencode((string) $fileItem['id']) . '?alt=media';
 			return $this->downloadAndSaveFile($saveFolder, $fileName, $userId, $fileUrl, $fileItem);
 		}
 		return null;

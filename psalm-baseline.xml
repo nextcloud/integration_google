@@ -1,71 +1,82 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="5.15.0@5c774aca4746caf3d239d9c8cadb9f882ca29352">
+<files psalm-version="5.22.2@d768d914152dbbf3486c36398802f74e80cfde48">
+  <file src="lib/Controller/ConfigController.php">
+    <DeprecatedMethod>
+      <code><![CDATA[getAppValue]]></code>
+      <code><![CDATA[getAppValue]]></code>
+      <code><![CDATA[getAppValue]]></code>
+      <code><![CDATA[setAppValue]]></code>
+    </DeprecatedMethod>
+  </file>
   <file src="lib/Service/GoogleAPIService.php">
+    <DeprecatedMethod>
+      <code><![CDATA[getAppValue]]></code>
+      <code><![CDATA[getAppValue]]></code>
+    </DeprecatedMethod>
     <InvalidArgument>
-      <code>$expiresAt</code>
+      <code><![CDATA[$expiresAt]]></code>
     </InvalidArgument>
     <InvalidReturnStatement>
       <code><![CDATA[['success' => true]]]></code>
     </InvalidReturnStatement>
     <InvalidReturnType>
-      <code>string[]</code>
+      <code><![CDATA[string[]]]></code>
     </InvalidReturnType>
     <MixedArgument>
       <code><![CDATA[$result['access_token']]]></code>
     </MixedArgument>
-    <PossiblyFalseArgument>
-      <code>$stream</code>
-      <code>$stream</code>
-    </PossiblyFalseArgument>
     <MixedInferredReturnType>
-      <code>array</code>
-      <code>array</code>
+      <code><![CDATA[array]]></code>
+      <code><![CDATA[array]]></code>
     </MixedInferredReturnType>
     <MixedReturnStatement>
-      <code>json_decode($body, true)</code>
-      <code>json_decode($body, true)</code>
+      <code><![CDATA[json_decode($body, true)]]></code>
+      <code><![CDATA[json_decode($body, true)]]></code>
     </MixedReturnStatement>
     <MixedReturnTypeCoercion>
       <code><![CDATA[['error' => $e->getMessage()]]]></code>
     </MixedReturnTypeCoercion>
     <PossiblyInvalidArgument>
-      <code>$body</code>
+      <code><![CDATA[$body]]></code>
     </PossiblyInvalidArgument>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$baseUrl]]></code>
+    </RiskyTruthyFalsyComparison>
     <UndefinedClass>
-      <code>$e</code>
-      <code>$e</code>
-      <code>$e</code>
-      <code>$e</code>
-      <code>$e</code>
-      <code>$e</code>
-      <code>$e</code>
-      <code>$e</code>
-      <code>$e</code>
-      <code>$e</code>
-      <code>$e</code>
-      <code>$e</code>
-      <code>$e</code>
-      <code>$e</code>
-      <code>$e</code>
-      <code>$e</code>
-      <code>$e</code>
-      <code>$e</code>
-      <code>$e</code>
-      <code>$e</code>
-      <code>ClientException</code>
-      <code>ClientException</code>
-      <code>ClientException</code>
-      <code>ConnectException</code>
-      <code>ConnectException</code>
-      <code>ConnectException</code>
-      <code>ServerException</code>
-      <code>ServerException</code>
-      <code>ServerException</code>
+      <code><![CDATA[$e]]></code>
+      <code><![CDATA[$e]]></code>
+      <code><![CDATA[$e]]></code>
+      <code><![CDATA[$e]]></code>
+      <code><![CDATA[$e]]></code>
+      <code><![CDATA[$e]]></code>
+      <code><![CDATA[$e]]></code>
+      <code><![CDATA[$e]]></code>
+      <code><![CDATA[$e]]></code>
+      <code><![CDATA[$e]]></code>
+      <code><![CDATA[$e]]></code>
+      <code><![CDATA[$e]]></code>
+      <code><![CDATA[$e]]></code>
+      <code><![CDATA[$e]]></code>
+      <code><![CDATA[$e]]></code>
+      <code><![CDATA[$e]]></code>
+      <code><![CDATA[$e]]></code>
+      <code><![CDATA[$e]]></code>
+      <code><![CDATA[$e]]></code>
+      <code><![CDATA[$e]]></code>
+      <code><![CDATA[ClientException]]></code>
+      <code><![CDATA[ClientException]]></code>
+      <code><![CDATA[ClientException]]></code>
+      <code><![CDATA[ConnectException]]></code>
+      <code><![CDATA[ConnectException]]></code>
+      <code><![CDATA[ConnectException]]></code>
+      <code><![CDATA[ServerException]]></code>
+      <code><![CDATA[ServerException]]></code>
+      <code><![CDATA[ServerException]]></code>
     </UndefinedClass>
   </file>
   <file src="lib/Service/GoogleCalendarAPIService.php">
     <ArgumentTypeCoercion>
-      <code>$lastModifieds</code>
+      <code><![CDATA[$lastModifieds]]></code>
     </ArgumentTypeCoercion>
     <MissingDependency>
       <code><![CDATA[$this->caldavBackend]]></code>
@@ -80,101 +91,54 @@
       <code><![CDATA[$this->caldavBackend]]></code>
       <code><![CDATA[$this->caldavBackend]]></code>
       <code><![CDATA[$this->caldavBackend]]></code>
-      <code>private</code>
+      <code><![CDATA[private]]></code>
     </MissingDependency>
     <MixedArgument>
-      <code><![CDATA[$e['created']]]></code>
-      <code><![CDATA[$e['description']]]></code>
-      <code><![CDATA[$e['end']['date']]]></code>
-      <code><![CDATA[$e['end']['dateTime']]]></code>
-      <code><![CDATA[$e['location']]]></code>
-      <code><![CDATA[$e['start']['date']]]></code>
-      <code><![CDATA[$e['start']['dateTime']]]></code>
-      <code><![CDATA[$e['status']]]></code>
-      <code><![CDATA[$e['summary']]]></code>
-      <code><![CDATA[$e['updated']]]></code>
-      <code><![CDATA[$e['updated']]]></code>
       <code><![CDATA[$eventColors[$e['colorId']]['background']]]></code>
       <code><![CDATA[$ex->getMessage()]]></code>
-      <code>$objectUri</code>
-      <code>$objectUri</code>
-      <code>$objectUri</code>
-      <code>$objects</code>
+      <code><![CDATA[$objects]]></code>
     </MixedArgument>
     <MixedArgumentTypeCoercion>
-      <code>$rgb</code>
-      <code>$rgbBlack</code>
+      <code><![CDATA[$rgb]]></code>
+      <code><![CDATA[$rgbBlack]]></code>
     </MixedArgumentTypeCoercion>
     <MixedArrayAccess>
-      <code><![CDATA[$e['colorId']]]></code>
-      <code><![CDATA[$e['created']]]></code>
-      <code><![CDATA[$e['description']]]></code>
-      <code><![CDATA[$e['end']['date']]]></code>
-      <code><![CDATA[$e['end']['dateTime']]]></code>
-      <code><![CDATA[$e['id']]]></code>
-      <code><![CDATA[$e['location']]]></code>
-      <code><![CDATA[$e['reminders']['overrides']]]></code>
-      <code><![CDATA[$e['reminders']['useDefault']]]></code>
-      <code><![CDATA[$e['sequence']]]></code>
-      <code><![CDATA[$e['start']['date']]]></code>
-      <code><![CDATA[$e['start']['dateTime']]]></code>
-      <code><![CDATA[$e['status']]]></code>
-      <code><![CDATA[$e['summary']]]></code>
-      <code><![CDATA[$e['updated']]]></code>
-      <code><![CDATA[$e['updated']]]></code>
-      <code><![CDATA[$e['visibility']]]></code>
       <code><![CDATA[$eventColors[$e['colorId']]]]></code>
       <code><![CDATA[$eventColors[$e['colorId']]['background']]]></code>
-      <code><![CDATA[$o['days']]]></code>
-      <code><![CDATA[$o['hours']]]></code>
-      <code><![CDATA[$o['minutes']]]></code>
-      <code><![CDATA[$o['weeks']]]></code>
       <code><![CDATA[$res['id']]]></code>
     </MixedArrayAccess>
-    <MixedArrayOffset>
-      <code><![CDATA[$eventColors[$e['colorId']]]]></code>
-      <code><![CDATA[$eventColors[$e['colorId']]]]></code>
-      <code><![CDATA[$eventColors[$e['colorId']]]]></code>
-    </MixedArrayOffset>
     <MixedAssignment>
-      <code>$black</code>
-      <code>$c</code>
-      <code>$e</code>
-      <code>$event</code>
-      <code>$eventColors</code>
-      <code>$eventGeneratorReturn</code>
-      <code>$localEventUpdatedTimestamp</code>
-      <code>$ncCalId</code>
-      <code>$o</code>
-      <code>$objectUri</code>
-      <code>$objects</code>
+      <code><![CDATA[$black]]></code>
+      <code><![CDATA[$c]]></code>
+      <code><![CDATA[$event]]></code>
+      <code><![CDATA[$eventColors]]></code>
+      <code><![CDATA[$eventGeneratorReturn]]></code>
+      <code><![CDATA[$localEventUpdatedTimestamp]]></code>
+      <code><![CDATA[$ncCalId]]></code>
+      <code><![CDATA[$objects]]></code>
       <code><![CDATA[$params['pageToken']]]></code>
-      <code>$r</code>
-      <code>$res</code>
+      <code><![CDATA[$res]]></code>
     </MixedAssignment>
     <MixedInferredReturnType>
-      <code>?int</code>
-      <code>array</code>
-      <code>array</code>
-      <code>int</code>
-      <code>int|null</code>
+      <code><![CDATA[?int]]></code>
+      <code><![CDATA[array]]></code>
+      <code><![CDATA[array]]></code>
+      <code><![CDATA[int]]></code>
+      <code><![CDATA[int|null]]></code>
     </MixedInferredReturnType>
     <MixedMethodCall>
-      <code>getBlue</code>
-      <code>getBlue</code>
-      <code>getGreen</code>
-      <code>getGreen</code>
-      <code>getRed</code>
-      <code>getRed</code>
+      <code><![CDATA[getBlue]]></code>
+      <code><![CDATA[getBlue]]></code>
+      <code><![CDATA[getGreen]]></code>
+      <code><![CDATA[getGreen]]></code>
+      <code><![CDATA[getRed]]></code>
+      <code><![CDATA[getRed]]></code>
     </MixedMethodCall>
     <MixedOperand>
-      <code><![CDATA[$e['sequence']]]></code>
-      <code>$ncCalId</code>
-      <code>$objectUri</code>
-      <code>$r</code>
+      <code><![CDATA[$ncCalId]]></code>
     </MixedOperand>
     <MixedReturnStatement>
-      <code>$eventGeneratorReturn</code>
+      <code><![CDATA[$eventGeneratorReturn]]></code>
       <code><![CDATA[$result['items']]]></code>
       <code><![CDATA[is_null($res)
 			? null
@@ -182,50 +146,44 @@
       <code><![CDATA[is_null($res)
 			? null
 			: $res['id']]]></code>
-      <code>max($lastModifieds)</code>
-      <code>max($lastModifieds)</code>
+      <code><![CDATA[max($lastModifieds)]]></code>
+      <code><![CDATA[max($lastModifieds)]]></code>
     </MixedReturnStatement>
-    <PossiblyInvalidArgument>
-      <code><![CDATA[str_replace("\n", '\n', $e['description'])]]></code>
-      <code><![CDATA[str_replace("\n", '\n', $e['location'])]]></code>
-      <code><![CDATA[str_replace("\n", '\n', $e['status'])]]></code>
-      <code><![CDATA[str_replace("\n", '\n', $e['summary'])]]></code>
-    </PossiblyInvalidArgument>
-    <PossiblyInvalidCast>
-      <code><![CDATA[str_replace("\n", '\n', $e['description'])]]></code>
-      <code><![CDATA[str_replace("\n", '\n', $e['location'])]]></code>
-      <code><![CDATA[str_replace("\n", '\n', $e['summary'])]]></code>
-    </PossiblyInvalidCast>
     <RedundantCast>
       <code><![CDATA[(int) (abs($rgb1['r'] - $rgb2['r']) + abs($rgb1['g'] - $rgb2['g']) + abs($rgb1['b'] - $rgb2['b']))]]></code>
     </RedundantCast>
+    <RedundantConditionGivenDocblockType>
+      <code><![CDATA[is_array($e['recurrence'])]]></code>
+      <code><![CDATA[isset($e['recurrence']) && is_array($e['recurrence'])]]></code>
+    </RedundantConditionGivenDocblockType>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$color]]></code>
+    </RiskyTruthyFalsyComparison>
     <UndefinedClass>
-      <code>$ex</code>
-      <code>$ex</code>
-      <code>BadRequest</code>
-      <code>Reader</code>
+      <code><![CDATA[$ex]]></code>
+      <code><![CDATA[$ex]]></code>
+      <code><![CDATA[BadRequest]]></code>
+      <code><![CDATA[Reader]]></code>
     </UndefinedClass>
     <UndefinedDocblockClass>
-      <code>$vCalendar</code>
+      <code><![CDATA[$vCalendar]]></code>
     </UndefinedDocblockClass>
     <UnnecessaryVarAnnotation>
-      <code>Color</code>
-      <code>Color</code>
+      <code><![CDATA[Color]]></code>
+      <code><![CDATA[Color]]></code>
     </UnnecessaryVarAnnotation>
     <UnusedParam>
-      <code>$calData</code>
+      <code><![CDATA[$calData]]></code>
     </UnusedParam>
   </file>
   <file src="lib/Service/GoogleContactsAPIService.php">
     <MixedArgument>
-      <code>$addrType</code>
-      <code>$addrType</code>
-      <code>$day</code>
-      <code>$day</code>
-      <code>$googleResourceName</code>
-      <code>$googleUpdateTime</code>
-      <code>$month</code>
-      <code>$month</code>
+      <code><![CDATA[$day]]></code>
+      <code><![CDATA[$day]]></code>
+      <code><![CDATA[$googleResourceName]]></code>
+      <code><![CDATA[$googleUpdateTime]]></code>
+      <code><![CDATA[$month]]></code>
+      <code><![CDATA[$month]]></code>
       <code><![CDATA[$ph['type'] ?? '']]></code>
       <code><![CDATA[$photoFile['body']]]></code>
       <code><![CDATA[$photo['url']]]></code>
@@ -235,13 +193,6 @@
       <code><![CDATA[$result['connections'] ?? []]]></code>
     </MixedArgument>
     <MixedArrayAccess>
-      <code><![CDATA[$address['city']]]></code>
-      <code><![CDATA[$address['country']]]></code>
-      <code><![CDATA[$address['extendedAddress']]]></code>
-      <code><![CDATA[$address['poBox']]]></code>
-      <code><![CDATA[$address['postalCode']]]></code>
-      <code><![CDATA[$address['streetAddress']]]></code>
-      <code><![CDATA[$address['type']]]></code>
       <code><![CDATA[$birthday['date']]]></code>
       <code><![CDATA[$birthday['date']]]></code>
       <code><![CDATA[$birthday['date']]]></code>
@@ -255,8 +206,6 @@
       <code><![CDATA[$c['metadata']['sources'][0]]]></code>
       <code><![CDATA[$c['metadata']['sources'][0]['updateTime']]]></code>
       <code><![CDATA[$c['resourceName']]]></code>
-      <code><![CDATA[$email['type']]]></code>
-      <code><![CDATA[$email['value']]]></code>
       <code><![CDATA[$existingContact['lastmodified']]]></code>
       <code><![CDATA[$group['formattedName']]]></code>
       <code><![CDATA[$group['groupType']]]></code>
@@ -264,12 +213,7 @@
       <code><![CDATA[$group['resourceName']]]></code>
       <code><![CDATA[$membership['contactGroupMembership']]]></code>
       <code><![CDATA[$membership['contactGroupMembership']['contactGroupResourceName']]]></code>
-      <code><![CDATA[$n['displayName']]]></code>
-      <code><![CDATA[$n['familyName']]]></code>
-      <code><![CDATA[$n['givenName']]]></code>
       <code><![CDATA[$nick['value']]]></code>
-      <code><![CDATA[$org['name']]]></code>
-      <code><![CDATA[$org['title']]]></code>
       <code><![CDATA[$ph['type']]]></code>
       <code><![CDATA[$ph['value']]]></code>
       <code><![CDATA[$photo['url']]]></code>
@@ -283,161 +227,143 @@
     <MixedArrayOffset>
       <code><![CDATA[$groupsById[$membership['contactGroupMembership']['contactGroupResourceName']]]]></code>
       <code><![CDATA[$groupsById[$membership['contactGroupMembership']['contactGroupResourceName']]]]></code>
-      <code>$groups[$groupResourceName]</code>
+      <code><![CDATA[$groups[$groupResourceName]]]></code>
     </MixedArrayOffset>
     <MixedAssignment>
-      <code>$addrProp</code>
-      <code>$addrType</code>
-      <code>$addrType</code>
-      <code>$address</code>
-      <code>$biography</code>
-      <code>$birthday</code>
-      <code>$c</code>
-      <code>$city</code>
-      <code>$contact</code>
-      <code>$contactGeneratorReturn</code>
-      <code>$contactGroupNames[]</code>
-      <code>$contentType</code>
-      <code>$contentType</code>
-      <code>$country</code>
-      <code>$day</code>
-      <code>$day</code>
-      <code>$displayName</code>
-      <code>$email</code>
-      <code>$existingContact</code>
-      <code>$extendedAddress</code>
-      <code>$familyName</code>
-      <code>$firstName</code>
-      <code>$googleResourceName</code>
-      <code>$googleUpdateTime</code>
-      <code>$group</code>
-      <code>$group</code>
-      <code>$groupName</code>
-      <code>$groupResourceName</code>
-      <code>$groupType</code>
-      <code>$groups[$groupResourceName]</code>
-      <code>$k</code>
-      <code>$key</code>
-      <code>$memberCount</code>
-      <code>$membership</code>
-      <code>$month</code>
-      <code>$month</code>
-      <code>$n</code>
-      <code>$name</code>
-      <code>$nick</code>
-      <code>$org</code>
+      <code><![CDATA[$addrProp]]></code>
+      <code><![CDATA[$biography]]></code>
+      <code><![CDATA[$birthday]]></code>
+      <code><![CDATA[$c]]></code>
+      <code><![CDATA[$contact]]></code>
+      <code><![CDATA[$contactGeneratorReturn]]></code>
+      <code><![CDATA[$contactGroupNames[]]]></code>
+      <code><![CDATA[$contentType]]></code>
+      <code><![CDATA[$contentType]]></code>
+      <code><![CDATA[$day]]></code>
+      <code><![CDATA[$day]]></code>
+      <code><![CDATA[$existingContact]]></code>
+      <code><![CDATA[$googleResourceName]]></code>
+      <code><![CDATA[$googleUpdateTime]]></code>
+      <code><![CDATA[$group]]></code>
+      <code><![CDATA[$group]]></code>
+      <code><![CDATA[$groupName]]></code>
+      <code><![CDATA[$groupResourceName]]></code>
+      <code><![CDATA[$groupType]]></code>
+      <code><![CDATA[$groups[$groupResourceName]]]></code>
+      <code><![CDATA[$k]]></code>
+      <code><![CDATA[$key]]></code>
+      <code><![CDATA[$memberCount]]></code>
+      <code><![CDATA[$membership]]></code>
+      <code><![CDATA[$month]]></code>
+      <code><![CDATA[$month]]></code>
+      <code><![CDATA[$nick]]></code>
       <code><![CDATA[$params['pageToken']]]></code>
       <code><![CDATA[$params['pageToken']]]></code>
       <code><![CDATA[$params['pageToken']]]></code>
       <code><![CDATA[$params['type']]]></code>
-      <code>$ph</code>
-      <code>$photo</code>
-      <code>$postOfficeBox</code>
-      <code>$postalCode</code>
-      <code>$prop</code>
-      <code>$prop</code>
-      <code>$prop</code>
-      <code>$prop</code>
-      <code>$prop</code>
-      <code>$prop</code>
-      <code>$prop</code>
-      <code>$prop</code>
-      <code>$prop</code>
-      <code>$prop</code>
-      <code>$prop</code>
-      <code>$prop</code>
-      <code>$prop</code>
-      <code>$prop</code>
-      <code>$streetAddress</code>
-      <code>$title</code>
-      <code>$url</code>
+      <code><![CDATA[$ph]]></code>
+      <code><![CDATA[$photo]]></code>
+      <code><![CDATA[$prop]]></code>
+      <code><![CDATA[$prop]]></code>
+      <code><![CDATA[$prop]]></code>
+      <code><![CDATA[$prop]]></code>
+      <code><![CDATA[$prop]]></code>
+      <code><![CDATA[$prop]]></code>
+      <code><![CDATA[$prop]]></code>
+      <code><![CDATA[$prop]]></code>
+      <code><![CDATA[$prop]]></code>
+      <code><![CDATA[$prop]]></code>
+      <code><![CDATA[$prop]]></code>
+      <code><![CDATA[$prop]]></code>
+      <code><![CDATA[$prop]]></code>
+      <code><![CDATA[$prop]]></code>
+      <code><![CDATA[$url]]></code>
     </MixedAssignment>
     <MixedInferredReturnType>
-      <code>array</code>
+      <code><![CDATA[array]]></code>
     </MixedInferredReturnType>
     <MixedOperand>
       <code><![CDATA[$birthday['date']['day']]]></code>
       <code><![CDATA[$birthday['date']['month']]]></code>
       <code><![CDATA[$birthday['date']['year']]]></code>
-      <code>$day</code>
-      <code>$day</code>
-      <code>$month</code>
-      <code>$month</code>
+      <code><![CDATA[$day]]></code>
+      <code><![CDATA[$day]]></code>
+      <code><![CDATA[$month]]></code>
+      <code><![CDATA[$month]]></code>
     </MixedOperand>
     <MixedReturnStatement>
-      <code>$contactGeneratorReturn</code>
+      <code><![CDATA[$contactGeneratorReturn]]></code>
     </MixedReturnStatement>
     <UndefinedClass>
       <code><![CDATA[$this->cdBackend]]></code>
       <code><![CDATA[$this->cdBackend]]></code>
       <code><![CDATA[$this->cdBackend]]></code>
       <code><![CDATA[$this->cdBackend]]></code>
-      <code>$vCard</code>
-      <code>$vCard</code>
-      <code>$vCard</code>
-      <code>$vCard</code>
-      <code>$vCard</code>
-      <code>$vCard</code>
-      <code>$vCard</code>
-      <code>$vCard</code>
-      <code>$vCard</code>
-      <code>$vCard</code>
-      <code>$vCard</code>
-      <code>$vCard</code>
-      <code>$vCard</code>
-      <code>$vCard</code>
-      <code>$vCard</code>
-      <code>$vCard</code>
-      <code>$vCard</code>
-      <code>$vCard</code>
-      <code>$vCard</code>
-      <code>$vCard</code>
-      <code>$vCard</code>
-      <code>$vCard</code>
-      <code>$vCard</code>
-      <code>$vCard</code>
-      <code>$vCard</code>
-      <code>$vCard</code>
-      <code>$vCard</code>
-      <code>$vCard</code>
-      <code>$vCard</code>
-      <code>$vCard</code>
-      <code>$vCard</code>
-      <code>$vCard</code>
-      <code>VCard</code>
-      <code>private</code>
+      <code><![CDATA[$vCard]]></code>
+      <code><![CDATA[$vCard]]></code>
+      <code><![CDATA[$vCard]]></code>
+      <code><![CDATA[$vCard]]></code>
+      <code><![CDATA[$vCard]]></code>
+      <code><![CDATA[$vCard]]></code>
+      <code><![CDATA[$vCard]]></code>
+      <code><![CDATA[$vCard]]></code>
+      <code><![CDATA[$vCard]]></code>
+      <code><![CDATA[$vCard]]></code>
+      <code><![CDATA[$vCard]]></code>
+      <code><![CDATA[$vCard]]></code>
+      <code><![CDATA[$vCard]]></code>
+      <code><![CDATA[$vCard]]></code>
+      <code><![CDATA[$vCard]]></code>
+      <code><![CDATA[$vCard]]></code>
+      <code><![CDATA[$vCard]]></code>
+      <code><![CDATA[$vCard]]></code>
+      <code><![CDATA[$vCard]]></code>
+      <code><![CDATA[$vCard]]></code>
+      <code><![CDATA[$vCard]]></code>
+      <code><![CDATA[$vCard]]></code>
+      <code><![CDATA[$vCard]]></code>
+      <code><![CDATA[$vCard]]></code>
+      <code><![CDATA[$vCard]]></code>
+      <code><![CDATA[$vCard]]></code>
+      <code><![CDATA[$vCard]]></code>
+      <code><![CDATA[$vCard]]></code>
+      <code><![CDATA[$vCard]]></code>
+      <code><![CDATA[$vCard]]></code>
+      <code><![CDATA[$vCard]]></code>
+      <code><![CDATA[$vCard]]></code>
+      <code><![CDATA[VCard]]></code>
+      <code><![CDATA[private]]></code>
     </UndefinedClass>
     <UnusedVariable>
-      <code>$k</code>
-      <code>$k</code>
-      <code>$k</code>
+      <code><![CDATA[$k]]></code>
+      <code><![CDATA[$k]]></code>
+      <code><![CDATA[$k]]></code>
     </UnusedVariable>
   </file>
   <file src="lib/Service/GoogleDriveAPIService.php">
     <DocblockTypeContradiction>
-      <code>$resource === false</code>
-      <code>$stream === false</code>
+      <code><![CDATA[$resource === false]]></code>
+      <code><![CDATA[$stream === false]]></code>
     </DocblockTypeContradiction>
     <InvalidArgument>
-      <code>$alreadyImported + $nbDownloaded</code>
-      <code>$alreadyImportedSize + $downloadedSize</code>
-      <code>$ts</code>
+      <code><![CDATA[$alreadyImported + $nbDownloaded]]></code>
+      <code><![CDATA[$alreadyImportedSize + $downloadedSize]]></code>
+      <code><![CDATA[$ts]]></code>
     </InvalidArgument>
     <MissingClosureReturnType>
-      <code>static function (array $fileItem) {</code>
-      <code>static function (array $fileItem) {</code>
-      <code>static function (array $fileItem) {</code>
+      <code><![CDATA[static function (array $fileItem) {]]></code>
+      <code><![CDATA[static function (array $fileItem) {]]></code>
+      <code><![CDATA[static function (array $fileItem) {]]></code>
     </MissingClosureReturnType>
     <MixedArgument>
-      <code>$dirId</code>
+      <code><![CDATA[$dirId]]></code>
       <code><![CDATA[$dirInfo['modifiedTime']]]></code>
       <code><![CDATA[$dir['id']]]></code>
       <code><![CDATA[$dir['name']]]></code>
       <code><![CDATA[$dir['parents']]]></code>
-      <code>$directoriesById[$dirId]</code>
-      <code>$directoryProgress</code>
-      <code>$fileItem</code>
-      <code><![CDATA[$fileItem['id']]]></code>
+      <code><![CDATA[$directoriesById[$dirId]]]></code>
+      <code><![CDATA[$directoryProgress]]></code>
+      <code><![CDATA[$fileItem]]></code>
       <code><![CDATA[$fileItem['id']]]></code>
       <code><![CDATA[$fileItem['id']]]></code>
       <code><![CDATA[$fileItem['mimeType']]]></code>
@@ -446,21 +372,18 @@
       <code><![CDATA[$fileItem['modifiedTime']]]></code>
       <code><![CDATA[$fileItem['name'] ?? 'Untitled']]></code>
       <code><![CDATA[$fileItem['parents']]]></code>
-      <code>$name</code>
-      <code>$name</code>
-      <code>$name</code>
-      <code>$parentId</code>
+      <code><![CDATA[$name]]></code>
+      <code><![CDATA[$name]]></code>
+      <code><![CDATA[$name]]></code>
+      <code><![CDATA[$parentId]]></code>
       <code><![CDATA[$result['files']]]></code>
-      <code>$saveFolder</code>
+      <code><![CDATA[$saveFolder]]></code>
     </MixedArgument>
     <MixedArgumentTypeCoercion>
-      <code>$id</code>
+      <code><![CDATA[$id]]></code>
       <code><![CDATA[array_map(static function (array $fileItem) {
 				return $fileItem['name'];
 			}, $fileItems)]]></code>
-      <code><![CDATA[static function (array $fileItem) {
-				return $fileItem['ownedByMe'];
-			}]]></code>
     </MixedArgumentTypeCoercion>
     <MixedArrayAccess>
       <code><![CDATA[$dir['id']]]></code>
@@ -490,36 +413,36 @@
       <code><![CDATA[$nbPerName[$fileItem['name']]]]></code>
     </MixedArrayOffset>
     <MixedAssignment>
-      <code>$dir</code>
-      <code>$dir</code>
-      <code>$dirId</code>
-      <code>$directoryIdsToExplore[]</code>
-      <code>$directoryProgress</code>
-      <code>$file</code>
-      <code>$fileItem</code>
-      <code>$fileItem</code>
+      <code><![CDATA[$dir]]></code>
+      <code><![CDATA[$dir]]></code>
+      <code><![CDATA[$dirId]]></code>
+      <code><![CDATA[$directoryIdsToExplore[]]]></code>
+      <code><![CDATA[$directoryProgress]]></code>
+      <code><![CDATA[$file]]></code>
+      <code><![CDATA[$fileItem]]></code>
+      <code><![CDATA[$fileItem]]></code>
       <code><![CDATA[$info['sharedWithMeSize']]]></code>
-      <code>$name</code>
+      <code><![CDATA[$name]]></code>
       <code><![CDATA[$params['pageToken']]]></code>
       <code><![CDATA[$params['pageToken']]]></code>
       <code><![CDATA[$params['pageToken']]]></code>
       <code><![CDATA[$params['pageToken']]]></code>
       <code><![CDATA[$params['pageToken']]]></code>
-      <code>$parentId</code>
-      <code>$saveFolder</code>
-      <code>$savedFile</code>
-      <code>$sharedWithMeSize</code>
-      <code>$timestampOnFile</code>
+      <code><![CDATA[$parentId]]></code>
+      <code><![CDATA[$saveFolder]]></code>
+      <code><![CDATA[$savedFile]]></code>
+      <code><![CDATA[$sharedWithMeSize]]></code>
+      <code><![CDATA[$timestampOnFile]]></code>
     </MixedAssignment>
     <MixedInferredReturnType>
-      <code>?int</code>
+      <code><![CDATA[?int]]></code>
     </MixedInferredReturnType>
     <MixedMethodCall>
-      <code>delete</code>
-      <code>get</code>
-      <code>getMtime</code>
-      <code>nodeExists</code>
-      <code>touch</code>
+      <code><![CDATA[delete]]></code>
+      <code><![CDATA[get]]></code>
+      <code><![CDATA[getMtime]]></code>
+      <code><![CDATA[nodeExists]]></code>
+      <code><![CDATA[touch]]></code>
     </MixedMethodCall>
     <MixedOperand>
       <code><![CDATA[$directoriesById[$dirId]['name']]]></code>
@@ -533,28 +456,28 @@
       <code><![CDATA[$stat['size'] ?? 0]]></code>
     </MixedReturnStatement>
     <RedundantConditionGivenDocblockType>
-      <code>is_resource($resource)</code>
+      <code><![CDATA[is_resource($resource)]]></code>
     </RedundantConditionGivenDocblockType>
     <UndefinedDocblockClass>
-      <code>NoUserException</code>
+      <code><![CDATA[NoUserException]]></code>
     </UndefinedDocblockClass>
   </file>
   <file src="lib/Service/GooglePhotosAPIService.php">
     <ArgumentTypeCoercion>
-      <code>$albumFolder</code>
+      <code><![CDATA[$albumFolder]]></code>
     </ArgumentTypeCoercion>
     <DocblockTypeContradiction>
-      <code>$resource === false</code>
+      <code><![CDATA[$resource === false]]></code>
     </DocblockTypeContradiction>
     <InvalidArgument>
-      <code>$alreadyImported + $nbDownloaded</code>
-      <code>$alreadyImported + $nbDownloaded</code>
-      <code>$ts</code>
+      <code><![CDATA[$alreadyImported + $nbDownloaded]]></code>
+      <code><![CDATA[$alreadyImported + $nbDownloaded]]></code>
+      <code><![CDATA[$ts]]></code>
     </InvalidArgument>
     <MixedArgument>
       <code><![CDATA[$album['title'] ?? 'Untitled']]></code>
-      <code>$photo</code>
-      <code>$photo</code>
+      <code><![CDATA[$photo]]></code>
+      <code><![CDATA[$photo]]></code>
       <code><![CDATA[$photo['filename'] ?? 'Untitled']]></code>
       <code><![CDATA[$photo['mediaMetadata']['creationTime']]]></code>
     </MixedArgument>
@@ -568,26 +491,26 @@
       <code><![CDATA[$photo['id']]]></code>
     </MixedArrayAccess>
     <MixedAssignment>
-      <code>$album</code>
-      <code>$album</code>
-      <code>$album</code>
-      <code>$album</code>
-      <code>$album</code>
-      <code>$albumId</code>
-      <code>$albums[]</code>
-      <code>$albums[]</code>
-      <code>$nbPhotos</code>
-      <code>$nbPhotos</code>
+      <code><![CDATA[$album]]></code>
+      <code><![CDATA[$album]]></code>
+      <code><![CDATA[$album]]></code>
+      <code><![CDATA[$album]]></code>
+      <code><![CDATA[$album]]></code>
+      <code><![CDATA[$albumId]]></code>
+      <code><![CDATA[$albums[]]]></code>
+      <code><![CDATA[$albums[]]]></code>
+      <code><![CDATA[$nbPhotos]]></code>
+      <code><![CDATA[$nbPhotos]]></code>
       <code><![CDATA[$params['pageToken']]]></code>
       <code><![CDATA[$params['pageToken']]]></code>
       <code><![CDATA[$params['pageToken']]]></code>
       <code><![CDATA[$params['pageToken']]]></code>
       <code><![CDATA[$params['pageToken']]]></code>
       <code><![CDATA[$params['pageToken']]]></code>
-      <code>$photo</code>
-      <code>$photo</code>
-      <code>$seenIds[]</code>
-      <code>$seenIds[]</code>
+      <code><![CDATA[$photo]]></code>
+      <code><![CDATA[$photo]]></code>
+      <code><![CDATA[$seenIds[]]]></code>
+      <code><![CDATA[$seenIds[]]]></code>
     </MixedAssignment>
     <MixedOperand>
       <code><![CDATA[$album['mediaItemsCount'] ?? 0]]></code>
@@ -597,15 +520,24 @@
       <code><![CDATA[$result['error']]]></code>
     </MixedOperand>
     <RedundantConditionGivenDocblockType>
-      <code>is_resource($resource)</code>
+      <code><![CDATA[is_resource($resource)]]></code>
     </RedundantConditionGivenDocblockType>
   </file>
+  <file src="lib/Settings/Admin.php">
+    <DeprecatedMethod>
+      <code><![CDATA[getAppValue]]></code>
+      <code><![CDATA[getAppValue]]></code>
+      <code><![CDATA[getAppValue]]></code>
+    </DeprecatedMethod>
+  </file>
   <file src="lib/Settings/Personal.php">
+    <DeprecatedMethod>
+      <code><![CDATA[getAppValue]]></code>
+      <code><![CDATA[getAppValue]]></code>
+      <code><![CDATA[getAppValue]]></code>
+    </DeprecatedMethod>
     <UndefinedDocblockClass>
-      <code>NoUserException</code>
+      <code><![CDATA[NoUserException]]></code>
     </UndefinedDocblockClass>
-    <UnnecessaryVarAnnotation>
-      <code>IStorage</code>
-    </UnnecessaryVarAnnotation>
   </file>
 </files>

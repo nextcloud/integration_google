@@ -303,7 +303,7 @@ class GooglePhotosAPIService {
 							$nbDownloaded++;
 							$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_photos', $alreadyImported + $nbDownloaded);
 							$downloadedSize += $size;
-							if ($maxDownloadSize && $downloadedSize > $maxDownloadSize) {
+							if ($maxDownloadSize !== null && $downloadedSize > $maxDownloadSize) {
 								return [
 									'nbDownloaded' => $nbDownloaded,
 									'targetPath' => $targetPath,
@@ -337,7 +337,7 @@ class GooglePhotosAPIService {
 							$nbDownloaded++;
 							$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_photos', $alreadyImported + $nbDownloaded);
 							$downloadedSize += $size;
-							if ($maxDownloadSize && $downloadedSize > $maxDownloadSize) {
+							if ($maxDownloadSize !== null && $downloadedSize > $maxDownloadSize) {
 								return [
 									'nbDownloaded' => $nbDownloaded,
 									'targetPath' => $targetPath,

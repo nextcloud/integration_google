@@ -98,6 +98,12 @@ class Personal implements ISettings {
 		return 10;
 	}
 
+	/**
+	 * @param \OCP\Files\Folder $userRoot
+	 * @param string $outputDir
+	 * @return bool|float|int
+	 * @throws NotFoundException
+	 */
 	public static function getFreeSpace(\OCP\Files\Folder $userRoot, string $outputDir) {
 		try {
 			// OutputDir can be on an external storage which can have more free space

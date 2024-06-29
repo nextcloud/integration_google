@@ -10,6 +10,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
  - Further improve error messages in browser popup
 
+### New ported from upstream 2.2.0
+
+- Adding prefix, suffix and middle name to contacts
+
+### Fixes ported from upstream 2.2.0
+ - fix(GoogleDriveAPIService): Make sure target path is not a shared folder
+ - fix(GoogleCalendarAPIService): Sanitize calendar name
+ - fix(GoogleDriveAPIService): Don't break if a file causes hiccups
+ - Fix(l10n): Update translations from Transifex
+
 ## [2.1.1] - 2024-04-21
 
 ### Changed
