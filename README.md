@@ -1,6 +1,6 @@
 # Google Synchronization
 
-**This is a fork of the [Google Integration][integration_google] app**
+**This is a fork of the [Google Integration][integration_google] app. Do not use both at the same time!!**
 
 **Use at your own risk. This app is still in early development. Users are effectively beta testers.**
 
@@ -39,8 +39,8 @@ This App supports:
 
 ## 🚀 Installation
 
-In your Nextcloud, simply enable the Google Integration app through the Apps management.
-The Google Integration app is available for Nextcloud >= 22.
+In your Nextcloud, simply enable the Google Synchronization app through the Apps management.
+The Google Synchronization app is available for Nextcloud >= 22.
 
 ## 🔧 Setup
 

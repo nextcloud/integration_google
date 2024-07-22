@@ -3,7 +3,7 @@
     <id>google_synchronization</id>
     <name>Google Synchronization</name>
     <summary>Import Google data into Nextcloud</summary>
-    <description><![CDATA[Google Synchronization automatically keeps your Nextcloud calendar up to date with your Google Calendar.]]></description>
+    <description><![CDATA[Google Synchronization automatically keeps your Nextcloud calendar up to date with your Google Calendar. Incompatible with Google Integration!]]></description>
     <version>2.2.0</version>
     <licence>agpl</licence>
     <author>Marcel Robitaille</author>
