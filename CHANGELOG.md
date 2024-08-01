@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+
+## [2.2.0] - 2024-08-01
+
+### Breaking changes
+
+- Drop support for Nextcloud 27
+- Drop support for Nextcloud 26
+
+### New
+
+- Add support for Nextcloud 30
+
 ## [2.2.0] - 2024-03-04
 
 ### New
