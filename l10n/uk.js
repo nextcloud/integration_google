@@ -2,7 +2,7 @@ OC.L10N.register(
     "integration_google",
     {
     "Error during OAuth exchanges" : "Помилка під час обміну OAuth",
-    "OAuth access token refused" : "Маркер доступу OAuth відхилено",
+    "OAuth access token refused" : "Токен доступу OAuth відхилено",
     "Bad credentials" : "Погані облікові дані",
     "Connected accounts" : "Підключені облікові записи",
     "Client ID" : "Ідентифікатор клієнта",
