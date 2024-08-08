@@ -4,8 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.0.1] - 2024-08-08
 
-## [2.2.0] - 2024-08-01
+### Fixed
+
+- Fix erroneously blacklisted filename characters
+
+
+## [3.0.0] - 2024-08-01
 
 ### Breaking changes
 
