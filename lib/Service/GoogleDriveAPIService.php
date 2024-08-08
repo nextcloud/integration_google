@@ -630,7 +630,7 @@ class GoogleDriveAPIService {
 	 * @return string name of the file to be saved
 	 */
 	private function getFileName(array $fileItem, string $userId, bool $hasNameConflict): string {
-		$fileName = preg_replace('/[\n^\w]/', '-', preg_replace('/\//', '-', $fileItem['name'] ?? 'Untitled'));
+		$fileName = preg_replace('/\n|\W/', '-', preg_replace('/\//', '-', $fileItem['name'] ?? 'Untitled'));
 
 		if (in_array($fileItem['mimeType'], array_values(self::DOCUMENT_MIME_TYPES))) {
 			$documentFormat = $this->getUserDocumentFormat($userId);
