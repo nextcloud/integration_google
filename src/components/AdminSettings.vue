@@ -56,7 +56,7 @@
 			<NcCheckboxRadioSwitch
 				:checked.sync="state.use_popup"
 				@update:checked="onUsePopupChanged">
-				{{ t('google_synchronization', 'Use a po-pup to authenticate') }}
+				{{ t('google_synchronization', 'Use a pop-up to authenticate') }}
 			</NcCheckboxRadioSwitch>
 		</div>
 		<br>
