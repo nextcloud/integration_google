@@ -33,7 +33,6 @@ OC.L10N.register(
     "Google admin options saved" : "Google admin options saved",
     "Failed to save Google admin options" : "Failed to save Google admin options",
     "Google data migration" : "Google data migration",
-    "No Google OAuth app configured. Ask your Nextcloud administrator to configure Google connected accounts admin section." : "No Google OAuth app configured. Ask your Nextcloud administrator to configure Google connected accounts admin section.",
     "Authentication" : "احراز هویت",
     "Sign in with Google" : "Sign in with Google",
     "Connected as {user}" : "متصل به عنوان {user}",
