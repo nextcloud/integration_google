@@ -52,10 +52,8 @@
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Su Google Drive tuo est prus mannu de 's'ispàtziu chi est abarradu ({formSpace})",
     "Cancel Google Drive import" : "Annulla importatzione dae Google Drive",
     "Photo import background process will begin soon." : "Su protzessu de importatzione in background de is fotos at a cumintzare tra pagu.",
-    "Last photo import job at {date}" : "Ultima operazione de importatzione dae Google Drive il {date}",
     "You can close this page. You will be notified when it finishes." : "Connetidu a Google in manera curreta!",
     "Google Drive background import process will begin soon." : "Sa fase de importatzione in background dae Google Drive at a cumintzare tra pagu.",
-    "Last Google Drive import job at {date}" : "Ùrtima operatzione de importatzione dae Google Drive il {date}",
     "Successfully connected to Google!" : "Connètidu a Google in manera curreta!",
     "Google connection error:" : "Errore de connessione a Google:",
     "Google options saved" : "Sèberos de Google sarvados",
@@ -74,6 +72,8 @@
     "Choose where to write imported files" : "Sèbera in ue est a pònnere is archìvios importados",
     "Choose where to write imported photos" : "Sèbera in ue est a pònnere is fotos importadas",
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} fotos importadas","{amount} fotos importadas"],
-    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} archìvios importados ({progress}%)","{amount} archìvios importados ({progress}%)"]
+    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} archìvios importados ({progress}%)","{amount} archìvios importados ({progress}%)"],
+    "Last Google Drive import job at {date}" : "Ùrtima operatzione de importatzione dae Google Drive il {date}",
+    "Last photo import job at {date}" : "Ultima operazione de importatzione dae Google Drive il {date}"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

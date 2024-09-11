@@ -63,10 +63,8 @@ OC.L10N.register(
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Google Drive-ja nagyobb, mint a fennmaradó szabad hely ({formSpace})",
     "Cancel Google Drive import" : "Google Drive importálásának törlése",
     "Photo import background process will begin soon." : "A fotók importálásának folyamata hamarosan megkezdődik.",
-    "Last photo import job at {date}" : "Utolsó fényképimportálás: {date}",
     "You can close this page. You will be notified when it finishes." : "Bezárhatja ezt az oldalt. Értesítést kap, ha befejeződik.",
     "Google Drive background import process will begin soon." : "A Google Drive háttérimportálási folyamata hamarosan megkezdődik.",
-    "Last Google Drive import job at {date}" : "Utolsó Google Drive importálási feladat: {date}",
     "Successfully connected to Google!" : "Sikeresen csatlakozott a Google-höz!",
     "Google connection error:" : "Google kapcsolati hiba:",
     "Google options saved" : "A Google beállításai mentve",
@@ -84,10 +82,9 @@ OC.L10N.register(
     "Failed to start importing Google Drive" : "Nem sikerült elindítani a Google Drive importálását",
     "Choose where to write imported files" : "Válassza ki az importált fájlok helyét",
     "Choose where to write imported photos" : "Válassza ki az importált fotók helyét",
-    "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} Google fénykép (>{formSize})",">{nbPhotos} Google fénykép (>{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} fotó importálva","{amount} fotó importálva"],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} fájl importálva ({progress}%)","{amount} fájl importálva ({progress}%)"],
-    "_{nbSeen} Google contact seen. {nbAdded} added, {nbUpdated} updated in {name}_::_{nbSeen} Google contacts seen. {nbAdded} added, {nbUpdated} updated in {name}_" : ["{nbSeen} Google-névjegy látva. {nbAdded} hozzáadva, {nbUpdated} frissítve a következőben: {name}.","{nbSeen} Google-névjegy látva. {nbAdded} hozzáadva, {nbUpdated} frissítve a következőben: {name}."],
-    "_{total} event successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_::_{total} events successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_" : ["{total} esemény sikeresen importálva a következőbe: {name} ({nbAdded} létrehozva, {nbUpdated} frissítve)","{total} esemény sikeresen importálva a következőbe: {name} ({nbAdded} létrehozva, {nbUpdated} frissítve)"]
+    "Last Google Drive import job at {date}" : "Utolsó Google Drive importálási feladat: {date}",
+    "Last photo import job at {date}" : "Utolsó fényképimportálás: {date}"
 },
 "nplurals=2; plural=(n != 1);");

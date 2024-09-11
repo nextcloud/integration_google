@@ -55,10 +55,8 @@ OC.L10N.register(
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Il tuo Google Drive è più grande dello spazio rimanente ({formSpace})",
     "Cancel Google Drive import" : "Annulla l'importazione da Google Drive",
     "Photo import background process will begin soon." : "Il processo di importazione in background delle foto inizierà presto.",
-    "Last photo import job at {date}" : "Ultima operazione di importazione foto il {date}",
     "You can close this page. You will be notified when it finishes." : "Puoi chiudere questa pagina. Riceverai una notifica al termine.",
     "Google Drive background import process will begin soon." : "Il processo di importazione in background da Google Drive inizierà presto.",
-    "Last Google Drive import job at {date}" : "Ultima operazione di importazione da Google Drive il {date}",
     "Successfully connected to Google!" : "Connesso correttamente a Google!",
     "Google connection error:" : "Errore di connessione a Google:",
     "Google options saved" : "Opzioni di Google salvate",
@@ -76,8 +74,9 @@ OC.L10N.register(
     "Failed to start importing Google Drive" : "Avvio dell'importazione da Google Drive non riuscito",
     "Choose where to write imported files" : "Scegli dove scrivere i file importati",
     "Choose where to write imported photos" : "Scegli dove scrivere le foto importate",
-    "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} foto di Google (>{formSize})",">{nbPhotos} foto di Google (>{formSize})",">{nbPhotos} foto di Google (>{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} foto importata","{amount} foto importate","{amount} foto importate"],
-    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} file importato ({progress}%)","{amount} file importati ({progress}%)","{amount} file importati ({progress}%)"]
+    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} file importato ({progress}%)","{amount} file importati ({progress}%)","{amount} file importati ({progress}%)"],
+    "Last Google Drive import job at {date}" : "Ultima operazione di importazione da Google Drive il {date}",
+    "Last photo import job at {date}" : "Ultima operazione di importazione foto il {date}"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

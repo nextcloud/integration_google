@@ -54,10 +54,8 @@ OC.L10N.register(
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Velikost datotek v oblaku Google Drive je večja od preostalega prostora ({formSpace})",
     "Cancel Google Drive import" : "Prekliči uvoz datotek Google Drive",
     "Photo import background process will begin soon." : "Uvoz slik bo kmalu začet v ozadju.",
-    "Last photo import job at {date}" : "Zadnji uvoz slik je bil izveden {date}",
     "You can close this page. You will be notified when it finishes." : "To stran lahko zaprete. Ob koncu opravila boste obveščeni, ko se to zaključi.",
     "Google Drive background import process will begin soon." : "Uvažanje datotek z računa Google Drive bo kmalu začeto.",
-    "Last Google Drive import job at {date}" : "Zadnji uvoz datotek z računa Goggle Drive je bil izveden {date}",
     "Successfully connected to Google!" : "Povezava z računom Google je uspešno vzpostavljena!",
     "Google connection error:" : "Napaka povezave Google:",
     "Google options saved" : "Nastavitve Google so shranjene",
@@ -76,6 +74,8 @@ OC.L10N.register(
     "Choose where to write imported files" : "Izbor mesta za shranjevanje uvoženih datotek",
     "Choose where to write imported photos" : "Izbor mesta za shranjevanje uvoženih slik",
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} uvožena slika","{amount} uvoženi sliki","{amount} uvožene slike","{amount} uvoženih slik"],
-    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} uvožena datoteka ({progress}%)","{amount} uvoženi datoteki ({progress}%)","{amount} uvožene datoteke ({progress}%)","{amount} uvoženih datotek ({progress}%)"]
+    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} uvožena datoteka ({progress}%)","{amount} uvoženi datoteki ({progress}%)","{amount} uvožene datoteke ({progress}%)","{amount} uvoženih datotek ({progress}%)"],
+    "Last Google Drive import job at {date}" : "Zadnji uvoz datotek z računa Goggle Drive je bil izveden {date}",
+    "Last photo import job at {date}" : "Zadnji uvoz slik je bil izveden {date}"
 },
 "nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);");

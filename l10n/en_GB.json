@@ -61,10 +61,8 @@
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Your Google Drive is bigger than your remaining space left ({formSpace})",
     "Cancel Google Drive import" : "Cancel Google Drive import",
     "Photo import background process will begin soon." : "Photo import background process will begin soon.",
-    "Last photo import job at {date}" : "Last photo import job at {date}",
     "You can close this page. You will be notified when it finishes." : "You can close this page. You will be notified when it finishes.",
     "Google Drive background import process will begin soon." : "Google Drive background import process will begin soon.",
-    "Last Google Drive import job at {date}" : "Last Google Drive import job at {date}",
     "Successfully connected to Google!" : "Successfully connected to Google!",
     "Google connection error:" : "Google connection error:",
     "Google options saved" : "Google options saved",
@@ -82,10 +80,9 @@
     "Failed to start importing Google Drive" : "Failed to start importing Google Drive",
     "Choose where to write imported files" : "Choose where to write imported files",
     "Choose where to write imported photos" : "Choose where to write imported photos",
-    "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} Google photo (>{formSize})",">{nbPhotos} Google photos (>{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} photo imported","{amount} photos imported"],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} file imported ({progress}%)","{amount} files imported ({progress}%)"],
-    "_{nbSeen} Google contact seen. {nbAdded} added, {nbUpdated} updated in {name}_::_{nbSeen} Google contacts seen. {nbAdded} added, {nbUpdated} updated in {name}_" : ["{nbSeen} Google contact seen. {nbAdded} added, {nbUpdated} updated in {name}","{nbSeen} Google contacts seen. {nbAdded} added, {nbUpdated} updated in {name}"],
-    "_{total} event successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_::_{total} events successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_" : ["{total} event successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)","{total} events successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)"]
+    "Last Google Drive import job at {date}" : "Last Google Drive import job at {date}",
+    "Last photo import job at {date}" : "Last photo import job at {date}"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

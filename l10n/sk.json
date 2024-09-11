@@ -54,10 +54,8 @@
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Váš Disk Google je väčší než vaše voľné miesto ({formSpace})",
     "Cancel Google Drive import" : "Zrušiť import z Disku Google",
     "Photo import background process will begin soon." : "Proces importu fotografií na pozadí sa čoskoro začne.",
-    "Last photo import job at {date}" : "Posledná úloha importu fotografií v {date}",
     "You can close this page. You will be notified when it finishes." : "Túto stránku môžete zavrieť. Po dokončení budete informovaní.",
     "Google Drive background import process will begin soon." : "Proces importu Disk Google na pozadí sa čoskoro začne.",
-    "Last Google Drive import job at {date}" : "Posledný import z Disku Google dňa {date}",
     "Successfully connected to Google!" : "Úspešne pripojené ku Google",
     "Google connection error:" : "Chyba pripojenia ku Google:",
     "Google options saved" : "Nastavenia Google boli uložené",
@@ -75,8 +73,9 @@
     "Failed to start importing Google Drive" : "Nepodarilo sa spustiť import z Disku Google",
     "Choose where to write imported files" : "Vyberte kam zapísať importované súbory",
     "Choose where to write imported photos" : "Vyberte kam zapísať importované obrázky",
-    "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} Fotka Google (>{formSize})",">{nbPhotos} Fotky Google (>{formSize})",">{nbPhotos} Fotky Google (>{formSize})",">{nbPhotos} Fotky Google (>{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} importovaná fotka","{amount} importované fotky","{amount} importované fotky","{amount} importovaných fotiek"],
-    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} importovaný súbor ({progress}%)","{amount} importované súbory ({progress}%)","{amount} importované súbory ({progress}%)","{amount} importovaných súborov ({progress}%)"]
+    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} importovaný súbor ({progress}%)","{amount} importované súbory ({progress}%)","{amount} importované súbory ({progress}%)","{amount} importovaných súborov ({progress}%)"],
+    "Last Google Drive import job at {date}" : "Posledný import z Disku Google dňa {date}",
+    "Last photo import job at {date}" : "Posledná úloha importu fotografií v {date}"
 },"pluralForm" :"nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);"
 }

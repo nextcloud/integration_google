@@ -55,10 +55,8 @@ OC.L10N.register(
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Je Google Drive is groter dan je resterende ruimte in ({formSpace})",
     "Cancel Google Drive import" : "Annuleren Google Drive import",
     "Photo import background process will begin soon." : "Foto-import achtergrondproces begint zometeen.",
-    "Last photo import job at {date}" : "Laatste foto-importjob op {date}",
     "You can close this page. You will be notified when it finishes." : "Je kunt deze pagina sluiten. Je krijgt een melding wanneer het klaar is.",
     "Google Drive background import process will begin soon." : "Google Drive achtergrond importproces begint zometeen.",
-    "Last Google Drive import job at {date}" : "Laatste Google Drive importjob op {date}",
     "Successfully connected to Google!" : "Succesvol verbonden met Google!",
     "Google connection error:" : "Google verbindingsfout:",
     "Google options saved" : "Google opties bewaard.",
@@ -76,8 +74,9 @@ OC.L10N.register(
     "Failed to start importing Google Drive" : "Kon import Google drive niet starten",
     "Choose where to write imported files" : "Kies waar geïmporteerde bestanden moeten worden weggeschreven",
     "Choose where to write imported photos" : "Kies waar geïmporteerde foto's moeten worden weggeschreven",
-    "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} Google foto's (>{formSize})",">{nbPhotos} Google foto's (>{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} foto geïmporteerd","{amount} foto's geïmporteerd"],
-    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} bestand geïmporteerd ({progress}%)","{amount} bestanden geïmporteerd ({progress}%)"]
+    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} bestand geïmporteerd ({progress}%)","{amount} bestanden geïmporteerd ({progress}%)"],
+    "Last Google Drive import job at {date}" : "Laatste Google Drive importjob op {date}",
+    "Last photo import job at {date}" : "Laatste foto-importjob op {date}"
 },
 "nplurals=2; plural=(n != 1);");

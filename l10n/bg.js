@@ -60,10 +60,8 @@ OC.L10N.register(
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Вашият Google Диск е по-голям от оставащото ви място ({formSpace})",
     "Cancel Google Drive import" : "Отказ на импортирането от Google Диск",
     "Photo import background process will begin soon." : "Фоновият процес на импортиране на снимки ще започне скоро.",
-    "Last photo import job at {date}" : "Последна задача за импортиране на снимки на {date}",
     "You can close this page. You will be notified when it finishes." : "Можете да затворите тази страница. Ще бъдете уведомени, когато приключи.",
     "Google Drive background import process will begin soon." : "Процесът на фоново импортиране на Google Диск ще започне скоро.",
-    "Last Google Drive import job at {date}" : "Последна задача за импортиране на Google Диск на {date}",
     "Successfully connected to Google!" : "Успешно свързване с Google!",
     "Google connection error:" : "Грешка при свързването с Google:",
     "Google options saved" : "Опциите на Google са записани",
@@ -81,10 +79,9 @@ OC.L10N.register(
     "Failed to start importing Google Drive" : "Неуспешно стартиране на импортирането на Google Диск",
     "Choose where to write imported files" : "Изберете къде да запишете импортирани файлове",
     "Choose where to write imported photos" : "Изберете къде да запишете импортираните снимки",
-    "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} Google снимкa (>{formSize})",">{nbPhotos} Google снимки (>{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} снимки са импортирани","{amount} снимки са импортирани"],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} импортирани файлове ({progress}%)","{amount} импортирани файлове ({progress}%)"],
-    "_{nbSeen} Google contact seen. {nbAdded} added, {nbUpdated} updated in {name}_::_{nbSeen} Google contacts seen. {nbAdded} added, {nbUpdated} updated in {name}_" : ["{nbSeen} Видяни контакти в Google. {nbAdded} добавен, {nbUpdated} актуализиран в {name}","{nbSeen} Видян в Google контакти. {nbAdded} добавен, {nbUpdated} актуализиран в {name}"],
-    "_{total} event successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_::_{total} events successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_" : ["{total} успешно импортирани събития в {name} ({nbAdded} създадени, {nbUpdated} актуализирани)","{total} успешно импортирани събития в {name} ({nbAdded} създадени, {nbUpdated} актуализирани)"]
+    "Last Google Drive import job at {date}" : "Последна задача за импортиране на Google Диск на {date}",
+    "Last photo import job at {date}" : "Последна задача за импортиране на снимки на {date}"
 },
 "nplurals=2; plural=(n != 1);");

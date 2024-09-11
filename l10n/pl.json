@@ -57,10 +57,8 @@
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Twój Dysk Google jest większy niż pozostałe wolne miejsce ({formSpace})",
     "Cancel Google Drive import" : "Anuluj importowanie Dysku Google",
     "Photo import background process will begin soon." : "Wkrótce rozpocznie się proces importowania zdjęć w tle.",
-    "Last photo import job at {date}" : "Ostatnie importowanie zdjęć w {date}",
     "You can close this page. You will be notified when it finishes." : "Możesz zamknąć tę stronę. Po zakończeniu zostaniesz powiadomiony.",
     "Google Drive background import process will begin soon." : "Wkrótce rozpocznie się proces importowania w tle z Dysku Google.",
-    "Last Google Drive import job at {date}" : "Ostatnie importowanie Dysku Google w {date}",
     "Successfully connected to Google!" : "Pomyślnie połączono z Google!",
     "Google connection error:" : "Błąd połączenia z Google:",
     "Google options saved" : "Opcje Google zostały zapisane",
@@ -78,10 +76,9 @@
     "Failed to start importing Google Drive" : "Nie udało się rozpocząć importowania Dysku Google",
     "Choose where to write imported files" : "Wybierz, gdzie zapisać zaimportowane pliki",
     "Choose where to write imported photos" : "Wybierz, gdzie zapisać zaimportowane zdjęcia",
-    "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} zdjęcie Google (>{formSize})",">{nbPhotos} zdjęcia Google (>{formSize})",">{nbPhotos} zdjęć Google (>{formSize})",">{nbPhotos} zdjęć Google (>{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["Zaimportowano {amount} zdjęcie","Zaimportowano {amount} zdjęcia","Zaimportowano {amount} zdjęć","Zaimportowano {amount} zdjęć"],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["Zaimportowano {amount} plik ({progress}%)","Zaimportowano {amount} pliki ({progress}%)","Zaimportowano {amount} plików ({progress}%)","Zaimportowano {amount} plików ({progress}%)"],
-    "_{nbSeen} Google contact seen. {nbAdded} added, {nbUpdated} updated in {name}_::_{nbSeen} Google contacts seen. {nbAdded} added, {nbUpdated} updated in {name}_" : ["{nbSeen} kontakt Google widziany. Dodano {nbAdded}, zaktualizowano {nbUpdated} w {name}","{nbSeen} kontakty Google widziany. Dodano {nbAdded}, zaktualizowano {nbUpdated} w {name}","{nbSeen} kontaktów Google widziany. Dodano {nbAdded}, zaktualizowano {nbUpdated} w {name}","{nbSeen} kontaktów Google widziany. Dodano {nbAdded}, zaktualizowano {nbUpdated} w {name}"],
-    "_{total} event successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_::_{total} events successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_" : ["Pomyślnie zaimportowano {total} wydarzenie w {name} (utworzono {nbAdded}, zaktualizowano {nbUpdated})","Pomyślnie zaimportowano {total} wydarzenia w {name} (utworzono {nbAdded}, zaktualizowano {nbUpdated})","Pomyślnie zaimportowano {total} wydarzeń w {name} (utworzono {nbAdded}, zaktualizowano {nbUpdated})","Pomyślnie zaimportowano {total} wydarzeń w {name} (utworzono {nbAdded}, zaktualizowano {nbUpdated})"]
+    "Last Google Drive import job at {date}" : "Ostatnie importowanie Dysku Google w {date}",
+    "Last photo import job at {date}" : "Ostatnie importowanie zdjęć w {date}"
 },"pluralForm" :"nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);"
 }

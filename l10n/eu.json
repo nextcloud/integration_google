@@ -57,10 +57,8 @@
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Zure Google Drive handiagoa da daukazun leku librea baino ({formSpace})",
     "Cancel Google Drive import" : "Ezeztatu Google Drive inportatzea",
     "Photo import background process will begin soon." : "Argazkiak inportatzeko atzeko planoko prozesua laster hasiko da.",
-    "Last photo import job at {date}" : "Egindako azken argazki inportazioa: {date}",
     "You can close this page. You will be notified when it finishes." : "Orri hau itxi dezakezu. Amaitzen denean jakinaraziko zaizu.",
     "Google Drive background import process will begin soon." : "Google Drive inportatzeko atzeko planoko prozesua laster hasiko da.",
-    "Last Google Drive import job at {date}" : "Egindako azken Google Drive inportazioa: {date}",
     "Successfully connected to Google!" : "Google-rekin konektatzea ondo egin da!",
     "Google connection error:" : "Google konexio errorea:",
     "Google options saved" : "Google aukerak ondo gorde dira",
@@ -78,10 +76,9 @@
     "Failed to start importing Google Drive" : "Google Drive inportatzen hasteak huts egin du",
     "Choose where to write imported files" : "Aukeratu non idatzi inportatutako fitxategiak",
     "Choose where to write imported photos" : "Aukeratu  non idatzi inportatutako argazkiak",
-    "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} Google argazkia (>{formSize})",">{nbPhotos} Google argazkiak (>{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} argazki inportatu dira ","{amount} argazki inportatu dira "],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} fitxategi inportatu dira ({progress}%)","{amount} fitxategi inportatu dira ({progress}%)"],
-    "_{nbSeen} Google contact seen. {nbAdded} added, {nbUpdated} updated in {name}_::_{nbSeen} Google contacts seen. {nbAdded} added, {nbUpdated} updated in {name}_" : ["{nbSeen} Google-ko kontaktuak ikusi dira. {nbAdded} gehitu da, {nbUpdated} eguneratu {name}-n","{nbSeen} Google-ko kontaktuak ikusi dira. {nbAdded} gehitu da, {nbUpdated} eguneratu {name}-n"],
-    "_{total} event successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_::_{total} events successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_" : ["{total} gertaerak behar bezala inportatu dira {name}-n ({nbAdded} sortu da, {nbUpdated} eguneratu)","{total} gertaerak behar bezala inportatu dira {name}-n ({nbAdded} sortu da, {nbUpdated} eguneratu)"]
+    "Last Google Drive import job at {date}" : "Egindako azken Google Drive inportazioa: {date}",
+    "Last photo import job at {date}" : "Egindako azken argazki inportazioa: {date}"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

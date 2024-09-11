@@ -63,10 +63,8 @@ OC.L10N.register(
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Ваш Google Drive је већи од преосталог слободног простора  ({formSpace})",
     "Cancel Google Drive import" : "Откажи Google Drive увоз",
     "Photo import background process will begin soon." : "Позадински процес увоза слика ће ускоро да почне.",
-    "Last photo import job at {date}" : "Последњи посао увоза слика дана {date}",
     "You can close this page. You will be notified when it finishes." : "Можете да затворите ову страницу. Бићете обавештени када се заврши.",
     "Google Drive background import process will begin soon." : "Позадински процес увоза Google Drive ће ускоро да почне.",
-    "Last Google Drive import job at {date}" : "Последњи посао увоза Google Drive дана {date}",
     "Successfully connected to Google!" : "Успешно је успостављена веза са Google!",
     "Google connection error:" : "Google грешка повезивања:",
     "Google options saved" : "Сачуване су Google опције",
@@ -84,10 +82,9 @@ OC.L10N.register(
     "Failed to start importing Google Drive" : "Није успео почетак увоза Google Drive",
     "Choose where to write imported files" : "Изаберите где желите да увезете фајлове",
     "Choose where to write imported photos" : "Изаберите где желите да увезете слике",
-    "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} Google слика (>{formSize})",">{nbPhotos} Google слике (>{formSize})",">{nbPhotos} Google слика (>{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["увезена је {amount} слика","увезене су {amount} слике","увезено је {amount} слика"],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["увезен је {amount} фајл ({progress}%)","увезена су {amount} фајла ({progress}%)","увезено је {amount} фајлова ({progress}%)"],
-    "_{nbSeen} Google contact seen. {nbAdded} added, {nbUpdated} updated in {name}_::_{nbSeen} Google contacts seen. {nbAdded} added, {nbUpdated} updated in {name}_" : ["Виђен је {nbSeen} Google контакт. Додато је {nbAdded}, ажурирано {nbUpdated} у {name}","Виђена су {nbSeen} Google контакта. Додато је {nbAdded}, ажурирано {nbUpdated} у {name}","Виђено је {nbSeen} Google контаката. Додато је {nbAdded}, ажурирано {nbUpdated} у {name}"],
-    "_{total} event successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_::_{total} events successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_" : ["{total} догађај је успешно увезен у {name} (креирано {nbAdded}, ажурирано {nbUpdated})","{total} догађаја су успешно увезена у {name} (креирано {nbAdded}, ажурирано {nbUpdated})","{total} догађаја је успешно увезено у {name} (креирано {nbAdded}, ажурирано {nbUpdated})"]
+    "Last Google Drive import job at {date}" : "Последњи посао увоза Google Drive дана {date}",
+    "Last photo import job at {date}" : "Последњи посао увоза слика дана {date}"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);");

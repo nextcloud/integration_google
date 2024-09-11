@@ -52,10 +52,8 @@
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Veličina vašeg Google Drivea veća je od preostalog prostora ({formSpace})",
     "Cancel Google Drive import" : "Odustani od uvoza iz Google Drivea",
     "Photo import background process will begin soon." : "Uskoro će početi pozadinski proces uvoza fotografija.",
-    "Last photo import job at {date}" : "Posljednji uvoz fotografija {date}",
     "You can close this page. You will be notified when it finishes." : "Možete zatvoriti ovu stranicu. Primit ćete obavijest po završetku.",
     "Google Drive background import process will begin soon." : "Uskoro će početi pozadinski proces uvoza iz Google Drivea.",
-    "Last Google Drive import job at {date}" : "Posljednji uvoz iz Google Drivea {date}",
     "Successfully connected to Google!" : "Uspješno povezivanje s Googleom!",
     "Google connection error:" : "Pogreška veze s Googleom:",
     "Google options saved" : "Postavke Googlea su spremljene",
@@ -74,6 +72,8 @@
     "Choose where to write imported files" : "Odaberite gdje želite zapisivati uvezene datoteke",
     "Choose where to write imported photos" : "Odaberite gdje želite zapisivati uvezene fotografije",
     "_{amount} photo imported_::_{amount} photos imported_" : ["Uvezena je {amount} fotografija","Uvezene su {amount} fotografije","Uvezeno je {amount} fotografija"],
-    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} uvezena datoteka ({progress} %)","{amount} uvezene datoteke ({progress} %)","{amount} uvezenih datoteka ({progress} %)"]
+    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} uvezena datoteka ({progress} %)","{amount} uvezene datoteke ({progress} %)","{amount} uvezenih datoteka ({progress} %)"],
+    "Last Google Drive import job at {date}" : "Posljednji uvoz iz Google Drivea {date}",
+    "Last photo import job at {date}" : "Posljednji uvoz fotografija {date}"
 },"pluralForm" :"nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;"
 }

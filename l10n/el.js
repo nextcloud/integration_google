@@ -56,10 +56,8 @@ OC.L10N.register(
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Το Google Drive σας είναι μεγαλύτερο από τον εναπομείνοντα χώρο σας ({formSpace})",
     "Cancel Google Drive import" : "Ακύρωση εισαγωγής Google Drive",
     "Photo import background process will begin soon." : "Η διαδικασία εισαγωγής φόντου φωτογραφιών θα ξεκινήσει σύντομα.",
-    "Last photo import job at {date}" : "Τελευταία εισαγωγή φωτογραφίας στις {ημερομηνία}",
     "You can close this page. You will be notified when it finishes." : "Μπορείτε να κλείσετε αυτήν τη σελίδα. Θα ειδοποιηθείτε όταν τελειώσει.",
     "Google Drive background import process will begin soon." : "Η διαδικασία εισαγωγής στο παρασκήνιο του Google Drive θα ξεκινήσει σύντομα.",
-    "Last Google Drive import job at {date}" : "Τελευταία εργασία εισαγωγής στο Google Drive στις {ημερομηνία}",
     "Successfully connected to Google!" : "Επιτυχημένη σύνδεση στο Google!",
     "Google connection error:" : "Σφάλμα σύνδεσης Google:",
     "Google options saved" : "Αποθηκεύτηκαν οι επιλογές Google",
@@ -77,8 +75,9 @@ OC.L10N.register(
     "Failed to start importing Google Drive" : "Αποτυχία έναρξης εισαγωγής του Google Drive",
     "Choose where to write imported files" : "Επιλέξτε πού να γράψετε τα εισαγόμενα αρχεία",
     "Choose where to write imported photos" : "Επιλέξτε πού θα γράψετε τις εισαγόμενες φωτογραφίες",
-    "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} φωτογραφία Google (>{formSize})",">{nbPhotos} φωτογραφίες Google (>{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["Προστέθηκε {amount} φωτογραφία","Προστέθηκαν {amount} φωτογραφίες"],
-    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["Προστέθηκε {amount} αρχείο ({progress}%)","Προστέθηκαν {amount} αρχεία ({progress}%)"]
+    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["Προστέθηκε {amount} αρχείο ({progress}%)","Προστέθηκαν {amount} αρχεία ({progress}%)"],
+    "Last Google Drive import job at {date}" : "Τελευταία εργασία εισαγωγής στο Google Drive στις {ημερομηνία}",
+    "Last photo import job at {date}" : "Τελευταία εισαγωγή φωτογραφίας στις {ημερομηνία}"
 },
 "nplurals=2; plural=(n != 1);");

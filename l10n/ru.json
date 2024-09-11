@@ -54,10 +54,8 @@
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Ваш Google Drive больше, чем оставшееся свободное место ({formSpace})",
     "Cancel Google Drive import" : "Отменить импорт Google Drive",
     "Photo import background process will begin soon." : "Скоро будет запущен импорт фотографий в фоне.",
-    "Last photo import job at {date}" : "Последняя работа по импорту фотографий на {date}",
     "You can close this page. You will be notified when it finishes." : "Вы можете закрыть эту страницу. Вы будете уведомлены, когда процесс завершится.",
     "Google Drive background import process will begin soon." : "Скоро будет запущен импорт с Google Диска в фоне.",
-    "Last Google Drive import job at {date}" : "Последний импорт Google Drive в {date}",
     "Successfully connected to Google!" : "Успешное подключено к Google!",
     "Google connection error:" : "Ошибка подключения к Google:",
     "Google options saved" : "Настройки Google сохранены",
@@ -75,8 +73,9 @@
     "Failed to start importing Google Drive" : "Не удалось начать импорт Google Drive",
     "Choose where to write imported files" : "Выберите, куда сохранять импортированные файлы",
     "Choose where to write imported photos" : "Выберите, куда сохранять импортированные фотографии",
-    "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} Google фотография (>{formSize})",">{nbPhotos} Google фотографии (>{formSize})",">{nbPhotos} Google фотографии (>{formSize})",">{nbPhotos} Google фотографии (>{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["Импортирована одна фотография","Импортировано {amount} фотографии","Импортировано {amount} фотографий","Импортировано {amount} фотографии"],
-    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} файл импортирован ({progress}%)","{amount} файла импортировано ({progress}%)","{amount} файлов импортировано ({progress}%)","{amount} файлов импортировано ({progress}%)"]
+    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} файл импортирован ({progress}%)","{amount} файла импортировано ({progress}%)","{amount} файлов импортировано ({progress}%)","{amount} файлов импортировано ({progress}%)"],
+    "Last Google Drive import job at {date}" : "Последний импорт Google Drive в {date}",
+    "Last photo import job at {date}" : "Последняя работа по импорту фотографий на {date}"
 },"pluralForm" :"nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);"
 }

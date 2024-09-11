@@ -61,10 +61,8 @@
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "您的 Google Drive 大於剩餘空間（{formSpace}）",
     "Cancel Google Drive import" : "取消 Google Drive 導入",
     "Photo import background process will begin soon." : "照片導入後台作業進程即將開始。",
-    "Last photo import job at {date}" : "上次照片導入作業於 {date} 執行",
     "You can close this page. You will be notified when it finishes." : "您可以關閉此頁面。完成時會通知您。",
     "Google Drive background import process will begin soon." : "Google Drive 導入後台作業進程即將開始。",
-    "Last Google Drive import job at {date}" : "上一次 Google Drive 導入作業的運行日期為 {date}",
     "Successfully connected to Google!" : "與 Google 連線成功！",
     "Google connection error:" : "Google 連線錯誤： ",
     "Google options saved" : "已儲存 Google 選項",
@@ -82,10 +80,9 @@
     "Failed to start importing Google Drive" : "無法開始導入Google Drive",
     "Choose where to write imported files" : "選擇寫入導入檔案的位置",
     "Choose where to write imported photos" : "選擇寫入導入照片的位置",
-    "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} 張 Google 照片（>{formSize}）"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["導入了 {amount} 張照片"],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["導入了 {amount} 個檔案（{progress}%）"],
-    "_{nbSeen} Google contact seen. {nbAdded} added, {nbUpdated} updated in {name}_::_{nbSeen} Google contacts seen. {nbAdded} added, {nbUpdated} updated in {name}_" : ["在 {name} 已看到 {nbSeen} 個 Google 聯絡人。已添加 {nbAdded} 個 ，更新了 {nbUpdated} 個"],
-    "_{total} event successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_::_{total} events successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_" : ["在 {name} 中成功導入了 {total} 個活動（創建了 {nbAdded} 個，更新了 {nbUpdated} 個）"]
+    "Last Google Drive import job at {date}" : "上一次 Google Drive 導入作業的運行日期為 {date}",
+    "Last photo import job at {date}" : "上次照片導入作業於 {date} 執行"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

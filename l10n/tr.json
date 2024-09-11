@@ -61,10 +61,8 @@
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Google Drive depolama alanınız kalan boş alanınızdan daha büyük gibi görünüyor ({formSpace})",
     "Cancel Google Drive import" : "Google Drive içe aktarmayı iptal et",
     "Photo import background process will begin soon." : "Birazdan arka planda fotoğrafların içe aktarılması işlemine başlanacak.",
-    "Last photo import job at {date}" : "Son fotoğraf içe aktarımı {date}",
     "You can close this page. You will be notified when it finishes." : "Bu sayfayı kapatabilirsiniz. İşlem tamamlandığında bilgilendirileceksiniz.",
     "Google Drive background import process will begin soon." : "Birazdan arka planda Google Drive içe aktarma işlemine başlanacak.",
-    "Last Google Drive import job at {date}" : "Son Google Drive içe aktarımı {date}",
     "Successfully connected to Google!" : "Google ile bağlantı kuruldu!",
     "Google connection error:" : "Google bağlantı sorunu:",
     "Google options saved" : "Google ayarları kaydedildi",
@@ -82,10 +80,9 @@
     "Failed to start importing Google Drive" : "Google Drive dosyalarının içe aktarılması işlemine başlanamadı",
     "Choose where to write imported files" : "İçe aktarılan dosyaların kaydedileceği konumu seçin",
     "Choose where to write imported photos" : "İçe aktarılan fotoğrafların kaydedileceği konumu seçin",
-    "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} Google fotoğrafı (>{formSize})",">{nbPhotos} Google fotoğrafı (>{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} fotoğraf içe aktarıldı","{amount} fotoğraf içe aktarıldı"],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} dosya içe aktarıldı ({progress}%)","{amount} dosya içe aktarıldı ({progress}%)"],
-    "_{nbSeen} Google contact seen. {nbAdded} added, {nbUpdated} updated in {name}_::_{nbSeen} Google contacts seen. {nbAdded} added, {nbUpdated} updated in {name}_" : ["{nbSeen} Google kişisi bulundu. {nbAdded} kişi eklendi, {name} içinde {nbUpdated} kişi güncellendi ","{nbSeen} Google kişisi bulundu. {nbAdded} kişi eklendi, {name} içinde {nbUpdated} kişi güncellendi "],
-    "_{total} event successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_::_{total} events successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_" : ["{total} etkinlik {name} içine aktarıldı ({nbAdded} eklendi, {nbUpdated} güncellendi)","{total} etkinlik {name} içine aktarıldı ({nbAdded} eklendi, {nbUpdated} güncellendi)"]
+    "Last Google Drive import job at {date}" : "Son Google Drive içe aktarımı {date}",
+    "Last photo import job at {date}" : "Son fotoğraf içe aktarımı {date}"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }

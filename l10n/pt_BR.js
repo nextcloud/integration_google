@@ -63,10 +63,8 @@ OC.L10N.register(
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Seu Google Drive é maior do que o espaço restante ({formSpace})",
     "Cancel Google Drive import" : "Cancelar importação do Google Drive",
     "Photo import background process will begin soon." : "O processo de importação de fotos em segundo plano começará em breve.",
-    "Last photo import job at {date}" : "Último trabalho de importação de foto em {date}",
     "You can close this page. You will be notified when it finishes." : "Você pode fechar esta página. Você será notificado quando terminar.",
     "Google Drive background import process will begin soon." : "O processo de importação do Google Drive em segundo plano começará em breve.",
-    "Last Google Drive import job at {date}" : "Último trabalho de importação do Google Drive em {data}",
     "Successfully connected to Google!" : "Conectado com sucesso ao Google!",
     "Google connection error:" : "Erro de conexão do Google:",
     "Google options saved" : "Opções do Google salvas",
@@ -84,10 +82,9 @@ OC.L10N.register(
     "Failed to start importing Google Drive" : "Falha ao iniciar a importação do Google Drive",
     "Choose where to write imported files" : "Escolha onde gravar os arquivos importados ",
     "Choose where to write imported photos" : "Escolha onde escrever as fotos importadas ",
-    "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} Google foto (>{formSize})",">{nbPhotos} Google fotos (>{formSize})",">{nbPhotos} Google fotos (>{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} fotos importadas","{amount} foto importada","{amount} foto importada"],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} arquivo importado ({progresso}%)","{amount} arquivos importados ({progresso}%)","{amount} arquivos importados ({progresso}%)"],
-    "_{nbSeen} Google contact seen. {nbAdded} added, {nbUpdated} updated in {name}_::_{nbSeen} Google contacts seen. {nbAdded} added, {nbUpdated} updated in {name}_" : ["{nbSeen} Contatos do Google vistos. {nbAdded} adicionado, {nbUpdated} atualizado em {name}","{nbSeen} Contatos do Google vistos. {nbAdded} adicionado, {nbUpdated} atualizado em {name}","{nbSeen} Contatos do Google vistos. {nbAdded} adicionado, {nbUpdated} atualizado em {name}"],
-    "_{total} event successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_::_{total} events successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_" : ["{total} evento importado com sucesso em {name} ({nbAdded} criado, {nbUpdated} atualizado)","{total} eventos importados com sucesso em {name} ({nbAdded} criados, {nbUpdated} atualizados)","{total} eventos importados com sucesso em {name} ({nbAdded} criados, {nbUpdated} atualizados)"]
+    "Last Google Drive import job at {date}" : "Último trabalho de importação do Google Drive em {data}",
+    "Last photo import job at {date}" : "Último trabalho de importação de foto em {date}"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

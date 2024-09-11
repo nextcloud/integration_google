@@ -61,10 +61,8 @@
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Tá do Google Drive níos mó ná an spás atá fágtha agat ({formSpace})",
     "Cancel Google Drive import" : "Cealaigh iompórtáil Google Drive",
     "Photo import background process will begin soon." : "Cuirfear tús le próiseas cúlra allmhairiú grianghraf go luath.",
-    "Last photo import job at {date}" : "An post iompórtála grianghraf is déanaí ag {date}",
     "You can close this page. You will be notified when it finishes." : "Is féidir leat an leathanach seo a dhúnadh. Cuirfear in iúl duit nuair a bheidh sé críochnaithe.",
     "Google Drive background import process will begin soon." : "Cuirfear tús le próiseas iompórtála cúlra Google Drive go luath.",
-    "Last Google Drive import job at {date}" : "An post iompórtála is déanaí ó Google Drive ag {date}",
     "Successfully connected to Google!" : "D'éirigh le nascadh le Google!",
     "Google connection error:" : "Earráid cheangail Google:",
     "Google options saved" : "Roghanna Google sábháilte",
@@ -82,10 +80,9 @@
     "Failed to start importing Google Drive" : "Theip ar iompórtáil Google Drive",
     "Choose where to write imported files" : "Roghnaigh cá háit le comhaid iompórtáilte a scríobh",
     "Choose where to write imported photos" : "Roghnaigh cá háit le grianghraif iompórtáilte a scríobh",
-    "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} Grianghraf Google (>{formSize})",">{nbPhotos} Grianghraif Google (>{formSize})",">{nbPhotos} Grianghraif Google (>{formSize})",">{nbPhotos} Grianghraif Google (>{formSize})",">{nbPhotos} Grianghraif Google (>{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} grianghraf iompórtáilte","{amount} grianghraf iompórtáilte","{amount} grianghraf iompórtáilte","{amount} grianghraf iompórtáilte","{amount} grianghraf iompórtáilte"],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} comhad iompórtáilte ({progress}%)","{amount} comhad a iompórtáladh ({progress}%)","{amount} comhad a iompórtáladh ({progress}%)","{amount} comhad a iompórtáladh ({progress}%)","{amount} comhad a iompórtáladh ({progress}%)"],
-    "_{nbSeen} Google contact seen. {nbAdded} added, {nbUpdated} updated in {name}_::_{nbSeen} Google contacts seen. {nbAdded} added, {nbUpdated} updated in {name}_" : ["{nbSeen} teagmhálaí Google le feiceáil. {nbAdded} curtha leis, {nbUpdated} nuashonraithe in {name}","{nbSeen} teagmhálaí Google le feiceáil. {nbAdded} curtha leis, {nbUpdated} nuashonraithe in {name}","{nbSeen} teagmhálaí Google le feiceáil. {nbAdded} curtha leis, {nbUpdated} nuashonraithe in {name}","{nbSeen} teagmhálaí Google le feiceáil. {nbAdded} curtha leis, {nbUpdated} nuashonraithe in {name}","{nbSeen} teagmhálaí Google le feiceáil. {nbAdded} curtha leis, {nbUpdated} nuashonraithe in {name}"],
-    "_{total} event successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_::_{total} events successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_" : ["D'éirigh le hiompórtáil {total} imeacht in {name} (cruthaíodh {nbAdded}, nuashonraíodh {nbUpdated})","D'éirigh le {total} imeacht a iompórtáil in {name} ({nbAdded} cruthaithe, {nbUpdated} nuashonraithe)","D'éirigh le {total} imeacht a iompórtáil in {name} ({nbAdded} cruthaithe, {nbUpdated} nuashonraithe)","D'éirigh le {total} imeacht a iompórtáil in {name} ({nbAdded} cruthaithe, {nbUpdated} nuashonraithe)","D'éirigh le {total} imeacht a iompórtáil in {name} ({nbAdded} cruthaithe, {nbUpdated} nuashonraithe)"]
+    "Last Google Drive import job at {date}" : "An post iompórtála is déanaí ó Google Drive ag {date}",
+    "Last photo import job at {date}" : "An post iompórtála grianghraf is déanaí ag {date}"
 },"pluralForm" :"nplurals=5; plural=(n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n<11 ? 3 : 4);"
 }

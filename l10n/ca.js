@@ -53,10 +53,8 @@ OC.L10N.register(
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "El seu Google Drive és més gran que l'espai restant que queda ({formSpace})",
     "Cancel Google Drive import" : "Cancel·lar la importació de Google Drive",
     "Photo import background process will begin soon." : "El procés de fons d'importació de fotos començarà aviat.",
-    "Last photo import job at {date}" : "Últim treball d'importació de fotos a {date}",
     "You can close this page. You will be notified when it finishes." : "Podeu tancar aquesta pàgina. Se us notificarà quan acabi.",
     "Google Drive background import process will begin soon." : "El procés d'importació de fons de Google Drive començarà aviat.",
-    "Last Google Drive import job at {date}" : "Darrer treball d'importació de Google Drive a {date}",
     "Successfully connected to Google!" : "S'ha connectat correctament a Google!",
     "Google connection error:" : "Error de connexió de Google:",
     "Google options saved" : "Opcions de Google desades.",
@@ -73,6 +71,8 @@ OC.L10N.register(
     "Starting importing files in {targetPath} directory" : "S'està iniciant la importació de fitxers al directori {targetPath}",
     "Failed to start importing Google Drive" : "No s'ha pogut començar a importar Google Drive",
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} foto importada","{amount} fotos importades"],
-    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} fitxer importat ({progress}%)","{amount} fitxers importats ({progress}%)"]
+    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} fitxer importat ({progress}%)","{amount} fitxers importats ({progress}%)"],
+    "Last Google Drive import job at {date}" : "Darrer treball d'importació de Google Drive a {date}",
+    "Last photo import job at {date}" : "Últim treball d'importació de fotos a {date}"
 },
 "nplurals=2; plural=(n != 1);");

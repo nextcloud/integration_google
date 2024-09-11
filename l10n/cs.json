@@ -61,10 +61,8 @@
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Objem dat na vašem Disku Google je větší, než volné místo ({formSpace}), které vám zbývá",
     "Cancel Google Drive import" : "Zrušit import z Google disku",
     "Photo import background process will begin soon." : "Proces importu fotek ze služby Fotky Google brzy na pozadí začne.",
-    "Last photo import job at {date}" : "Minulá úloha importu fotek v {date}",
     "You can close this page. You will be notified when it finishes." : "Tuto stránku můžete zavřít. Až bude dokončeno, budete upozorněni.",
     "Google Drive background import process will begin soon." : "Proces importu z Google Disku brzy na pozadí začne.",
-    "Last Google Drive import job at {date}" : "Nejnovější import z Disku Google proběhl {date}",
     "Successfully connected to Google!" : "Úspěšně připojeno ke Google!",
     "Google connection error:" : "Chyba připojení ke Google:",
     "Google options saved" : "Předvolby pro Google uloženy",
@@ -82,10 +80,9 @@
     "Failed to start importing Google Drive" : "Nezdařilo se spustit import ze služby Disk Google",
     "Choose where to write imported files" : "Vyberte, kam chcete importované soubory ukládat",
     "Choose where to write imported photos" : "Vyberte, kam chcete importované fotky ukládat",
-    "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} Google fotka (>{formSize})",">{nbPhotos} Google fotky (>{formSize})",">{nbPhotos} Google fotek (>{formSize})",">{nbPhotos} Google fotky (>{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["naimportována {amount} fotka","naimportovány {amount} fotky","naimportováno {amount} fotek","naimportovány {amount} fotky"],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} soubor naimportován ({progress}%)","{amount} soubory naimportovány ({progress}%)","{amount} souborů naimportováno ({progress}%)","{amount} soubory naimportovány ({progress}%)"],
-    "_{nbSeen} Google contact seen. {nbAdded} added, {nbUpdated} updated in {name}_::_{nbSeen} Google contacts seen. {nbAdded} added, {nbUpdated} updated in {name}_" : ["Zjištěn {nbSeen} kontakt z Kontakty Google. {nbAdded} přidán, {nbUpdated} zaktualizován u {name}","Zjištěny {nbSeen} kontakty z Kontakty Google. {nbAdded} přidáno, {nbUpdated} zaktualizováno u {name}","Zjištěno {nbSeen} kontaktů z Kontakty Google. {nbAdded} přidáno, {nbUpdated} zaktualizováno u {name}","Zjištěny {nbSeen} kontakty z Kontakty Google. {nbAdded} přidáno, {nbUpdated} zaktualizováno u {name}"],
-    "_{total} event successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_::_{total} events successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_" : ["{total} událost úspěšně naimportována do {name} ({nbAdded} vytvořena, {nbUpdated} zaktualizována)","{total} události úspěšně naimportovány do {name} ({nbAdded} vytvořeno, {nbUpdated} zaktualizováno)","{total} událostí úspěšně naimportováno do {name} ({nbAdded} vytvořeno, {nbUpdated} zaktualizováno)","{total} události úspěšně naimportovány do {name} ({nbAdded} vytvořeno, {nbUpdated} zaktualizováno)"]
+    "Last Google Drive import job at {date}" : "Nejnovější import z Disku Google proběhl {date}",
+    "Last photo import job at {date}" : "Minulá úloha importu fotek v {date}"
 },"pluralForm" :"nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;"
 }

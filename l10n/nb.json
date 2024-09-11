@@ -61,10 +61,8 @@
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Google Disk er større enn den gjenværende plassen din ({formSpace})",
     "Cancel Google Drive import" : "Avbryt Google Disk import",
     "Photo import background process will begin soon." : "Bakgrunnsprosessen for bildeimport starter snart.",
-    "Last photo import job at {date}" : "Siste fotoimportjobb den {date}",
     "You can close this page. You will be notified when it finishes." : "Du kan lukke denne siden. Du vil bli varslet når den er ferdig.",
     "Google Drive background import process will begin soon." : "Google Disk-bakgrunnsimporteringsprosessen starter snart.",
-    "Last Google Drive import job at {date}" : "Siste importjobb for Google Disk den {date}",
     "Successfully connected to Google!" : "Koblet til Google!",
     "Google connection error:" : "Google-forbindelsesfeil:",
     "Google options saved" : "Alternativer for Google lagret",
@@ -82,10 +80,9 @@
     "Failed to start importing Google Drive" : "Kunne ikke starte importen av Google Disk",
     "Choose where to write imported files" : "Velg hvor du vil skrive importerte filer",
     "Choose where to write imported photos" : "Velg hvor du vil skrive importerte bilder",
-    "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} Google bilde (>{formSize})",">{nbPhotos} Google bilder (>{formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} bilde importert","{amount} bilder importert"],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} fil importert ({fremdrift}%)","{amount} filer importert ({fremdrift}%)"],
-    "_{nbSeen} Google contact seen. {nbAdded} added, {nbUpdated} updated in {name}_::_{nbSeen} Google contacts seen. {nbAdded} added, {nbUpdated} updated in {name}_" : ["{nbSeen} Google-kontakt sett. {nbAdded} lagt til, {nbUpdated} oppdatert i {name}","{nbSeen} Google-kontakter sett. {nbAdded} lagt til, {nbUpdated} oppdatert i {name}"],
-    "_{total} event successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_::_{total} events successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_" : ["{total} hendelse ble importert inn {name} ({nbAdded} opprettet, {nbUpdated} oppdatert)","{total} hendelser ble importert inn {name} ({nbAdded} opprettet, {nbUpdated} oppdatert)"]
+    "Last Google Drive import job at {date}" : "Siste importjobb for Google Disk den {date}",
+    "Last photo import job at {date}" : "Siste fotoimportjobb den {date}"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

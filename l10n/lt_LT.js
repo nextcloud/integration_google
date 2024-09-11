@@ -47,10 +47,8 @@ OC.L10N.register(
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Jūsų „Google“ diskas yra didesnis, nei jums yra likę laisvos vietos ({formSpace})",
     "Cancel Google Drive import" : "Atsisakyti „Google“ disko importavimo",
     "Photo import background process will begin soon." : "Netrukus prasidės foninis nuotraukų importavimo procesas.",
-    "Last photo import job at {date}" : "Paskutinė nuotraukų importavimo užduotis ties {date}",
     "You can close this page. You will be notified when it finishes." : "Galite užverti šį puslapį. Jums bus pranešta, kai ji užbaigs savo darbą.",
     "Google Drive background import process will begin soon." : "Netrukus prasidės foninis „Google“ disko importavimo procesas.",
-    "Last Google Drive import job at {date}" : "Paskutinė „Google“ disko importavimo užduotis ties {date}",
     "Successfully connected to Google!" : "Sėkmingai prisijungta prie „Google“!",
     "Google connection error:" : "Ryšio su „Google“ klaida:",
     "Google options saved" : "„Google“ parinktys įrašytos",
@@ -67,6 +65,8 @@ OC.L10N.register(
     "Starting importing files in {targetPath} directory" : "Pradedamas failų importavimas į {targetPath} katalogą",
     "Failed to start importing Google Drive" : "Nepavyko pradėti „Google“ disko importavimo",
     "_{amount} photo imported_::_{amount} photos imported_" : ["Importuota {amount} nuotrauka","Importuotos {amount} nuotraukos","Importuota {amount} nuotraukų","Importuota {amount} nuotrauka"],
-    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["Importuotas {amount} failas ({progress}%)","Importuoti {amount} failai ({progress}%)","Importuota {amount} failų ({progress}%)","Importuotas {amount} failas ({progress}%)"]
+    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["Importuotas {amount} failas ({progress}%)","Importuoti {amount} failai ({progress}%)","Importuota {amount} failų ({progress}%)","Importuotas {amount} failas ({progress}%)"],
+    "Last Google Drive import job at {date}" : "Paskutinė „Google“ disko importavimo užduotis ties {date}",
+    "Last photo import job at {date}" : "Paskutinė nuotraukų importavimo užduotis ties {date}"
 },
 "nplurals=4; plural=(n % 10 == 1 && (n % 100 > 19 || n % 100 < 11) ? 0 : (n % 10 >= 2 && n % 10 <=9) && (n % 100 > 19 || n % 100 < 11) ? 1 : n % 1 != 0 ? 2: 3);");

@@ -63,10 +63,8 @@ OC.L10N.register(
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "قوقل درايف خاصّتُك أكبر من المساحة المتبقية لديك ({formSpace})",
     "Cancel Google Drive import" : "إلغاء استيراد قوقل درايف Google Drive",
     "Photo import background process will begin soon." : "عملية استيراد الصور في الخلفية ستبدأ حالاً.",
-    "Last photo import job at {date}" : "آخر مهمة لاستيراد الصور كانت في {date}",
     "You can close this page. You will be notified when it finishes." : "يمكنك إغلاق هذه الصفحة الآن. سيتم إخطارك عند اكتمال المَهَمّة.",
     "Google Drive background import process will begin soon." : "مهمة استيراد قوقل درايف Google Drive في الخلفية ستبدأ حالاً.",
-    "Last Google Drive import job at {date}" : "آخر مهمة استيراد من قوقل درايف كانت في {date}",
     "Successfully connected to Google!" : "تمّ الاتصال بقوقل بنجاحٍ!",
     "Google connection error:" : "خطأ في الاتصال بقوقل:",
     "Google options saved" : "تمّ حفظ خيارات قوقل ",
@@ -84,10 +82,9 @@ OC.L10N.register(
     "Failed to start importing Google Drive" : "تعذّر البدء في استيراد قوقل درايف Google Drive",
     "Choose where to write imported files" : "حدِّد إلى أين ستتم كتابة الملفات المستوردة",
     "Choose where to write imported photos" : "حدِّد إلى أين ستتم كتابة الصور المستوردة",
-    "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : ["> {nbPhotos} صور جوجل (> {formSize})","> {nbPhotos} صورة جوجل (> {formSize})","> {nbPhotos} صور جوجل (> {formSize})","> {nbPhotos} صور جوجل (> {formSize})","> {nbPhotos} صور جوجل (> {formSize})","> {nbPhotos} صور جوجل (> {formSize})"],
     "_{amount} photo imported_::_{amount} photos imported_" : ["تم استيراد {amount} صور","تم استيراد {amount} صورة","تم استيراد {amount} صور","تم استيراد {amount} صور","تم استيراد {amount} صور","تم استيراد {amount} صور"],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} ملفات تم استيرادها ({progress}%)","{amount} ملف تم استيراده ({progress}%)","{amount} ملفات تم استيرادها ({progress}%)","{amount} ملفات تم استيرادها ({progress}%)","{amount} ملفات تم استيرادها ({progress}%)","{amount}  ملفات تم استيرادها ({progress}%)"],
-    "_{nbSeen} Google contact seen. {nbAdded} added, {nbUpdated} updated in {name}_::_{nbSeen} Google contacts seen. {nbAdded} added, {nbUpdated} updated in {name}_" : ["{nbSeen} رؤية جهات اتصال جوجل. تمت إضافة {nb added} وتم تحديث {nbUpdated} في {name}","{nbSeen} رؤية جهة اتصال جوجل. تمت إضافة {nb added} وتم تحديث {nbUpdated} في {name}","{nbSeen} رؤية جهات اتصال جوجل. تمت إضافة {nb added} وتم تحديث {nbUpdated} في {name}","{nbSeen} رؤية جهات اتصال جوجل. تمت إضافة {nb added} وتم تحديث {nbUpdated} في {name}","{nbSeen} رؤية جهات اتصال جوجل. تمت إضافة {nb added} وتم تحديث {nbUpdated} في {name}","{nbSeen} رؤية جهات اتصال جوجل. تمت إضافة {nb added} وتم تحديث {nbUpdated} في {name}"],
-    "_{total} event successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_::_{total} events successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_" : ["تم استيراد {total} أحداث بنجاح في {name} (تم إنشاء {nb added} وتم تحديث {nbUpdated})","تم استيراد {total} حدث بنجاح في {name} (تم إنشاء {nb added} وتم تحديث {nbUpdated})","تم استيراد {total} أحداث بنجاح في {name} (تم إنشاء {nb added} وتم تحديث {nbUpdated})","تم استيراد {total} أحداث بنجاح في {name} (تم إنشاء {nb added} وتم تحديث {nbUpdated})","تم استيراد {total} أحداث بنجاح في {name} (تم إنشاء {nb added} وتم تحديث {nbUpdated})","تم استيراد {total} أحداث بنجاح في {name} (تم إنشاء {nb added} وتم تحديث {nbUpdated})"]
+    "Last Google Drive import job at {date}" : "آخر مهمة استيراد من قوقل درايف كانت في {date}",
+    "Last photo import job at {date}" : "آخر مهمة لاستيراد الصور كانت في {date}"
 },
 "nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;");
