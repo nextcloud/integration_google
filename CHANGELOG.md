@@ -4,12 +4,6 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [3.0.1] - 2024-09-26
-
-### Fixed
-
-- Fix erroneously blacklisted filename characters
-
 ## [3.0.0] - 2024-09-26
 
 ### Breaking changes
@@ -20,6 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### New
 
 - Add support for Nextcloud 30
+- Updated UI components library
 
 ## [2.2.0] - 2024-06-29
 
