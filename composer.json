@@ -14,5 +14,10 @@
         "nextcloud/coding-standard": "^1",
         "psalm/phar": "^5.10.0",
         "nextcloud/ocp": "dev-master"
+    },
+    "config": {
+        "platform": {
+            "php": "8.0.7"
+        }
     }
 }
