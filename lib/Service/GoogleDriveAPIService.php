@@ -334,8 +334,7 @@ class GoogleDriveAPIService {
 							continue;
 						}
 
-						if (isset($fileItem['parents']) && count($fileItem['parents']) > 0
-							&& isset($directoriesById[$fileItem['parents'][0]], $directoriesById[$fileItem['parents'][0]]['node'])) {
+						if (isset($directoriesById[$fileItem['parents'][0]]['node']) && isset($fileItem['parents']) && count($fileItem['parents']) > 0) {
 							$saveFolder = $directoriesById[$fileItem['parents'][0]]['node'];
 						} else {
 							$saveFolder = $rootImportFolder;
