@@ -46,6 +46,7 @@ jobs:
       - name: Install dependencies
         run: |
           composer remove nextcloud/ocp --dev
+          rm composer.lock
           composer i
 
       - name: Install nextcloud/ocp
