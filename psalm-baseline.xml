@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="5.22.2@d768d914152dbbf3486c36398802f74e80cfde48">
+<files psalm-version="5.26.1@d747f6500b38ac4f7dfc5edbcae6e4b637d7add0">
   <file src="lib/Controller/ConfigController.php">
     <DeprecatedMethod>
       <code><![CDATA[getAppValue]]></code>
@@ -149,6 +149,9 @@
       <code><![CDATA[max($lastModifieds)]]></code>
       <code><![CDATA[max($lastModifieds)]]></code>
     </MixedReturnStatement>
+    <PossiblyUndefinedArrayOffset>
+      <code><![CDATA[$e['colorId']]]></code>
+    </PossiblyUndefinedArrayOffset>
     <RedundantCast>
       <code><![CDATA[(int) (abs($rgb1['r'] - $rgb2['r']) + abs($rgb1['g'] - $rgb2['g']) + abs($rgb1['b'] - $rgb2['b']))]]></code>
     </RedundantCast>
@@ -211,8 +214,6 @@
       <code><![CDATA[$group['groupType']]]></code>
       <code><![CDATA[$group['memberCount']]]></code>
       <code><![CDATA[$group['resourceName']]]></code>
-      <code><![CDATA[$membership['contactGroupMembership']]]></code>
-      <code><![CDATA[$membership['contactGroupMembership']['contactGroupResourceName']]]></code>
       <code><![CDATA[$nick['value']]]></code>
       <code><![CDATA[$ph['type']]]></code>
       <code><![CDATA[$ph['value']]]></code>
@@ -253,7 +254,6 @@
       <code><![CDATA[$k]]></code>
       <code><![CDATA[$key]]></code>
       <code><![CDATA[$memberCount]]></code>
-      <code><![CDATA[$membership]]></code>
       <code><![CDATA[$month]]></code>
       <code><![CDATA[$month]]></code>
       <code><![CDATA[$nick]]></code>
@@ -341,10 +341,6 @@
     </UnusedVariable>
   </file>
   <file src="lib/Service/GoogleDriveAPIService.php">
-    <DocblockTypeContradiction>
-      <code><![CDATA[$resource === false]]></code>
-      <code><![CDATA[$stream === false]]></code>
-    </DocblockTypeContradiction>
     <InvalidArgument>
       <code><![CDATA[$alreadyImported + $nbDownloaded]]></code>
       <code><![CDATA[$alreadyImportedSize + $downloadedSize]]></code>
@@ -398,6 +394,8 @@
       <code><![CDATA[$fileItem['id']]]></code>
       <code><![CDATA[$fileItem['modifiedTime']]]></code>
       <code><![CDATA[$fileItem['ownedByMe']]]></code>
+      <code><![CDATA[$fileItem['parents']]]></code>
+      <code><![CDATA[$fileItem['parents'][0]]]></code>
       <code><![CDATA[$fileItem['parents'][0]]]></code>
       <code><![CDATA[$file['ownedByMe']]]></code>
       <code><![CDATA[$file['size']]]></code>
@@ -407,7 +405,6 @@
     </MixedArrayAssignment>
     <MixedArrayOffset>
       <code><![CDATA[$directoriesById[$dir['id']]]]></code>
-      <code><![CDATA[$directoriesById[$fileItem['parents'][0]]]]></code>
       <code><![CDATA[$directoriesById[$fileItem['parents'][0]]]]></code>
       <code><![CDATA[$directoriesById[$fileItem['parents'][0]]]]></code>
       <code><![CDATA[$nbPerName[$fileItem['name']]]]></code>
@@ -466,9 +463,6 @@
     <ArgumentTypeCoercion>
       <code><![CDATA[$albumFolder]]></code>
     </ArgumentTypeCoercion>
-    <DocblockTypeContradiction>
-      <code><![CDATA[$resource === false]]></code>
-    </DocblockTypeContradiction>
     <InvalidArgument>
       <code><![CDATA[$alreadyImported + $nbDownloaded]]></code>
       <code><![CDATA[$alreadyImported + $nbDownloaded]]></code>
