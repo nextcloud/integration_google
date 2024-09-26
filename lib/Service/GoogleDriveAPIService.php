@@ -19,7 +19,6 @@ use OCA\Google\BackgroundJob\ImportDriveJob;
 use OCP\BackgroundJob\IJobList;
 use OCP\Files\File;
 use OCP\Files\Folder;
-use OCP\Files\ForbiddenException;
 use OCP\Files\InvalidPathException;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;

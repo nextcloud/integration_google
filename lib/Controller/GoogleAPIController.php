@@ -123,7 +123,7 @@ class GoogleAPIController extends Controller {
 		if ($this->accessToken === '' || $this->userId === null) {
 			return new DataResponse([], 400);
 		}
-		/** @var array{error?:string} $result */
+		/** @var array{error?:array{id: string}} $result */
 		$result = $this->googleCalendarAPIService->getCalendarList($this->userId);
 		if (isset($result['error'])) {
 			$response = new DataResponse($result['error'], 401);
@@ -131,7 +131,6 @@ class GoogleAPIController extends Controller {
 			foreach ($result as $key => $cal) {
 				$isJobRegistered = $this->googleCalendarAPIService->
 					isJobRegisteredForCalendar($this->userId, $cal["id"]);
-				$calId = $cal["id"];
 				$result[$key]["isJobRegistered"] = $isJobRegistered;
 			}
 			$response = new DataResponse($result);
@@ -227,12 +226,12 @@ class GoogleAPIController extends Controller {
 	 * @return DataResponse
 	 */
 	public function registerSyncCalendar(string $calId, string $calName, ?string $color = null): DataResponse {
-		if ($this->accessToken === '') {
+		if ($this->accessToken === '' || $this->userId === null) {
 			return new DataResponse('', 400);
 		}
-		$result = $this->googleCalendarAPIService->registerSyncCalendar(
+		$this->googleCalendarAPIService->registerSyncCalendar(
 			$this->userId, $calId, $calName, $color);
-		$response = new DataResponse($result, 200);
+		$response = new DataResponse("OK", 200);
 		return $response;
 	}
 
@@ -245,14 +244,12 @@ class GoogleAPIController extends Controller {
 	 * @return DataResponse
 	 */
 	public function unregisterSyncCalendar(string $calId): DataResponse {
-
-		$accessToken = $this->accessToken;
-		$userId = $this->userId;
-
-
-		$result = $this->googleCalendarAPIService->unregisterSyncCalendar(
+		if ($this->accessToken === '' || $this->userId === null) {
+			return new DataResponse('', 400);
+		}
+		$this->googleCalendarAPIService->unregisterSyncCalendar(
 			$this->userId, $calId);
-		$response = new DataResponse($result, 200);
+		$response = new DataResponse("OK", 200);
 		return $response;
 	}
 

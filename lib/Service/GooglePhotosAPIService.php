@@ -406,7 +406,7 @@ class GooglePhotosAPIService {
 				$stat = $savedFile->stat();
 				return intval($stat['size'] ?? 0);
 			} else {
-				$this->logger->warning('Google API error downloading photo ' . '<redacted>' . ' : ' . $res['error'], ['app' => Application::APP_ID]);
+				$this->logger->warning('Google API error downloading photo ' . '<redacted>' . ' : ' . (string)$res['error'], ['app' => Application::APP_ID]);
 				if ($savedFile->isDeletable()) {
 					$savedFile->unlock(ILockingProvider::LOCK_EXCLUSIVE);
 					$savedFile->delete();

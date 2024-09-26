@@ -278,12 +278,16 @@ class GoogleAPIService {
 
 	/**
 	 * Make a simple authenticated HTTP request to download a file
+	 *
 	 * @param string $userId the user from which the request is coming
 	 * @param string $url The path to reach
 	 * @param resource $resource
 	 * @param array $params Query parameters (key/val pairs)
 	 * @param string $method HTTP query method
-	 * @return string[]
+	 *
+	 * @return (mixed|string|true)[]
+	 *
+	 * @psalm-return array{error?: mixed|string, success?: true}
 	 */
 	public function simpleDownload(string $userId, string $url, $resource, array $params = [], string $method = 'GET'): array {
 		$this->checkTokenExpiration($userId);
