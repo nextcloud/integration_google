@@ -9,7 +9,7 @@ use OCA\Google\Service\GoogleCalendarAPIService;
 
 class ImportCalendarJob extends TimedJob {
 
-	private $service;
+	private GoogleCalendarAPIService $service;
 
 	public function __construct(ITimeFactory $timeFactory, GoogleCalendarAPIService $service) {
 		parent::__construct($timeFactory);
@@ -17,15 +17,22 @@ class ImportCalendarJob extends TimedJob {
 		parent::setInterval(1);
 	}
 
-	protected function run($arguments): void {
-		echo(date("Y-m-d H:i:s") . ' Importing ' . $arguments['cal_name'] . '...');
+	/**
+	 * @param array{user_id: string, cal_id: string, cal_name: string,color: string} $argument
+	 */
+	protected function run($argument): void {
+		echo(date("Y-m-d H:i:s") . ' Importing ' . $argument['cal_name'] . '...');
 		$result = $this->service->safeImportCalendar(
-			$arguments['user_id'],
-			$arguments['cal_id'],
-			$arguments['cal_name'],
-			$arguments['color'],
+			$argument['user_id'],
+			$argument['cal_id'],
+			$argument['cal_name'],
+			$argument['color'],
 		);
-		echo(' done. Added ' . $result['nbAdded'] . PHP_EOL);
+		if (isset($result['error'])) {
+			echo(' error: ' . $result['error'] . PHP_EOL);
+		} else {
+			echo(' done. Added ' . $result['nbAdded'] . PHP_EOL);
+		}
 	}
 
 }

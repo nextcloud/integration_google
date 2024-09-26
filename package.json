@@ -1,6 +1,6 @@
 {
 	"name": "google_synchronization",
-	"version": "2.2.0",
+	"version": "3.0.0",
 	"description": "A Nextcloud app to continuously synchronize Google Calendar",
 	"main": "index.js",
 	"directories": {
@@ -43,17 +43,17 @@
 		"@nextcloud/l10n": "^1.4.0",
 		"@nextcloud/moment": "^1.1.1",
 		"@nextcloud/router": "^2.0.0",
-		"@nextcloud/vue": "^7.2.0",
+		"@nextcloud/vue": "8.x",
 		"vue": "^2.6.14",
 		"vue-material-design-icons": "^5.1.2"
 	},
 	"devDependencies": {
 		"@nextcloud/babel-config": "^1.0.0",
 		"@nextcloud/browserslist-config": "^2.2.0",
-		"@nextcloud/eslint-config": "^8.0.0",
-		"@nextcloud/stylelint-config": "^2.1.2",
-		"@nextcloud/webpack-vue-config": "^5.2.1",
-		"eslint-webpack-plugin": "^3.2.0",
-		"stylelint-webpack-plugin": "^3.3.0"
+		"@nextcloud/eslint-config": "8.x",
+		"@nextcloud/stylelint-config": "^3.x",
+		"@nextcloud/webpack-vue-config": "6.x",
+		"eslint-webpack-plugin": "4.x",
+		"stylelint-webpack-plugin": "5.x"
 	}
 }

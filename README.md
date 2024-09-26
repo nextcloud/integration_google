@@ -74,6 +74,7 @@ This also allows me to decide for myself if my releases are major, minor, or pat
 
 | Google Synchronization version | Google Integration version |
 | ------------------------------ | -------------------------- |
+| 3.0.0                          | 3.1.0                      |
 | 2.2.0                          | 2.2.0                      |
 | 2.1.1                          | 2.1.0                      |
 | 2.1.0-2-nightly                | 2.1.0                      |
@@ -101,6 +102,7 @@ If there is a strong business case for any development of this app, we will cons
 1. Install Node dependencies (install [Node.js](https://nodejs.org/en/), run `npm install`)
 1. Build JavaScript bundle: `npm run dev` or `npm run watch`
 1. Enable the app. Go to the apps page in your development version of Nextcloud, find "Google Synchronization", and click "Enable"
+<!-- sudo docker run --rm -p 8080:80 -v /home/marcel/code/google_synchronization:/var/www/html/apps/google_synchronization:ro ghcr.io/juliushaertl/nextcloud-dev-php81:latest -->
 
 ### Logging
 

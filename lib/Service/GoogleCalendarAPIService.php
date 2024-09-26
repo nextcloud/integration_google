@@ -11,16 +11,16 @@
 
 namespace OCA\Google\Service;
 
-use Ds\Set;
 use DateTime;
 use DateTimeZone;
+use Ds\Set;
 use Exception;
 use Generator;
 use OCA\DAV\CalDAV\CalDavBackend;
 use OCA\Google\AppInfo\Application;
-use OCP\IL10N;
-use OCP\BackgroundJob\IJobList;
 use OCA\Google\BackgroundJob\ImportCalendarJob;
+use OCP\BackgroundJob\IJobList;
+use OCP\IL10N;
 
 use Ortic\ColorConverter\Color;
 use Ortic\ColorConverter\Colors\Named;
@@ -86,7 +86,6 @@ class GoogleCalendarAPIService {
 		];
 		// init
 		$closestColor = 'black';
-		/** @var Color $color */
 		$black = Color::fromString(Named::CSS_COLORS['black']);
 		$rgbBlack = [
 			'r' => $black->getRed(),
@@ -96,7 +95,6 @@ class GoogleCalendarAPIService {
 		$closestDiff = $this->colorDiff($rbgColor, $rgbBlack);
 
 		foreach (Named::CSS_COLORS as $name => $hex) {
-			/** @var Color $color */
 			$c = Color::fromString($hex);
 			$rgb = [
 				'r' => $c->getRed(),
@@ -170,7 +168,7 @@ class GoogleCalendarAPIService {
 	 * @param string $calId
 	 * @param string $calName
 	 * @param ?string $color
-	 * @return array
+	 * @return array{error: string}|array{nbAdded: int, nbUpdated: int, calName: string}
 	 */
 	public function safeImportCalendar(string $userId, string $calId, string $calName, ?string $color = null): array {
 		$startTime = microtime(true);
@@ -201,7 +199,7 @@ class GoogleCalendarAPIService {
 	 * @param string $calId
 	 * @param string $calName
 	 * @param ?string $color
-	 * @return array
+	 * @return array{nbAdded: int, nbUpdated: int, calName: string}
 	 */
 	public function importCalendar(string $userId, string $calId, string $calName, ?string $color = null): array {
 		$params = [];
@@ -216,13 +214,16 @@ class GoogleCalendarAPIService {
 			$ncCalId = $this->caldavBackend->createCalendar('principals/users/' . $userId, $newCalName, $params);
 		}
 
+		/** @var Set<string> $unseenURIs */
 		$unseenURIs = new Set();
+		/** @var array{uri: string} $e */
 		foreach ($this->caldavBackend->getCalendarObjects($ncCalId) as $e) {
 			$unseenURIs->add($e['uri']);
 		}
 
 		// get color list
 		$eventColors = [];
+		/** @type array{error: string}|array{event: array} $colors */
 		$colors = $this->googleApiService->request($userId, 'calendar/v3/colors');
 		if (!isset($colors['error']) && isset($colors['event'])) {
 			$eventColors = $colors['event'];
@@ -385,7 +386,7 @@ class GoogleCalendarAPIService {
 
 		$eventGeneratorReturn = $events->getReturn();
 		if (isset($eventGeneratorReturn['error'])) {
-			return $eventGeneratorReturn;
+			/* return $eventGeneratorReturn; */
 		}
 		return [
 			'nbAdded' => $nbAdded,
@@ -405,7 +406,7 @@ class GoogleCalendarAPIService {
 	 * Check if a background job is registered.
 	 * @param string $userId The user id of the job.
 	 * @param string $calId The calendar id of the job.
-	 * @return Whether the job with the given parameters is registered.
+	 * @return bool Whether the job with the given parameters is registered.
 	 */
 	public function isJobRegisteredForCalendar(string $userId, string $calId): bool {
 		foreach ($this->jobList->getJobsIterator(ImportCalendarJob::class, null, 0) as $job) {
@@ -426,7 +427,7 @@ class GoogleCalendarAPIService {
 	 * @param string $calId
 	 * @param string $calName
 	 * @param ?string $color
-	 * @return array
+	 * @return void
 	 */
 	public function registerSyncCalendar(string $userId, string $calId, string $calName, ?string $color = null): void {
 		$argument = [
@@ -437,7 +438,6 @@ class GoogleCalendarAPIService {
 		];
 
 		foreach ($this->jobList->getJobsIterator(ImportCalendarJob::class, null, 0) as $job) {
-			$id = $job->getId();
 			$args = $job->getArgument();
 
 			if ($args["user_id"] == $argument["user_id"] && $args["cal_id"] == $argument["cal_id"]) {
@@ -456,12 +456,12 @@ class GoogleCalendarAPIService {
 	 * @param string $calId
 	 * @param string $calName
 	 * @param ?string $color
-	 * @return array
+	 * @return void
 	 */
 	public function unregisterSyncCalendar(string $userId, string $calId): void {
 
 		foreach ($this->jobList->getJobsIterator(ImportCalendarJob::class, null, 0) as $job) {
-			$id = $job->getId();
+			/** @var array{user_id: string, cal_id: string} $args */
 			$args = $job->getArgument();
 
 			if ($args["user_id"] == $userId && $args["cal_id"] == $calId) {

@@ -19,7 +19,6 @@ use OCA\Google\BackgroundJob\ImportDriveJob;
 use OCP\BackgroundJob\IJobList;
 use OCP\Files\File;
 use OCP\Files\Folder;
-use OCP\Files\ForbiddenException;
 use OCP\Files\InvalidPathException;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
@@ -159,6 +158,7 @@ class GoogleDriveAPIService {
 			$lastJobStart = $this->config->getUserValue($userId, Application::APP_ID, 'drive_import_job_last_start');
 			if ($lastJobStart !== '' && ($nowTs - intval($lastJobStart) < Application::IMPORT_JOB_TIMEOUT)) {
 				// last job has started less than an hour ago => we consider it can still be running
+				$this->jobList->add(ImportDriveJob::class, ['user_id' => $userId]);
 				return;
 			}
 		}
@@ -333,8 +333,7 @@ class GoogleDriveAPIService {
 							continue;
 						}
 
-						if (isset($fileItem['parents']) && count($fileItem['parents']) > 0
-							&& isset($directoriesById[$fileItem['parents'][0]], $directoriesById[$fileItem['parents'][0]]['node'])) {
+						if (isset($directoriesById[$fileItem['parents'][0]]['node']) && isset($fileItem['parents']) && count($fileItem['parents']) > 0) {
 							$saveFolder = $directoriesById[$fileItem['parents'][0]]['node'];
 						} else {
 							$saveFolder = $rootImportFolder;
@@ -629,7 +628,7 @@ class GoogleDriveAPIService {
 	 * @return string name of the file to be saved
 	 */
 	private function getFileName(array $fileItem, string $userId, bool $hasNameConflict): string {
-		$fileName = preg_replace('/\\n/', '', preg_replace('/\//', '-', $fileItem['name'] ?? 'Untitled'));
+		$fileName = preg_replace('/\/|\n|[^._A-Za-z0-9-]/', '-', $fileItem['name'] ?? 'Untitled');
 
 		if (in_array($fileItem['mimeType'], array_values(self::DOCUMENT_MIME_TYPES))) {
 			$documentFormat = $this->getUserDocumentFormat($userId);

@@ -491,7 +491,7 @@ export default {
 					const ssoWindow = window.open(
 						requestUrl,
 						t('google_synchronization', 'Sign in with Google'),
-						'toolbar=no, menubar=no, width=600, height=700'
+						'toolbar=no, menubar=no, width=600, height=700',
 					)
 					ssoWindow.focus()
 					window.addEventListener('message', (event) => {
@@ -586,7 +586,7 @@ export default {
 				.catch((error) => {
 					showServerError(
 						error,
-						t('google_synchronization', 'Failed to get number of Google photos')
+						t('google_synchronization', 'Failed to get number of Google photos'),
 					)
 				})
 				.then(() => {
@@ -650,8 +650,8 @@ export default {
 							'{nbSeen} Google contact seen. {nbAdded} added, {nbUpdated} updated in {name}',
 							'{nbSeen} Google contacts seen. {nbAdded} added, {nbUpdated} updated in {name}',
 							nbSeen,
-							{ nbAdded, nbSeen, nbUpdated, name: this.selectedAddressBookName }
-						)
+							{ nbAdded, nbSeen, nbUpdated, name: this.selectedAddressBookName },
+						),
 					)
 					this.showAddressBooks = false
 				})
@@ -688,8 +688,8 @@ export default {
 							'{total} event successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)',
 							'{total} events successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)',
 							total,
-							{ total, nbAdded, nbUpdated, name: calName }
-						)
+							{ total, nbAdded, nbUpdated, name: calName },
+						),
 					)
 				})
 				.catch((error) => {
@@ -722,7 +722,7 @@ export default {
 				.then((_response) => {
 					cal.isJobRegistered = desiredState
 					showSuccess(
-						this.n('google_synchronization', successMessage, successMessage, 1)
+						this.n('google_synchronization', successMessage, successMessage, 1),
 					)
 				})
 				.catch((error) => {
@@ -746,7 +746,7 @@ export default {
 				.then((response) => {
 					const targetPath = response.data.targetPath
 					showSuccess(
-						t('google_synchronization', 'Starting importing photos in {targetPath} directory', { targetPath })
+						t('google_synchronization', 'Starting importing photos in {targetPath} directory', { targetPath }),
 					)
 					this.getPhotoImportValues(true)
 				})
@@ -812,7 +812,7 @@ export default {
 				.then((response) => {
 					const targetPath = response.data.targetPath
 					showSuccess(
-						t('google_synchronization', 'Starting importing files in {targetPath} directory', { targetPath })
+						t('google_synchronization', 'Starting importing files in {targetPath} directory', { targetPath }),
 					)
 					this.getDriveImportValues(true)
 				})
@@ -874,7 +874,7 @@ export default {
 				},
 				false,
 				'httpd/unix-directory',
-				true
+				true,
 			)
 		},
 		onPhotoOutputChange() {
@@ -889,7 +889,7 @@ export default {
 				},
 				false,
 				'httpd/unix-directory',
-				true
+				true,
 			)
 		},
 	},
