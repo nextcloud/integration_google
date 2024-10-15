@@ -22,7 +22,7 @@ OC.L10N.register(
     "Go to \"APIs & Services\" => \"Credentials\" and click on \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\"." : "انتقل إلى \"APIs & Services\" => \"Credentials\" ثم انقُر على \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\".",
     "Set the \"Application type\" to \"Web application\" and give a name to the application." : "في خانة \"نوع التطبيق\" Application type إختَر \"تطبيق الويب\" Web application و قُم بتسمية التطبيق.",
     "Make sure you set one \"Authorized redirect URI\" to" : "تأكّد من تعيين خانة\"عنوان URI معتمد لإعادة التوجيه\" Authorized redirect URI إلى",
-    "Put the \"Client ID\" and \"Client secret\" below." : "أدخِل \"مُعرّف العميل\" Client ID و \"سر العميل\" Client secret أدناه. ",
+    "Put the \"Client ID\" and \"Client secret\" below." : "أدخِل \"معرف العميل\" Client ID و \"كلمة سر العميل\" Client secret أدناه. ",
     "Finally, go to \"APIs & Services\" => \"Library\" and add the following APIs: \"Google Drive API\", \"Google Calendar API\", \"People API\" and \"Photos Library API\"." : "أخيرًا ، إنتقِل إلى APIs & Services\" => \"Library\"، و أضف واجهات برمجة التطبيقات التالية: قوقل درايف \"Google Drive API\" ، و تقويم قوقل \"Google Calendar API\"، و الأشخاص \"People API\" ، و مكتبة الصور \"Photos Library API\".",
     "Your Nextcloud users will then see a \"Connect to Google\" button in their personal settings." : "سوف يرى مستخدمو نكست كلاود عندك بعد ذلك زر \"الاتصال بقوقل\" Connect to Google في إعداداتهم الشخصية.",
     "Client ID" : "مُعرِّف العميل Client ID",
