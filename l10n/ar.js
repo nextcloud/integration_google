@@ -14,7 +14,7 @@ OC.L10N.register(
     "Private event" : "حَدَثُ خاصُّ",
     "Connected accounts" : "حسابات مترابطة",
     "Data migration" : "ترحيل البيانات",
-    "Google integration" : "مُكاملة قوقل",
+    "Google integration" : "التكامل مع قوقل",
     "Import Google data into Nextcloud" : "إستيراد بيانات من قوقل إلى نكست كلاود",
     "Google integration allows you to automatically migrate your Google calendars, contacts, photos and files into Nextcloud." : "تُتيح لك المُكاملة مع قوقل ترحيل تقاويم قوقل و جهات الاتصال و الصور و الملفات تلقائيًا إلى نكست كلاود.",
     "If you want to allow your Nextcloud users to authenticate to Google, create an OAuth application in your Google settings." : "إذا كنت تريد السماح لمستخدمي نكست كلاود لديك بالمصادقة على هويّاتهم من خلال قوقل، فيجب أن تُنشِئ تطبيق OAuth في إعدادات قوقل.",
