@@ -13,7 +13,7 @@ OC.L10N.register(
     "Data migration" : "数据迁移",
     "Google integration" : "Google 整合",
     "Import Google data into Nextcloud" : "将 Google 数据导入 Nextcloud",
-    "If you want to allow your Nextcloud users to authenticate to Google, create an OAuth application in your Google settings." : "如果你想让你的Nextcloud用户进行Google账户验证，在Google设置中创建一个OAuth应用程序。",
+    "If you want to allow your Nextcloud users to authenticate to Google, create an OAuth application in your Google settings." : "如果你想允许你的 Nextcloud 用户进行 Google 验证，在 Google 设置中创建一个 OAuth 应用程序。",
     "Google API settings" : "Google API 设置",
     "Go to \"APIs & Services\" => \"Credentials\" and click on \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\"." : "前往 \"APIs & Services\" => \"Credentials\" 然后点击 \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\"。",
     "Set the \"Application type\" to \"Web application\" and give a name to the application." : "将“应用程序类型”设置为“Web应用程序”，并为应用程序指定一个名称。 ",
