@@ -9,7 +9,7 @@
     "Private event" : "私人活动",
     "Connected accounts" : "关联账号",
     "Data migration" : "数据迁移",
-    "Google integration" : "Google 整合",
+    "Google integration" : "Google 集成",
     "Import Google data into Nextcloud" : "将 Google 数据导入 Nextcloud",
     "If you want to allow your Nextcloud users to authenticate to Google, create an OAuth application in your Google settings." : "如果你想允许你的 Nextcloud 用户进行 Google 验证，在 Google 设置中创建一个 OAuth 应用程序。",
     "Google API settings" : "Google API 设置",
