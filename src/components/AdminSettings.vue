@@ -74,6 +74,7 @@ import axios from '@nextcloud/axios'
 import { delay } from '../utils.js'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
+import {confirmPassword} from '@nextcloud/password-confirmation'
 
 export default {
 	name: 'AdminSettings',
@@ -105,7 +106,8 @@ export default {
 		},
 		onInput() {
 			const that = this
-			delay(() => {
+			delay(async() => {
+        await confirmPassword()
 				that.saveOptions({
 					client_id: this.state.client_id,
 					client_secret: this.state.client_secret,
