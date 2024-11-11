@@ -16,6 +16,7 @@ use OCA\Google\Service\GoogleCalendarAPIService;
 use OCA\Google\Service\GoogleContactsAPIService;
 use OCA\Google\Service\GoogleDriveAPIService;
 use OCA\Google\Service\GooglePhotosAPIService;
+use OCA\Google\Service\SecretService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IConfig;
@@ -37,10 +38,11 @@ class GoogleAPIController extends Controller {
 		private GoogleContactsAPIService $googleContactsAPIService,
 		private GoogleDriveAPIService $googleDriveAPIService,
 		private GoogleCalendarAPIService $googleCalendarAPIService,
-		private ?string $userId
+		private ?string $userId,
+		private SecretService $secretService,
 	) {
 		parent::__construct($appName, $request);
-		$this->accessToken = $this->config->getUserValue($this->userId, Application::APP_ID, 'token');
+		$this->accessToken = $this->userId !== null ? $this->secretService->getEncryptedUserValue($this->userId, 'token') : '';
 	}
 
 	/**

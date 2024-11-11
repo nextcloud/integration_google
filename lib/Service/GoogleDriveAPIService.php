@@ -51,12 +51,6 @@ class GoogleDriveAPIService {
 		private UserScopeService $userScopeService,
 		private GoogleAPIService $googleApiService
 	) {
-		$this->logger = $logger;
-		$this->config = $config;
-		$this->root = $root;
-		$this->jobList = $jobList;
-		$this->googleApiService = $googleApiService;
-		$this->userScopeService = $userScopeService;
 	}
 
 	/**

@@ -5,6 +5,7 @@ namespace OCA\Google\Settings;
 use OC\User\NoUserException;
 use OCA\Google\AppInfo\Application;
 use OCA\Google\Service\GoogleAPIService;
+use OCA\Google\Service\SecretService;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Services\IInitialState;
 use OCP\Files\IRootFolder;
@@ -22,7 +23,8 @@ class Personal implements ISettings {
 		private IUserManager $userManager,
 		private IInitialState $initialStateService,
 		private GoogleAPIService $googleAPIService,
-		private ?string $userId
+		private ?string $userId,
+		private SecretService $secretService,
 	) {
 	}
 
@@ -49,8 +51,8 @@ class Personal implements ISettings {
 		}
 
 		// for OAuth
-		$clientID = $this->config->getAppValue(Application::APP_ID, 'client_id');
-		$clientSecret = $this->config->getAppValue(Application::APP_ID, 'client_secret') !== '';
+		$clientID = $this->secretService->getEncryptedAppValue('client_id');
+		$clientSecret = $this->secretService->getEncryptedAppValue('client_secret') !== '';
 		$usePopup = $this->config->getAppValue(Application::APP_ID, 'use_popup', '0');
 
 		// get free space
@@ -59,7 +61,7 @@ class Personal implements ISettings {
 		$user = $this->userManager->get($this->userId);
 
 		// make a request to potentially refresh the token before the settings page is loaded
-		$accessToken = $this->config->getUserValue($this->userId, Application::APP_ID, 'token');
+		$accessToken = $this->secretService->getEncryptedUserValue($this->userId, 'token');
 		if ($accessToken) {
 			$this->googleAPIService->request($this->userId, 'oauth2/v1/userinfo', ['alt' => 'json']);
 		}

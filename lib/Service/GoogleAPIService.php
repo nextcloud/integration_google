@@ -38,7 +38,8 @@ class GoogleAPIService {
 		private IL10N $l10n,
 		private IConfig $config,
 		private INotificationManager $notificationManager,
-		IClientService $clientService
+		IClientService $clientService,
+		private SecretService $secretService,
 	) {
 		$this->client = $clientService->newClient();
 	}
@@ -90,7 +91,7 @@ class GoogleAPIService {
 		string $method = 'GET', ?string $baseUrl = null
 	): array {
 		$this->checkTokenExpiration($userId);
-		$accessToken = $this->config->getUserValue($userId, Application::APP_ID, 'token');
+		$accessToken = $this->secretService->getEncryptedUserValue($userId, 'token');
 		try {
 			$url = $baseUrl ?: 'https://www.googleapis.com/';
 			$url = $url . $endPoint;
@@ -227,7 +228,7 @@ class GoogleAPIService {
 	 */
 	public function simpleRequest(string $userId, string $url, array $params = [], string $method = 'GET'): array {
 		$this->checkTokenExpiration($userId);
-		$accessToken = $this->config->getUserValue($userId, Application::APP_ID, 'token');
+		$accessToken = $this->secretService->getEncryptedUserValue($userId, 'token');
 		try {
 			$options = [
 				'timeout' => 0,
@@ -291,7 +292,7 @@ class GoogleAPIService {
 	 */
 	public function simpleDownload(string $userId, string $url, $resource, array $params = [], string $method = 'GET'): array {
 		$this->checkTokenExpiration($userId);
-		$accessToken = $this->config->getUserValue($userId, Application::APP_ID, 'token');
+		$accessToken = $this->secretService->getEncryptedUserValue($userId, 'token');
 		try {
 			$options = [
 				// does not work with sink if SSE is enabled
@@ -354,7 +355,7 @@ class GoogleAPIService {
 	}
 
 	private function checkTokenExpiration(string $userId): void {
-		$refreshToken = $this->config->getUserValue($userId, Application::APP_ID, 'refresh_token');
+		$refreshToken = $this->secretService->getEncryptedUserValue($userId, 'refresh_token');
 		$expireAt = $this->config->getUserValue($userId, Application::APP_ID, 'token_expires_at');
 		if ($refreshToken !== '' && $expireAt !== '') {
 			$nowTs = (new DateTime())->getTimestamp();
@@ -368,9 +369,9 @@ class GoogleAPIService {
 
 	public function refreshToken(string $userId): array {
 		$this->logger->debug('Trying to REFRESH the access token', ['app' => Application::APP_ID]);
-		$refreshToken = $this->config->getUserValue($userId, Application::APP_ID, 'refresh_token');
-		$clientID = $this->config->getAppValue(Application::APP_ID, 'client_id');
-		$clientSecret = $this->config->getAppValue(Application::APP_ID, 'client_secret');
+		$refreshToken = $this->secretService->getEncryptedUserValue($userId, 'refresh_token');
+		$clientID = $this->secretService->getEncryptedAppValue('client_id');
+		$clientSecret = $this->secretService->getEncryptedAppValue('client_secret');
 		$result = $this->requestOAuthAccessToken([
 			'client_id' => $clientID,
 			'client_secret' => $clientSecret,
@@ -380,7 +381,7 @@ class GoogleAPIService {
 
 		if (isset($result['access_token'])) {
 			$this->logger->debug('Google access token successfully refreshed', ['app' => Application::APP_ID]);
-			$this->config->setUserValue($userId, Application::APP_ID, 'token', $result['access_token']);
+			$this->secretService->setEncryptedUserValue($userId, 'token', $result['access_token']);
 			if (isset($result['expires_in'])) {
 				$nowTs = (new DateTime())->getTimestamp();
 				$expiresAt = $nowTs + (int) $result['expires_in'];
