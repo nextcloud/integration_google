@@ -19,7 +19,6 @@ use OCA\Google\BackgroundJob\ImportDriveJob;
 use OCP\BackgroundJob\IJobList;
 use OCP\Files\File;
 use OCP\Files\Folder;
-use OCP\Files\ForbiddenException;
 use OCP\Files\InvalidPathException;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
@@ -52,12 +51,6 @@ class GoogleDriveAPIService {
 		private UserScopeService $userScopeService,
 		private GoogleAPIService $googleApiService
 	) {
-		$this->logger = $logger;
-		$this->config = $config;
-		$this->root = $root;
-		$this->jobList = $jobList;
-		$this->googleApiService = $googleApiService;
-		$this->userScopeService = $userScopeService;
 	}
 
 	/**
@@ -524,10 +517,10 @@ class GoogleDriveAPIService {
 
 		$stream = $logFile->fopen('a');
 		if ($stream === false) {
-            $this->logger->error('Could not open log file');
-            return;
-        }
-        fwrite($stream, '1. Failed to download file: ' . $fileName . PHP_EOL);
+			$this->logger->error('Could not open log file');
+			return;
+		}
+		fwrite($stream, '1. Failed to download file: ' . $fileName . PHP_EOL);
 		fclose($stream);
 	}
 

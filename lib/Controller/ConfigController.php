@@ -15,6 +15,7 @@ use DateTime;
 use Exception;
 use OCA\Google\AppInfo\Application;
 use OCA\Google\Service\GoogleAPIService;
+use OCA\Google\Service\SecretService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
@@ -27,6 +28,7 @@ use OCP\IConfig;
 use OCP\IL10N;
 use OCP\IRequest;
 use OCP\IURLGenerator;
+use OCP\Security\ICrypto;
 use Throwable;
 
 class ConfigController extends Controller {
@@ -46,7 +48,9 @@ class ConfigController extends Controller {
 		private IContactManager $contactsManager,
 		private IInitialState $initialStateService,
 		private GoogleAPIService $googleApiService,
-		private ?string $userId
+		private ?string $userId,
+		private ICrypto	$crypto,
+		private SecretService $secretService,
 	) {
 		parent::__construct($appName, $request);
 	}
@@ -74,7 +78,7 @@ class ConfigController extends Controller {
 			$this->config->deleteUserValue($this->userId, Application::APP_ID, 'token_expires_at');
 			$this->config->deleteUserValue($this->userId, Application::APP_ID, 'token');
 			$result['user_name'] = '';
-		}else{
+		} else {
 			if (isset($values['drive_output_dir'])) {
 				$root = \OCP\Server::get(\OCP\Files\IRootFolder::class);
 				$userRoot = $root->getUserFolder($this->userId);
@@ -90,8 +94,15 @@ class ConfigController extends Controller {
 	 * @param array<string,string> $values key/value pairs to store in app config
 	 * @return DataResponse
 	 */
+	#[Http\Attribute\PasswordConfirmationRequired]
 	public function setAdminConfig(array $values): DataResponse {
 		foreach ($values as $key => $value) {
+			if ($key === 'client_secret' && $value === 'dummySecret') {
+				continue;
+			}
+			if ($key === 'client_secret' || $key === 'client_id') {
+				$value = $this->crypto->encrypt($value);
+			}
 			$this->config->setAppValue(Application::APP_ID, $key, $value);
 		}
 		return new DataResponse(1);
@@ -156,8 +167,8 @@ class ConfigController extends Controller {
 		}
 
 		$configState = $this->config->getUserValue($this->userId, Application::APP_ID, 'oauth_state');
-		$clientID = $this->config->getAppValue(Application::APP_ID, 'client_id');
-		$clientSecret = $this->config->getAppValue(Application::APP_ID, 'client_secret');
+		$clientID = $this->secretService->getEncryptedAppValue('client_id');
+		$clientSecret = $this->secretService->getEncryptedAppValue('client_secret');
 
 		// Store given scopes in space-separated string
 		$scopes = explode(' ', $scope);
@@ -192,8 +203,8 @@ class ConfigController extends Controller {
 					$expiresAt = $nowTs + (int) $result['expires_in'];
 					$this->config->setUserValue($this->userId, Application::APP_ID, 'token_expires_at', (string)$expiresAt);
 				}
-				$this->config->setUserValue($this->userId, Application::APP_ID, 'token', $accessToken);
-				$this->config->setUserValue($this->userId, Application::APP_ID, 'refresh_token', $refreshToken);
+				$this->secretService->setEncryptedUserValue($this->userId, 'token', $accessToken);
+				$this->secretService->setEncryptedUserValue($this->userId, 'refresh_token', $refreshToken);
 				$username = $this->storeUserInfo();
 				$usePopup = $this->config->getAppValue(Application::APP_ID, 'use_popup', '0') === '1';
 				if ($usePopup) {
