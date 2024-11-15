@@ -129,17 +129,16 @@ export default {
 	},
 
 	methods: {
-		onUsePopupChanged(newValue) {
+		async onUsePopupChanged(newValue) {
 			this.saveOptions({ use_popup: newValue ? '1' : '0' })
 		},
 		onInput() {
 			const that = this
-			delay(async() => {
-        await confirmPassword()
+			delay(async () => {
 				that.saveOptions({
 					client_id: this.state.client_id,
 					client_secret: this.state.client_secret,
-				})
+				}, true)
 			}, 2000)()
 		},
 		onDeleteJobs() {
@@ -157,7 +156,8 @@ export default {
 					)
 				})
 		},
-		saveOptions(values) {
+		async saveOptions(values) {
+			await confirmPassword()
 			const req = {
 				values,
 			}
