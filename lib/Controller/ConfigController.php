@@ -100,7 +100,7 @@ class ConfigController extends Controller {
 			if ($key === 'client_secret' && $value === 'dummySecret') {
 				continue;
 			}
-			if ($key === 'client_secret' || $key === 'client_id') {
+			if (in_array($key, ['client_secret', 'client_id'], true) && $value !== '') {
 				$value = $this->crypto->encrypt($value);
 			}
 			$this->config->setAppValue(Application::APP_ID, $key, $value);
