@@ -114,7 +114,7 @@ export default {
 			}, 2000)()
 		},
 		async saveOptions(values) {
-      await confirmPassword()
+			await confirmPassword()
 			const req = {
 				values,
 			}
