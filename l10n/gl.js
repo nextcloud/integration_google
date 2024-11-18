@@ -81,7 +81,7 @@ OC.L10N.register(
     "Starting importing photos in {targetPath} directory" : "Comezando a importar fotos no directorio {targetPath}",
     "Failed to start importing Google photos" : "Produciuse un fallo ao comezar a importar fotos de Google",
     "Starting importing files in {targetPath} directory" : "Comezando a importar ficheiros no directorio {targetPath}",
-    "Failed to start importing Google Drive" : "Produciuse un fallo ao comezar a importar dende Google Drive",
+    "Failed to start importing Google Drive" : "Produciuse un fallo ao comezar a importar desde Google Drive",
     "Choose where to write imported files" : "Escoller onde gravar os ficheiros importados",
     "Choose where to write imported photos" : "Escoller onde gravar as fotos importadas",
     "_>{nbPhotos} Google photo (>{formSize})_::_>{nbPhotos} Google photos (>{formSize})_" : [">{nbPhotos} Foto Google (>{formSize})",">{nbPhotos} Photos de Google (>{formSize})"],
