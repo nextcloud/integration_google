@@ -259,8 +259,8 @@ class GoogleContactsAPIService {
 			// group/label
 			if (isset($c['memberships']) && is_array($c['memberships'])) {
 				$contactGroupNames = [];
-                /** @var array{contactGroupMembership: array{contactGroupResourceName: mixed}} $membership */
-                foreach ($c['memberships'] as $membership) {
+				/** @var array{contactGroupMembership: array{contactGroupResourceName: mixed}} $membership */
+				foreach ($c['memberships'] as $membership) {
 					if (isset(
 						$membership['contactGroupMembership'],
 						$membership['contactGroupMembership']['contactGroupResourceName'],

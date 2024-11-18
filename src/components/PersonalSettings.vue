@@ -448,7 +448,7 @@ export default {
 				.catch((error) => {
 					showError(
 						t('integration_google', 'Failed to save Google options')
-						+ ': ' + error.response?.request?.responseText
+						+ ': ' + error.response?.request?.responseText,
 					)
 				})
 				.then(() => {
@@ -486,7 +486,7 @@ export default {
 					const ssoWindow = window.open(
 						requestUrl,
 						t('integration_google', 'Sign in with Google'),
-						'toolbar=no, menubar=no, width=600, height=700'
+						'toolbar=no, menubar=no, width=600, height=700',
 					)
 					ssoWindow.focus()
 					window.addEventListener('message', (event) => {
@@ -500,7 +500,7 @@ export default {
 			}).catch((error) => {
 				showError(
 					t('integration_google', 'Failed to save Google OAuth state')
-					+ ': ' + error.response?.request?.responseText
+					+ ': ' + error.response?.request?.responseText,
 				)
 			})
 		},
@@ -517,7 +517,7 @@ export default {
 				.catch((error) => {
 					showError(
 						t('integration_google', 'Failed to get Google Drive information')
-						+ ': ' + error.response?.request?.responseText
+						+ ': ' + error.response?.request?.responseText,
 					)
 				})
 				.then(() => {
@@ -535,7 +535,7 @@ export default {
 				.catch((error) => {
 					showError(
 						t('integration_google', 'Failed to get calendar list')
-						+ ': ' + error.response?.request?.responseText
+						+ ': ' + error.response?.request?.responseText,
 					)
 				})
 				.then(() => {
@@ -583,7 +583,7 @@ export default {
 				.catch((error) => {
 					showError(
 						t('integration_google', 'Failed to get number of Google photos')
-						+ ': ' + error.response?.request?.responseText
+						+ ': ' + error.response?.request?.responseText,
 					)
 				})
 				.then(() => {
@@ -601,7 +601,7 @@ export default {
 				.catch((error) => {
 					showError(
 						t('integration_google', 'Failed to get number of Google contacts')
-						+ ': ' + error.response?.request?.responseText
+						+ ': ' + error.response?.request?.responseText,
 					)
 				})
 				.then(() => {
@@ -618,7 +618,7 @@ export default {
 				.catch((error) => {
 					showError(
 						t('integration_google', 'Failed to get address book list')
-						+ ': ' + error.response?.request?.responseText
+						+ ': ' + error.response?.request?.responseText,
 					)
 				})
 				.then(() => {
@@ -649,15 +649,15 @@ export default {
 							'{nbSeen} Google contact seen. {nbAdded} added, {nbUpdated} updated in {name}',
 							'{nbSeen} Google contacts seen. {nbAdded} added, {nbUpdated} updated in {name}',
 							nbSeen,
-							{ nbAdded, nbSeen, nbUpdated, name: this.selectedAddressBookName }
-						)
+							{ nbAdded, nbSeen, nbUpdated, name: this.selectedAddressBookName },
+						),
 					)
 					this.showAddressBooks = false
 				})
 				.catch((error) => {
 					showError(
 						t('integration_google', 'Failed to get address book list')
-						+ ': ' + error.response?.request?.responseText
+						+ ': ' + error.response?.request?.responseText,
 					)
 				})
 				.then(() => {
@@ -687,14 +687,14 @@ export default {
 							'{total} event successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)',
 							'{total} events successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)',
 							total,
-							{ total, nbAdded, nbUpdated, name: calName }
-						)
+							{ total, nbAdded, nbUpdated, name: calName },
+						),
 					)
 				})
 				.catch((error) => {
 					showError(
 						t('integration_google', 'Failed to import Google calendar')
-						+ ': ' + error.response?.request?.responseText
+						+ ': ' + error.response?.request?.responseText,
 					)
 				})
 				.then(() => {
@@ -711,14 +711,14 @@ export default {
 				.then((response) => {
 					const targetPath = response.data.targetPath
 					showSuccess(
-						t('integration_google', 'Starting importing photos in {targetPath} directory', { targetPath })
+						t('integration_google', 'Starting importing photos in {targetPath} directory', { targetPath }),
 					)
 					this.getPhotoImportValues(true)
 				})
 				.catch((error) => {
 					showError(
 						t('integration_google', 'Failed to start importing Google photos')
-						+ ': ' + error.response?.request?.responseText
+						+ ': ' + error.response?.request?.responseText,
 					)
 				})
 				.then(() => {
@@ -777,14 +777,14 @@ export default {
 				.then((response) => {
 					const targetPath = response.data.targetPath
 					showSuccess(
-						t('integration_google', 'Starting importing files in {targetPath} directory', { targetPath })
+						t('integration_google', 'Starting importing files in {targetPath} directory', { targetPath }),
 					)
 					this.getDriveImportValues(true)
 				})
 				.catch((error) => {
 					showError(
 						t('integration_google', 'Failed to start importing Google Drive')
-						+ ': ' + error.response?.request?.responseText
+						+ ': ' + error.response?.request?.responseText,
 					)
 				})
 				.then(() => {
@@ -841,7 +841,7 @@ export default {
 				},
 				false,
 				'httpd/unix-directory',
-				true
+				true,
 			)
 		},
 		onPhotoOutputChange() {
@@ -856,7 +856,7 @@ export default {
 				},
 				false,
 				'httpd/unix-directory',
-				true
+				true,
 			)
 		},
 	},

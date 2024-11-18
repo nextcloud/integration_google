@@ -74,6 +74,7 @@ import axios from '@nextcloud/axios'
 import { delay } from '../utils.js'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
+import { confirmPassword } from '@nextcloud/password-confirmation'
 
 export default {
 	name: 'AdminSettings',
@@ -100,19 +101,20 @@ export default {
 	},
 
 	methods: {
-		onUsePopupChanged(newValue) {
+		async onUsePopupChanged(newValue) {
 			this.saveOptions({ use_popup: newValue ? '1' : '0' })
 		},
 		onInput() {
 			const that = this
-			delay(() => {
+			delay(async () => {
 				that.saveOptions({
 					client_id: this.state.client_id,
 					client_secret: this.state.client_secret,
-				})
+				}, true)
 			}, 2000)()
 		},
-		saveOptions(values) {
+		async saveOptions(values) {
+			await confirmPassword()
 			const req = {
 				values,
 			}
@@ -124,7 +126,7 @@ export default {
 				.catch((error) => {
 					showError(
 						t('integration_google', 'Failed to save Google admin options')
-						+ ': ' + error.response.request.responseText
+						+ ': ' + error.response.request.responseText,
 					)
 				})
 				.then(() => {
