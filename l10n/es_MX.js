@@ -4,6 +4,7 @@ OC.L10N.register(
     "Client ID" : "ID del cliente",
     "Client secret" : "Secreto del cliente",
     "Authentication" : "Autenticación",
+    "Sign in with Google" : "Iniciar sesión con Google",
     "Contacts" : "Contactos",
     "Calendars" : "Calendarios",
     "Import calendar" : "Importar calendario",
