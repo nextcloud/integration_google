@@ -1,6 +1,6 @@
 {
 	"name": "integration_google",
-	"version": "3.1.0",
+	"version": "3.1.1",
 	"description": "Google integration",
 	"main": "index.js",
 	"directories": {
