@@ -372,6 +372,9 @@ class GooglePhotosAPIService {
 	 */
 	private function getPhoto(string $userId, array $photo, Folder $albumFolder): ?int {
 		$photoName = preg_replace('/\//', '_', $photo['filename'] ?? 'Untitled');
+		if ($albumFolder->nodeExists($photoName)) {
+			$photoName = $photo['id'] . '_' . $photoName;
+		}
 		if (!$albumFolder->nodeExists($photoName)) {
 			if (isset($photo['mediaMetadata']['photo'])) {
 				$photoUrl = $photo['baseUrl'] . '=d';
