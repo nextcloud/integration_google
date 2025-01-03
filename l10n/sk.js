@@ -1,6 +1,7 @@
 OC.L10N.register(
     "integration_google",
     {
+    "No logged in user" : "Žiadny prihlásený užívateľ",
     "Missing refresh token in Google response." : "V odpovedi Google chýba obnovovací token.",
     "Error getting OAuth access token." : "Chyba pri získavaní prístupového tokenu OAuth.",
     "Error during OAuth exchanges" : "Chyba počas výmen OAuth",
