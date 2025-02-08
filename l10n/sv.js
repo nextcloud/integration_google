@@ -11,6 +11,7 @@ OC.L10N.register(
     "Google API settings" : "Google API-inställningar",
     "Client ID" : "Klient-ID",
     "Client secret" : "Klienthemlighet",
+    "Use a pop-up to authenticate" : "Använd en popup för att autentisera",
     "Authentication" : "Autentisering",
     "Connected as {user}" : "Ansluten som {user}",
     "Disconnect from Google" : "Koppla ner från Google",
