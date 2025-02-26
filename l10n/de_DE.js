@@ -33,7 +33,7 @@ OC.L10N.register(
     "Google admin options saved" : "Google-Administrationseinstellungen gespeichert",
     "Failed to save Google admin options" : "Fehler beim Speichern der Google-Administrationseinstellungen",
     "Google data migration" : "Google-Datenmigration",
-    "No Google OAuth app configured. Ask your Nextcloud administrator to configure Google connected accounts admin section." : "Google OAuth-App nicht konfiguriert. Bitten Sie Ihren Nextcloud-Administrator, den Administrationsbereich für verbundene Google-Konten einzurichten.",
+    "No Google OAuth app configured. Ask your Nextcloud administrator to configure Google connected accounts admin section." : "Google OAuth-App nicht konfiguriert. Bitten Sie Ihre Nextcloud-Administration, den Administrationsbereich für verbundene Google-Konten einzurichten.",
     "Authentication" : "Authentifizierung",
     "Sign in with Google" : "Mit Google anmelden",
     "Connected as {user}" : "Verbunden als {user}",
