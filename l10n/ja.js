@@ -11,9 +11,10 @@ OC.L10N.register(
     "Google API settings" : "Google API 設定",
     "Client ID" : "クライアント ID",
     "Client secret" : "クライアントシークレット",
+    "Successfully connected to Google!" : "Google への接続に成功しました！",
+    "Sign in with Google" : "Googleでサインイン",
     "Google data migration" : "Google データの移行",
     "Authentication" : "認証",
-    "Sign in with Google" : "Googleでサインイン",
     "Connected as {user}" : "{user} を接続済み",
     "Disconnect from Google" : "Google から切断",
     "Contacts" : "連絡先",
@@ -26,7 +27,6 @@ OC.L10N.register(
     "Ignore shared albums" : "共有済みアルバムを無視",
     "Import Google photos" : "Google フォトをインポート",
     "Drive" : "ドライブ",
-    "Ignore shared files" : "共有済みファイルを無視",
-    "Successfully connected to Google!" : "Google への接続に成功しました！"
+    "Ignore shared files" : "共有済みファイルを無視"
 },
 "nplurals=1; plural=0;");
