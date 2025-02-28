@@ -43,6 +43,8 @@
     "Failed to get number of Google photos" : "Неуспешно получаване на бройката снимки в Google",
     "Failed to get number of Google contacts" : "Неуспешно получаване на бройката контакти в Google ",
     "Failed to get address book list" : "Неуспешно получаване на списък на адресна книга",
+    "_{nbSeen} Google contact seen. {nbAdded} added, {nbUpdated} updated in {name}_::_{nbSeen} Google contacts seen. {nbAdded} added, {nbUpdated} updated in {name}_" : ["{nbSeen} Видяни контакти в Google. {nbAdded} добавен, {nbUpdated} актуализиран в {name}","{nbSeen} Видян в Google контакти. {nbAdded} добавен, {nbUpdated} актуализиран в {name}"],
+    "_{total} event successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_::_{total} events successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_" : ["{total} успешно импортирани събития в {name} ({nbAdded} създадени, {nbUpdated} актуализирани)","{total} успешно импортирани събития в {name} ({nbAdded} създадени, {nbUpdated} актуализирани)"],
     "Failed to import Google calendar" : "Импортирането на Google календар беше неуспешно",
     "Starting importing photos in {targetPath} directory" : "Започва импортирането на снимки в директория {targetPath}",
     "Failed to start importing Google photos" : "Неуспешно стартиране на импортирането на снимки от Google",
