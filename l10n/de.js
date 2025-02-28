@@ -48,6 +48,7 @@ OC.L10N.register(
     "Failed to get number of Google photos" : "Fehler beim Abrufen der Anzahl der Google-Fotos",
     "Failed to get number of Google contacts" : "Fehler beim Abrufen der Anzahl der Google-Kontakte",
     "Failed to get address book list" : "Fehler beim Abrufen der Adressbuch-Liste",
+    "_{nbSeen} Google contact seen. {nbAdded} added, {nbUpdated} updated in {name}_::_{nbSeen} Google contacts seen. {nbAdded} added, {nbUpdated} updated in {name}_" : ["{nbSeen} Google-Kontakt gesehen. {nbAdded} hinzugefügt, {nbUpdated} aktualisiert in {name}","{nbSeen} Google-Kontakte gesehen. {nbAdded} hinzugefügt, {nbUpdated} aktualisiert in {name}"],
     "_{total} event successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_::_{total} events successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_" : ["{total} Ereignis erfolgreich in {name} importiert ({nbAdded} erstellt, {nbUpdated} aktualisiert)","{total} Ereignisse erfolgreich in {name} importiert ({nbAdded} erstellt, {nbUpdated} aktualisiert)"],
     "Failed to import Google calendar" : "Google-Kalender konnte nicht importiert werden",
     "Starting importing photos in {targetPath} directory" : "Beginn des Imports von Fotos im Verzeichnis {targetPath}",
