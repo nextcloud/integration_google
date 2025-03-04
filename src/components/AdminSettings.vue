@@ -11,6 +11,9 @@
 			{{ t('integration_google', 'Go to "APIs & Services" => "Credentials" and click on "+ CREATE CREDENTIALS" -> "OAuth client ID".') }}
 			<br>
 			{{ t('integration_google', 'Set the "Application type" to "Web application" and give a name to the application.') }}
+			<br>
+			{{ t('integration_google', 'Google may require site verification for OAuth to work with your site, which can be done in Google\'s search console') }}
+			<a href="https://search.google.com/search-console/" class="external" target="_blank">{{ t('integration_google', 'Google Search console') }}</a>
 		</p>
 		<br>
 		<p class="settings-hint with-icon">
