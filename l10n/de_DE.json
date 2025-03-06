@@ -21,6 +21,8 @@
     "Google API settings" : "Google-API-Einstellungen",
     "Go to \"APIs & Services\" => \"Credentials\" and click on \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\"." : "Wechseln Sie zu \"API & Dienste\" => \"Anmeldeinformationen\" und klicken Sie auf \"+ ANMELDEINFORMATIONEN ERSTELLEN\" -> \"OAuth Client-ID\"",
     "Set the \"Application type\" to \"Web application\" and give a name to the application." : "Setzen Sie den \"Anwendungstyp\" auf \"Webanwendung\" und geben Sie der Anwendung einen Namen.",
+    "Google may require site verification for OAuth to work with your site, which can be done in Google's search console" : "Google kann eine Standortüberprüfung verlangen, damit OAuth mit Ihrer Website funktioniert, die in der Google-Suchkonsole vorgenommen werden kann",
+    "Google Search console" : "Google-Suchkonsole",
     "Make sure you set one \"Authorized redirect URI\" to" : "Stellen Sie sicher, dass eine \"Autorisierte Weiterleitungs-URI\" gesetzt ist auf",
     "Put the \"Client ID\" and \"Client secret\" below." : "Geben Sie unten die \"Client ID\" und die \"Geheime Zeichenkette des Clients\" ein.",
     "Finally, go to \"APIs & Services\" => \"Library\" and add the following APIs: \"Google Drive API\", \"Google Calendar API\", \"People API\" and \"Photos Library API\"." : "Abschließend gehen Sie zu \"API & Dienste\" =>\"Bibliothek\" und fügen Sie die folgenden APIs hinzu: \"Google Calendar API\", \"People API\" und \"Photos Library API\".",

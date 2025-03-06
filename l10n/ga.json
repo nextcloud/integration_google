@@ -21,6 +21,8 @@
     "Google API settings" : "Socruithe Google API",
     "Go to \"APIs & Services\" => \"Credentials\" and click on \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\"." : "Téigh go dtí \"APIs & Services\" => \"Dintiúir\" agus cliceáil ar \"+ CREATE REDENTIALS\" -> \"ID cliant OAuth\".",
     "Set the \"Application type\" to \"Web application\" and give a name to the application." : "Socraigh an \"Cineál Feidhmchláir\" go \"Feidhmchlár Gréasáin\" agus tabhair ainm don fheidhmchlár.",
+    "Google may require site verification for OAuth to work with your site, which can be done in Google's search console" : "Seans go mbeidh fíorú suímh ag teastáil ó Google le go n-oibreoidh OAuth le do shuíomh, rud is féidir a dhéanamh ar chonsól cuardaigh Google",
+    "Google Search console" : "Consól Cuardaigh Google",
     "Make sure you set one \"Authorized redirect URI\" to" : "Cinntigh go bhfuil \"URI atreoraithe Údaraithe\" socraithe agat chuige",
     "Put the \"Client ID\" and \"Client secret\" below." : "Cuir an \"ID Cliant\" agus \"Rúnda an Chliaint\" thíos.",
     "Finally, go to \"APIs & Services\" => \"Library\" and add the following APIs: \"Google Drive API\", \"Google Calendar API\", \"People API\" and \"Photos Library API\"." : "Ar deireadh, téigh go dtí \"APIs & Services\" => \"Leabharlann\" agus cuir na APIs seo a leanas leis: \"Google Drive API\", \"Google Calendar API\", \"People API\" agus \"Photos Library API\".",
