@@ -21,6 +21,8 @@
     "Google API settings" : "Google API подешавања",
     "Go to \"APIs & Services\" => \"Credentials\" and click on \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\"." : "Идите на „APIs & Services” => „Credentials” и кликните на „+ CREATE CREDENTIALS” -> „OAuth client ID.",
     "Set the \"Application type\" to \"Web application\" and give a name to the application." : "Поставите „Application type” на „Web application” и дајте име апликацији.",
+    "Google may require site verification for OAuth to work with your site, which can be done in Google's search console" : "Да би OAuth функционисао за ваш сајт, Google може да захтева потврђивање сајта. То може да се изврши у конзоли Google претраге",
+    "Google Search console" : "Конзола Google претраге",
     "Make sure you set one \"Authorized redirect URI\" to" : "Обезбедите да један „Authorized redirect URI” поставите на",
     "Put the \"Client ID\" and \"Client secret\" below." : "Унесите испод „ID клијента” и „Тајна клијента”.",
     "Finally, go to \"APIs & Services\" => \"Library\" and add the following APIs: \"Google Drive API\", \"Google Calendar API\", \"People API\" and \"Photos Library API\"." : "Коначно, идите на „APIs & Services” => „Library” и додајте следеће API: „Google Drive API”, „Google Calendar API”, „People API” и „Photos Library API”.",
