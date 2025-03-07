@@ -23,6 +23,8 @@ OC.L10N.register(
     "Google API settings" : "Nastavení pro Google API",
     "Go to \"APIs & Services\" => \"Credentials\" and click on \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\"." : "Jděte do „API rozhraní a služby“ => „Přihlašovací údaje“ a klikněte na „+ VYTVOŘIT PŘIHLAŠOVACÍ ÚDAJE“ -> „Identif. OAuth klienta“.",
     "Set the \"Application type\" to \"Web application\" and give a name to the application." : "Nastavte „Typ aplikace“ na „Webová aplikace“ a nějak ji nazvěte.",
+    "Google may require site verification for OAuth to work with your site, which can be done in Google's search console" : "Může se stát, že Google bude vyžadovat ověření lokality, aby pro ni OAuth fungovalo. To je možné udělat v konzoli Google Search",
+    "Google Search console" : "Konzole Google Search",
     "Make sure you set one \"Authorized redirect URI\" to" : "Ověřte, že jste nastavili jednu „URI pověřeného přesměrování“ na",
     "Put the \"Client ID\" and \"Client secret\" below." : "Níže vložte „Identif. klienta“ a „tajemství klienta“.",
     "Finally, go to \"APIs & Services\" => \"Library\" and add the following APIs: \"Google Drive API\", \"Google Calendar API\", \"People API\" and \"Photos Library API\"." : "Nakonec, jděte do „API rozhraní a služby“ => „Knihovna“ a přidejte následující API rozhraní: „API Disku Google“, „\nAPI Kalendáře Google“ „API lidí“ a „API knihovny fotek“.",
