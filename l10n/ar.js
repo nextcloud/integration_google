@@ -23,6 +23,8 @@ OC.L10N.register(
     "Google API settings" : "إعدادات واجهة برمجة تطبيقات قوقل Google API",
     "Go to \"APIs & Services\" => \"Credentials\" and click on \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\"." : "انتقل إلى \"APIs & Services\" => \"Credentials\" ثم انقُر على \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\".",
     "Set the \"Application type\" to \"Web application\" and give a name to the application." : "في خانة \"نوع التطبيق\" Application type إختَر \"تطبيق الويب\" Web application و قُم بتسمية التطبيق.",
+    "Google may require site verification for OAuth to work with your site, which can be done in Google's search console" : "قد تتطلب Google التحقق من الموقع لكي يعمل OAuth مع موقعك، ويمكن القيام بذلك في شاشىة بحث Google",
+    "Google Search console" : "شاشة بحث قوقل Google",
     "Make sure you set one \"Authorized redirect URI\" to" : "تأكّد من تعيين خانة\"عنوان URI معتمد لإعادة التوجيه\" Authorized redirect URI إلى",
     "Put the \"Client ID\" and \"Client secret\" below." : "أدخِل \"معرف العميل\" Client ID و \"كلمة سر العميل\" Client secret أدناه. ",
     "Finally, go to \"APIs & Services\" => \"Library\" and add the following APIs: \"Google Drive API\", \"Google Calendar API\", \"People API\" and \"Photos Library API\"." : "أخيرًا ، إنتقِل إلى APIs & Services\" => \"Library\"، و أضف واجهات برمجة التطبيقات التالية: قوقل درايف \"Google Drive API\" ، و تقويم قوقل \"Google Calendar API\"، و الأشخاص \"People API\" ، و مكتبة الصور \"Photos Library API\".",
