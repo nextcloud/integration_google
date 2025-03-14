@@ -2,9 +2,11 @@ OC.L10N.register(
     "integration_google",
     {
     "Bad credentials" : "Nederīgi pieteikšanās dati",
-    "Connected accounts" : "Savienotie konti",
+    "Connected accounts" : "Sasaistītie konti",
     "Google API settings" : "Google API iestatījumi",
     "Client ID" : "Klienta ID",
+    "You can close this page. You will be notified when it finishes." : "Šo lapu var aizvērt. Tiks paziņot, kad tas tiks pabeigts.",
+    "No Google OAuth app configured. Ask your Nextcloud administrator to configure Google connected accounts admin section." : "Kav konfigurēta neviena Google OAuth lietotne. Jāvaicā savam Nextcloud pārvaldītājam, lai konfigurē sasaistīto google kontu pārvaldības sadaļu.",
     "Authentication" : "Autentifikācija",
     "Contacts" : "Kontakti",
     "Calendars" : "Kalendāri",
