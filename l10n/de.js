@@ -23,7 +23,7 @@ OC.L10N.register(
     "Google API settings" : "Google-API-Einstellungen",
     "Go to \"APIs & Services\" => \"Credentials\" and click on \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\"." : "Wechsele zu \"API & Dienste\" => \"Anmeldeinformationen\" und klicke auf \"+ ANMELDEINFORMATIONEN ERSTELLEN\" -> \"OAuth Client-ID\"",
     "Set the \"Application type\" to \"Web application\" and give a name to the application." : "Setze den \"Anwendungstyp\" auf \"Webanwendung\" und gib der Anwendung einen Namen.",
-    "Google may require site verification for OAuth to work with your site, which can be done in Google's search console" : "Google kann eine Standortüberprüfung verlangen, damit OAuth mit Ihrer Website funktioniert, die in der Google-Suchkonsole vorgenommen werden kann",
+    "Google may require site verification for OAuth to work with your site, which can be done in Google's search console" : "Google kann eine Seitenüberprüfung anfordern, damit OAuth mit deiner Website funktioniert. Dies kann in der Google-Suchkonsole erledigt werden",
     "Google Search console" : "Google-Suchkonsole",
     "Make sure you set one \"Authorized redirect URI\" to" : "Stelle sicher, dass eine \"Autorisierte Weiterleitungs-URI\" gesetzt ist auf",
     "Put the \"Client ID\" and \"Client secret\" below." : "Gib unten die \"Client ID\" und \"Client-Geheimnis\" ein.",
