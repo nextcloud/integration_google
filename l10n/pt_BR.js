@@ -23,6 +23,8 @@ OC.L10N.register(
     "Google API settings" : "Configurações de API do Google",
     "Go to \"APIs & Services\" => \"Credentials\" and click on \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\"." : "Vá para \"APIs e serviços\" => \"Credenciais\" e clique em \"+ CRIAR CREDENCIAIS\" -> \"ID do cliente OAuth\".",
     "Set the \"Application type\" to \"Web application\" and give a name to the application." : "Defina o \"Tipo de aplicativo\" como \"Aplicativo da Web\" e dê um nome ao aplicativo.",
+    "Google may require site verification for OAuth to work with your site, which can be done in Google's search console" : "O Google pode exigir a verificação do site para que o OAuth funcione com o seu site, o que pode ser feito no console de pesquisa do Google",
+    "Google Search console" : "Console de pesquisa do Google",
     "Make sure you set one \"Authorized redirect URI\" to" : "Certifique-se de definir um \"URI de redirecionamento autorizado\" para",
     "Put the \"Client ID\" and \"Client secret\" below." : "Coloque o \"ID do cliente\" e a \"chave do cliente\" abaixo.",
     "Finally, go to \"APIs & Services\" => \"Library\" and add the following APIs: \"Google Drive API\", \"Google Calendar API\", \"People API\" and \"Photos Library API\"." : "Por fim, vá para \"APIs e serviços\" => \"Biblioteca\" e adicione as seguintes APIs: \"API do Google Drive\", \"API do Google Agenda\", \"API de pessoas\" e \"API da biblioteca de fotos\".",
