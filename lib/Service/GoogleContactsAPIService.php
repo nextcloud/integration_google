@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Nextcloud - google
  *
@@ -15,14 +14,26 @@ namespace OCA\Google\Service;
 use DateTime;
 use Exception;
 use Generator;
+use OCA\DAV\CardDAV\CardDavBackend;
 use OCA\Google\AppInfo\Application;
+use OCP\Contacts\IManager as IContactManager;
+use Psr\Log\LoggerInterface;
 use Sabre\VObject\Component\VCard;
 use Throwable;
 
 /**
  * Service to make requests to Google v3 (JSON) API
  */
-final class GoogleContactsAPIService {
+class GoogleContactsAPIService {
+
+	public function __construct(
+		string $appName,
+		private LoggerInterface $logger,
+		private IContactManager $contactsManager,
+		private CardDavBackend $cdBackend,
+		private GoogleAPIService $googleApiService
+	) {
+	}
 
 	/**
 	 * Get groups that are not empty and with type USER_CONTACT_GROUP

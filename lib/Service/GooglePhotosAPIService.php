@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Nextcloud - google
  *
@@ -16,17 +15,32 @@ use DateTime;
 use Exception;
 use OCA\Google\AppInfo\Application;
 use OCA\Google\BackgroundJob\ImportPhotosJob;
+use OCP\BackgroundJob\IJobList;
 use OCP\Files\FileInfo;
 use OCP\Files\Folder;
+use OCP\Files\IRootFolder;
+use OCP\IConfig;
 use OCP\Lock\ILockingProvider;
 use OCP\Lock\LockedException;
+use Psr\Log\LoggerInterface;
 
 use Throwable;
 
 /**
  * Service to make requests to Google v3 (JSON) API
  */
-final class GooglePhotosAPIService {
+class GooglePhotosAPIService {
+
+	public function __construct(
+		string $appName,
+		private LoggerInterface $logger,
+		private IConfig $config,
+		private IRootFolder $root,
+		private IJobList $jobList,
+		private UserScopeService $userScopeService,
+		private GoogleAPIService $googleApiService
+	) {
+	}
 
 	/**
 	 * @param string $userId

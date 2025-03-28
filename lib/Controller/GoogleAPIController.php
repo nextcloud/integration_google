@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Nextcloud - google
  *
@@ -23,7 +22,7 @@ use OCP\AppFramework\Http\DataResponse;
 use OCP\IConfig;
 use OCP\IRequest;
 
-final class GoogleAPIController extends Controller {
+class GoogleAPIController extends Controller {
 
 	private string $accessToken;
 

@@ -17,7 +17,7 @@ use OCP\Migration\IOutput;
 use OCP\Migration\SimpleMigrationStep;
 use OCP\Security\ICrypto;
 
-final class Version03001001Date20241111105515 extends SimpleMigrationStep {
+class Version03001001Date20241111105515 extends SimpleMigrationStep {
 
 	public function __construct(
 		private IConfig $config,
@@ -30,10 +30,7 @@ final class Version03001001Date20241111105515 extends SimpleMigrationStep {
 	 * @param IOutput $output
 	 * @param Closure $schemaClosure The `\Closure` returns a `ISchemaWrapper`
 	 * @param array $options
-	 *
-	 * @return void
 	 */
-	#[\Override]
 	public function postSchemaChange(IOutput $output, Closure $schemaClosure, array $options) {
 		// migrate api credentials in app config
 		foreach (['client_id', 'client_secret'] as $key) {

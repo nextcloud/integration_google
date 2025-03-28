@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @copyright Copyright (c) 2019 Julius Härtl <jus@bitgrid.net>
  *
@@ -24,9 +23,16 @@
 
 namespace OCA\Google\Service;
 
+use OCP\IUserManager;
 use OCP\IUserSession;
 
-final class UserScopeService {
+class UserScopeService {
+
+	public function __construct(
+		private IUserSession $userSession,
+		private IUserManager $userManager
+	) {
+	}
 
 	/**
 	 * Set a valid user in IUserSession since lots of server logic is relying on obtaining

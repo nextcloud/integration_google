@@ -6,7 +6,7 @@ use OCP\IL10N;
 use OCP\IURLGenerator;
 use OCP\Settings\IIconSection;
 
-final class AdminSection implements IIconSection {
+class AdminSection implements IIconSection {
 
 	public function __construct(
 		private IURLGenerator $urlGenerator,
@@ -19,7 +19,6 @@ final class AdminSection implements IIconSection {
 	 *
 	 * @returns string
 	 */
-	#[\Override]
 	public function getID(): string {
 		return 'connected-accounts'; //or a generic id if feasible
 	}
@@ -30,7 +29,6 @@ final class AdminSection implements IIconSection {
 	 *
 	 * @return string
 	 */
-	#[\Override]
 	public function getName(): string {
 		return $this->l->t('Connected accounts');
 	}
@@ -40,12 +38,10 @@ final class AdminSection implements IIconSection {
 	 * the settings navigation. The sections are arranged in ascending order of
 	 * the priority values. It is required to return a value between 0 and 99.
 	 */
-	#[\Override]
 	public function getPriority(): int {
 		return 80;
 	}
 
-	#[\Override]
 	public function getIcon(): string {
 		return $this->urlGenerator->imagePath('core', 'categories/integration.svg');
 	}

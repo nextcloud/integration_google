@@ -12,18 +12,25 @@
 
 namespace OCA\Google\BackgroundJob;
 
+use OCA\Google\Service\GooglePhotosAPIService;
+use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\BackgroundJob\QueuedJob;
 
 /**
  * A QueuedJob to partially import google photos and launch following job
  */
-final class ImportPhotosJob extends QueuedJob {
+class ImportPhotosJob extends QueuedJob {
+
+	public function __construct(
+		ITimeFactory $timeFactory,
+		private GooglePhotosAPIService $service) {
+		parent::__construct($timeFactory);
+	}
 
 	/**
 	 * @param array{user_id:string} $argument
 	 * @return void
 	 */
-	#[\Override]
 	public function run($argument) {
 		$userId = $argument['user_id'];
 		$this->service->importPhotosJob($userId);
