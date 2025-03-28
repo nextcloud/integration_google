@@ -1,16 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="5.26.1@d747f6500b38ac4f7dfc5edbcae6e4b637d7add0">
+<files psalm-version="6.7.1@a2f190972555ea01b0cfcc1913924d6c5fc1a64e">
+  <file src="lib/AppInfo/Application.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[Application]]></code>
+    </ClassMustBeFinal>
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function boot(IBootContext $context): void {]]></code>
+      <code><![CDATA[public function register(IRegistrationContext $context): void {]]></code>
+    </MissingOverrideAttribute>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="lib/BackgroundJob/ImportDriveJob.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[ImportDriveJob]]></code>
+    </ClassMustBeFinal>
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function run($argument) {]]></code>
+    </MissingOverrideAttribute>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="lib/BackgroundJob/ImportPhotosJob.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[ImportPhotosJob]]></code>
+    </ClassMustBeFinal>
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function run($argument) {]]></code>
+    </MissingOverrideAttribute>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
   <file src="lib/Controller/ConfigController.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[ConfigController]]></code>
+    </ClassMustBeFinal>
     <DeprecatedMethod>
       <code><![CDATA[getAppValue]]></code>
       <code><![CDATA[setAppValue]]></code>
     </DeprecatedMethod>
+    <PossiblyFalseArgument>
+      <code><![CDATA[json_encode($scopesArray)]]></code>
+    </PossiblyFalseArgument>
+    <PossiblyUnusedParam>
+      <code><![CDATA[$error]]></code>
+    </PossiblyUnusedParam>
+    <UnusedClass>
+      <code><![CDATA[ConfigController]]></code>
+    </UnusedClass>
+  </file>
+  <file src="lib/Controller/GoogleAPIController.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[GoogleAPIController]]></code>
+    </ClassMustBeFinal>
+    <UnusedClass>
+      <code><![CDATA[GoogleAPIController]]></code>
+    </UnusedClass>
   </file>
   <file src="lib/Migration/Version03001001Date20241111105515.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[Version03001001Date20241111105515]]></code>
+    </ClassMustBeFinal>
     <DeprecatedMethod>
       <code><![CDATA[getAppValue]]></code>
       <code><![CDATA[setAppValue]]></code>
     </DeprecatedMethod>
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function postSchemaChange(IOutput $output, Closure $schemaClosure, array $options) {]]></code>
+    </MissingOverrideAttribute>
     <MissingReturnType>
       <code><![CDATA[postSchemaChange]]></code>
     </MissingReturnType>
@@ -32,11 +92,35 @@
       <code><![CDATA[$userId]]></code>
       <code><![CDATA[$userId]]></code>
     </MixedAssignment>
+    <UnusedClass>
+      <code><![CDATA[Version03001001Date20241111105515]]></code>
+    </UnusedClass>
+  </file>
+  <file src="lib/Notification/Notifier.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[Notifier]]></code>
+    </ClassMustBeFinal>
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function getID(): string {]]></code>
+      <code><![CDATA[public function getName(): string {]]></code>
+      <code><![CDATA[public function prepare(INotification $notification, string $languageCode): INotification {]]></code>
+    </MissingOverrideAttribute>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
   </file>
   <file src="lib/Service/GoogleAPIService.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[GoogleAPIService]]></code>
+    </ClassMustBeFinal>
     <InvalidArgument>
       <code><![CDATA[$expiresAt]]></code>
     </InvalidArgument>
+    <InvalidOperand>
+      <code><![CDATA[$response->getStatusCode()]]></code>
+      <code><![CDATA[$response->getStatusCode()]]></code>
+      <code><![CDATA[strlen($accessToken)]]></code>
+    </InvalidOperand>
     <InvalidReturnStatement>
       <code><![CDATA[['success' => true]]]></code>
     </InvalidReturnStatement>
@@ -46,10 +130,6 @@
     <MixedArgument>
       <code><![CDATA[$result['access_token']]]></code>
     </MixedArgument>
-    <MixedInferredReturnType>
-      <code><![CDATA[array]]></code>
-      <code><![CDATA[array]]></code>
-    </MixedInferredReturnType>
     <MixedReturnStatement>
       <code><![CDATA[json_decode($body, true)]]></code>
       <code><![CDATA[json_decode($body, true)]]></code>
@@ -57,9 +137,28 @@
     <MixedReturnTypeCoercion>
       <code><![CDATA[['error' => $e->getMessage()]]]></code>
     </MixedReturnTypeCoercion>
+    <PossiblyFalseArgument>
+      <code><![CDATA[$body]]></code>
+      <code><![CDATA[$body]]></code>
+      <code><![CDATA[$chunk]]></code>
+    </PossiblyFalseArgument>
+    <PossiblyFalseOperand>
+      <code><![CDATA[$body]]></code>
+      <code><![CDATA[$responseTxt]]></code>
+      <code><![CDATA[json_encode($params)]]></code>
+    </PossiblyFalseOperand>
     <PossiblyInvalidArgument>
       <code><![CDATA[$body]]></code>
     </PossiblyInvalidArgument>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedParam>
+      <code><![CDATA[$appName]]></code>
+    </PossiblyUnusedParam>
+    <PossiblyUnusedReturnValue>
+      <code><![CDATA[array]]></code>
+    </PossiblyUnusedReturnValue>
     <RiskyTruthyFalsyComparison>
       <code><![CDATA[$baseUrl]]></code>
     </RiskyTruthyFalsyComparison>
@@ -99,6 +198,12 @@
     <ArgumentTypeCoercion>
       <code><![CDATA[$lastModifieds]]></code>
     </ArgumentTypeCoercion>
+    <ClassMustBeFinal>
+      <code><![CDATA[GoogleCalendarAPIService]]></code>
+    </ClassMustBeFinal>
+    <InvalidOperand>
+      <code><![CDATA[$nbMin]]></code>
+    </InvalidOperand>
     <MissingDependency>
       <code><![CDATA[$this->caldavBackend]]></code>
       <code><![CDATA[$this->caldavBackend]]></code>
@@ -140,13 +245,6 @@
       <code><![CDATA[$params['pageToken']]]></code>
       <code><![CDATA[$res]]></code>
     </MixedAssignment>
-    <MixedInferredReturnType>
-      <code><![CDATA[?int]]></code>
-      <code><![CDATA[array]]></code>
-      <code><![CDATA[array]]></code>
-      <code><![CDATA[int]]></code>
-      <code><![CDATA[int|null]]></code>
-    </MixedInferredReturnType>
     <MixedMethodCall>
       <code><![CDATA[getBlue]]></code>
       <code><![CDATA[getBlue]]></code>
@@ -173,6 +271,12 @@
     <PossiblyUndefinedArrayOffset>
       <code><![CDATA[$e['colorId']]]></code>
     </PossiblyUndefinedArrayOffset>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedParam>
+      <code><![CDATA[$appName]]></code>
+    </PossiblyUnusedParam>
     <RedundantCast>
       <code><![CDATA[(int) (abs($rgb1['r'] - $rgb2['r']) + abs($rgb1['g'] - $rgb2['g']) + abs($rgb1['b'] - $rgb2['b']))]]></code>
     </RedundantCast>
@@ -196,11 +300,22 @@
       <code><![CDATA[Color]]></code>
       <code><![CDATA[Color]]></code>
     </UnnecessaryVarAnnotation>
+    <UnusedMethod>
+      <code><![CDATA[getCalendarLastEventModificationTimestamp]]></code>
+      <code><![CDATA[getEventLastModifiedTimestamp]]></code>
+    </UnusedMethod>
     <UnusedParam>
       <code><![CDATA[$calData]]></code>
     </UnusedParam>
   </file>
   <file src="lib/Service/GoogleContactsAPIService.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[GoogleContactsAPIService]]></code>
+    </ClassMustBeFinal>
+    <InvalidOperand>
+      <code><![CDATA[$nbAdded]]></code>
+      <code><![CDATA[$totalContactNumber]]></code>
+    </InvalidOperand>
     <MixedArgument>
       <code><![CDATA[$day]]></code>
       <code><![CDATA[$day]]></code>
@@ -300,9 +415,6 @@
       <code><![CDATA[$prop]]></code>
       <code><![CDATA[$url]]></code>
     </MixedAssignment>
-    <MixedInferredReturnType>
-      <code><![CDATA[array]]></code>
-    </MixedInferredReturnType>
     <MixedOperand>
       <code><![CDATA[$birthday['date']['day']]]></code>
       <code><![CDATA[$birthday['date']['month']]]></code>
@@ -315,6 +427,12 @@
     <MixedReturnStatement>
       <code><![CDATA[$contactGeneratorReturn]]></code>
     </MixedReturnStatement>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedParam>
+      <code><![CDATA[$appName]]></code>
+    </PossiblyUnusedParam>
     <UndefinedClass>
       <code><![CDATA[$this->cdBackend]]></code>
       <code><![CDATA[$this->cdBackend]]></code>
@@ -362,6 +480,12 @@
     </UnusedVariable>
   </file>
   <file src="lib/Service/GoogleDriveAPIService.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[GoogleDriveAPIService]]></code>
+    </ClassMustBeFinal>
+    <ImplicitToStringCast>
+      <code><![CDATA[$e]]></code>
+    </ImplicitToStringCast>
     <InvalidArgument>
       <code><![CDATA[$alreadyImported + $nbDownloaded]]></code>
       <code><![CDATA[$alreadyImportedSize + $downloadedSize]]></code>
@@ -452,9 +576,6 @@
       <code><![CDATA[$sharedWithMeSize]]></code>
       <code><![CDATA[$timestampOnFile]]></code>
     </MixedAssignment>
-    <MixedInferredReturnType>
-      <code><![CDATA[?int]]></code>
-    </MixedInferredReturnType>
     <MixedMethodCall>
       <code><![CDATA[delete]]></code>
       <code><![CDATA[get]]></code>
@@ -473,6 +594,24 @@
       <code><![CDATA[$stat['size'] ?? 0]]></code>
       <code><![CDATA[$stat['size'] ?? 0]]></code>
     </MixedReturnStatement>
+    <PossiblyFalseArgument>
+      <code><![CDATA[json_encode($directoryProgress)]]></code>
+    </PossiblyFalseArgument>
+    <PossiblyNullArgument>
+      <code><![CDATA[$fileName]]></code>
+      <code><![CDATA[$fileName]]></code>
+    </PossiblyNullArgument>
+    <PossiblyNullOperand>
+      <code><![CDATA[$fileName]]></code>
+      <code><![CDATA[$fileName]]></code>
+      <code><![CDATA[$fileName]]></code>
+    </PossiblyNullOperand>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedParam>
+      <code><![CDATA[$appName]]></code>
+    </PossiblyUnusedParam>
     <RedundantConditionGivenDocblockType>
       <code><![CDATA[is_resource($resource)]]></code>
     </RedundantConditionGivenDocblockType>
@@ -484,16 +623,21 @@
     <ArgumentTypeCoercion>
       <code><![CDATA[$albumFolder]]></code>
     </ArgumentTypeCoercion>
+    <ClassMustBeFinal>
+      <code><![CDATA[GooglePhotosAPIService]]></code>
+    </ClassMustBeFinal>
     <InvalidArgument>
       <code><![CDATA[$alreadyImported + $nbDownloaded]]></code>
       <code><![CDATA[$alreadyImported + $nbDownloaded]]></code>
       <code><![CDATA[$ts]]></code>
     </InvalidArgument>
+    <InvalidOperand>
+      <code><![CDATA[count($albums)]]></code>
+    </InvalidOperand>
     <MixedArgument>
       <code><![CDATA[$album['title'] ?? 'Untitled']]></code>
       <code><![CDATA[$photo]]></code>
       <code><![CDATA[$photo]]></code>
-      <code><![CDATA[$photo['filename'] ?? 'Untitled']]></code>
       <code><![CDATA[$photo['mediaMetadata']['creationTime']]]></code>
     </MixedArgument>
     <MixedArrayAccess>
@@ -530,32 +674,121 @@
     <MixedOperand>
       <code><![CDATA[$album['mediaItemsCount'] ?? 0]]></code>
       <code><![CDATA[$album['mediaItemsCount'] ?? 0]]></code>
-      <code><![CDATA[$photo['baseUrl']]]></code>
-      <code><![CDATA[$photo['baseUrl']]]></code>
       <code><![CDATA[$result['error']]]></code>
     </MixedOperand>
+    <PossiblyFalseOperand>
+      <code><![CDATA[json_encode($result)]]></code>
+    </PossiblyFalseOperand>
+    <PossiblyNullArgument>
+      <code><![CDATA[$albumName]]></code>
+      <code><![CDATA[$albumName]]></code>
+      <code><![CDATA[$albumName]]></code>
+      <code><![CDATA[$photoName]]></code>
+      <code><![CDATA[$photoName]]></code>
+      <code><![CDATA[$photoName]]></code>
+    </PossiblyNullArgument>
+    <PossiblyNullOperand>
+      <code><![CDATA[$photoName]]></code>
+    </PossiblyNullOperand>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedParam>
+      <code><![CDATA[$appName]]></code>
+    </PossiblyUnusedParam>
     <RedundantConditionGivenDocblockType>
       <code><![CDATA[is_resource($resource)]]></code>
     </RedundantConditionGivenDocblockType>
   </file>
   <file src="lib/Service/SecretService.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[SecretService]]></code>
+    </ClassMustBeFinal>
     <DeprecatedMethod>
       <code><![CDATA[getAppValue]]></code>
       <code><![CDATA[setAppValue]]></code>
       <code><![CDATA[setAppValue]]></code>
     </DeprecatedMethod>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+      <code><![CDATA[setEncryptedAppValue]]></code>
+    </PossiblyUnusedMethod>
+    <UnusedProperty>
+      <code><![CDATA[$userManager]]></code>
+    </UnusedProperty>
+  </file>
+  <file src="lib/Service/UserScopeService.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[UserScopeService]]></code>
+    </ClassMustBeFinal>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedParam>
+      <code><![CDATA[$owner]]></code>
+    </PossiblyUnusedParam>
   </file>
   <file src="lib/Settings/Admin.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[Admin]]></code>
+    </ClassMustBeFinal>
     <DeprecatedMethod>
       <code><![CDATA[getAppValue]]></code>
     </DeprecatedMethod>
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function getForm(): TemplateResponse {]]></code>
+      <code><![CDATA[public function getPriority(): int {]]></code>
+      <code><![CDATA[public function getSection(): string {]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[Admin]]></code>
+    </UnusedClass>
+  </file>
+  <file src="lib/Settings/AdminSection.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[AdminSection]]></code>
+    </ClassMustBeFinal>
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function getID(): string {]]></code>
+      <code><![CDATA[public function getIcon(): string {]]></code>
+      <code><![CDATA[public function getName(): string {]]></code>
+      <code><![CDATA[public function getPriority(): int {]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[AdminSection]]></code>
+    </UnusedClass>
   </file>
   <file src="lib/Settings/Personal.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[Personal]]></code>
+    </ClassMustBeFinal>
     <DeprecatedMethod>
       <code><![CDATA[getAppValue]]></code>
     </DeprecatedMethod>
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function getForm(): TemplateResponse {]]></code>
+      <code><![CDATA[public function getPriority(): int {]]></code>
+      <code><![CDATA[public function getSection(): string {]]></code>
+    </MissingOverrideAttribute>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
     <UndefinedDocblockClass>
       <code><![CDATA[NoUserException]]></code>
     </UndefinedDocblockClass>
+  </file>
+  <file src="lib/Settings/PersonalSection.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[PersonalSection]]></code>
+    </ClassMustBeFinal>
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function getID(): string {]]></code>
+      <code><![CDATA[public function getIcon(): string {]]></code>
+      <code><![CDATA[public function getName(): string {]]></code>
+      <code><![CDATA[public function getPriority(): int {]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[PersonalSection]]></code>
+    </UnusedClass>
   </file>
 </files>
