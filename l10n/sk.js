@@ -23,6 +23,8 @@ OC.L10N.register(
     "Google API settings" : "Nastavenia Google API",
     "Go to \"APIs & Services\" => \"Credentials\" and click on \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\"." : "Choďte na \"APIs & Services\" => \"Credentials\" a kliknite na \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\".",
     "Set the \"Application type\" to \"Web application\" and give a name to the application." : "Nastavte Typ aplikácie na Webovú aplikáciu a pomenujte aplikáciu.",
+    "Google may require site verification for OAuth to work with your site, which can be done in Google's search console" : "Google môže vyžadovať overenie, aby OAuth fungoval s vašou stránkou, čo možno vykonať vo vyhľadávacej konzole Google",
+    "Google Search console" : "Konzola vyhľadávania Google",
     "Make sure you set one \"Authorized redirect URI\" to" : "Nezabudnite nastaviť jeden autorizovaný URI presmerovania na",
     "Put the \"Client ID\" and \"Client secret\" below." : "Nižšie vložte \"ID klienta\" a \"Tajomstvo klienta\".",
     "Finally, go to \"APIs & Services\" => \"Library\" and add the following APIs: \"Google Drive API\", \"Google Calendar API\", \"People API\" and \"Photos Library API\"." : "Nakoniec choďte na  \"APIs & Services\" => \"Library\" a pridajte následujúce API: \"Google Drive API\", \"Google Calendar API\", \"People API\" and \"Photos Library API\".",
