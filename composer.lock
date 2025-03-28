@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e8f8476168e3720112342c5ec1936993",
+    "content-hash": "005fea5f0141eb15aff04dfb52621456",
     "packages": [
         {
             "name": "ortic/color-converter",
@@ -2765,11 +2765,11 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=8.0.0"
+        "php": ">=8.1.0"
     },
     "platform-dev": {},
     "platform-overrides": {
-        "php": "8.1"
+        "php": "8.1.0"
     },
     "plugin-api-version": "2.6.0"
 }
