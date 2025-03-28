@@ -16,7 +16,7 @@
     <bugs>https://github.com/MarcelRobitaille/nextcloud_google_synchronization/issues</bugs>
     <screenshot>https://github.com/MarcelRobitaille/nextcloud_google_synchronization/raw/master/img/screenshot1.jpg</screenshot>
     <dependencies>
-        <nextcloud min-version="28" max-version="32"/>
+        <nextcloud min-version="29" max-version="32"/>
     </dependencies>
     <settings>
         <admin>OCA\Google\Settings\Admin</admin>
