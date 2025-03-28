@@ -9,7 +9,7 @@ use OCP\AppFramework\Services\IInitialState;
 use OCP\IConfig;
 use OCP\Settings\ISettings;
 
-class Admin implements ISettings {
+final class Admin implements ISettings {
 
 	public function __construct(
 		private IConfig $config,
@@ -21,6 +21,7 @@ class Admin implements ISettings {
 	/**
 	 * @return TemplateResponse
 	 */
+	#[\Override]
 	public function getForm(): TemplateResponse {
 		$clientID = $this->secretService->getEncryptedAppValue('client_id');
 		$clientSecret = $this->secretService->getEncryptedAppValue('client_secret');
@@ -35,10 +36,12 @@ class Admin implements ISettings {
 		return new TemplateResponse(Application::APP_ID, 'adminSettings');
 	}
 
+	#[\Override]
 	public function getSection(): string {
 		return 'connected-accounts';
 	}
 
+	#[\Override]
 	public function getPriority(): int {
 		return 10;
 	}

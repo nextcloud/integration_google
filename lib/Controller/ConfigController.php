@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Nextcloud - google
  *
@@ -31,7 +32,7 @@ use OCP\IURLGenerator;
 use OCP\Security\ICrypto;
 use Throwable;
 
-class ConfigController extends Controller {
+final class ConfigController extends Controller {
 
 	public const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.readonly';
 	public const CONTACTS_SCOPE = 'https://www.googleapis.com/auth/contacts.readonly';

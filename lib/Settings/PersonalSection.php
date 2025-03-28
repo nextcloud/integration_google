@@ -6,7 +6,7 @@ use OCP\IL10N;
 use OCP\IURLGenerator;
 use OCP\Settings\IIconSection;
 
-class PersonalSection implements IIconSection {
+final class PersonalSection implements IIconSection {
 
 	public function __construct(
 		private IURLGenerator $urlGenerator,
@@ -19,6 +19,7 @@ class PersonalSection implements IIconSection {
 	 *
 	 * @returns string
 	 */
+	#[\Override]
 	public function getID(): string {
 		return 'migration'; //or a generic id if feasible
 	}
@@ -29,6 +30,7 @@ class PersonalSection implements IIconSection {
 	 *
 	 * @return string
 	 */
+	#[\Override]
 	public function getName(): string {
 		return $this->l->t('Data migration');
 	}
@@ -38,6 +40,7 @@ class PersonalSection implements IIconSection {
 	 * the settings navigation. The sections are arranged in ascending order of
 	 * the priority values. It is required to return a value between 0 and 99.
 	 */
+	#[\Override]
 	public function getPriority(): int {
 		return 80;
 	}
@@ -45,6 +48,7 @@ class PersonalSection implements IIconSection {
 	/**
 	 * @return string The relative path to a an icon describing the section
 	 */
+	#[\Override]
 	public function getIcon(): string {
 		return $this->urlGenerator->imagePath('core', 'actions/download.svg');
 	}

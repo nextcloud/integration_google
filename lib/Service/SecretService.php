@@ -3,18 +3,10 @@
 namespace OCA\Google\Service;
 
 use OCA\Google\AppInfo\Application;
-use OCP\IConfig;
-use OCP\IUserManager;
 use OCP\PreConditionNotMetException;
-use OCP\Security\ICrypto;
 
-class SecretService {
-	public function __construct(
-		private IConfig $config,
-		private IUserManager $userManager,
-		private ICrypto $crypto,
-	) {
-	}
+final class SecretService {
+
 
 	/**
 	 * @param string $userId
@@ -44,20 +36,6 @@ class SecretService {
 			return '';
 		}
 		return $this->crypto->decrypt($storedValue);
-	}
-
-	/**
-	 * @param string $key
-	 * @param string $value
-	 * @return void
-	 */
-	public function setEncryptedAppValue(string $key, string $value): void {
-		if ($value === '') {
-			$this->config->setAppValue(Application::APP_ID, $key, '');
-			return;
-		}
-		$encryptedValue = $this->crypto->encrypt($value);
-		$this->config->setAppValue(Application::APP_ID, $key, $encryptedValue);
 	}
 
 	/**

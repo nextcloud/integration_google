@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Nextcloud - google
  *
@@ -13,18 +14,10 @@ namespace OCA\Google\Notification;
 
 use InvalidArgumentException;
 use OCA\Google\AppInfo\Application;
-use OCP\IURLGenerator;
-use OCP\L10N\IFactory;
 use OCP\Notification\INotification;
 use OCP\Notification\INotifier;
 
-class Notifier implements INotifier {
-
-	public function __construct(
-		private IFactory $factory,
-		private IURLGenerator $url
-	) {
-	}
+final class Notifier implements INotifier {
 
 	/**
 	 * Identifier of the notifier, only use [a-z0-9_]
@@ -32,6 +25,7 @@ class Notifier implements INotifier {
 	 * @return string
 	 * @since 17.0.0
 	 */
+	#[\Override]
 	public function getID(): string {
 		return 'integration_google';
 	}
@@ -41,6 +35,7 @@ class Notifier implements INotifier {
 	 * @return string
 	 * @since 17.0.0
 	 */
+	#[\Override]
 	public function getName(): string {
 		return $this->factory->get('integration_google')->t('Google');
 	}
@@ -52,6 +47,7 @@ class Notifier implements INotifier {
 	 * @throws InvalidArgumentException When the notification was not prepared by a notifier
 	 * @since 9.0.0
 	 */
+	#[\Override]
 	public function prepare(INotification $notification, string $languageCode): INotification {
 		if ($notification->getApp() !== 'integration_google') {
 			// Not my app => throw

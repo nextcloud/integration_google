@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Nextcloud - google
  *
@@ -15,16 +16,10 @@ use DateTime;
 use DateTimeZone;
 use Exception;
 use Generator;
-use OCA\DAV\CalDAV\CalDavBackend;
 use OCA\Google\AppInfo\Application;
-use OCP\IL10N;
 use Ortic\ColorConverter\Color;
 use Ortic\ColorConverter\Colors\Named;
-use Psr\Log\LoggerInterface;
 use Sabre\DAV\Exception\BadRequest;
-use Sabre\VObject\Component\VCalendar;
-use Sabre\VObject\Component\VEvent;
-use Sabre\VObject\Reader;
 use Throwable;
 
 require_once __DIR__ . '/../../vendor/autoload.php';
@@ -32,16 +27,7 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 /**
  * Service to make requests to Google v3 (JSON) API
  */
-class GoogleCalendarAPIService {
-
-	public function __construct(
-		string $appName,
-		private LoggerInterface $logger,
-		private IL10N $l10n,
-		private CalDavBackend $caldavBackend,
-		private GoogleAPIService $googleApiService
-	) {
-	}
+final class GoogleCalendarAPIService {
 
 	/**
 	 * @param string $userId
@@ -81,7 +67,6 @@ class GoogleCalendarAPIService {
 		];
 		// init
 		$closestColor = 'black';
-		/** @var Color $color */
 		$black = Color::fromString(Named::CSS_COLORS['black']);
 		$rgbBlack = [
 			'r' => $black->getRed(),
@@ -91,7 +76,6 @@ class GoogleCalendarAPIService {
 		$closestDiff = $this->colorDiff($rbgColor, $rgbBlack);
 
 		foreach (Named::CSS_COLORS as $name => $hex) {
-			/** @var Color $color */
 			$c = Color::fromString($hex);
 			$rgb = [
 				'r' => $c->getRed(),
@@ -118,46 +102,6 @@ class GoogleCalendarAPIService {
 	 */
 	private function colorDiff(array $rgb1, array $rgb2): int|float {
 		return (int) (abs($rgb1['r'] - $rgb2['r']) + abs($rgb1['g'] - $rgb2['g']) + abs($rgb1['b'] - $rgb2['b']));
-	}
-
-	/**
-	 * Get last modified timestamp from the calendar data of a calendar object
-	 *
-	 * @param string $calData
-	 * @return int|null
-	 * @throws Exception
-	 */
-	private function getEventLastModifiedTimestamp(string $calData): ?int {
-		/** @var VCalendar $vCalendar */
-		$vCalendar = Reader::read($calData);
-		/** @var VEvent $vEvent */
-		$vEvent = $vCalendar->{'VEVENT'};
-		$iCalEvents = $vEvent->getIterator();
-		foreach ($iCalEvents as $event) {
-			if (isset($event->{'LAST-MODIFIED'})) {
-				$lastMod = $event->{'LAST-MODIFIED'};
-				if (is_string($lastMod)) {
-					return (new DateTime($lastMod))->getTimestamp();
-				} elseif ($lastMod instanceof \Sabre\VObject\Property\ICalendar\DateTime) {
-					return $lastMod->getDateTime()->getTimestamp();
-				}
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * get the most recent event update date in a calendar
-	 *
-	 * @param int $calendarId
-	 * @return int
-	 */
-	private function getCalendarLastEventModificationTimestamp(int $calendarId): int {
-		$objects = $this->caldavBackend->getCalendarObjects($calendarId);
-		$lastModifieds = array_map(static function (array $object) {
-			return $object['lastmodified'] ?? 0;
-		}, $objects);
-		return max($lastModifieds);
 	}
 
 	/**

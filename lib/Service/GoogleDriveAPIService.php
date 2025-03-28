@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Nextcloud - google
  *
@@ -16,42 +17,24 @@ use Exception;
 use OC\User\NoUserException;
 use OCA\Google\AppInfo\Application;
 use OCA\Google\BackgroundJob\ImportDriveJob;
-use OCP\BackgroundJob\IJobList;
 use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\Files\InvalidPathException;
-use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
 use OCP\Files\NotPermittedException;
-use OCP\IConfig;
 use OCP\Lock\ILockingProvider;
 use OCP\Lock\LockedException;
 use OCP\PreConditionNotMetException;
-use Psr\Log\LoggerInterface;
 
 use Throwable;
 
-class GoogleDriveAPIService {
+final class GoogleDriveAPIService {
 
 	private const DOCUMENT_MIME_TYPES = [
 		'document' => 'application/vnd.google-apps.document',
 		'spreadsheet' => 'application/vnd.google-apps.spreadsheet',
 		'presentation' => 'application/vnd.google-apps.presentation',
 	];
-
-	/**
-	 * Service to make requests to Google v3 (JSON) API
-	 */
-	public function __construct(
-		string $appName,
-		private LoggerInterface $logger,
-		private IConfig $config,
-		private IRootFolder $root,
-		private IJobList $jobList,
-		private UserScopeService $userScopeService,
-		private GoogleAPIService $googleApiService
-	) {
-	}
 
 	/**
 	 * @param string $userId

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Nextcloud - google
  *
@@ -17,32 +18,15 @@ use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\ServerException;
 use OCA\Google\AppInfo\Application;
-use OCP\Http\Client\IClientService;
 use OCP\Http\Client\IResponse;
-use OCP\IConfig;
-use OCP\IL10N;
-use OCP\Notification\IManager as INotificationManager;
-use Psr\Log\LoggerInterface;
 use Throwable;
 
 /**
  * Service to make requests to Google v3 (JSON) API
  */
-class GoogleAPIService {
+final class GoogleAPIService {
 
 	private \OCP\Http\Client\IClient $client;
-
-	public function __construct(
-		string $appName,
-		private LoggerInterface $logger,
-		private IL10N $l10n,
-		private IConfig $config,
-		private INotificationManager $notificationManager,
-		IClientService $clientService,
-		private SecretService $secretService,
-	) {
-		$this->client = $clientService->newClient();
-	}
 
 	/**
 	 * @param string $baseUrl
@@ -279,12 +263,16 @@ class GoogleAPIService {
 
 	/**
 	 * Make a simple authenticated HTTP request to download a file
+	 *
 	 * @param string $userId the user from which the request is coming
 	 * @param string $url The path to reach
 	 * @param resource $resource
 	 * @param array $params Query parameters (key/val pairs)
 	 * @param string $method HTTP query method
-	 * @return string[]
+	 *
+	 * @return (mixed|string|true)[]
+	 *
+	 * @psalm-return array{error?: mixed|string, success?: true}
 	 */
 	public function simpleDownload(string $userId, string $url, $resource, array $params = [], string $method = 'GET'): array {
 		$this->checkTokenExpiration($userId);

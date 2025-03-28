@@ -12,25 +12,18 @@
 
 namespace OCA\Google\BackgroundJob;
 
-use OCA\Google\Service\GoogleDriveAPIService;
-use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\BackgroundJob\QueuedJob;
 
 /**
  * A QueuedJob to partially import google drive files and launch following job
  */
-class ImportDriveJob extends QueuedJob {
-
-	public function __construct(
-		ITimeFactory $timeFactory,
-		private GoogleDriveAPIService $service) {
-		parent::__construct($timeFactory);
-	}
+final class ImportDriveJob extends QueuedJob {
 
 	/**
 	 * @param array{user_id:string} $argument
 	 * @return void
 	 */
+	#[\Override]
 	public function run($argument) {
 		$userId = $argument['user_id'];
 		$this->service->importDriveJob($userId);

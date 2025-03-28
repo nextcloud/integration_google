@@ -4,29 +4,12 @@ namespace OCA\Google\Settings;
 
 use OC\User\NoUserException;
 use OCA\Google\AppInfo\Application;
-use OCA\Google\Service\GoogleAPIService;
-use OCA\Google\Service\SecretService;
 use OCP\AppFramework\Http\TemplateResponse;
-use OCP\AppFramework\Services\IInitialState;
-use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
 use OCP\Files\NotPermittedException;
-use OCP\IConfig;
-use OCP\IUserManager;
 use OCP\Settings\ISettings;
 
-class Personal implements ISettings {
-
-	public function __construct(
-		private IConfig $config,
-		private IRootFolder $root,
-		private IUserManager $userManager,
-		private IInitialState $initialStateService,
-		private GoogleAPIService $googleAPIService,
-		private ?string $userId,
-		private SecretService $secretService,
-	) {
-	}
+final class Personal implements ISettings {
 
 	/**
 	 * @return TemplateResponse
@@ -34,6 +17,7 @@ class Personal implements ISettings {
 	 * @throws NotPermittedException
 	 * @throws NoUserException
 	 */
+	#[\Override]
 	public function getForm(): TemplateResponse {
 		if ($this->userId === null) {
 			return new TemplateResponse(Application::APP_ID, 'personalSettings');
@@ -92,10 +76,12 @@ class Personal implements ISettings {
 		return new TemplateResponse(Application::APP_ID, 'personalSettings');
 	}
 
+	#[\Override]
 	public function getSection(): string {
 		return 'migration';
 	}
 
+	#[\Override]
 	public function getPriority(): int {
 		return 10;
 	}
