@@ -50,6 +50,8 @@ OC.L10N.register(
     "Failed to get number of Google photos" : "Nepodarilo sa získať počet fotiek na Googli",
     "Failed to get number of Google contacts" : "Nepodarilo sa získať počet kontaktov na Googli",
     "Failed to get address book list" : "Nepodarilo sa získať zoznam adresárov",
+    "_{nbSeen} Google contact seen. {nbAdded} added, {nbUpdated} updated in {name}_::_{nbSeen} Google contacts seen. {nbAdded} added, {nbUpdated} updated in {name}_" : ["Nájdený {nbSeen} Google kontakt. {nbAdded} pridaných, {nbUpdated} aktualizovaných v {name}","Nájdené {nbSeen} Google kontakty. {nbAdded} pridaných, {nbUpdated} aktualizovaných v {name}","Nájdených {nbSeen} Google kontaktov. {nbAdded} pridaných, {nbUpdated} aktualizovaných v {name}","Nájdených {nbSeen} Google kontaktov. {nbAdded} pridaných, {nbUpdated} aktualizovaných v {name}"],
+    "_{total} event successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_::_{total} events successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_" : ["{total} udalosť bola úspešne importovaná v {name} ({nbAdded} vytvorených, {nbUpdated} aktualizovaných)","{total} udalosti boli úspešne importovaných v {name} ({nbAdded} vytvorených, {nbUpdated} aktualizovaných)","{total}udalostí bolo úspešne importovaných v {name} ({nbAdded} vytvorených, {nbUpdated} aktualizovaných)","{total} udalostí bolo úspešne importovaných v {name} ({nbAdded} vytvorených, {nbUpdated} aktualizovaných)"],
     "Failed to import Google calendar" : "Nepodarilo sa importovať kalendár Google.",
     "Starting importing photos in {targetPath} directory" : "Spúšťa sa import fotografií do adresára {targetPath}",
     "Failed to start importing Google photos" : "Nepodarilo sa spustiť import fotografií z Googlu",
