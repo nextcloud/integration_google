@@ -45,7 +45,7 @@ class GoogleCalendarAPIService {
 		private IL10N $l10n,
 		private CalDavBackend $caldavBackend,
 		private IJobList $jobList,
-		private GoogleAPIService $googleApiService
+		private GoogleAPIService $googleApiService,
 	) {
 	}
 
@@ -121,7 +121,7 @@ class GoogleCalendarAPIService {
 	 * @psalm-return 0|float|positive-int
 	 */
 	private function colorDiff(array $rgb1, array $rgb2): int|float {
-		return (int) (abs($rgb1['r'] - $rgb2['r']) + abs($rgb1['g'] - $rgb2['g']) + abs($rgb1['b'] - $rgb2['b']));
+		return (int)(abs($rgb1['r'] - $rgb2['r']) + abs($rgb1['g'] - $rgb2['g']) + abs($rgb1['b'] - $rgb2['b']));
 	}
 
 	/**
@@ -208,7 +208,7 @@ class GoogleCalendarAPIService {
 			$params['{http://apple.com/ns/ical/}calendar-color'] = $color;
 		}
 
-		$newCalName = urlencode(trim($calName) . ' (' . $this->l10n->t('Google Calendar import') .')');
+		$newCalName = urlencode(trim($calName) . ' (' . $this->l10n->t('Google Calendar import') . ')');
 		$ncCalId = $this->calendarExists($userId, $newCalName);
 		$calendarIsNew = is_null($ncCalId);
 		if (is_null($ncCalId)) {
@@ -310,16 +310,16 @@ class GoogleCalendarAPIService {
 				foreach ($e['reminders']['overrides'] as $o) {
 					$nbMin = 0;
 					if (isset($o['minutes'])) {
-						$nbMin += (int) $o['minutes'];
+						$nbMin += (int)$o['minutes'];
 					}
 					if (isset($o['hours'])) {
-						$nbMin += ((int) $o['hours']) * 60;
+						$nbMin += ((int)$o['hours']) * 60;
 					}
 					if (isset($o['days'])) {
-						$nbMin += ((int) $o['days']) * 60 * 24;
+						$nbMin += ((int)$o['days']) * 60 * 24;
 					}
 					if (isset($o['weeks'])) {
-						$nbMin += ((int) $o['weeks']) * 60 * 24 * 7;
+						$nbMin += ((int)$o['weeks']) * 60 * 24 * 7;
 					}
 					$calData .= 'BEGIN:VALARM' . "\n"
 						. 'ACTION:DISPLAY' . "\n"
@@ -482,7 +482,7 @@ class GoogleCalendarAPIService {
 			'maxResults' => 2500,
 		];
 		do {
-			$result = $this->googleApiService->request($userId, 'calendar/v3/calendars/'. urlencode($calId) .'/events', $params);
+			$result = $this->googleApiService->request($userId, 'calendar/v3/calendars/' . urlencode($calId) . '/events', $params);
 			if (isset($result['error'])) {
 				return $result;
 			}

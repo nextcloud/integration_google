@@ -32,7 +32,7 @@ class GoogleContactsAPIService {
 		private LoggerInterface $logger,
 		private IContactManager $contactsManager,
 		private CardDavBackend $cdBackend,
-		private GoogleAPIService $googleApiService
+		private GoogleAPIService $googleApiService,
 	) {
 	}
 
@@ -194,7 +194,7 @@ class GoogleContactsAPIService {
 					} else {
 						try {
 							$googleUpdateTimestamp = (new DateTime($googleUpdateTime))->getTimestamp();
-						} catch (Exception | Throwable $e) {
+						} catch (Exception|Throwable $e) {
 							$googleUpdateTimestamp = 0;
 						}
 					}
