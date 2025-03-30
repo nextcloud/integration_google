@@ -114,11 +114,9 @@ class GoogleCalendarAPIService {
 	 * @param array{r:int, g:int, b:int} $rgb2 second color
 	 *
 	 * @return int the distance between colors
-	 *
-	 * @psalm-return 0|float|positive-int
 	 */
 	private function colorDiff(array $rgb1, array $rgb2): int|float {
-		return (int)(abs($rgb1['r'] - $rgb2['r']) + abs($rgb1['g'] - $rgb2['g']) + abs($rgb1['b'] - $rgb2['b']));
+		return abs($rgb1['r'] - $rgb2['r']) + abs($rgb1['g'] - $rgb2['g']) + abs($rgb1['b'] - $rgb2['b']);
 	}
 
 	/**

@@ -277,9 +277,6 @@
     <PossiblyUnusedParam>
       <code><![CDATA[$appName]]></code>
     </PossiblyUnusedParam>
-    <RedundantCast>
-      <code><![CDATA[(int) (abs($rgb1['r'] - $rgb2['r']) + abs($rgb1['g'] - $rgb2['g']) + abs($rgb1['b'] - $rgb2['b']))]]></code>
-    </RedundantCast>
     <RedundantConditionGivenDocblockType>
       <code><![CDATA[is_array($e['recurrence'])]]></code>
       <code><![CDATA[isset($e['recurrence']) && is_array($e['recurrence'])]]></code>
