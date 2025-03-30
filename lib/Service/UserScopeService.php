@@ -31,7 +31,7 @@ class UserScopeService {
 
 	public function __construct(
 		private IUserSession $userSession,
-		private IUserManager $userManager
+		private IUserManager $userManager,
 	) {
 	}
 
@@ -41,7 +41,7 @@ class UserScopeService {
 	 *
 	 * @param string|null $uid
 	 */
-	public function setUserScope(string $uid = null): void {
+	public function setUserScope(?string $uid = null): void {
 		if ($uid === null) {
 			return;
 		}

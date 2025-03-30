@@ -50,7 +50,7 @@ class GoogleDriveAPIService {
 		private IRootFolder $root,
 		private IJobList $jobList,
 		private UserScopeService $userScopeService,
-		private GoogleAPIService $googleApiService
+		private GoogleAPIService $googleApiService,
 	) {
 	}
 
@@ -68,7 +68,7 @@ class GoogleDriveAPIService {
 			return $result;
 		}
 		$info = [
-			'usageInDrive' => (int) $result['storageQuota']['usageInDrive'],
+			'usageInDrive' => (int)$result['storageQuota']['usageInDrive'],
 			'sharedWithMeSize' => 0,
 		];
 		if (!$considerSharedFiles) {
@@ -183,21 +183,21 @@ class GoogleDriveAPIService {
 			? []
 			: json_decode($directoryProgressStr, true);
 		// import by batch of 500 Mo
-		$alreadyImported = (int) $this->config->getUserValue($userId, Application::APP_ID, 'nb_imported_files', '0');
-		$alreadyImportedSize = (int) $this->config->getUserValue($userId, Application::APP_ID, 'drive_imported_size', '0');
+		$alreadyImported = (int)$this->config->getUserValue($userId, Application::APP_ID, 'nb_imported_files', '0');
+		$alreadyImportedSize = (int)$this->config->getUserValue($userId, Application::APP_ID, 'drive_imported_size', '0');
 		try {
 			$result = $this->importFiles(
 				$userId, $targetPath, 500000000,
 				$alreadyImported, $alreadyImportedSize, $directoryProgress
 			);
-		} catch (Exception | Throwable $e) {
+		} catch (Exception|Throwable $e) {
 			$result = [
 				'error' => 'Unknown job failure. ' . $e,
 			];
 		}
 		if (isset($result['error']) || (isset($result['finished']) && $result['finished'])) {
 			if (isset($result['finished']) && $result['finished']) {
-				$nbImported = (int) $this->config->getUserValue($userId, Application::APP_ID, 'nb_imported_files', '0');
+				$nbImported = (int)$this->config->getUserValue($userId, Application::APP_ID, 'nb_imported_files', '0');
 				$this->googleApiService->sendNCNotification($userId, 'import_drive_finished', [
 					'nbImported' => $nbImported,
 					'targetPath' => $targetPath,
@@ -238,7 +238,7 @@ class GoogleDriveAPIService {
 	public function importFiles(
 		string $userId, string $targetPath,
 		?int $maxDownloadSize = null, int $alreadyImported = 0, int $alreadyImportedSize = 0,
-		array &$directoryProgress = []
+		array &$directoryProgress = [],
 	): array {
 		$considerSharedFiles = $this->config->getUserValue($userId, Application::APP_ID, 'consider_shared_files', '0') === '1';
 		// create root folder
@@ -576,7 +576,7 @@ class GoogleDriveAPIService {
 	 */
 	private function downloadAndSaveFile(
 		Folder $saveFolder, string $fileName, string $userId,
-		string $fileUrl, array $fileItem, array $params = []
+		string $fileUrl, array $fileItem, array $params = [],
 	): ?int {
 		try {
 			$savedFile = $saveFolder->newFile($fileName);
@@ -700,11 +700,11 @@ class GoogleDriveAPIService {
 			$documentFormat = $this->getUserDocumentFormat($userId);
 			// potentially a doc
 			$params = $this->getDocumentRequestParams($fileItem['mimeType'], $documentFormat);
-			$fileUrl = 'https://www.googleapis.com/drive/v3/files/' . urlencode((string) $fileItem['id']) . '/export';
+			$fileUrl = 'https://www.googleapis.com/drive/v3/files/' . urlencode((string)$fileItem['id']) . '/export';
 			return $this->downloadAndSaveFile($saveFolder, $fileName, $userId, $fileUrl, $fileItem, $params);
 		} elseif (isset($fileItem['webContentLink'])) {
 			// classic file
-			$fileUrl = 'https://www.googleapis.com/drive/v3/files/' . urlencode((string) $fileItem['id']) . '?alt=media';
+			$fileUrl = 'https://www.googleapis.com/drive/v3/files/' . urlencode((string)$fileItem['id']) . '?alt=media';
 			return $this->downloadAndSaveFile($saveFolder, $fileName, $userId, $fileUrl, $fileItem);
 		}
 		return null;

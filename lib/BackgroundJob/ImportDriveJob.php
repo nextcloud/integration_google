@@ -23,7 +23,8 @@ class ImportDriveJob extends QueuedJob {
 
 	public function __construct(
 		ITimeFactory $timeFactory,
-		private GoogleDriveAPIService $service) {
+		private GoogleDriveAPIService $service,
+	) {
 		parent::__construct($timeFactory);
 	}
 
