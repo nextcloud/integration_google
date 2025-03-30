@@ -23,7 +23,8 @@ class ImportPhotosJob extends QueuedJob {
 
 	public function __construct(
 		ITimeFactory $timeFactory,
-		private GooglePhotosAPIService $service) {
+		private GooglePhotosAPIService $service,
+	) {
 		parent::__construct($timeFactory);
 	}
 
