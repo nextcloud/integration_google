@@ -1,9 +1,12 @@
 OC.L10N.register(
     "google_synchronization",
     {
+    "Bad credentials" : "Vale kasutajanimi, salasõna või tunnusluba",
+    "Connected accounts" : "Ühendatud kasutajakontod",
     "Client ID" : "Kliendi ID",
     "Client secret" : "Kliendi salasõna",
     "Authentication" : "Autentimine",
+    "Connected as {user}" : "Ühendatud kui {user}",
     "Contacts" : "Kontaktid",
     "Calendars" : "Kalendrid",
     "Import calendar" : "Impordi kalender",
