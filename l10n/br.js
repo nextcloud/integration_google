@@ -1,6 +1,7 @@
 OC.L10N.register(
     "integration_google",
     {
+    "Google" : "Google",
     "Client ID" : "ID kliant",
     "Contacts" : "Darempredoù",
     "Calendars" : "Deiziadurioù",
