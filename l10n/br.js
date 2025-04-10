@@ -4,7 +4,7 @@ OC.L10N.register(
     "Google" : "Google",
     "Client ID" : "ID kliant",
     "Contacts" : "Darempredoù",
-    "Calendars" : "Deiziadurioù",
+    "Calendars" : "Deiziataerioù",
     "Photos" : "Fotoioù",
     "Drive" : "Bleinañ"
 },
