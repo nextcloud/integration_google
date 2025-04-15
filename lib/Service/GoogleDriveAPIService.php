@@ -540,7 +540,7 @@ class GoogleDriveAPIService {
 			// create dir if we are on top OR if its parent is current dir
 			if (($currentFolderId === '' && !array_key_exists($parentId, $directoriesById))
 				|| $parentId === $currentFolderId) {
-				$name = $dir['name'];
+				$name = preg_replace('/[\/?<>\\:*|"]/', '-', trim((string)($dir['name'] ?? 'Untitled')));
 				if (!$currentFolder->nodeExists($name)) {
 					$newDir = $currentFolder->newFolder($name);
 				} else {
@@ -623,7 +623,7 @@ class GoogleDriveAPIService {
 	 * @return string name of the file to be saved
 	 */
 	private function getFileName(array $fileItem, string $userId, bool $hasNameConflict): string {
-		$fileName = preg_replace('/\/|\n|[^._A-Za-z0-9-]/', '-', $fileItem['name'] ?? 'Untitled');
+		$fileName = preg_replace('/[\/?<>\\:*|"]/', '-', trim((string)($fileItem['name'] ?? 'Untitled')));
 
 		if (in_array($fileItem['mimeType'], array_values(self::DOCUMENT_MIME_TYPES))) {
 			$documentFormat = $this->getUserDocumentFormat($userId);
