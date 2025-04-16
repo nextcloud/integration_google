@@ -16,6 +16,7 @@ use DateTime;
 use Exception;
 use OCA\Google\AppInfo\Application;
 use OCA\Google\BackgroundJob\ImportPhotosJob;
+use OCA\Google\Service\Utils\FileUtils;
 use OCP\BackgroundJob\IJobList;
 use OCP\Files\FileInfo;
 use OCP\Files\Folder;
@@ -277,7 +278,7 @@ class GooglePhotosAPIService {
 		$seenIds = [];
 		foreach ($albums as $album) {
 			$albumId = $album['id'];
-			$albumName = preg_replace('/[\/?<>\\:*|"]/', '-', trim((string)($album['title'] ?? 'Untitled')));
+			$albumName = FileUtils::sanitizeFilename((string)($album['title']), $album['id'], $this->logger);
 			if (!$folder->nodeExists($albumName)) {
 				$albumFolder = $folder->newFolder($albumName);
 			} else {
@@ -372,7 +373,7 @@ class GooglePhotosAPIService {
 	 * @throws \OCP\Files\NotPermittedException
 	 */
 	private function getPhoto(string $userId, array $photo, Folder $albumFolder): ?int {
-		$photoName = preg_replace('/[\/?<>\\:*|"]/', '-', trim((string)($photo['filename'] ?? 'Untitled')));
+		$photoName = FileUtils::sanitizeFilename((string)($photo['filename']), $photo['id'], $this->logger);
 		if ($albumFolder->nodeExists($photoName)) {
 			$photoName = $photo['id'] . '_' . $photoName;
 		}
