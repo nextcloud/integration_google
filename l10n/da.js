@@ -1,6 +1,8 @@
 OC.L10N.register(
     "integration_google",
     {
+    "Error during OAuth exchanges" : "Fejl under OAuth-udvekslinger",
+    "OAuth access token refused" : "OAuth adgang token nægtet",
     "Bad credentials" : "Forkerte legitimationsoplysninger",
     "Connected accounts" : "Forbundne konti",
     "Go to \"APIs & Services\" => \"Credentials\" and click on \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\"." : "Gå til \"API'er & services\" => \"Legitimationsoplysninger\" og klik på \"+ OPRET LEGITIMATIONSOPLYSNINGER\" -> \"OAuth klient ID\".",
