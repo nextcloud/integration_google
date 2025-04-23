@@ -1,0 +1,8 @@
+{ "translations": {
+    "Bad credentials" : "Akkaunt ma'lumotlari xato",
+    "Authentication" : "Autentifikatsiya",
+    "Contacts" : "Contacts",
+    "Calendars" : "Taqvimlar",
+    "Photos" : "Photos"
+},"pluralForm" :"nplurals=1; plural=0;"
+}
