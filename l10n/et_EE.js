@@ -5,6 +5,7 @@ OC.L10N.register(
     "Connected accounts" : "Ühendatud kasutajakontod",
     "Client ID" : "Kliendi ID",
     "Client secret" : "Kliendi salasõna",
+    "Sign in with Google" : "Logi sisse Google'i  kontoga",
     "Authentication" : "Autentimine",
     "Connected as {user}" : "Ühendatud kui {user}",
     "Contacts" : "Kontaktid",
