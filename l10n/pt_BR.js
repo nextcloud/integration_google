@@ -69,7 +69,7 @@ OC.L10N.register(
     "Import Google Contacts in Nextcloud" : "Importar Contatos do Google no Nextcloud",
     "Choose where to import the contacts" : "Escolha para onde importar os contatos",
     "New address book" : "Novo catálogo de endereços",
-    "address book name" : "Nome do catálogo de endereços",
+    "address book name" : "nome do catálogo de endereços",
     "Import in \"{name}\" address book" : "Importar no catálogo de endereços \"{name}\"",
     "Calendars" : "Calendários",
     "Import calendar" : "Importar calendário",
