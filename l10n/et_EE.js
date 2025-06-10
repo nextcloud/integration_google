@@ -1,6 +1,7 @@
 OC.L10N.register(
     "google_synchronization",
     {
+    "Error during OAuth exchanges" : "Viga OAuth andmevahetusel",
     "Bad credentials" : "Vale kasutajanimi, salasõna või tunnusluba",
     "Connected accounts" : "Ühendatud kasutajakontod",
     "Client ID" : "Kliendi ID",
