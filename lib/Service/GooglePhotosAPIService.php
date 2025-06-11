@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Nextcloud - google
  *
@@ -38,7 +39,7 @@ class GooglePhotosAPIService {
 		private IRootFolder $root,
 		private IJobList $jobList,
 		private UserScopeService $userScopeService,
-		private GoogleAPIService $googleApiService
+		private GoogleAPIService $googleApiService,
 	) {
 	}
 
@@ -173,10 +174,10 @@ class GooglePhotosAPIService {
 		$targetPath = $targetPath ?: '/Google Photos';
 		// import photos by batch of 500 Mo
 		$alreadyImported = $this->config->getUserValue($userId, Application::APP_ID, 'nb_imported_photos', '0');
-		$alreadyImported = (int) $alreadyImported;
+		$alreadyImported = (int)$alreadyImported;
 		try {
 			$result = $this->importPhotos($userId, $targetPath, 500000000, $alreadyImported);
-		} catch (Exception | Throwable $e) {
+		} catch (Exception|Throwable $e) {
 			$result = [
 				'error' => 'Unknown job failure. ' . $e->getMessage(),
 			];
@@ -211,7 +212,7 @@ class GooglePhotosAPIService {
 	 */
 	public function importPhotos(
 		string $userId, string $targetPath,
-		?int $maxDownloadSize = null, int $alreadyImported = 0
+		?int $maxDownloadSize = null, int $alreadyImported = 0,
 	): array {
 		// create root folder
 		$userFolder = $this->root->getUserFolder($userId);
@@ -363,7 +364,7 @@ class GooglePhotosAPIService {
 
 	/**
 	 * @param string $userId
-	 * @param array $photo
+	 * @param array{baseUrl: string, id: string, filename: string, mediaMetadata: array} $photo
 	 * @param Folder $albumFolder
 	 * @return int|null downloaded size, null if already existing
 	 * @throws \OCP\Files\InvalidPathException
@@ -407,7 +408,7 @@ class GooglePhotosAPIService {
 					$savedFile->touch();
 				}
 				$stat = $savedFile->stat();
-				return intval($stat['size'] ?? 0);
+				return (int)($stat['size'] ?? 0);
 			} else {
 				$this->logger->warning('Google API error downloading photo ' . '<redacted>' . ' : ' . (string)$res['error'], ['app' => Application::APP_ID]);
 				if ($savedFile->isDeletable()) {

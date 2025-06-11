@@ -21,6 +21,8 @@
     "Google API settings" : "Google API ayarları",
     "Go to \"APIs & Services\" => \"Credentials\" and click on \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\"." : "\"API ve hizmetler\" => \"Kimlik bilgileri\" bölümüne gidip \"+ KİMLİK BİLGİSİ OLUŞTUR\" -> \"OAuth istemci kimliği\" üzerine tıklayın.",
     "Set the \"Application type\" to \"Web application\" and give a name to the application." : "\"Uygulama türü\" olarak \"Web uygulaması\" seçin ve uygulamanıza bir ad verin.",
+    "Google may require site verification for OAuth to work with your site, which can be done in Google's search console" : "Sitenizde OAuth çalışması için Google site doğrulaması isteyebilir. Bu işlemi Google Search panosundan yapabilirsiniz",
+    "Google Search console" : "Google Search panosu",
     "Make sure you set one \"Authorized redirect URI\" to" : "\"İzin verilen yönlendirme adresini\" şuna ayarladığınızdan emin olun",
     "Put the \"Client ID\" and \"Client secret\" below." : "\"İstemci kimliği\" ve \"İstemci parolası\" bilgilerini aşağıya ekleyin.",
     "Finally, go to \"APIs & Services\" => \"Library\" and add the following APIs: \"Google Drive API\", \"Google Calendar API\", \"People API\" and \"Photos Library API\"." : "Son olarak \"API ve hizmetler\" => \"Kitaplık\" bölümüne gidin ve şu API uygulamalarını ekleyin: \"Google Drive API\", \"Google Calendar API\", \"People API\" ve \"Photos Library API\".",

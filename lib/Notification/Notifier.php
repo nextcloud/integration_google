@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Nextcloud - google
  *
@@ -22,7 +23,7 @@ class Notifier implements INotifier {
 
 	public function __construct(
 		private IFactory $factory,
-		private IURLGenerator $url
+		private IURLGenerator $url,
 	) {
 	}
 
@@ -64,7 +65,7 @@ class Notifier implements INotifier {
 			case 'import_photos_finished':
 				/** @var array{nbImported?:string, targetPath: string} $p */
 				$p = $notification->getSubjectParameters();
-				$nbImported = (int) ($p['nbImported'] ?? 0);
+				$nbImported = (int)($p['nbImported'] ?? 0);
 				$targetPath = $p['targetPath'];
 				$content = $l->n('%n photo was imported from Google.', '%n photos were imported from Google.', $nbImported);
 
@@ -76,7 +77,7 @@ class Notifier implements INotifier {
 			case 'import_drive_finished':
 				/** @var array{nbImported?:string, targetPath: string} $p */
 				$p = $notification->getSubjectParameters();
-				$nbImported = (int) ($p['nbImported'] ?? 0);
+				$nbImported = (int)($p['nbImported'] ?? 0);
 				$targetPath = $p['targetPath'];
 				$content = $l->n('%n file was imported from Google Drive.', '%n files were imported from Google Drive.', $nbImported);
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Nextcloud - google
  *
@@ -49,7 +50,7 @@ class ConfigController extends Controller {
 		private IInitialState $initialStateService,
 		private GoogleAPIService $googleApiService,
 		private ?string $userId,
-		private ICrypto	$crypto,
+		private ICrypto $crypto,
 		private SecretService $secretService,
 	) {
 		parent::__construct($appName, $request);
@@ -127,7 +128,7 @@ class ConfigController extends Controller {
 						'canEdit' => $canEdit,
 					];
 				}
-			} catch (Exception | Throwable $e) {
+			} catch (Exception|Throwable $e) {
 			}
 		}
 		return new DataResponse($result);
@@ -200,7 +201,7 @@ class ConfigController extends Controller {
 				$refreshToken = $result['refresh_token'];
 				if (isset($result['expires_in'])) {
 					$nowTs = (new DateTime())->getTimestamp();
-					$expiresAt = $nowTs + (int) $result['expires_in'];
+					$expiresAt = $nowTs + (int)$result['expires_in'];
 					$this->config->setUserValue($this->userId, Application::APP_ID, 'token_expires_at', (string)$expiresAt);
 				}
 				$this->secretService->setEncryptedUserValue($this->userId, 'token', $accessToken);

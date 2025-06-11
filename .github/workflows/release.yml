@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Use Node 16
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.2.0
         with:
           node-version: 16
 
@@ -21,7 +21,7 @@ jobs:
         run: npm i -g npm@^8.0.0
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@cf4cade2721270509d5b1c766ab3549210a39a2a # v2.33.0
         with:
           php-version: '7.4'
           extensions: mbstring, intl, sqlite3
@@ -30,7 +30,7 @@ jobs:
           tools: php-cs-fixer, phpunit
 
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Get current tag
         id: tag
@@ -78,7 +78,7 @@ jobs:
       - name: Create Release
         if: ${{ startsWith( steps.tag.outputs.currenttag , 'v' ) }}
         id: create_release
-        uses: actions/create-release@v1
+        uses: actions/create-release@0cb9c9b65d5d1901c1f53e5e66eaf4afd303e70e # v1.1.4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -90,7 +90,7 @@ jobs:
       - name: Upload Release Asset
         if: ${{ startsWith( steps.tag.outputs.currenttag , 'v' ) }}
         id: upload-release-asset
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@e8f9f06c4b078e705bd2ea027f0926603fc9b4d5 # v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:

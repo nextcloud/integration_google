@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Nextcloud - google
  *
@@ -56,8 +57,8 @@ class GoogleAPIController extends Controller {
 		}
 		return new DataResponse([
 			'importing_photos' => $this->config->getUserValue($this->userId, Application::APP_ID, 'importing_photos') === '1',
-			'last_import_timestamp' => (int) $this->config->getUserValue($this->userId, Application::APP_ID, 'last_import_timestamp', '0'),
-			'nb_imported_photos' => (int) $this->config->getUserValue($this->userId, Application::APP_ID, 'nb_imported_photos', '0'),
+			'last_import_timestamp' => (int)$this->config->getUserValue($this->userId, Application::APP_ID, 'last_import_timestamp', '0'),
+			'nb_imported_photos' => (int)$this->config->getUserValue($this->userId, Application::APP_ID, 'nb_imported_photos', '0'),
 		]);
 	}
 
@@ -72,9 +73,9 @@ class GoogleAPIController extends Controller {
 		}
 		return new DataResponse([
 			'importing_drive' => $this->config->getUserValue($this->userId, Application::APP_ID, 'importing_drive') === '1',
-			'last_drive_import_timestamp' => (int) $this->config->getUserValue($this->userId, Application::APP_ID, 'last_drive_import_timestamp', '0'),
-			'nb_imported_files' => (int) $this->config->getUserValue($this->userId, Application::APP_ID, 'nb_imported_files', '0'),
-			'drive_imported_size' => (int) $this->config->getUserValue($this->userId, Application::APP_ID, 'drive_imported_size', '0'),
+			'last_drive_import_timestamp' => (int)$this->config->getUserValue($this->userId, Application::APP_ID, 'last_drive_import_timestamp', '0'),
+			'nb_imported_files' => (int)$this->config->getUserValue($this->userId, Application::APP_ID, 'nb_imported_files', '0'),
+			'drive_imported_size' => (int)$this->config->getUserValue($this->userId, Application::APP_ID, 'drive_imported_size', '0'),
 		]);
 	}
 

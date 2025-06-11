@@ -1,6 +1,8 @@
 OC.L10N.register(
     "google_synchronization",
     {
+    "Error during OAuth exchanges" : "Fejl under OAuth-udvekslinger",
+    "OAuth access token refused" : "OAuth adgangsnøgle afvist",
     "Bad credentials" : "Forkerte legitimationsoplysninger",
     "Connected accounts" : "Forbundne konti",
     "Go to \"APIs & Services\" => \"Credentials\" and click on \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\"." : "Gå til \"API'er & services\" => \"Legitimationsoplysninger\" og klik på \"+ OPRET LEGITIMATIONSOPLYSNINGER\" -> \"OAuth klient ID\".",
@@ -11,7 +13,7 @@ OC.L10N.register(
     "Connected as {user}" : "Forbundet som {user}",
     "Contacts" : "Kontakter",
     "Calendars" : "Kalendere",
-    "Import calendar" : "Importer kalender",
+    "Import calendar" : "Importér kalender",
     "Photos" : "Billeder",
     "Drive" : "Drev"
 },

@@ -21,6 +21,8 @@
     "Google API settings" : "Google API 設定",
     "Go to \"APIs & Services\" => \"Credentials\" and click on \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\"." : "前往 \"APIs & Services\" => \"Credentials\" 然後單擊 \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\"。",
     "Set the \"Application type\" to \"Web application\" and give a name to the application." : "將「Application type」設置為 \"Web application\"，然後為應用程序命名。",
+    "Google may require site verification for OAuth to work with your site, which can be done in Google's search console" : "Google可能需要對您的網站進行驗證，以便 OAuth 正常運作，這可以在 Google 搜尋控制台中完成",
+    "Google Search console" : "Google 搜尋控制台",
     "Make sure you set one \"Authorized redirect URI\" to" : "確保您將「Authorized redirect URI」設定為",
     "Put the \"Client ID\" and \"Client secret\" below." : "在下方輸入「客戶端 ID」與「客戶端密碼」。",
     "Finally, go to \"APIs & Services\" => \"Library\" and add the following APIs: \"Google Drive API\", \"Google Calendar API\", \"People API\" and \"Photos Library API\"." : "最後，轉到 \"APIs & Services\" => \"Library\" 並添加以下 API：\"Google Drive API\"、\"Google Calendar API\"、\"People API\" 和 \"Photos Library API\"。",
