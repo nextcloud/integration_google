@@ -1,16 +1,18 @@
 OC.L10N.register(
     "google_synchronization",
     {
+    "Bad credentials" : "Forkerte legitimationsoplysninger",
     "Connected accounts" : "Forbundne konti",
-    "Client ID" : "Klient-ID",
-    "Client secret" : "Klient hemmelighed",
-    "Authentication" : "Godkendelse",
+    "Go to \"APIs & Services\" => \"Credentials\" and click on \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\"." : "Gå til \"API'er & services\" => \"Legitimationsoplysninger\" og klik på \"+ OPRET LEGITIMATIONSOPLYSNINGER\" -> \"OAuth klient ID\".",
+    "Client ID" : "Klient ID",
+    "Client secret" : "Klienthemmelighed",
     "Sign in with Google" : "Log ind med Google",
+    "Authentication" : "Godkendelse",
     "Connected as {user}" : "Forbundet som {user}",
     "Contacts" : "Kontakter",
     "Calendars" : "Kalendere",
     "Import calendar" : "Importer kalender",
     "Photos" : "Billeder",
-    "Drive" : "Køre"
+    "Drive" : "Drev"
 },
 "nplurals=2; plural=(n != 1);");

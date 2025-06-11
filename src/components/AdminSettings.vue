@@ -11,6 +11,9 @@
 			{{ t('google_synchronization', 'Go to "APIs & Services" => "Credentials" and click on "+ CREATE CREDENTIALS" -> "OAuth client ID".') }}
 			<br>
 			{{ t('google_synchronization', 'Set the "Application type" to "Web application" and give a name to the application.') }}
+			<br>
+			{{ t('google_synchronization', 'Google may require site verification for OAuth to work with your site, which can be done in Google\'s search console') }}
+			<a href="https://search.google.com/search-console/" class="external" target="_blank">{{ t('integration_google', 'Google Search console') }}</a>
 		</p>
 		<br>
 		<p class="settings-hint with-icon">
@@ -99,6 +102,7 @@ import { showSuccess } from '@nextcloud/dialogs'
 import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
 import DeleteIcon from 'vue-material-design-icons/Delete.vue'
+import {confirmPassword} from '@nextcloud/password-confirmation'
 
 export default {
 	name: 'AdminSettings',
@@ -128,16 +132,16 @@ export default {
 	},
 
 	methods: {
-		onUsePopupChanged(newValue) {
+		async onUsePopupChanged(newValue) {
 			this.saveOptions({ use_popup: newValue ? '1' : '0' })
 		},
 		onInput() {
 			const that = this
-			delay(() => {
+			delay(async () => {
 				that.saveOptions({
 					client_id: this.state.client_id,
 					client_secret: this.state.client_secret,
-				})
+				}, true)
 			}, 2000)()
 		},
 		onDeleteJobs() {
@@ -155,7 +159,8 @@ export default {
 					)
 				})
 		},
-		saveOptions(values) {
+		async saveOptions(values) {
+			await confirmPassword()
 			const req = {
 				values,
 			}

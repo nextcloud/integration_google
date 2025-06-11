@@ -1,6 +1,8 @@
 OC.L10N.register(
     "google_synchronization",
     {
+    "Bad credentials" : "Nederīgi pieteikšanās dati",
+    "Connected accounts" : "Savienotie konti",
     "Google API settings" : "Google API iestatījumi",
     "Client ID" : "Klienta ID",
     "Authentication" : "Autentifikācija",

@@ -3,16 +3,37 @@
   <file src="lib/Controller/ConfigController.php">
     <DeprecatedMethod>
       <code><![CDATA[getAppValue]]></code>
-      <code><![CDATA[getAppValue]]></code>
-      <code><![CDATA[getAppValue]]></code>
       <code><![CDATA[setAppValue]]></code>
     </DeprecatedMethod>
   </file>
-  <file src="lib/Service/GoogleAPIService.php">
+  <file src="lib/Migration/Version03001001Date20241111105515.php">
     <DeprecatedMethod>
       <code><![CDATA[getAppValue]]></code>
-      <code><![CDATA[getAppValue]]></code>
+      <code><![CDATA[setAppValue]]></code>
     </DeprecatedMethod>
+    <MissingReturnType>
+      <code><![CDATA[postSchemaChange]]></code>
+    </MissingReturnType>
+    <MixedArgument>
+      <code><![CDATA[$storedClearToken]]></code>
+      <code><![CDATA[$storedClearToken]]></code>
+    </MixedArgument>
+    <MixedArrayAccess>
+      <code><![CDATA[$row['configvalue']]]></code>
+      <code><![CDATA[$row['configvalue']]]></code>
+      <code><![CDATA[$row['userid']]]></code>
+      <code><![CDATA[$row['userid']]]></code>
+    </MixedArrayAccess>
+    <MixedAssignment>
+      <code><![CDATA[$row]]></code>
+      <code><![CDATA[$row]]></code>
+      <code><![CDATA[$storedClearToken]]></code>
+      <code><![CDATA[$storedClearToken]]></code>
+      <code><![CDATA[$userId]]></code>
+      <code><![CDATA[$userId]]></code>
+    </MixedAssignment>
+  </file>
+  <file src="lib/Service/GoogleAPIService.php">
     <InvalidArgument>
       <code><![CDATA[$expiresAt]]></code>
     </InvalidArgument>
@@ -517,17 +538,20 @@
       <code><![CDATA[is_resource($resource)]]></code>
     </RedundantConditionGivenDocblockType>
   </file>
-  <file src="lib/Settings/Admin.php">
+  <file src="lib/Service/SecretService.php">
     <DeprecatedMethod>
       <code><![CDATA[getAppValue]]></code>
-      <code><![CDATA[getAppValue]]></code>
+      <code><![CDATA[setAppValue]]></code>
+      <code><![CDATA[setAppValue]]></code>
+    </DeprecatedMethod>
+  </file>
+  <file src="lib/Settings/Admin.php">
+    <DeprecatedMethod>
       <code><![CDATA[getAppValue]]></code>
     </DeprecatedMethod>
   </file>
   <file src="lib/Settings/Personal.php">
     <DeprecatedMethod>
-      <code><![CDATA[getAppValue]]></code>
-      <code><![CDATA[getAppValue]]></code>
       <code><![CDATA[getAppValue]]></code>
     </DeprecatedMethod>
     <UndefinedDocblockClass>

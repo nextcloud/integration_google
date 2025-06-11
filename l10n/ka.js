@@ -3,8 +3,8 @@ OC.L10N.register(
     {
     "Client ID" : "Client ID",
     "Client secret" : "Client secret",
-    "Authentication" : "Authentication",
     "Sign in with Google" : "Sign in with Google",
+    "Authentication" : "Authentication",
     "Contacts" : "Contacts",
     "Calendars" : "Calendars",
     "Import calendar" : "Import calendar",

@@ -7,6 +7,7 @@ OC.L10N.register(
     "Connected accounts" : "Tengdir aðgangar",
     "Client ID" : "Biðlaraauðkenni",
     "Client secret" : "Leynilykill biðlara",
+    "Sign in with Google" : "Skrá inn með Google",
     "Authentication" : "Auðkenning",
     "Connected as {user}" : "Tengt sem {user}",
     "Contacts" : "Tengiliðir",
