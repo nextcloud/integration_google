@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.2.0] - 2025-06-11
+
+### New
+
+- Support for up to Nextcloud 32
+
+## Fixed
+
+* fix(AdminSettings): mention that google site verification may be necessary
+* Fix(l10n): Update translations from Transifex
+* fix(GooglePhotosAPIService): Allow multiple photos with the same name
+* fix: Safer settings
+
 ## [3.0.0] - 2024-09-26
 
 ### Breaking changes

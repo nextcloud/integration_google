@@ -40,7 +40,7 @@ This App supports:
 ## 🚀 Installation
 
 In your Nextcloud, simply enable the Google Synchronization app through the Apps management.
-The Google Synchronization app is available for Nextcloud >= 22.
+The Google Synchronization app is available for Nextcloud >= 28.
 
 ## 🔧 Setup
 
@@ -74,6 +74,7 @@ This also allows me to decide for myself if my releases are major, minor, or pat
 
 | Google Synchronization version | Google Integration version |
 | ------------------------------ | -------------------------- |
+| 3.2.0                          | 3.2.0                      |
 | 3.0.0                          | 3.1.0                      |
 | 2.2.0                          | 2.2.0                      |
 | 2.1.1                          | 2.1.0                      |
