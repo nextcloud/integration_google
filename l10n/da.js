@@ -13,7 +13,7 @@ OC.L10N.register(
     "Connected as {user}" : "Forbundet som {user}",
     "Contacts" : "Kontakter",
     "Calendars" : "Kalendere",
-    "Import calendar" : "Importer kalender",
+    "Import calendar" : "Importér kalender",
     "Photos" : "Billeder",
     "Drive" : "Drev"
 },
