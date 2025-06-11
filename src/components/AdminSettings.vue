@@ -102,7 +102,7 @@ import { showSuccess } from '@nextcloud/dialogs'
 import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
 import DeleteIcon from 'vue-material-design-icons/Delete.vue'
-import {confirmPassword} from '@nextcloud/password-confirmation'
+import { confirmPassword } from '@nextcloud/password-confirmation'
 
 export default {
 	name: 'AdminSettings',
