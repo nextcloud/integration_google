@@ -21,6 +21,7 @@
     "Google API settings" : "Paramètres de l'API Google",
     "Go to \"APIs & Services\" => \"Credentials\" and click on \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\"." : "Allez dans \"APIs & Services\" => \"Credentials\" et cliquez sur \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\".",
     "Set the \"Application type\" to \"Web application\" and give a name to the application." : "Réglez le \"Type d'application\" sur \"Application Web\" et donnez un nom à l'application.",
+    "Google Search console" : "Console Google Search",
     "Make sure you set one \"Authorized redirect URI\" to" : "Assurez-vous de définir une \"URI de redirection autorisée\" à",
     "Put the \"Client ID\" and \"Client secret\" below." : "Mettez le \"Client ID\" et \"Client secret\" ci-dessous.",
     "Finally, go to \"APIs & Services\" => \"Library\" and add the following APIs: \"Google Drive API\", \"Google Calendar API\", \"People API\" and \"Photos Library API\"." : "Enfin, allez dans \"APIs & Services\" => \"Library\" et ajoutez les API suivantes: \"Google Drive API\", \"Google Calendar API\", \"People API\" et \"Photos Library API\".",
