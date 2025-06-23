@@ -21,6 +21,7 @@
     "Google API settings" : "Paramètres de l'API Google",
     "Go to \"APIs & Services\" => \"Credentials\" and click on \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\"." : "Allez dans \"APIs & Services\" => \"Credentials\" et cliquez sur \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\".",
     "Set the \"Application type\" to \"Web application\" and give a name to the application." : "Réglez le \"Type d'application\" sur \"Application Web\" et donnez un nom à l'application.",
+    "Google may require site verification for OAuth to work with your site, which can be done in Google's search console" : "Google peut exiger une vérification du site pour que OAuth fonctionne avec votre site, ce qui peut être fait dans la console de recherche de Google",
     "Google Search console" : "Console Google Search",
     "Make sure you set one \"Authorized redirect URI\" to" : "Assurez-vous de définir une \"URI de redirection autorisée\" à",
     "Put the \"Client ID\" and \"Client secret\" below." : "Mettez le \"Client ID\" et \"Client secret\" ci-dessous.",
