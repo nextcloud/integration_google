@@ -2,36 +2,42 @@
 
 namespace OCA\Google\Service\Utils;
 
-use OC;
 use OCP\Files\EmptyFileNameException;
 use OCP\Files\FileNameTooLongException;
 use OCP\Files\InvalidCharacterInPathException;
 use OCP\Files\InvalidDirectoryException;
 use OCP\Files\ReservedWordException;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Psr\Log\LoggerInterface;
 
 class FileUtils {
+
+	public function __construct(
+		private \OCP\Files\IFilenameValidator $validator,
+		private \OCP\IConfig $config,
+		private LoggerInterface $logger,
+	) {
+	}
 
 	/**
 	 * Sanitize the filename to ensure it is valid, does not exceed length limits.
 	 *
 	 * @param string $filename The original filename to sanitize.
 	 * @param string $id A unique ID to append if necessary to ensure uniqueness.
-	 * @param LoggerInterface $logger Logger for logging messages.
 	 * @param int $recursionDepth The current recursion depth (used to prevent infinite loops).
 	 * @param string|null $originalFilename The original filename for logging.
 	 * @return string The sanitized and validated filename.
 	 */
-	public static function sanitizeFilename(
+	public function sanitizeFilename(
 		string $filename,
 		string $id,
-		LoggerInterface $logger,
 		int $recursionDepth = 0,
 		?string $originalFilename = null,
 	): string {
 		if ($recursionDepth > 15) {
 			$filename = 'Untitled_' . $id;
-			$logger->warning('Maximum recursion depth reached while sanitizing filename: ' . ($originalFilename ?? $filename) . ' renaming to ' . $filename);
+			$this->logger->warning('Maximum recursion depth reached while sanitizing filename: ' . ($originalFilename ?? $filename) . ' renaming to ' . $filename);
 			return $filename;
 		}
 
@@ -40,16 +46,16 @@ class FileUtils {
 		}
 
 		// Use Nextcloud 32+ validator if available
-		if (version_compare(OC::$server->getConfig()->getSystemValue('version', '0.0.0'), '32.0.0', '>=')) {
-			$logger->debug('Using Nextcloud 32+ filename validator for sanitization.');
+		if (version_compare($this->config->getSystemValue('version', '0.0.0'), '32.0.0', '>=')) {
+			$this->logger->debug('Using Nextcloud 32+ filename validator for sanitization.');
 			try {
-				return OC::$server->get(\OCP\Files\IFilenameValidator::class)->sanitizeFilename($filename);
-			} catch (\InvalidArgumentException $exception) {
-				$logger->error('Unable to sanitize filename: ' . $filename, ['exception' => $exception]);
+				return $this->validator->sanitizeFilename($filename);
+			} catch (\InvalidArgumentException|NotFoundExceptionInterface|ContainerExceptionInterface $exception) {
+				$this->logger->error('Unable to sanitize filename: ' . $filename, ['exception' => $exception]);
 				return 'Untitled_' . $id;
 			}
 		} else {
-			$logger->debug('Using legacy filename sanitization method.');
+			$this->logger->debug('Using legacy filename sanitization method.');
 		}
 
 		// Trim whitespace and trailing dots
@@ -67,18 +73,18 @@ class FileUtils {
 		}
 
 		try {
-			OC::$server->get(\OCP\Files\IFilenameValidator::class)->validateFilename($filename);
+			$this->validator->validateFilename($filename);
 			if ($recursionDepth > 0) {
-				$logger->info('Filename sanitized successfully: "' . $filename . '" (original: "' . $originalFilename . '")');
+				$this->logger->info('Filename sanitized successfully: "' . $filename . '" (original: "' . $originalFilename . '")');
 			}
 			return $filename;
 		} catch (\Throwable $exception) {
-			$logger->warning('Exception during filename validation: ' . $filename, ['exception' => $exception]);
+			$this->logger->warning('Exception during filename validation: ' . $filename, ['exception' => $exception]);
 			$filename = self::handleFilenameException($filename, $id, $exception, $logger);
 			if (strpos($filename, $id) === false) {
 				$filename = self::appendIdBeforeExtension($filename, $id);
 			}
-			return self::sanitizeFilename($filename, $id, $logger, $recursionDepth + 1, $originalFilename);
+			return $this->sanitizeFilename($filename, $id, $recursionDepth + 1, $originalFilename);
 		}
 	}
 

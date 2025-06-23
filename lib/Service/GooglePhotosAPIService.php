@@ -41,6 +41,7 @@ class GooglePhotosAPIService {
 		private IJobList $jobList,
 		private UserScopeService $userScopeService,
 		private GoogleAPIService $googleApiService,
+		private FileUtils $fileUtils,
 	) {
 	}
 
@@ -278,7 +279,7 @@ class GooglePhotosAPIService {
 		$seenIds = [];
 		foreach ($albums as $album) {
 			$albumId = $album['id'];
-			$albumName = FileUtils::sanitizeFilename((string)($album['title']), $album['id'], $this->logger);
+			$albumName = $this->fileUtils->sanitizeFilename((string)($album['title']), $album['id']);
 			if (!$folder->nodeExists($albumName)) {
 				$albumFolder = $folder->newFolder($albumName);
 			} else {
@@ -373,7 +374,7 @@ class GooglePhotosAPIService {
 	 * @throws \OCP\Files\NotPermittedException
 	 */
 	private function getPhoto(string $userId, array $photo, Folder $albumFolder): ?int {
-		$photoName = FileUtils::sanitizeFilename((string)($photo['filename']), $photo['id'], $this->logger);
+		$photoName = $this->fileUtils->sanitizeFilename((string)($photo['filename']), $photo['id']);
 		if ($albumFolder->nodeExists($photoName)) {
 			$photoName = $photo['id'] . '_' . $photoName;
 		}
