@@ -11,7 +11,7 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Log\LoggerInterface;
 
-class FileUtils {
+final class FileUtils {
 
 	public function __construct(
 		private \OCP\Files\IFilenameValidator $validator,
@@ -46,7 +46,7 @@ class FileUtils {
 		}
 
 		// Use Nextcloud 32+ validator if available
-		if (version_compare($this->config->getSystemValue('version', '0.0.0'), '32.0.0', '>=')) {
+		if (version_compare($this->config->getSystemValueString('version', '0.0.0'), '32.0.0', '>=')) {
 			$this->logger->debug('Using Nextcloud 32+ filename validator for sanitization.');
 			try {
 				return $this->validator->sanitizeFilename($filename);
@@ -80,7 +80,7 @@ class FileUtils {
 			return $filename;
 		} catch (\Throwable $exception) {
 			$this->logger->warning('Exception during filename validation: ' . $filename, ['exception' => $exception]);
-			$filename = self::handleFilenameException($filename, $id, $exception, $logger);
+			$filename = self::handleFilenameException($filename, $id, $exception, $this->logger);
 			if (strpos($filename, $id) === false) {
 				$filename = self::appendIdBeforeExtension($filename, $id);
 			}

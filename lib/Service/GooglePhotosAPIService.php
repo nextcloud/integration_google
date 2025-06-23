@@ -279,7 +279,7 @@ class GooglePhotosAPIService {
 		$seenIds = [];
 		foreach ($albums as $album) {
 			$albumId = $album['id'];
-			$albumName = $this->fileUtils->sanitizeFilename((string)($album['title']), $album['id']);
+			$albumName = $this->fileUtils->sanitizeFilename((string)($album['title']), (string)$album['id']);
 			if (!$folder->nodeExists($albumName)) {
 				$albumFolder = $folder->newFolder($albumName);
 			} else {
@@ -374,7 +374,7 @@ class GooglePhotosAPIService {
 	 * @throws \OCP\Files\NotPermittedException
 	 */
 	private function getPhoto(string $userId, array $photo, Folder $albumFolder): ?int {
-		$photoName = $this->fileUtils->sanitizeFilename((string)($photo['filename']), $photo['id']);
+		$photoName = $this->fileUtils->sanitizeFilename($photo['filename'], (string)$photo['id']);
 		if ($albumFolder->nodeExists($photoName)) {
 			$photoName = $photo['id'] . '_' . $photoName;
 		}
