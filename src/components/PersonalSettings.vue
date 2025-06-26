@@ -11,7 +11,7 @@
 			id="google-content">
 			<h3>{{ t('integration_google', 'Authentication') }}</h3>
 			<button v-if="!connected" class="google-oauth" @click="onOAuthClick">
-				<span class="google-signin" />
+				<GoogleIconColor />
 				<span>{{ t('integration_google', 'Sign in with Google') }}</span>
 			</button>
 			<div v-else>
@@ -95,8 +95,8 @@
 					id="google-photos">
 					<h3>{{ t('integration_google', 'Photos') }}</h3>
 					<NcCheckboxRadioSwitch v-if="!importingPhotos"
-						:checked="!state.consider_shared_albums"
-						@update:checked="onPhotoConsiderSharedChange">
+						:model-value="!state.consider_shared_albums"
+						@update:model-value="onPhotoConsiderSharedChange">
 						{{ t('integration_google', 'Ignore shared albums') }}
 					</NcCheckboxRadioSwitch>
 					<br>
@@ -163,8 +163,8 @@
 					id="google-drive">
 					<h3>{{ t('integration_google', 'Drive') }}</h3>
 					<NcCheckboxRadioSwitch v-if="!importingDrive"
-						:checked="!state.consider_shared_files"
-						@update:checked="onDriveConsiderSharedChange">
+						:model-value="!state.consider_shared_files"
+						@update:model-value="onDriveConsiderSharedChange">
 						{{ t('integration_google', 'Ignore shared files') }}
 					</NcCheckboxRadioSwitch>
 					<div v-if="!importingDrive" class="line">
@@ -269,15 +269,17 @@ import { generateUrl } from '@nextcloud/router'
 import axios from '@nextcloud/axios'
 import moment from '@nextcloud/moment'
 import { showSuccess, showError } from '@nextcloud/dialogs'
-import NcAppNavigationIconBullet from '@nextcloud/vue/dist/Components/NcAppNavigationIconBullet.js'
-import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
-import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
+import NcAppNavigationIconBullet from '@nextcloud/vue/components/NcAppNavigationIconBullet'
+import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
+import NcButton from '@nextcloud/vue/components/NcButton'
 import { humanFileSize } from '../utils.js'
+import GoogleIconColor from './icons/GoogleIconColor.vue'
 
 export default {
 	name: 'PersonalSettings',
 
 	components: {
+		GoogleIconColor,
 		GoogleIcon,
 		NcAppNavigationIconBullet,
 		NcButton,
@@ -666,7 +668,7 @@ export default {
 		},
 		onCalendarImport(cal) {
 			const calId = cal.id
-			this.$set(this.importingCalendar, calId, true)
+			this.importingCalendar[calId] = true
 			const req = {
 				params: {
 					calId,
@@ -698,7 +700,7 @@ export default {
 					)
 				})
 				.then(() => {
-					this.$set(this.importingCalendar, calId, false)
+					this.importingCalendar[calId] = false
 				})
 		},
 		onImportPhotos() {
@@ -934,7 +936,6 @@ export default {
 		display: flex;
 		align-items: center;
 		.google-signin {
-			background: url('../../img/google.svg');
 			width: 46px;
 			height: 46px;
 		}

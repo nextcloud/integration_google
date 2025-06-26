@@ -1,5 +1,5 @@
 module.exports = {
-	extends: 'stylelint-config-recommended-vue',
+	extends: '@nextcloud/stylelint-config',
 	rules: {
 		'selector-type-no-unknown': null,
 		'rule-empty-line-before': [

@@ -57,8 +57,8 @@
 					@focus="readonly = false">
 			</div>
 			<NcCheckboxRadioSwitch
-				:checked.sync="state.use_popup"
-				@update:checked="onUsePopupChanged">
+				v-model="state.use_popup"
+				@update:model-value="onUsePopupChanged">
 				{{ t('integration_google', 'Use a pop-up to authenticate') }}
 			</NcCheckboxRadioSwitch>
 		</div>
@@ -76,7 +76,7 @@ import { generateUrl } from '@nextcloud/router'
 import axios from '@nextcloud/axios'
 import { delay } from '../utils.js'
 import { showSuccess, showError } from '@nextcloud/dialogs'
-import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
+import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 import { confirmPassword } from '@nextcloud/password-confirmation'
 
 export default {
