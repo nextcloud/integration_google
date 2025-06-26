@@ -11,15 +11,13 @@
  * @copyright Julien Veyssier 2020
  */
 
-import Vue from 'vue'
-import './bootstrap.js'
+import { createApp } from 'vue'
 import AdminSettings from './components/AdminSettings.vue'
+import { translate as t, translatePlural as n } from '@nextcloud/l10n'
 
 // eslint-disable-next-line
 'use strict'
 
-// eslint-disable-next-line
-new Vue({
-	el: '#google_prefs',
-	render: h => h(AdminSettings),
-})
+const app = createApp(AdminSettings)
+app.mixin({ methods: { t, n } })
+app.mount('#google_prefs')
