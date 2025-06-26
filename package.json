@@ -22,7 +22,7 @@
 	"keywords": [
 		"google"
 	],
-    "type": "module",
+	"type": "module",
 	"author": "Julien Veyssier",
 	"license": "AGPL-3.0",
 	"bugs": {
