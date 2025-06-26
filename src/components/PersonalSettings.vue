@@ -935,10 +935,6 @@ export default {
 		padding: 0;
 		display: flex;
 		align-items: center;
-		.google-signin {
-			width: 46px;
-			height: 46px;
-		}
 		span {
 			padding: 0 8px 0 8px;
 			font-size: 1.1em;
