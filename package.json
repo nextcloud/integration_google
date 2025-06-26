@@ -7,9 +7,9 @@
 		"test": "tests"
 	},
 	"scripts": {
-		"build": "NODE_ENV=production webpack --progress --config webpack.js",
-		"dev": "NODE_ENV=development webpack --progress --config webpack.js",
-		"watch": "NODE_ENV=development webpack --progress --watch --config webpack.js",
+		"build": "NODE_ENV=production vite --mode production build",
+		"dev": "NODE_ENV=development vite --mode development build",
+		"watch": "NODE_ENV=development vite --mode development build --watch",
 		"lint": "eslint --ext .js,.vue src",
 		"lint:fix": "eslint --ext .js,.vue src --fix",
 		"stylelint": "stylelint src/**/*.vue src/**/*.scss src/**/*.css",
@@ -22,6 +22,7 @@
 	"keywords": [
 		"google"
 	],
+	"type": "module",
 	"author": "Julien Veyssier",
 	"license": "AGPL-3.0",
 	"bugs": {
@@ -32,29 +33,29 @@
 		"extends @nextcloud/browserslist-config"
 	],
 	"engines": {
-		"node": "^16.0.0",
-		"npm": "^7.0.0 || ^8.0.0"
+		"node": "^22.0.0",
+		"npm": "^10.0.0"
 	},
 	"dependencies": {
-		"@nextcloud/auth": "^2.0.0",
-		"@nextcloud/axios": "^2.0.0",
-		"@nextcloud/dialogs": "^3.1.2",
+		"@nextcloud/auth": "^2.5.1",
+		"@nextcloud/axios": "2.5.1",
+		"@nextcloud/dialogs": "^7.0.0-rc.1",
 		"@nextcloud/initial-state": "^2.0.0",
-		"@nextcloud/l10n": "^1.4.0",
+		"@nextcloud/l10n": "^3.3.0",
 		"@nextcloud/moment": "^1.3.4",
-		"@nextcloud/password-confirmation": "^5.3.1",
-		"@nextcloud/router": "^2.0.0",
-		"@nextcloud/vue": "8.x",
-		"vue": "^2.6.14",
+		"@nextcloud/password-confirmation": "^6.0.0-rc.0",
+		"@nextcloud/router": "^3.0.1",
+		"@nextcloud/vue": "^9.0.0-rc.3",
+		"vue": "^3.5.17",
 		"vue-material-design-icons": "^5.3.1"
 	},
 	"devDependencies": {
-		"@nextcloud/babel-config": "^1.0.0",
-		"@nextcloud/browserslist-config": "^2.2.0",
-		"@nextcloud/eslint-config": "8.x",
-		"@nextcloud/stylelint-config": "^3.x",
-		"@nextcloud/webpack-vue-config": "6.x",
-		"eslint-webpack-plugin": "4.x",
-		"stylelint-webpack-plugin": "5.x"
+		"@nextcloud/babel-config": "^1.2.0",
+		"@nextcloud/browserslist-config": "^3.0.1",
+		"@nextcloud/eslint-config": "^8.4.2",
+		"@nextcloud/stylelint-config": "^3.1.0",
+		"@nextcloud/vite-config": "^2.3.5",
+		"vite-plugin-eslint": "^1.8.1",
+		"vite-plugin-stylelint": "^6.0.0"
 	}
 }
