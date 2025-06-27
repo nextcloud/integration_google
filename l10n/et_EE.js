@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Error getting OAuth access token." : "Viga OAuthi tunnusloa laadimisel.",
     "Error during OAuth exchanges" : "Viga OAuth andmevahetusel",
+    "OAuth access token refused" : "OAuthi tunnusluba pole õige.",
     "Bad credentials" : "Vale kasutajanimi, salasõna või tunnusluba",
     "Connected accounts" : "Ühendatud kasutajakontod",
     "Client ID" : "Kliendi ID",
