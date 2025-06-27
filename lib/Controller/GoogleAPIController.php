@@ -16,7 +16,6 @@ use OCA\Google\AppInfo\Application;
 use OCA\Google\Service\GoogleCalendarAPIService;
 use OCA\Google\Service\GoogleContactsAPIService;
 use OCA\Google\Service\GoogleDriveAPIService;
-use OCA\Google\Service\GooglePhotosAPIService;
 use OCA\Google\Service\SecretService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
@@ -31,7 +30,6 @@ class GoogleAPIController extends Controller {
 		string $appName,
 		IRequest $request,
 		private IConfig $config,
-		private GooglePhotosAPIService $googlePhotosAPIService,
 		private GoogleContactsAPIService $googleContactsAPIService,
 		private GoogleDriveAPIService $googleDriveAPIService,
 		private GoogleCalendarAPIService $googleCalendarAPIService,
@@ -40,22 +38,6 @@ class GoogleAPIController extends Controller {
 	) {
 		parent::__construct($appName, $request);
 		$this->accessToken = $this->userId !== null ? $this->secretService->getEncryptedUserValue($this->userId, 'token') : '';
-	}
-
-	/**
-	 * @NoAdminRequired
-	 *
-	 * @return DataResponse
-	 */
-	public function getImportPhotosInformation(): DataResponse {
-		if ($this->accessToken === '') {
-			return new DataResponse([], 400);
-		}
-		return new DataResponse([
-			'importing_photos' => $this->config->getUserValue($this->userId, Application::APP_ID, 'importing_photos') === '1',
-			'last_import_timestamp' => (int)$this->config->getUserValue($this->userId, Application::APP_ID, 'last_import_timestamp', '0'),
-			'nb_imported_photos' => (int)$this->config->getUserValue($this->userId, Application::APP_ID, 'nb_imported_photos', '0'),
-		]);
 	}
 
 	/**
@@ -73,25 +55,6 @@ class GoogleAPIController extends Controller {
 			'nb_imported_files' => (int)$this->config->getUserValue($this->userId, Application::APP_ID, 'nb_imported_files', '0'),
 			'drive_imported_size' => (int)$this->config->getUserValue($this->userId, Application::APP_ID, 'drive_imported_size', '0'),
 		]);
-	}
-
-	/**
-	 * @NoAdminRequired
-	 *
-	 * @return DataResponse
-	 */
-	public function getPhotoNumber(): DataResponse {
-		if ($this->accessToken === '' || $this->userId === null) {
-			return new DataResponse([], 400);
-		}
-		/** @var array{error?:string} $result */
-		$result = $this->googlePhotosAPIService->getPhotoNumber($this->userId);
-		if (isset($result['error'])) {
-			$response = new DataResponse($result['error'], 401);
-		} else {
-			$response = new DataResponse($result);
-		}
-		return $response;
 	}
 
 	/**
@@ -143,25 +106,6 @@ class GoogleAPIController extends Controller {
 		}
 		/** @var array{error?:string} $result */
 		$result = $this->googleDriveAPIService->getDriveSize($this->userId);
-		if (isset($result['error'])) {
-			$response = new DataResponse($result['error'], 401);
-		} else {
-			$response = new DataResponse($result);
-		}
-		return $response;
-	}
-
-	/**
-	 * @NoAdminRequired
-	 *
-	 * @return DataResponse
-	 */
-	public function importPhotos(): DataResponse {
-		if ($this->accessToken === '' || $this->userId === null) {
-			return new DataResponse([], 400);
-		}
-		/** @var array{error?:string} $result */
-		$result = $this->googlePhotosAPIService->startImportPhotos($this->userId);
 		if (isset($result['error'])) {
 			$response = new DataResponse($result['error'], 401);
 		} else {
