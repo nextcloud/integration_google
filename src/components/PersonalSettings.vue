@@ -28,13 +28,22 @@
 					</NcButton>
 				</div>
 				<br>
-				<div v-if="nbContacts > 0"
+				<div v-if="nbContacts + nbOtherContacts >= 0"
 					id="google-contacts">
 					<h3>{{ t('google_synchronization', 'Contacts') }}</h3>
 					<div class="line">
+						<NcCheckboxRadioSwitch v-if="!importingContacts && state.user_scopes.can_access_other_contacts"
+							:model-value="state.consider_other_contacts"
+							@update:model-value="onContactsConsiderOtherChange">
+							{{ t('integration_google', 'Include other contacts') }}
+						</NcCheckboxRadioSwitch>
+					</div>
+					<div class="line">
 						<label>
 							<AccountGroupIcon />
-							{{ t('google_synchronization', '{amount} Google contacts', { amount: nbContacts }) }}
+							{{ state.consider_other_contacts
+								? t('google_synchronization', '{amount} Google + {otherAmount} other contacts', { amount: nbContacts, otherAmount: nbOtherContacts })
+								: t('google_synchronization', '{amount} Google contacts', { amount: nbContacts }) }}
 						</label>
 						<NcButton @click="onImportContacts">
 							<template #icon>
@@ -317,8 +326,10 @@ export default {
 			importingCalendar: {},
 			loadingSyncCalendar: {},
 			// contacts
+			considerOtherContacts: false,
 			addressbooks: [],
 			nbContacts: 0,
+			nbOtherContacts: 0,
 			showAddressBooks: false,
 			selectedAddressBook: 0,
 			newAddressBookName: 'Google Contacts import',
@@ -471,6 +482,7 @@ export default {
 				'https://www.googleapis.com/auth/contacts.readonly',
 				'https://www.googleapis.com/auth/photoslibrary.readonly',
 				'https://www.googleapis.com/auth/drive.readonly',
+				'https://www.googleapis.com/auth/contacts.other.readonly',
 			]
 			const requestUrl = 'https://accounts.google.com/o/oauth2/v2/auth?'
 				+ 'client_id=' + encodeURIComponent(this.state.client_id)
@@ -601,6 +613,7 @@ export default {
 				.then((response) => {
 					if (response.data && Object.keys(response.data).length > 0) {
 						this.nbContacts = response.data.nbContacts
+						this.nbOtherContacts = response.data.nbOtherContacts ?? 0
 					}
 				})
 				.catch((error) => {
@@ -848,6 +861,10 @@ export default {
 		},
 		myHumanFileSize(bytes, approx = false, si = false, dp = 1) {
 			return humanFileSize(bytes, approx, si, dp)
+		},
+		onContactsConsiderOtherChange(newValue) {
+			this.state.consider_other_contacts = newValue
+			this.saveOptions({ consider_other_contacts: this.state.consider_other_contacts ? '1' : '0' }, this.getNbGoogleContacts)
 		},
 		onDriveConsiderSharedChange(newValue) {
 			this.state.consider_shared_files = !newValue
