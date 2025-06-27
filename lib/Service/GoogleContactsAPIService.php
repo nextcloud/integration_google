@@ -18,6 +18,7 @@ use Generator;
 use OCA\DAV\CardDAV\CardDavBackend;
 use OCA\Google\AppInfo\Application;
 use OCP\Contacts\IManager as IContactManager;
+use OCP\IConfig;
 use Psr\Log\LoggerInterface;
 use Sabre\VObject\Component\VCard;
 use Throwable;
@@ -33,6 +34,7 @@ class GoogleContactsAPIService {
 		private IContactManager $contactsManager,
 		private CardDavBackend $cdBackend,
 		private GoogleAPIService $googleApiService,
+		private IConfig $config,
 	) {
 	}
 
@@ -72,29 +74,40 @@ class GoogleContactsAPIService {
 	 * @return array
 	 */
 	public function getContactNumber(string $userId): array {
-		$nbContacts = 0;
 		$params = [
 			'personFields' => implode(',', [
 				'names',
 			]),
-			'pageSize' => 100,
 		];
-		do {
-			$result = $this->googleApiService->request($userId, 'v1/people/me/connections', $params, 'GET', 'https://people.googleapis.com/');
-			if (isset($result['error'])) {
-				return $result;
+		$result = [];
+		$contacts = $this->googleApiService->request($userId, 'v1/people/me/connections', $params, 'GET', 'https://people.googleapis.com/');
+		if (isset($contacts['error'])) {
+			return $contacts;
+		}
+		$result['nbContacts'] = $contacts['totalItems'] ?? 0;
+		$otherContacts = $this->config->getUserValue($userId, Application::APP_ID, 'consider_other_contacts', '0');
+		if ($otherContacts == '1') {
+			$params = [
+				'readMask' => implode(',', [
+					'names',
+					'emailAddresses',
+				]),
+			];
+			$otherContacts = $this->googleApiService->request($userId, 'v1/otherContacts', $params, 'GET', 'https://people.googleapis.com/');
+			if (isset($otherContacts['error'])) {
+				return $otherContacts;
 			}
-			$nbContacts += count($result['connections'] ?? []);
-			$params['pageToken'] = $result['nextPageToken'] ?? '';
-		} while (isset($result['nextPageToken']));
-		return ['nbContacts' => $nbContacts];
+			$result['nbOtherContacts'] = $otherContacts['totalSize'] ?? 0;
+		}
+		return $result;
 	}
 
 	/**
 	 * @param string $userId
+	 * @param bool $otherContacts
 	 * @return Generator
 	 */
-	public function getContactList(string $userId): Generator {
+	public function getContactList(string $userId, bool $otherContacts = false): Generator {
 		$params = [
 			'personFields' => implode(',', [
 				'addresses',
@@ -127,6 +140,31 @@ class GoogleContactsAPIService {
 			}
 			$params['pageToken'] = $result['nextPageToken'] ?? '';
 		} while (isset($result['nextPageToken']));
+		if ($otherContacts) {
+			$params = [
+				'readMask' => implode(',', [
+					'emailAddresses',
+					'metadata',
+					'names',
+					'phoneNumbers',
+					'photos',
+				]),
+				'sources' => 'READ_SOURCE_TYPE_CONTACT',
+				'pageSize' => 100,
+			];
+			do {
+				$result = $this->googleApiService->request($userId, 'v1/otherContacts', $params, 'GET', 'https://people.googleapis.com/');
+				if (isset($result['error'])) {
+					return $result;
+				}
+				if (isset($result['otherContacts']) && is_array($result['otherContacts'])) {
+					foreach ($result['otherContacts'] as $contact) {
+						yield $contact;
+					}
+				}
+				$params['pageToken'] = $result['nextPageToken'] ?? '';
+			} while (isset($result['nextPageToken']));
+		}
 		return [];
 	}
 
@@ -166,9 +204,9 @@ class GoogleContactsAPIService {
 			}
 			$existingAddressBook = $addressBook;
 		}
-
+		$otherContacts = $this->config->getUserValue($userId, Application::APP_ID, 'consider_other_contacts', '0') === '1';
 		$groupsById = $this->getContactGroupsById($userId);
-		$contacts = $this->getContactList($userId);
+		$contacts = $this->getContactList($userId, $otherContacts);
 		$nbAdded = 0;
 		$nbUpdated = 0;
 		$totalContactNumber = 0;
