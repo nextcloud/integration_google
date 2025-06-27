@@ -39,6 +39,7 @@ class GoogleDriveAPIService {
 		'document' => 'application/vnd.google-apps.document',
 		'spreadsheet' => 'application/vnd.google-apps.spreadsheet',
 		'presentation' => 'application/vnd.google-apps.presentation',
+		'drawing' => 'application/vnd.google-apps.drawing',
 	];
 
 	/**
@@ -638,6 +639,9 @@ class GoogleDriveAPIService {
 					break;
 				case self::DOCUMENT_MIME_TYPES['presentation']:
 					$fileName .= $documentFormat === 'openxml' ? '.pptx' : '.odp';
+					break;
+				case self::DOCUMENT_MIME_TYPES['drawing']:
+					$fileName .= '.pdf';
 					break;
 			}
 		}
