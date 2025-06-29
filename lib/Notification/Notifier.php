@@ -62,18 +62,6 @@ class Notifier implements INotifier {
 		$l = $this->factory->get('integration_google', $languageCode);
 
 		switch ($notification->getSubject()) {
-			case 'import_photos_finished':
-				/** @var array{nbImported?:string, targetPath: string} $p */
-				$p = $notification->getSubjectParameters();
-				$nbImported = (int)($p['nbImported'] ?? 0);
-				$targetPath = $p['targetPath'];
-				$content = $l->n('%n photo was imported from Google.', '%n photos were imported from Google.', $nbImported);
-
-				$notification->setParsedSubject($content)
-					->setIcon($this->url->getAbsoluteURL($this->url->imagePath(Application::APP_ID, 'app-dark.svg')))
-					->setLink($this->url->linkToRouteAbsolute('files.view.index', ['dir' => $targetPath]));
-				return $notification;
-
 			case 'import_drive_finished':
 				/** @var array{nbImported?:string, targetPath: string} $p */
 				$p = $notification->getSubjectParameters();

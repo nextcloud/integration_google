@@ -38,7 +38,6 @@ class ConfigController extends Controller {
 	public const CONTACTS_SCOPE = 'https://www.googleapis.com/auth/contacts.readonly';
 	public const CALENDAR_SCOPE = 'https://www.googleapis.com/auth/calendar.readonly';
 	public const CALENDAR_EVENTS_SCOPE = 'https://www.googleapis.com/auth/calendar.events.readonly';
-	public const PHOTOS_SCOPE = 'https://www.googleapis.com/auth/photoslibrary.readonly';
 
 	public function __construct(
 		string $appName,
@@ -177,7 +176,6 @@ class ConfigController extends Controller {
 		$scopesArray = [
 			'can_access_drive' => in_array(self::DRIVE_SCOPE, $scopes) ? 1 : 0,
 			'can_access_contacts' => in_array(self::CONTACTS_SCOPE, $scopes) ? 1 : 0,
-			'can_access_photos' => in_array(self::PHOTOS_SCOPE, $scopes) ? 1 : 0,
 			'can_access_calendar' => (in_array(self::CALENDAR_SCOPE, $scopes) && in_array(self::CALENDAR_EVENTS_SCOPE, $scopes)) ? 1 : 0,
 		];
 

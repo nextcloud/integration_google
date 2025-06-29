@@ -25,7 +25,7 @@
 		<p class="settings-hint">
 			{{ t('integration_google', 'Put the "Client ID" and "Client secret" below.') }}
 			<br>
-			{{ t('integration_google', 'Finally, go to "APIs & Services" => "Library" and add the following APIs: "Google Drive API", "Google Calendar API", "People API" and "Photos Library API".') }}
+			{{ t('integration_google', 'Finally, go to "APIs & Services" => "Library" and add the following APIs: "Google Drive API", "Google Calendar API", and "People API".') }}
 			<br>
 			{{ t('integration_google', 'Your Nextcloud users will then see a "Connect to Google" button in their personal settings.') }}
 		</p>
