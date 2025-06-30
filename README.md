@@ -29,4 +29,5 @@ If there is a strong business case for any development of this app, we will cons
 
 ## Limitations
 
-This app can not migrate google photos files due to limitations in the Google Photos API making it too complex for end users.
+This app can not migrate Google photos files due to limitations in the Google Photos API making it too complex for end users.
+For more information please visit [the Google Photos Documentation.](https://developers.google.com/photos/support/updates#affected-scopes-methods)
