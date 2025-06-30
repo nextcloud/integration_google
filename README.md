@@ -26,3 +26,8 @@ While there are many things that could be done to further improve this app, the 
 We would be more than excited if you would like to collaborate with us. We will merge pull requests for new features and fixes. We also would love to welcome co-maintainers.
 
 If there is a strong business case for any development of this app, we will consider your wishes for our roadmap. Please [contact your account manager](https://nextcloud.com/enterprise/) to talk about the possibilities.
+
+## Limitations
+
+This app can not migrate Google photos files due to limitations in the Google Photos API making it too complex for end users.
+For more information please visit [the Google Photos Documentation.](https://developers.google.com/photos/support/updates#affected-scopes-methods)

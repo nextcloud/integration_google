@@ -100,74 +100,6 @@
 					</div>
 					<br>
 				</div>
-				<div v-if="nbPhotos > 0"
-					id="google-photos">
-					<h3>{{ t('integration_google', 'Photos') }}</h3>
-					<NcCheckboxRadioSwitch v-if="!importingPhotos"
-						:model-value="!state.consider_shared_albums"
-						@update:model-value="onPhotoConsiderSharedChange">
-						{{ t('integration_google', 'Ignore shared albums') }}
-					</NcCheckboxRadioSwitch>
-					<br>
-					<p v-if="!importingPhotos" class="settings-hint">
-						<InformationOutlineIcon />
-						{{ t('integration_google', 'Warning: Google does not provide location data in imported photos.') }}
-					</p>
-					<div v-if="!importingPhotos" class="line">
-						<label for="photo-output">
-							<FolderIcon />
-							{{ t('integration_google', 'Import directory') }}
-						</label>
-						<input id="photo-output"
-							:readonly="true"
-							:value="state.photo_output_dir">
-						<NcButton class="edit-output-dir"
-							@click="onPhotoOutputChange">
-							<template #icon>
-								<PencilIcon />
-							</template>
-						</NcButton>
-						<br><br>
-					</div>
-					<div class="line">
-						<label>
-							<ImageIcon />
-							{{ n('integration_google',
-								'>{nbPhotos} Google photo (>{formSize})',
-								'>{nbPhotos} Google photos (>{formSize})',
-								nbPhotos,
-								{ nbPhotos, formSize: myHumanFileSize(estimatedPhotoCollectionSize, true) })
-							}}
-						</label>
-						<NcButton v-if="enoughSpaceForPhotos && !importingPhotos"
-							id="google-import-photos"
-							:disabled="gettingPhotoInfo"
-							:class="{ loading: gettingPhotoInfo }"
-							@click="onImportPhotos">
-							<template #icon>
-								<FileImageIcon />
-							</template>
-							{{ t('integration_google', 'Import Google photos') }}
-						</NcButton>
-						<span v-else-if="!enoughSpaceForPhotos">
-							{{ t('integration_google', 'Your Google photo collection size is estimated to be bigger than your remaining space left ({formSpace})', { formSpace: myHumanFileSize(state.free_space) }) }}
-						</span>
-					</div>
-					<div v-if="importingPhotos">
-						<br>
-						{{ n('integration_google', '{amount} photo imported', '{amount} photos imported', nbImportedPhotos, { amount: nbImportedPhotos }) }}
-						<br>
-						{{ lastPhotoImportDate }}
-						<br>
-						<NcButton @click="onCancelPhotoImport">
-							<template #icon>
-								<CloseIcon />
-							</template>
-							{{ t('integration_google', 'Cancel photo import') }}
-						</NcButton>
-					</div>
-					<br><br>
-				</div>
 				<div v-if="showDrive"
 					id="google-drive">
 					<h3>{{ t('integration_google', 'Drive') }}</h3>
@@ -258,14 +190,11 @@
 <script>
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 import AccountGroupIcon from 'vue-material-design-icons/AccountGroup.vue'
-import InformationOutlineIcon from 'vue-material-design-icons/InformationOutline.vue'
 import FileDocumentIcon from 'vue-material-design-icons/FileDocument.vue'
 import FileIcon from 'vue-material-design-icons/File.vue'
 import FolderIcon from 'vue-material-design-icons/Folder.vue'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
 import CalendarIcon from 'vue-material-design-icons/Calendar.vue'
-import FileImageIcon from 'vue-material-design-icons/FileImage.vue'
-import ImageIcon from 'vue-material-design-icons/Image.vue'
 import DownloadIcon from 'vue-material-design-icons/Download.vue'
 import AccountMultipleIcon from 'vue-material-design-icons/AccountMultiple.vue'
 import PencilIcon from 'vue-material-design-icons/Pencil.vue'
@@ -299,11 +228,8 @@ export default {
 		AccountMultipleIcon,
 		DownloadIcon,
 		CalendarIcon,
-		FileImageIcon,
-		ImageIcon,
 		FolderIcon,
 		FileDocumentIcon,
-		InformationOutlineIcon,
 		FileIcon,
 		CheckIcon,
 		AccountGroupIcon,
@@ -327,13 +253,6 @@ export default {
 			selectedAddressBook: 0,
 			newAddressBookName: 'Google Contacts import',
 			importingContacts: false,
-			// photos
-			nbPhotos: 0,
-			gettingPhotoInfo: false,
-			importingPhotos: false,
-			lastPhotoImportTimestamp: 0,
-			nbImportedPhotos: 0,
-			photoImportLoop: null,
 			// drive
 			driveSize: 0,
 			gettingDriveInfo: false,
@@ -368,24 +287,6 @@ export default {
 			return this.selectedAddressBook === 0
 				? null
 				: this.addressbooks[this.selectedAddressBook].uri
-		},
-		estimatedPhotoCollectionSize() {
-			// we estimate with an average 1 MB size per photo
-			return this.nbPhotos * 1000000
-		},
-		enoughSpaceForPhotos() {
-			return this.nbPhotos === 0 || this.state.user_quota === 'none' || this.estimatedPhotoCollectionSize < this.state.free_space
-		},
-		lastPhotoImportDate() {
-			return this.lastPhotoImportTimestamp !== 0
-				? t('integration_google', 'Last photo import job at {date}', { date: moment.unix(this.lastPhotoImportTimestamp).format('LLL') })
-				: t('integration_google', 'Photo import background process will begin soon.') + ' '
-					+ t('integration_google', 'You can close this page. You will be notified when it finishes.')
-		},
-		photoImportProgress() {
-			return this.nbPhotos > 0 && this.nbImportedPhotos > 0
-				? parseInt(this.nbImportedPhotos / this.nbPhotos * 100)
-				: 0
 		},
 		enoughSpaceForDrive() {
 			return this.driveSize === 0 || this.state.user_quota === 'none' || this.driveSize < this.state.free_space
@@ -431,10 +332,6 @@ export default {
 				if (this.state.user_scopes.can_access_contacts) {
 					this.getNbGoogleContacts()
 				}
-				if (this.state.user_scopes.can_access_photos) {
-					this.getNbGooglePhotos()
-					this.getPhotoImportValues(true)
-				}
 				if (this.state.user_scopes.can_access_drive) {
 					this.getGoogleDriveInfo()
 					this.getDriveImportValues(true)
@@ -475,7 +372,6 @@ export default {
 				'https://www.googleapis.com/auth/calendar.readonly',
 				'https://www.googleapis.com/auth/calendar.events.readonly',
 				'https://www.googleapis.com/auth/contacts.readonly',
-				'https://www.googleapis.com/auth/photoslibrary.readonly',
 				'https://www.googleapis.com/auth/drive.readonly',
 				'https://www.googleapis.com/auth/contacts.other.readonly',
 			]
@@ -562,47 +458,6 @@ export default {
 			return cal.backgroundColor
 				? cal.backgroundColor.replace('#', '')
 				: '0082c9'
-		},
-		getPhotoImportValues(launchLoop = false) {
-			const url = generateUrl('/apps/integration_google/import-photos-info')
-			axios.get(url)
-				.then((response) => {
-					if (response.data && Object.keys(response.data).length > 0) {
-						this.lastPhotoImportTimestamp = response.data.last_import_timestamp
-						this.nbImportedPhotos = response.data.nb_imported_photos
-						this.importingPhotos = response.data.importing_photos
-						if (!this.importingPhotos) {
-							clearInterval(this.photoImportLoop)
-						} else if (launchLoop) {
-							// launch loop if we are currently importing AND it's the first time we call getPhotoImportValues
-							this.photoImportLoop = setInterval(() => this.getPhotoImportValues(), 10000)
-						}
-					}
-				})
-				.catch((error) => {
-					console.debug(error)
-				})
-				.then(() => {
-				})
-		},
-		getNbGooglePhotos() {
-			this.gettingPhotoInfo = true
-			const url = generateUrl('/apps/integration_google/photo-number')
-			axios.get(url)
-				.then((response) => {
-					if (response.data && Object.keys(response.data).length > 0) {
-						this.nbPhotos = response.data.nbPhotos
-					}
-				})
-				.catch((error) => {
-					showError(
-						t('integration_google', 'Failed to get number of Google photos')
-						+ ': ' + error.response?.request?.responseText,
-					)
-				})
-				.then(() => {
-					this.gettingPhotoInfo = false
-				})
 		},
 		getNbGoogleContacts() {
 			const url = generateUrl('/apps/integration_google/contact-number')
@@ -716,49 +571,6 @@ export default {
 					this.importingCalendar[calId] = false
 				})
 		},
-		onImportPhotos() {
-			const req = {
-				params: {
-				},
-			}
-			const url = generateUrl('/apps/integration_google/import-photos')
-			axios.get(url, req)
-				.then((response) => {
-					const targetPath = response.data.targetPath
-					showSuccess(
-						t('integration_google', 'Starting importing photos in {targetPath} directory', { targetPath }),
-					)
-					this.getPhotoImportValues(true)
-				})
-				.catch((error) => {
-					showError(
-						t('integration_google', 'Failed to start importing Google photos')
-						+ ': ' + error.response?.request?.responseText,
-					)
-				})
-				.then(() => {
-				})
-		},
-		onCancelPhotoImport() {
-			this.importingPhotos = false
-			clearInterval(this.photoImportLoop)
-			const req = {
-				values: {
-					importing_photos: '0',
-					last_import_timestamp: '0',
-					nb_imported_photos: '0',
-				},
-			}
-			const url = generateUrl('/apps/integration_google/config')
-			axios.put(url, req)
-				.then((response) => {
-				})
-				.catch((error) => {
-					console.debug(error)
-				})
-				.then(() => {
-				})
-		},
 		getDriveImportValues(launchLoop = false) {
 			const url = generateUrl('/apps/integration_google/import-files-info')
 			axios.get(url)
@@ -837,10 +649,6 @@ export default {
 			this.state.consider_shared_files = !newValue
 			this.saveOptions({ consider_shared_files: this.state.consider_shared_files ? '1' : '0' }, this.getGoogleDriveInfo)
 		},
-		onPhotoConsiderSharedChange(newValue) {
-			this.state.consider_shared_albums = !newValue
-			this.saveOptions({ consider_shared_albums: this.state.consider_shared_albums ? '1' : '0' }, this.getNbGooglePhotos)
-		},
 		onDocumentFormatChange(e) {
 			this.saveOptions({ document_format: this.state.document_format })
 		},
@@ -857,21 +665,6 @@ export default {
 							this.state.free_space = response.data.free_space
 						}
 					})
-				},
-				false,
-				'httpd/unix-directory',
-				true,
-			)
-		},
-		onPhotoOutputChange() {
-			OC.dialogs.filepicker(
-				t('integration_google', 'Choose where to write imported photos'),
-				(targetPath) => {
-					if (targetPath === '') {
-						targetPath = '/'
-					}
-					this.state.photo_output_dir = targetPath
-					this.saveOptions({ photo_output_dir: this.state.photo_output_dir })
 				},
 				false,
 				'httpd/unix-directory',
@@ -917,11 +710,8 @@ export default {
 	}
 
 	#google-drive button,
-	#google-drive select,
-	#google-photos button {
+	#google-drive select {
 		width: 300px;
-
-		&#google-import-photos,
 		&#google-import-files {
 			height: 34px;
 		}
