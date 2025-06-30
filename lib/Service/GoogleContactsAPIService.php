@@ -85,8 +85,9 @@ class GoogleContactsAPIService {
 			return $contacts;
 		}
 		$result['nbContacts'] = $contacts['totalItems'] ?? 0;
-		$otherContacts = $this->config->getUserValue($userId, Application::APP_ID, 'consider_other_contacts', '0');
-		if ($otherContacts == '1') {
+		$scopes = $this->config->getUserValue($userId, Application::APP_ID, 'user_scopes', '{}');
+		$scopes = json_decode($scopes, true);
+		if (isset($scopes['can_access_other_contacts']) && $scopes['can_access_other_contacts'] === 1) {
 			$params = [
 				'readMask' => implode(',', [
 					'names',
