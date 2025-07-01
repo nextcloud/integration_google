@@ -3,7 +3,6 @@
     "Client secret" : "კლიენტის საიდუმლო",
     "Authentication" : "აუტენტიფიკაცია",
     "Contacts" : "კონტაქტები",
-    "Import calendar" : "კალენდრის იმპორტი",
-    "Photos" : "ფოტოები"
+    "Import calendar" : "კალენდრის იმპორტი"
 },"pluralForm" :"nplurals=2; plural=(n!=1);"
 }

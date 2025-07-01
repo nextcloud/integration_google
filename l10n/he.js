@@ -17,8 +17,6 @@ OC.L10N.register(
     "{amount} Google contacts" : "{amount} אנשי קשר ב־Google",
     "Calendars" : "לוחות שנה",
     "Import calendar" : "ייבוא יומן",
-    "Photos" : "תמונות",
-    "Ignore shared albums" : "התעלמות מאלבומים משותפים",
     "Drive" : "נהיגה"
 },
 "nplurals=3; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: 2;");

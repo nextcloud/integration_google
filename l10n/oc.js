@@ -8,7 +8,6 @@ OC.L10N.register(
     "Connected as {user}" : "Connectat coma {user}",
     "Contacts" : "Contactes",
     "Calendars" : "Calendièrs",
-    "Import calendar" : "Importar un calendièr",
-    "Photos" : "Photos"
+    "Import calendar" : "Importar un calendièr"
 },
 "nplurals=2; plural=(n > 1);");

@@ -23,9 +23,6 @@ OC.L10N.register(
     "address book name" : "アドレス帳の名前",
     "Calendars" : "カレンダー",
     "Import calendar" : "カレンダーのインポート",
-    "Photos" : "写真",
-    "Ignore shared albums" : "共有済みアルバムを無視",
-    "Import Google photos" : "Google フォトをインポート",
     "Drive" : "ドライブ",
     "Ignore shared files" : "共有済みファイルを無視"
 },

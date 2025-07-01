@@ -13,8 +13,7 @@ OC.L10N.register(
     "Contacts" : "Tengiliðir",
     "Calendars" : "Dagatöl",
     "Import calendar" : "Flytja inn dagatal",
-    "Photos" : "Ljósmyndir",
-    "Import directory" : "Flytja möppu inn",
-    "Drive" : "Keyra"
+    "Drive" : "Keyra",
+    "Import directory" : "Flytja möppu inn"
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");

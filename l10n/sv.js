@@ -12,7 +12,6 @@ OC.L10N.register(
     "Client ID" : "Klient-ID",
     "Client secret" : "Klienthemlighet",
     "Use a pop-up to authenticate" : "Använd en popup för att autentisera",
-    "Photo import background process will begin soon." : "Fotoimportbakgrundsprocessen börjar snart.",
     "Sign in with Google" : "Sign in with Google",
     "Authentication" : "Autentisering",
     "Connected as {user}" : "Ansluten som {user}",
@@ -24,8 +23,6 @@ OC.L10N.register(
     "address book name" : "adressbokens namn",
     "Calendars" : "Kalendrar",
     "Import calendar" : "Importera kalender",
-    "Photos" : "Bilder",
-    "Import Google photos" : "Importera Google-foton",
     "Drive" : "Biltur"
 },
 "nplurals=2; plural=(n != 1);");
