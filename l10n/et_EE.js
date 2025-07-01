@@ -15,7 +15,6 @@ OC.L10N.register(
     "Contacts" : "Kontaktid",
     "Calendars" : "Kalendrid",
     "Import calendar" : "Impordi kalender",
-    "Photos" : "Fotod",
     "Drive" : "Sõit"
 },
 "nplurals=2; plural=(n != 1);");
