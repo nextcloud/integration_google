@@ -5,7 +5,6 @@ OC.L10N.register(
     "Client secret" : "კლიენტის საიდუმლო",
     "Authentication" : "აუტენტიფიკაცია",
     "Contacts" : "კონტაქტები",
-    "Import calendar" : "კალენდრის იმპორტი",
-    "Photos" : "ფოტოები"
+    "Import calendar" : "კალენდრის იმპორტი"
 },
 "nplurals=2; plural=(n!=1);");

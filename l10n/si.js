@@ -9,7 +9,6 @@ OC.L10N.register(
     "Google data migration" : "ගූගල් දත්ත සංක්‍රමණය",
     "Authentication" : "සත්‍යාපනය",
     "Disconnect from Google" : "ගූගල් වෙතින් විසන්ධි කරන්න",
-    "New address book" : "නව ලිපින පොත",
-    "Photos" : "ඡායාරූප"
+    "New address book" : "නව ලිපින පොත"
 },
 "nplurals=2; plural=(n != 1);");

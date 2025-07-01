@@ -11,7 +11,6 @@ OC.L10N.register(
     "Authentication" : "Otentikasi",
     "Connected as {user}" : "Terhubung sebagai {user}",
     "Contacts" : "Kontak",
-    "Calendars" : "Kalender",
-    "Photos" : "Foto"
+    "Calendars" : "Kalender"
 },
 "nplurals=1; plural=0;");
