@@ -1,6 +1,8 @@
 { "translations": {
+    "No logged in user" : "Sisselogitud kasutajat pole",
     "Error getting OAuth access token." : "Viga OAuthi tunnusloa laadimisel.",
     "Error during OAuth exchanges" : "Viga OAuth andmevahetusel",
+    "_%n file was imported from Google Drive._::_%n files were imported from Google Drive._" : ["%n fail on imporditud Google Drive'ist.","%n faili on imporditud Google Drive'ist."],
     "OAuth access token refused" : "OAuthi tunnusluba pole õige.",
     "Bad credentials" : "Vale kasutajanimi, salasõna või tunnusluba",
     "Connected accounts" : "Ühendatud kasutajakontod",
@@ -8,11 +10,21 @@
     "Client secret" : "Kliendi salasõna",
     "Use a pop-up to authenticate" : "Kasuta autentimiseks hüpikakent",
     "Sign in with Google" : "Logi sisse Google'i  kontoga",
+    "Failed to get Google Drive information" : "Google Drive'i teabe laadimine ei õnnestunud",
+    "Choose where to write imported files" : "Vali, kuhu soovid salvestada imporditud failid",
     "Authentication" : "Autentimine",
     "Connected as {user}" : "Ühendatud kui {user}",
     "Contacts" : "Kontaktid",
+    "{amount} Google + {otherAmount} other contacts" : "{amount} Google'i + {otherAmount} muud kontakti",
+    "Import in \"{name}\" address book" : "Impordi aadressiraamatusse „{name}“",
     "Calendars" : "Kalendrid",
     "Import calendar" : "Impordi kalender",
-    "Drive" : "Sõit"
+    "Drive" : "Sõit",
+    "Google documents import format" : "Google'i dokumentide impordivorming",
+    "Import directory" : "Impordi kaust",
+    "Your Google Drive ({formSize} + {formSharedSize} shared with you)" : "Sinu Google Drive ({formSize} + {formSharedSize} jagatud sinuga)",
+    "Your Google Drive ({formSize})" : "Sinu Google Drive ({formSize})",
+    "Cancel Google Drive import" : "Katkesta import Google Drive'ist",
+    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["Imporditud on {amount} fail ({progress}%)","Imporditud on {amount} faili ({progress}%)"]
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
