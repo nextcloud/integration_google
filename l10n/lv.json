@@ -6,6 +6,7 @@
     "You can close this page. You will be notified when it finishes." : "Šo lapu var aizvērt. Tiks paziņot, kad tas tiks pabeigts.",
     "No Google OAuth app configured. Ask your Nextcloud administrator to configure Google connected accounts admin section." : "Kav konfigurēta neviena Google OAuth lietotne. Jāvaicā savam Nextcloud pārvaldītājam, lai konfigurē sasaistīto google kontu pārvaldības sadaļu.",
     "Authentication" : "Autentifikācija",
+    "Connected as {user}" : "Savienojies kā {user}",
     "Contacts" : "Kontakti",
     "Import calendar" : "Importēt kalendāru",
     "Drive" : "Braukt"
