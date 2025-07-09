@@ -1,6 +1,7 @@
 # Google integration in Nextcloud
 
 🇬 Google integration allows you to automatically migrate your Google calendars, contacts, photos and files into Nextcloud.
+This integration supports both personal Google accounts and Google Workspace (formerly G Suite) accounts.
 
 Note that this is a one-time import and will not keep Nextcloud in sync with Google.
 
