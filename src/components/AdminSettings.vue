@@ -32,7 +32,7 @@
 		<div class="fields">
 			<div class="line">
 				<label for="google-client-id">
-					<KeyIcon />
+					<KeyOutlineIcon />
 					{{ t('google_synchronization', 'Client ID') }}
 				</label>
 				<input id="google-client-id"
@@ -45,7 +45,7 @@
 			</div>
 			<div class="line">
 				<label for="google-client-secret">
-					<KeyIcon />
+					<KeyOutlineIcon />
 					{{ t('google_synchronization', 'Client secret') }}
 				</label>
 				<input id="google-client-secret"
@@ -79,7 +79,7 @@
 				class="calendar-button-sync"
 				@click="onDeleteJobs(cal)">
 				<template #icon>
-					<DeleteIcon />
+					<DeleteOutlinedIcon />
 				</template>
 				{{ t('google_synchronization', 'Delete all background jobs') }}
 			</NcButton>
@@ -88,7 +88,7 @@
 </template>
 
 <script>
-import KeyIcon from 'vue-material-design-icons/Key.vue'
+import KeyOutlineIcon from 'vue-material-design-icons/KeyOutline.vue'
 import InformationOutlineIcon from 'vue-material-design-icons/InformationOutline.vue'
 import AlertOutlineIcon from 'vue-material-design-icons/AlertOutline.vue'
 
@@ -101,7 +101,7 @@ import { delay, showServerError } from '../utils.js'
 import { showSuccess } from '@nextcloud/dialogs'
 import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
-import DeleteIcon from 'vue-material-design-icons/Delete.vue'
+import DeleteOutlineIcon from 'vue-material-design-icons/Delete.vue'
 import { confirmPassword } from '@nextcloud/password-confirmation'
 
 export default {
@@ -111,8 +111,8 @@ export default {
 		GoogleIcon,
 		NcCheckboxRadioSwitch,
 		NcButton,
-		KeyIcon,
-		DeleteIcon,
+		DeleteOutlineIcon,
+		KeyOutlineIcon,
 		InformationOutlineIcon,
 		AlertOutlineIcon,
 	},
