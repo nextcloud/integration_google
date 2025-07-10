@@ -40,14 +40,14 @@
 					</div>
 					<div class="line">
 						<label>
-							<AccountGroupIcon />
+							<AccountGroupOutlineIcon />
 							{{ state.consider_other_contacts
 								? t('google_synchronization', '{amount} Google + {otherAmount} other contacts', { amount: nbContacts, otherAmount: nbOtherContacts })
 								: t('google_synchronization', '{amount} Google contacts', { amount: nbContacts }) }}
 						</label>
 						<NcButton @click="onImportContacts">
 							<template #icon>
-								<AccountMultipleIcon />
+								<AccountMultipleOutlineIcon />
 							</template>
 							{{ t('google_synchronization', 'Import Google Contacts in Nextcloud') }}
 						</NcButton>
@@ -75,7 +75,7 @@
 							:class="{ loading: importingContacts }"
 							@click="onFinalImportContacts">
 							<template #icon>
-								<DownloadIcon />
+								<DownloadOutlineIcon />
 							</template>
 							{{ t('google_synchronization', 'Import in "{name}" address book', { name: selectedAddressBookName }) }}
 						</NcButton>
@@ -93,7 +93,7 @@
 							:class="{ loading: importingCalendar[cal.id] }"
 							@click="onCalendarImport(cal)">
 							<template #icon>
-								<CalendarIcon />
+								<CalendarImportOutlineIcon />
 							</template>
 							{{ t('google_synchronization', 'Import calendar') }}
 						</NcButton>
@@ -116,7 +116,7 @@
 					</NcCheckboxRadioSwitch>
 					<div v-if="!importingDrive" class="line">
 						<label for="document-format">
-							<FileDocumentIcon />
+							<FileDocumentOutlineIcon />
 							{{ t('google_synchronization', 'Google documents import format') }}
 						</label>
 						<select id="document-format"
@@ -133,7 +133,7 @@
 					</div>
 					<div v-if="!importingDrive" class="line">
 						<label for="drive-output">
-							<FolderIcon />
+							<FolderOutlineIcon />
 							{{ t('google_synchronization', 'Import directory') }}
 						</label>
 						<input id="drive-output"
@@ -142,14 +142,14 @@
 						<NcButton class="edit-output-dir"
 							@click="onDriveOutputChange">
 							<template #icon>
-								<PencilIcon />
+								<PencilOutlineIcon />
 							</template>
 						</NcButton>
 						<br><br>
 					</div>
 					<div class="line">
 						<label v-if="state.consider_shared_files && sharedWithMeSize > 0">
-							<FileIcon />
+							<FileOutlineIcon />
 							{{ t('google_synchronization',
 								'Your Google Drive ({formSize} + {formSharedSize} shared with you)',
 								{ formSize: myHumanFileSize(driveSize, true), formSharedSize: myHumanFileSize(sharedWithMeSize, true) }
@@ -157,7 +157,7 @@
 							}}
 						</label>
 						<label v-else>
-							<FileIcon />
+							<FileOutlineIcon />
 							{{ t('google_synchronization', 'Your Google Drive ({formSize})', { formSize: myHumanFileSize(driveSize, true) }) }}
 						</label>
 						<NcButton v-if="enoughSpaceForDrive && !importingDrive"
@@ -195,15 +195,15 @@
 
 <script>
 import CheckIcon from 'vue-material-design-icons/Check.vue'
-import AccountGroupIcon from 'vue-material-design-icons/AccountGroup.vue'
-import FileDocumentIcon from 'vue-material-design-icons/FileDocument.vue'
-import FileIcon from 'vue-material-design-icons/File.vue'
-import FolderIcon from 'vue-material-design-icons/Folder.vue'
+import AccountGroupOutlineIcon from 'vue-material-design-icons/AccountGroupOutline.vue'
+import FileDocumentOutlineIcon from 'vue-material-design-icons/FileDocumentOutline.vue'
+import FileOutlineIcon from 'vue-material-design-icons/FileOutline.vue'
+import FolderOutlineIcon from 'vue-material-design-icons/FolderOutline.vue'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
-import CalendarIcon from 'vue-material-design-icons/Calendar.vue'
-import DownloadIcon from 'vue-material-design-icons/Download.vue'
-import AccountMultipleIcon from 'vue-material-design-icons/AccountMultiple.vue'
-import PencilIcon from 'vue-material-design-icons/Pencil.vue'
+import CalendarImportOutlineIcon from 'vue-material-design-icons/CalendarImportOutline.vue'
+import DownloadOutlineIcon from 'vue-material-design-icons/DownloadOutline.vue'
+import AccountMultipleOutlineIcon from 'vue-material-design-icons/AccountMultipleOutline.vue'
+import PencilOutlineIcon from 'vue-material-design-icons/PencilOutline.vue'
 import GoogleDriveIcon from 'vue-material-design-icons/GoogleDrive.vue'
 
 import GoogleIcon from './icons/GoogleIcon.vue'
@@ -230,15 +230,15 @@ export default {
 		NcCheckboxRadioSwitch,
 		CloseIcon,
 		GoogleDriveIcon,
-		PencilIcon,
-		AccountMultipleIcon,
-		DownloadIcon,
-		CalendarIcon,
-		FolderIcon,
-		FileDocumentIcon,
-		FileIcon,
+		PencilOutlineIcon,
+		AccountMultipleOutlineIcon,
+		DownloadOutlineIcon,
+		CalendarImportOutlineIcon,
+		FolderOutlineIcon,
+		FileDocumentOutlineIcon,
+		FileOutlineIcon,
 		CheckIcon,
-		AccountGroupIcon,
+		AccountGroupOutlineIcon,
 	},
 
 	props: [],
