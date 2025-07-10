@@ -32,7 +32,7 @@
 		<div class="fields">
 			<div class="line">
 				<label for="google-client-id">
-					<KeyIcon />
+					<KeyOutlineIcon />
 					{{ t('integration_google', 'Client ID') }}
 				</label>
 				<input id="google-client-id"
@@ -45,7 +45,7 @@
 			</div>
 			<div class="line">
 				<label for="google-client-secret">
-					<KeyIcon />
+					<KeyOutlineIcon />
 					{{ t('integration_google', 'Client secret') }}
 				</label>
 				<input id="google-client-secret"
@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import KeyIcon from 'vue-material-design-icons/Key.vue'
+import KeyOutlineIcon from 'vue-material-design-icons/KeyOutline.vue'
 import InformationOutlineIcon from 'vue-material-design-icons/InformationOutline.vue'
 
 import GoogleIcon from './icons/GoogleIcon.vue'
@@ -85,7 +85,7 @@ export default {
 	components: {
 		GoogleIcon,
 		NcCheckboxRadioSwitch,
-		KeyIcon,
+		KeyOutlineIcon,
 		InformationOutlineIcon,
 	},
 
