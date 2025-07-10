@@ -4,6 +4,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.0.0] - 2025-07-10
+
+### Breaking changes
+
+- Drop support for Nextcloud 29
+- Drop support for Nextcloud 28
+- Drop support for Google Photos #246
+
+### Added
+
+- Support importing other contacts #245
+- Support for Google Drawings #244
+- Vue 3 and Vite #242
+
+### Fixed
+
+- Fix large office file exports #243
+- Improve sanitation of folder and file names #209
+
 ## [3.2.0] - 2025-03-04
 
 ### New
