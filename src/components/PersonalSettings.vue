@@ -84,6 +84,11 @@
 				</div>
 				<div v-if="calendars.length > 0">
 					<h3>{{ t('google_synchronization', 'Calendars') }}</h3>
+					<NcCheckboxRadioSwitch
+						:model-value="state.consider_all_events"
+						@update:model-value="onConsiderAllEventsChange">
+						{{ t('google_synchronization', 'Import all events including Birthdays') }}
+					</NcCheckboxRadioSwitch>
 					<div v-for="cal in calendars" :key="cal.id" class="calendar-item">
 						<label>
 							<NcAppNavigationIconBullet :color="getCalendarColor(cal)" />
@@ -681,6 +686,10 @@ export default {
 		onDriveConsiderSharedChange(newValue) {
 			this.state.consider_shared_files = !newValue
 			this.saveOptions({ consider_shared_files: this.state.consider_shared_files ? '1' : '0' }, this.getGoogleDriveInfo)
+		},
+		onConsiderAllEventsChange(newValue) {
+			this.state.consider_all_events = newValue
+			this.saveOptions({ consider_all_events: this.state.consider_all_events ? '0' : '1' })
 		},
 		onDocumentFormatChange(e) {
 			this.saveOptions({ document_format: this.state.document_format })
