@@ -43,6 +43,7 @@ class Personal implements ISettings {
 		$userName = $this->config->getUserValue($this->userId, Application::APP_ID, 'user_name');
 		$driveOutputDir = $this->config->getUserValue($this->userId, Application::APP_ID, 'drive_output_dir', '/Google Drive');
 		$driveOutputDir = $driveOutputDir ?: '/Google Drive';
+		$considerAllEvents = $this->config->getUserValue($this->userId, Application::APP_ID, 'consider_all_events', '1') === '1';
 		$considerSharedFiles = $this->config->getUserValue($this->userId, Application::APP_ID, 'consider_shared_files', '0') === '1';
 		$considerSharedAlbums = $this->config->getUserValue($this->userId, Application::APP_ID, 'consider_shared_albums', '0') === '1';
 		$considerOtherContacts = $this->config->getUserValue($this->userId, Application::APP_ID, 'consider_other_contacts', '0') === '1';
@@ -82,6 +83,7 @@ class Personal implements ISettings {
 			'user_name' => $userName,
 			'free_space' => $freeSpace,
 			'user_quota' => $user === null ? '' : $user->getQuota(),
+			'consider_all_events' => $considerAllEvents,
 			'consider_shared_files' => $considerSharedFiles,
 			'consider_shared_albums' => $considerSharedAlbums,
 			'consider_other_contacts' => $considerOtherContacts,

@@ -18,6 +18,7 @@ use Exception;
 use Generator;
 use OCA\DAV\CalDAV\CalDavBackend;
 use OCA\Google\AppInfo\Application;
+use OCP\IConfig;
 use OCP\IL10N;
 use Ortic\ColorConverter\Color;
 use Ortic\ColorConverter\Colors\Named;
@@ -41,6 +42,7 @@ class GoogleCalendarAPIService {
 		private IL10N $l10n,
 		private CalDavBackend $caldavBackend,
 		private GoogleAPIService $googleApiService,
+		private IConfig $config,
 	) {
 	}
 
@@ -188,7 +190,8 @@ class GoogleCalendarAPIService {
 
 		date_default_timezone_set('UTC');
 		$utcTimezone = new DateTimeZone('-0000');
-		$events = $this->getCalendarEvents($userId, $calId);
+		$allEvents = $this->config->getUserValue($userId, Application::APP_ID, 'consider_all_events', '1') === '1';
+		$events = $this->getCalendarEvents($userId, $calId, $allEvents);
 		$nbAdded = 0;
 		$nbUpdated = 0;
 		/** @var array{id: string, start?: array{date?: string, dateTime?: string}, end?: array{date?: string, dateTime?: string}, colorId?: string, summary?: string, visibility?: string, sequence?: string, location?: string, description?: string, status?: string, created?: string, updated?: string, reminders?: array{useDefault?: bool, overrides?: list{array{minutes?: string, hours?: string, days?: string, weeks?: string}}}, recurrence?: list<string>} $e */
@@ -350,12 +353,16 @@ class GoogleCalendarAPIService {
 	/**
 	 * @param string $userId
 	 * @param string $calId
+	 * @param bool $allEvents
 	 * @return Generator
 	 */
-	private function getCalendarEvents(string $userId, string $calId): Generator {
+	private function getCalendarEvents(string $userId, string $calId, bool $allEvents): Generator {
 		$params = [
 			'maxResults' => 2500,
 		];
+		if (!$allEvents) {
+			$params['eventTypes'] = 'default';
+		}
 		do {
 			$result = $this->googleApiService->request($userId, 'calendar/v3/calendars/' . urlencode($calId) . '/events', $params);
 			if (isset($result['error'])) {
