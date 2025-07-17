@@ -67,6 +67,7 @@ OC.L10N.register(
     "address book name" : "address book name",
     "Import in \"{name}\" address book" : "Import in \"{name}\" address book",
     "Calendars" : "Calendars",
+    "Import all events including Birthdays" : "Import all events including Birthdays",
     "Import calendar" : "Import calendar",
     "Drive" : "Drive",
     "Ignore shared files" : "Ignore shared files",

@@ -67,6 +67,7 @@ OC.L10N.register(
     "address book name" : "通訊錄名稱",
     "Import in \"{name}\" address book" : "導入 \"{name}\" 通訊錄",
     "Calendars" : "日曆",
+    "Import all events including Birthdays" : "匯入所有活動，包括生日",
     "Import calendar" : "導入日曆",
     "Drive" : "Drive",
     "Ignore shared files" : "略過共享的檔案",

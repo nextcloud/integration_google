@@ -67,6 +67,7 @@ OC.L10N.register(
     "address book name" : "назив адресара",
     "Import in \"{name}\" address book" : "Увези у адресар „{name}”",
     "Calendars" : "Календари",
+    "Import all events including Birthdays" : "Увези све догађаје укључујући и рођендане",
     "Import calendar" : "Увези календар",
     "Drive" : "Вожња",
     "Ignore shared files" : "Игнориши дељене фајлове",

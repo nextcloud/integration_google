@@ -65,6 +65,7 @@
     "address book name" : "通訊錄名稱",
     "Import in \"{name}\" address book" : "匯入於「{name}」通訊錄",
     "Calendars" : "日曆",
+    "Import all events including Birthdays" : "匯入包含生日的所有事件",
     "Import calendar" : "匯入日曆",
     "Drive" : "Drive",
     "Ignore shared files" : "忽略已分享的檔案",
