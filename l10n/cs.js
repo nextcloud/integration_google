@@ -67,6 +67,7 @@ OC.L10N.register(
     "address book name" : "název adresáře kontaktů",
     "Import in \"{name}\" address book" : "Naimportovat do adresáře kontaktů „{name}“",
     "Calendars" : "Kalendáře",
+    "Import all events including Birthdays" : "Naimportovat veškeré události, včetně narozenin",
     "Import calendar" : "Importovat kalendář",
     "Drive" : "Disk",
     "Ignore shared files" : "Ignorovat sdílené soubory",
