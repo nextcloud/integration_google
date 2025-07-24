@@ -67,6 +67,7 @@ OC.L10N.register(
     "address book name" : "adres defteri adı",
     "Import in \"{name}\" address book" : "\"{name}\" adres defteri içine aktar",
     "Calendars" : "Takvimler",
+    "Import all events including Birthdays" : "Doğum günleri ile tüm etkinlikler içe aktarılsın",
     "Import calendar" : "Takvimi içe aktar",
     "Drive" : "Drive",
     "Ignore shared files" : "Paylaşılmış dosyalar yok sayılsın",
