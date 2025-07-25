@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.1.0] - 2025-07-24
+
+### Added
+
+- Allow disabling of imports of birthday events in calendar #258 @lukasdotcom
+- Use outlined icons in the UI #254 @lukasdotcom
+
 ## [4.0.0] - 2025-07-10
 
 ### Breaking changes
