@@ -5,6 +5,7 @@ OC.L10N.register(
     "OAuth access token refused" : "Токен доступу OAuth відхилено",
     "Bad credentials" : "Погані облікові дані",
     "Connected accounts" : "Підключені облікові записи",
+    "Data migration" : "Перенесення даних",
     "Client ID" : "Ідентифікатор клієнта",
     "Client secret" : "Ключ клієнта",
     "Sign in with Google" : "Увійдіть за допомогою Google",
