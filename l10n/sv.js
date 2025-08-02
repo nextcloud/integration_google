@@ -13,6 +13,7 @@ OC.L10N.register(
     "Client secret" : "Klienthemlighet",
     "Use a pop-up to authenticate" : "Använd en popup för att autentisera",
     "Sign in with Google" : "Sign in with Google",
+    "Choose where to write imported files" : "Välj var importerade filer ska skrivas",
     "Authentication" : "Autentisering",
     "Connected as {user}" : "Ansluten som {user}",
     "Disconnect from Google" : "Koppla ner från Google",
@@ -23,6 +24,7 @@ OC.L10N.register(
     "address book name" : "adressbokens namn",
     "Calendars" : "Kalendrar",
     "Import calendar" : "Importera kalender",
-    "Drive" : "Biltur"
+    "Drive" : "Biltur",
+    "Import directory" : "Importera katalog"
 },
 "nplurals=2; plural=(n != 1);");
