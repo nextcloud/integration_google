@@ -57,6 +57,7 @@ OC.L10N.register(
     "address book name" : "Имя адресной книги",
     "Import in \"{name}\" address book" : "Импортировать в адресную книгу \"{name}\"",
     "Calendars" : "Календари",
+    "Import all events including Birthdays" : "Открыть все события, включая Дни Рождения",
     "Import calendar" : "Импортировать календарь",
     "Drive" : "Диск",
     "Ignore shared files" : "Игнорировать полученные файлы",
