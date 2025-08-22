@@ -79,7 +79,7 @@
 				class="calendar-button-sync"
 				@click="onDeleteJobs(cal)">
 				<template #icon>
-					<DeleteOutlinedIcon />
+					<DeleteOutlineIcon />
 				</template>
 				{{ t('google_synchronization', 'Delete all background jobs') }}
 			</NcButton>
@@ -99,7 +99,7 @@ import { generateUrl } from '@nextcloud/router'
 import axios from '@nextcloud/axios'
 import { delay, showServerError } from '../utils.js'
 import { showSuccess } from '@nextcloud/dialogs'
-import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
+import NcButton from '@nextcloud/vue/components/NcButton'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 import DeleteOutlineIcon from 'vue-material-design-icons/Delete.vue'
 import { confirmPassword } from '@nextcloud/password-confirmation'
@@ -186,12 +186,12 @@ export default {
 	h2 {
 		display: flex;
 		span {
-			margin-right: 8px;
+			margin-inline-end: 8px;
 		}
 	}
 
 	.fields {
-		margin-left: 30px;
+		margin-inline-start: 30px;
 	}
 
 	.line {
@@ -202,7 +202,7 @@ export default {
 			width: 250px;
 			display: flex;
 			.material-design-icon {
-				margin-right: 8px;
+				margin-inline-end: 8px;
 			}
 		}
 		input[type=password] {
