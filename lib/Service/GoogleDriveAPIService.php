@@ -17,6 +17,7 @@ use Exception;
 use OC\User\NoUserException;
 use OCA\Google\AppInfo\Application;
 use OCA\Google\BackgroundJob\ImportDriveJob;
+use OCA\Google\Service\Utils\FileUtils;
 use OCP\BackgroundJob\IJobList;
 use OCP\Files\File;
 use OCP\Files\Folder;
@@ -51,6 +52,7 @@ class GoogleDriveAPIService {
 		private IJobList $jobList,
 		private UserScopeService $userScopeService,
 		private GoogleAPIService $googleApiService,
+		private FileUtils $fileUtils,
 	) {
 	}
 
@@ -540,7 +542,7 @@ class GoogleDriveAPIService {
 			// create dir if we are on top OR if its parent is current dir
 			if (($currentFolderId === '' && !array_key_exists($parentId, $directoriesById))
 				|| $parentId === $currentFolderId) {
-				$name = $dir['name'];
+				$name = $this->fileUtils->sanitizeFilename((string)($dir['name']), (string)$id);
 				if (!$currentFolder->nodeExists($name)) {
 					$newDir = $currentFolder->newFolder($name);
 				} else {
@@ -550,7 +552,7 @@ class GoogleDriveAPIService {
 					}
 				}
 				$directoriesById[$id]['node'] = $newDir;
-				$success = $this->createDirsUnder($directoriesById, $newDir, $id);
+				$success = $this->createDirsUnder($directoriesById, $newDir, (string)$id);
 				if (!$success) {
 					return false;
 				}
@@ -623,7 +625,7 @@ class GoogleDriveAPIService {
 	 * @return string name of the file to be saved
 	 */
 	private function getFileName(array $fileItem, string $userId, bool $hasNameConflict): string {
-		$fileName = preg_replace('/\/|\n|[^._A-Za-z0-9-]/', '-', $fileItem['name'] ?? 'Untitled');
+		$fileName = $this->fileUtils->sanitizeFilename((string)($fileItem['name']), (string)$fileItem['id']);
 
 		if (in_array($fileItem['mimeType'], array_values(self::DOCUMENT_MIME_TYPES))) {
 			$documentFormat = $this->getUserDocumentFormat($userId);
