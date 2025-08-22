@@ -719,7 +719,7 @@ export default {
 
 <style scoped lang="scss">
 #google-content {
-	margin-left: 40px;
+	margin-inline-start: 40px;
 
 	h3 {
 		font-weight: bold;
@@ -734,7 +734,7 @@ export default {
 			width: 300px;
 			display: flex;
 			.material-design-icon {
-				margin-right: 8px;
+				margin-inline-end: 8px;
 			}
 		}
 	}
@@ -755,7 +755,7 @@ export default {
 	/* There are better ways to do this, */
 	/* but I'm trying to avoid conflicts with upstream*/
 	.calendar-button-sync {
-		margin-left: 10px;
+		margin-inline-start: 10px;
 	}
 
 	#google-drive button,
@@ -776,7 +776,7 @@ export default {
 	}
 
 	.check-option {
-		margin-left: 5px;
+		margin-inline-start: 5px;
 	}
 
 	.edit-output-dir {
@@ -802,7 +802,7 @@ h2,
 .settings-hint {
 	display: flex;
 	span {
-		margin-right: 8px;
+		margin-inline-end: 8px;
 	}
 }
 
@@ -814,7 +814,7 @@ h2,
 }
 
 .sync-checkbox {
-	margin-left: 20px;
+	margin-inline-start: 20px;
 }
 
 </style>
