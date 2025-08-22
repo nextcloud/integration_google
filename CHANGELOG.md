@@ -22,6 +22,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+- Added warning if using an IP as a redirect URI (#32)
+- Cleaned up setup page
 - Fix large office file exports #243
 - Improve sanitation of folder and file names #209
 

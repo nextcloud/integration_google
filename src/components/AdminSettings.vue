@@ -4,64 +4,69 @@
 			<GoogleIcon />
 			{{ t('google_synchronization', 'Google Synchronization') }}
 		</h2>
-		<p class="settings-hint">
-			{{ t('google_synchronization', 'If you want to allow your Nextcloud users to authenticate to Google, create an OAuth application in your Google settings.') }}
-			<a href="https://console.developers.google.com/" class="external" target="_blank">{{ t('google_synchronization', 'Google API settings') }}</a>
-			<br>
-			{{ t('google_synchronization', 'Go to "APIs & Services" => "Credentials" and click on "+ CREATE CREDENTIALS" -> "OAuth client ID".') }}
-			<br>
-			{{ t('google_synchronization', 'Set the "Application type" to "Web application" and give a name to the application.') }}
-			<br>
-			{{ t('google_synchronization', 'Google may require site verification for OAuth to work with your site, which can be done in Google\'s search console') }}
-			<a href="https://search.google.com/search-console/" class="external" target="_blank">{{ t('google_synchronization', 'Google Search console') }}</a>
-		</p>
-		<br>
-		<p class="settings-hint with-icon">
-			<InformationOutlineIcon />
-			{{ t('google_synchronization', 'Make sure you set one "Authorized redirect URI" to') }}
-			&nbsp;<strong>{{ redirect_uri }}</strong>
-		</p>
-		<br>
-		<p class="settings-hint">
-			{{ t('google_synchronization', 'Put the "Client ID" and "Client secret" below.') }}
-			<br>
-			{{ t('google_synchronization', 'Finally, go to "APIs & Services" => "Library" and add the following APIs: "Google Drive API", "Google Calendar API", and "People API".') }}
-			<br>
-			{{ t('google_synchronization', 'Your Nextcloud users will then see a "Connect to Google" button in their personal settings.') }}
-		</p>
-		<div class="fields">
-			<div class="line">
-				<label for="google-client-id">
-					<KeyOutlineIcon />
-					{{ t('google_synchronization', 'Client ID') }}
-				</label>
-				<input id="google-client-id"
-					v-model="state.client_id"
-					type="password"
-					:readonly="readonly"
-					:placeholder="t('google_synchronization', 'Client ID of your Google application')"
-					@focus="readonly = false"
-					@input="onInput">
-			</div>
-			<div class="line">
-				<label for="google-client-secret">
-					<KeyOutlineIcon />
-					{{ t('google_synchronization', 'Client secret') }}
-				</label>
-				<input id="google-client-secret"
-					v-model="state.client_secret"
-					type="password"
-					:readonly="readonly"
-					:placeholder="t('google_synchronization', 'Client secret of your Google application')"
-					@input="onInput"
-					@focus="readonly = false">
-			</div>
-			<NcCheckboxRadioSwitch
-				v-model="state.use_popup"
-				@update:model-value="onUsePopupChanged">
-				{{ t('google_synchronization', 'Use a pop-up to authenticate') }}
-			</NcCheckboxRadioSwitch>
-		</div>
+		<ol class="settings-hint">
+			<li>
+				<a href="https://console.developers.google.com/" class="external" target="_blank">
+					{{ t('google_synchronization', 'Open the Google Cloud Console.') }}
+				</a>
+			</li>
+			<li>{{ t('google_synchronization', 'Go to "APIs & Services" => "Credentials" and click on "+ CREATE CREDENTIALS" -> "OAuth client ID".') }}</li>
+			<li>{{ t('google_synchronization', 'Set the "Application type" to "Web application" and give a name to the application.') }}</li>
+			<li>
+				{{ t('google_synchronization', 'Google may require site verification for OAuth to work with your site, which can be done in Google\'s search console:') }}
+				<a href="https://search.google.com/search-console/" class="external" target="_blank">{{ t('google_synchronization', 'Google Search console') }}</a>
+			</li>
+			<li>
+				{{ t('google_synchronization', 'Make sure you set one "Authorized redirect URI" to') }}
+				<strong>{{ redirect_uri }}</strong>
+				<p v-if="!isDomainName" class="settings-hint with-icon alert">
+					<AlertOutlineIcon />
+					<strong>{{ t('google_synchronization', 'Warning: You are accessing Nextcloud using an IP address, but Google requires a public domain for redirect URIs.') }}</strong>
+				</p>
+			</li>
+			<li>
+				{{ t('google_synchronization', 'Put the "Client ID" and "Client secret" below.') }}
+				<div class="fields">
+					<div class="line">
+						<label for="google-client-id">
+							<KeyOutlineIcon />
+							{{ t('google_synchronization', 'Client ID') }}
+						</label>
+						<input id="google-client-id"
+							v-model="state.client_id"
+							type="password"
+							:readonly="readonly"
+							:placeholder="t('google_synchronization', 'Client ID of your Google application')"
+							@focus="readonly = false"
+							@input="onInput">
+					</div>
+					<div class="line">
+						<label for="google-client-secret">
+							<KeyOutlineIcon />
+							{{ t('google_synchronization', 'Client secret') }}
+						</label>
+						<input id="google-client-secret"
+							v-model="state.client_secret"
+							type="password"
+							:readonly="readonly"
+							:placeholder="t('google_synchronization', 'Client secret of your Google application')"
+							@input="onInput"
+							@focus="readonly = false">
+					</div>
+					<NcCheckboxRadioSwitch
+						v-model="state.use_popup"
+						@update:model-value="onUsePopupChanged">
+						{{ t('google_synchronization', 'Use a pop-up to authenticate') }}
+					</NcCheckboxRadioSwitch>
+				</div>
+			</li>
+			<li>
+				{{ t('google_synchronization', 'Finally, go to "APIs & Services" => "Library" and add the following APIs: "Google Drive API", "Google Calendar API", and "People API".') }}
+			</li>
+			<li>
+				{{ t('google_synchronization', 'Your Nextcloud users will then see a "Connect to Google" button in their personal settings.') }}
+			</li>
+		</ol>
 		<br>
 		<hr>
 		<br>
@@ -89,7 +94,6 @@
 
 <script>
 import KeyOutlineIcon from 'vue-material-design-icons/KeyOutline.vue'
-import InformationOutlineIcon from 'vue-material-design-icons/InformationOutline.vue'
 import AlertOutlineIcon from 'vue-material-design-icons/AlertOutline.vue'
 
 import GoogleIcon from './icons/GoogleIcon.vue'
@@ -113,7 +117,6 @@ export default {
 		NcButton,
 		DeleteOutlineIcon,
 		KeyOutlineIcon,
-		InformationOutlineIcon,
 		AlertOutlineIcon,
 	},
 
@@ -129,6 +132,9 @@ export default {
 	},
 
 	computed: {
+		isDomainName() {
+			return Boolean(window.location.hostname.match(/[a-z]/i))
+		},
 	},
 
 	methods: {
@@ -190,6 +196,10 @@ export default {
 		}
 	}
 
+	ol.settings-hint {
+		margin-inline-start: 16px;
+	}
+
 	.fields {
 		margin-inline-start: 30px;
 	}
@@ -208,6 +218,10 @@ export default {
 		input[type=password] {
 			width: 250px;
 		}
+	}
+
+	.alert {
+		color: red;
 	}
 }
 </style>
