@@ -35,7 +35,7 @@
 						<NcCheckboxRadioSwitch v-if="!importingContacts && state.user_scopes.can_access_other_contacts"
 							:model-value="state.consider_other_contacts"
 							@update:model-value="onContactsConsiderOtherChange">
-							{{ t('integration_google', 'Include other contacts') }}
+							{{ t('google_synchronization', 'Include other contacts') }}
 						</NcCheckboxRadioSwitch>
 					</div>
 					<div class="line">
