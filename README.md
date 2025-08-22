@@ -97,13 +97,15 @@ If there is a strong business case for any development of this app, we will cons
 
 ## Development guide
 
-1. Setup Nextcloud development environment (such as [nextcloud-docker-dev](https://github.com/juliushaertl/nextcloud-docker-dev))
-1. Install the files for this app in the development environment (I like to modify the `nextcloud-docker-dev` `docker-compose.yml` file and add a volume like this: `- ../google_synchronization:/var/www/html/apps/google_synchronization:ro`. Please read that project's README for alternative methods.)
+Use the docker compose file in this repo:
+
 1. Install PHP dependencies (install [Composer](https://getcomposer.org/), run `composer install`)
 1. Install Node dependencies (install [Node.js](https://nodejs.org/en/), run `npm install`)
 1. Build JavaScript bundle: `npm run dev` or `npm run watch`
-1. Enable the app. Go to the apps page in your development version of Nextcloud, find "Google Synchronization", and click "Enable"
-<!-- sudo docker run --rm -p 8080:80 -v /home/marcel/code/google_synchronization:/var/www/html/apps/google_synchronization:ro ghcr.io/juliushaertl/nextcloud-dev-php81:latest -->
+1. Change the version of nextcloud in `./docker-compose.yml` to the desired version.
+1. `sudo docker compose up -d`
+1. `sudo docker compose exec -u www-data app php occ app:enable google_synchronization`
+1. Go to localhost:8080
 
 ### Logging
 
