@@ -4,6 +4,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.0.0] - 2025-08-23
+
+### Breaking changes
+
+- Drop support for Nextcloud 29
+- Drop support for Nextcloud 28
+- Drop support for Google Photos #246
+
+### Added
+
+- Allow disabling of imports of birthday events in calendar #258 @lukasdotcom
+- Use outlined icons in the UI #254 @lukasdotcom
+- Support importing other contacts #245
+- Support for Google Drawings #244
+- Vue 3 and Vite #242
+
+### Fixed
+
+- Added warning if using an IP as a redirect URI (#32)
+- Cleaned up setup page
+- Fix large office file exports #243
+- Improve sanitation of folder and file names #209
+
 ## [3.2.0] - 2025-06-11
 
 ### New

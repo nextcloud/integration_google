@@ -21,6 +21,7 @@ use OCA\DAV\CalDAV\CalDavBackend;
 use OCA\Google\AppInfo\Application;
 use OCA\Google\BackgroundJob\ImportCalendarJob;
 use OCP\BackgroundJob\IJobList;
+use OCP\IConfig;
 use OCP\IL10N;
 
 use Ortic\ColorConverter\Color;
@@ -46,6 +47,7 @@ class GoogleCalendarAPIService {
 		private CalDavBackend $caldavBackend,
 		private IJobList $jobList,
 		private GoogleAPIService $googleApiService,
+		private IConfig $config,
 	) {
 	}
 
@@ -230,7 +232,8 @@ class GoogleCalendarAPIService {
 
 		date_default_timezone_set('UTC');
 		$utcTimezone = new DateTimeZone('-0000');
-		$events = $this->getCalendarEvents($userId, $calId);
+		$allEvents = $this->config->getUserValue($userId, Application::APP_ID, 'consider_all_events', '1') === '1';
+		$events = $this->getCalendarEvents($userId, $calId, $allEvents);
 		$nbAdded = 0;
 		$nbUpdated = 0;
 
@@ -473,12 +476,16 @@ class GoogleCalendarAPIService {
 	/**
 	 * @param string $userId
 	 * @param string $calId
+	 * @param bool $allEvents
 	 * @return Generator
 	 */
-	private function getCalendarEvents(string $userId, string $calId): Generator {
+	private function getCalendarEvents(string $userId, string $calId, bool $allEvents): Generator {
 		$params = [
 			'maxResults' => 2500,
 		];
+		if (!$allEvents) {
+			$params['eventTypes'] = 'default';
+		}
 		do {
 			$result = $this->googleApiService->request($userId, 'calendar/v3/calendars/' . urlencode($calId) . '/events', $params);
 			if (isset($result['error'])) {

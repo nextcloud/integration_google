@@ -17,6 +17,7 @@ use Exception;
 use OC\User\NoUserException;
 use OCA\Google\AppInfo\Application;
 use OCA\Google\BackgroundJob\ImportDriveJob;
+use OCA\Google\Service\Utils\FileUtils;
 use OCP\BackgroundJob\IJobList;
 use OCP\Files\File;
 use OCP\Files\Folder;
@@ -38,6 +39,7 @@ class GoogleDriveAPIService {
 		'document' => 'application/vnd.google-apps.document',
 		'spreadsheet' => 'application/vnd.google-apps.spreadsheet',
 		'presentation' => 'application/vnd.google-apps.presentation',
+		'drawing' => 'application/vnd.google-apps.drawing',
 	];
 
 	/**
@@ -51,6 +53,7 @@ class GoogleDriveAPIService {
 		private IJobList $jobList,
 		private UserScopeService $userScopeService,
 		private GoogleAPIService $googleApiService,
+		private FileUtils $fileUtils,
 	) {
 	}
 
@@ -368,7 +371,7 @@ class GoogleDriveAPIService {
 							$filePathInDrive = $dirId === 'root' ? '/' . $fileItem['name'] : $directoriesById[$dirId]['name'] . '/' . $fileItem['name'];
 							$this->logFailedDownloadsForUser($rootImportFolder, $filePathInDrive);
 						}
-					} catch (\Throwable $e) {
+					} catch (Throwable $e) {
 						$this->logger->warning('Error while importing file', ['exception' => $e]);
 						$this->logger->debug('Skipping file ' . strval($fileItem['id']));
 						continue;
@@ -503,7 +506,7 @@ class GoogleDriveAPIService {
 	 * @param Folder $folder
 	 * @param string $fileName
 	 * @throws LockedException
-	 * @throws \OCP\Files\NotPermittedException
+	 * @throws NotPermittedException
 	 */
 	private function logFailedDownloadsForUser(Folder $folder, string $fileName): void {
 		try {
@@ -540,7 +543,7 @@ class GoogleDriveAPIService {
 			// create dir if we are on top OR if its parent is current dir
 			if (($currentFolderId === '' && !array_key_exists($parentId, $directoriesById))
 				|| $parentId === $currentFolderId) {
-				$name = $dir['name'];
+				$name = $this->fileUtils->sanitizeFilename((string)($dir['name']), (string)$id);
 				if (!$currentFolder->nodeExists($name)) {
 					$newDir = $currentFolder->newFolder($name);
 				} else {
@@ -550,7 +553,7 @@ class GoogleDriveAPIService {
 					}
 				}
 				$directoriesById[$id]['node'] = $newDir;
-				$success = $this->createDirsUnder($directoriesById, $newDir, $id);
+				$success = $this->createDirsUnder($directoriesById, $newDir, (string)$id);
 				if (!$success) {
 					return false;
 				}
@@ -623,7 +626,7 @@ class GoogleDriveAPIService {
 	 * @return string name of the file to be saved
 	 */
 	private function getFileName(array $fileItem, string $userId, bool $hasNameConflict): string {
-		$fileName = preg_replace('/\/|\n|[^._A-Za-z0-9-]/', '-', $fileItem['name'] ?? 'Untitled');
+		$fileName = $this->fileUtils->sanitizeFilename((string)($fileItem['name']), (string)$fileItem['id']);
 
 		if (in_array($fileItem['mimeType'], array_values(self::DOCUMENT_MIME_TYPES))) {
 			$documentFormat = $this->getUserDocumentFormat($userId);
@@ -636,6 +639,9 @@ class GoogleDriveAPIService {
 					break;
 				case self::DOCUMENT_MIME_TYPES['presentation']:
 					$fileName .= $documentFormat === 'openxml' ? '.pptx' : '.odp';
+					break;
+				case self::DOCUMENT_MIME_TYPES['drawing']:
+					$fileName .= '.pdf';
 					break;
 			}
 		}
@@ -701,7 +707,37 @@ class GoogleDriveAPIService {
 			// potentially a doc
 			$params = $this->getDocumentRequestParams($fileItem['mimeType'], $documentFormat);
 			$fileUrl = 'https://www.googleapis.com/drive/v3/files/' . urlencode((string)$fileItem['id']) . '/export';
-			return $this->downloadAndSaveFile($saveFolder, $fileName, $userId, $fileUrl, $fileItem, $params);
+			$result = $this->downloadAndSaveFile($saveFolder, $fileName, $userId, $fileUrl, $fileItem, $params);
+			if ($result !== null) {
+				return $result;
+			}
+			$this->logger->debug('Document export failed, trying through exportLinks', ['fileItem' => $fileItem]);
+			// Try a different method to export if that fails due to the file being too large
+			$exportUrl = '/drive/v3/files/' . urlencode((string)$fileItem['id']);
+			$result = $this->googleApiService->request($userId, $exportUrl, ['fields' => 'exportLinks']);
+			if (!isset($result['exportLinks'])) {
+				return null;
+			}
+			$fileUrl = null;
+			$formatStart = $documentFormat === 'openxml' ? 'application/vnd.openxmlformats-officedocument.' : 'application/vnd.oasis.opendocument.';
+			foreach ($result['exportLinks'] as $exportType => $potentialUrl) {
+				if (str_starts_with($exportType, $formatStart)) {
+					$fileUrl = $potentialUrl;
+					break;
+				}
+			}
+			// Fallback to PDF if needed
+			if ($fileUrl === null) {
+				if (isset($result['exportLinks']['application/pdf'])) {
+					$this->logger->debug('Falling back to pdf', ['fileItem' => $fileItem]);
+					$fileUrl = $result['exportLinks']['application/pdf'];
+				} else {
+					$this->logger->error('Could not export document', ['fileItem' => $fileItem]);
+					return null;
+				}
+			}
+			$this->logger->debug('Document export succeeded', ['fileItem' => $fileItem, 'fileUrl' => $fileUrl]);
+			return $this->downloadAndSaveFile($saveFolder, $fileName, $userId, $fileUrl, $fileItem);
 		} elseif (isset($fileItem['webContentLink'])) {
 			// classic file
 			$fileUrl = 'https://www.googleapis.com/drive/v3/files/' . urlencode((string)$fileItem['id']) . '?alt=media';

@@ -6,7 +6,6 @@
     "Connected as {user}" : "Connectat coma {user}",
     "Contacts" : "Contactes",
     "Calendars" : "Calendièrs",
-    "Import calendar" : "Importar un calendièr",
-    "Photos" : "Photos"
+    "Import calendar" : "Importar un calendièr"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }

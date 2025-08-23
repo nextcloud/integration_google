@@ -36,9 +36,9 @@ class ConfigController extends Controller {
 
 	public const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.readonly';
 	public const CONTACTS_SCOPE = 'https://www.googleapis.com/auth/contacts.readonly';
+	public const CONTACTS_OTHER_SCOPE = 'https://www.googleapis.com/auth/contacts.other.readonly';
 	public const CALENDAR_SCOPE = 'https://www.googleapis.com/auth/calendar.readonly';
 	public const CALENDAR_EVENTS_SCOPE = 'https://www.googleapis.com/auth/calendar.events.readonly';
-	public const PHOTOS_SCOPE = 'https://www.googleapis.com/auth/photoslibrary.readonly';
 
 	public function __construct(
 		string $appName,
@@ -162,8 +162,8 @@ class ConfigController extends Controller {
 	public function oauthRedirect(string $code = '', string $state = '', string $scope = '', string $error = ''): RedirectResponse {
 		if ($this->userId === null) {
 			return new RedirectResponse(
-				$this->urlGenerator->linkToRoute('settings.PersonalSettings.index', ['section' => 'migration']) .
-				'?googleToken=error&message=' . urlencode($this->l->t('No logged in user'))
+				$this->urlGenerator->linkToRoute('settings.PersonalSettings.index', ['section' => 'google_synchronization'])
+				. '?googleToken=error&message=' . urlencode($this->l->t('No logged in user'))
 			);
 		}
 
@@ -177,7 +177,7 @@ class ConfigController extends Controller {
 		$scopesArray = [
 			'can_access_drive' => in_array(self::DRIVE_SCOPE, $scopes) ? 1 : 0,
 			'can_access_contacts' => in_array(self::CONTACTS_SCOPE, $scopes) ? 1 : 0,
-			'can_access_photos' => in_array(self::PHOTOS_SCOPE, $scopes) ? 1 : 0,
+			'can_access_other_contacts' => in_array(self::CONTACTS_OTHER_SCOPE, $scopes) ? 1 : 0,
 			'can_access_calendar' => (in_array(self::CALENDAR_SCOPE, $scopes) && in_array(self::CALENDAR_EVENTS_SCOPE, $scopes)) ? 1 : 0,
 		];
 
@@ -214,8 +214,8 @@ class ConfigController extends Controller {
 					);
 				} else {
 					return new RedirectResponse(
-						$this->urlGenerator->linkToRoute('settings.PersonalSettings.index', ['section' => 'google_synchronization']) .
-						'?googleToken=success'
+						$this->urlGenerator->linkToRoute('settings.PersonalSettings.index', ['section' => 'google_synchronization'])
+						. '?googleToken=success'
 					);
 				}
 			}
@@ -228,8 +228,8 @@ class ConfigController extends Controller {
 			$result = $this->l->t('Error during OAuth exchanges');
 		}
 		return new RedirectResponse(
-			$this->urlGenerator->linkToRoute('settings.PersonalSettings.index', ['section' => 'google_synchronization']) .
-			'?googleToken=error&message=' . urlencode($result)
+			$this->urlGenerator->linkToRoute('settings.PersonalSettings.index', ['section' => 'google_synchronization'])
+			. '?googleToken=error&message=' . urlencode($result)
 		);
 	}
 

@@ -8,12 +8,14 @@ use OCA\Google\Service\GoogleAPIService;
 use OCA\Google\Service\SecretService;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Services\IInitialState;
+use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
 use OCP\Files\NotPermittedException;
 use OCP\IConfig;
 use OCP\IUserManager;
 use OCP\Settings\ISettings;
+use Throwable;
 
 class Personal implements ISettings {
 
@@ -41,10 +43,10 @@ class Personal implements ISettings {
 		$userName = $this->config->getUserValue($this->userId, Application::APP_ID, 'user_name');
 		$driveOutputDir = $this->config->getUserValue($this->userId, Application::APP_ID, 'drive_output_dir', '/Google Drive');
 		$driveOutputDir = $driveOutputDir ?: '/Google Drive';
-		$photoOutputDir = $this->config->getUserValue($this->userId, Application::APP_ID, 'photo_output_dir', '/Google Photos');
-		$photoOutputDir = $photoOutputDir ?: '/Google Photos';
+		$considerAllEvents = $this->config->getUserValue($this->userId, Application::APP_ID, 'consider_all_events', '1') === '1';
 		$considerSharedFiles = $this->config->getUserValue($this->userId, Application::APP_ID, 'consider_shared_files', '0') === '1';
 		$considerSharedAlbums = $this->config->getUserValue($this->userId, Application::APP_ID, 'consider_shared_albums', '0') === '1';
+		$considerOtherContacts = $this->config->getUserValue($this->userId, Application::APP_ID, 'consider_other_contacts', '0') === '1';
 		$documentFormat = $this->config->getUserValue($this->userId, Application::APP_ID, 'document_format', 'openxml');
 		if (!in_array($documentFormat, ['openxml', 'opendoc'])) {
 			$documentFormat = 'openxml';
@@ -81,11 +83,12 @@ class Personal implements ISettings {
 			'user_name' => $userName,
 			'free_space' => $freeSpace,
 			'user_quota' => $user === null ? '' : $user->getQuota(),
+			'consider_all_events' => $considerAllEvents,
 			'consider_shared_files' => $considerSharedFiles,
 			'consider_shared_albums' => $considerSharedAlbums,
+			'consider_other_contacts' => $considerOtherContacts,
 			'document_format' => $documentFormat,
 			'drive_output_dir' => $driveOutputDir,
-			'photo_output_dir' => $photoOutputDir,
 			'user_scopes' => $userScopes,
 		];
 		$this->initialStateService->provideInitialState('user-config', $userConfig);
@@ -101,16 +104,16 @@ class Personal implements ISettings {
 	}
 
 	/**
-	 * @param \OCP\Files\Folder $userRoot
+	 * @param Folder $userRoot
 	 * @param string $outputDir
 	 * @return bool|float|int
 	 * @throws NotFoundException
 	 */
-	public static function getFreeSpace(\OCP\Files\Folder $userRoot, string $outputDir) {
+	public static function getFreeSpace(Folder $userRoot, string $outputDir) {
 		try {
 			// OutputDir can be on an external storage which can have more free space
 			$freeSpace = $userRoot->get($outputDir)->getStorage()->free_space('/');
-		} catch (\Throwable $e) {
+		} catch (Throwable $e) {
 			$freeSpace = false;
 		}
 		return $freeSpace !== false && $freeSpace > 0 ? $freeSpace : $userRoot->getStorage()->free_space('/');

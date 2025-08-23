@@ -14,7 +14,6 @@ OC.L10N.register(
     "Contacts" : "연락처",
     "Calendars" : "달력",
     "Import calendar" : "달력 가져오기",
-    "Photos" : "사진",
     "Drive" : "드라이브"
 },
 "nplurals=1; plural=0;");

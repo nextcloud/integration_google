@@ -11,7 +11,7 @@
 			id="google-content">
 			<h3>{{ t('google_synchronization', 'Authentication') }}</h3>
 			<button v-if="!connected" class="google-oauth" @click="onOAuthClick">
-				<span class="google-signin" />
+				<GoogleIconColor />
 				<span>{{ t('google_synchronization', 'Sign in with Google') }}</span>
 			</button>
 			<div v-else>
@@ -28,17 +28,26 @@
 					</NcButton>
 				</div>
 				<br>
-				<div v-if="nbContacts > 0"
+				<div v-if="nbContacts + nbOtherContacts >= 0"
 					id="google-contacts">
 					<h3>{{ t('google_synchronization', 'Contacts') }}</h3>
 					<div class="line">
+						<NcCheckboxRadioSwitch v-if="!importingContacts && state.user_scopes.can_access_other_contacts"
+							:model-value="state.consider_other_contacts"
+							@update:model-value="onContactsConsiderOtherChange">
+							{{ t('google_synchronization', 'Include other contacts') }}
+						</NcCheckboxRadioSwitch>
+					</div>
+					<div class="line">
 						<label>
-							<AccountGroupIcon />
-							{{ t('google_synchronization', '{amount} Google contacts', { amount: nbContacts }) }}
+							<AccountGroupOutlineIcon />
+							{{ state.consider_other_contacts
+								? t('google_synchronization', '{amount} Google + {otherAmount} other contacts', { amount: nbContacts, otherAmount: nbOtherContacts })
+								: t('google_synchronization', '{amount} Google contacts', { amount: nbContacts }) }}
 						</label>
 						<NcButton @click="onImportContacts">
 							<template #icon>
-								<AccountMultipleIcon />
+								<AccountMultipleOutlineIcon />
 							</template>
 							{{ t('google_synchronization', 'Import Google Contacts in Nextcloud') }}
 						</NcButton>
@@ -66,7 +75,7 @@
 							:class="{ loading: importingContacts }"
 							@click="onFinalImportContacts">
 							<template #icon>
-								<DownloadIcon />
+								<DownloadOutlineIcon />
 							</template>
 							{{ t('google_synchronization', 'Import in "{name}" address book', { name: selectedAddressBookName }) }}
 						</NcButton>
@@ -75,6 +84,11 @@
 				</div>
 				<div v-if="calendars.length > 0">
 					<h3>{{ t('google_synchronization', 'Calendars') }}</h3>
+					<NcCheckboxRadioSwitch
+						:model-value="state.consider_all_events"
+						@update:model-value="onConsiderAllEventsChange">
+						{{ t('google_synchronization', 'Import all events including Birthdays') }}
+					</NcCheckboxRadioSwitch>
 					<div v-for="cal in calendars" :key="cal.id" class="calendar-item">
 						<label>
 							<NcAppNavigationIconBullet :color="getCalendarColor(cal)" />
@@ -84,7 +98,7 @@
 							:class="{ loading: importingCalendar[cal.id] }"
 							@click="onCalendarImport(cal)">
 							<template #icon>
-								<CalendarIcon />
+								<CalendarImportOutlineIcon />
 							</template>
 							{{ t('google_synchronization', 'Import calendar') }}
 						</NcButton>
@@ -97,85 +111,17 @@
 					</div>
 					<br>
 				</div>
-				<div v-if="nbPhotos > 0"
-					id="google-photos">
-					<h3>{{ t('google_synchronization', 'Photos') }}</h3>
-					<NcCheckboxRadioSwitch v-if="!importingPhotos"
-						:checked="!state.consider_shared_albums"
-						@update:checked="onPhotoConsiderSharedChange">
-						{{ t('google_synchronization', 'Ignore shared albums') }}
-					</NcCheckboxRadioSwitch>
-					<br>
-					<p v-if="!importingPhotos" class="settings-hint">
-						<InformationOutlineIcon />
-						{{ t('google_synchronization', 'Warning: Google does not provide location data in imported photos.') }}
-					</p>
-					<div v-if="!importingPhotos" class="line">
-						<label for="photo-output">
-							<FolderIcon />
-							{{ t('google_synchronization', 'Import directory') }}
-						</label>
-						<input id="photo-output"
-							:readonly="true"
-							:value="state.photo_output_dir">
-						<NcButton class="edit-output-dir"
-							@click="onPhotoOutputChange">
-							<template #icon>
-								<PencilIcon />
-							</template>
-						</NcButton>
-						<br><br>
-					</div>
-					<div class="line">
-						<label>
-							<ImageIcon />
-							{{ n('google_synchronization',
-								'>{nbPhotos} Google photo (>{formSize})',
-								'>{nbPhotos} Google photos (>{formSize})',
-								nbPhotos,
-								{ nbPhotos, formSize: myHumanFileSize(estimatedPhotoCollectionSize, true) })
-							}}
-						</label>
-						<NcButton v-if="enoughSpaceForPhotos && !importingPhotos"
-							id="google-import-photos"
-							:disabled="gettingPhotoInfo"
-							:class="{ loading: gettingPhotoInfo }"
-							@click="onImportPhotos">
-							<template #icon>
-								<FileImageIcon />
-							</template>
-							{{ t('google_synchronization', 'Import Google photos') }}
-						</NcButton>
-						<span v-else-if="!enoughSpaceForPhotos">
-							{{ t('google_synchronization', 'Your Google photo collection size is estimated to be bigger than your remaining space left ({formSpace})', { formSpace: myHumanFileSize(state.free_space) }) }}
-						</span>
-					</div>
-					<div v-if="importingPhotos">
-						<br>
-						{{ n('google_synchronization', '{amount} photo imported', '{amount} photos imported', nbImportedPhotos, { amount: nbImportedPhotos }) }}
-						<br>
-						{{ lastPhotoImportDate }}
-						<br>
-						<NcButton @click="onCancelPhotoImport">
-							<template #icon>
-								<CloseIcon />
-							</template>
-							{{ t('google_synchronization', 'Cancel photo import') }}
-						</NcButton>
-					</div>
-					<br><br>
-				</div>
 				<div v-if="showDrive"
 					id="google-drive">
 					<h3>{{ t('google_synchronization', 'Drive') }}</h3>
 					<NcCheckboxRadioSwitch v-if="!importingDrive"
-						:checked="!state.consider_shared_files"
-						@update:checked="onDriveConsiderSharedChange">
+						:model-value="!state.consider_shared_files"
+						@update:model-value="onDriveConsiderSharedChange">
 						{{ t('google_synchronization', 'Ignore shared files') }}
 					</NcCheckboxRadioSwitch>
 					<div v-if="!importingDrive" class="line">
 						<label for="document-format">
-							<FileDocumentIcon />
+							<FileDocumentOutlineIcon />
 							{{ t('google_synchronization', 'Google documents import format') }}
 						</label>
 						<select id="document-format"
@@ -192,7 +138,7 @@
 					</div>
 					<div v-if="!importingDrive" class="line">
 						<label for="drive-output">
-							<FolderIcon />
+							<FolderOutlineIcon />
 							{{ t('google_synchronization', 'Import directory') }}
 						</label>
 						<input id="drive-output"
@@ -201,14 +147,14 @@
 						<NcButton class="edit-output-dir"
 							@click="onDriveOutputChange">
 							<template #icon>
-								<PencilIcon />
+								<PencilOutlineIcon />
 							</template>
 						</NcButton>
 						<br><br>
 					</div>
 					<div class="line">
 						<label v-if="state.consider_shared_files && sharedWithMeSize > 0">
-							<FileIcon />
+							<FileOutlineIcon />
 							{{ t('google_synchronization',
 								'Your Google Drive ({formSize} + {formSharedSize} shared with you)',
 								{ formSize: myHumanFileSize(driveSize, true), formSharedSize: myHumanFileSize(sharedWithMeSize, true) }
@@ -216,7 +162,7 @@
 							}}
 						</label>
 						<label v-else>
-							<FileIcon />
+							<FileOutlineIcon />
 							{{ t('google_synchronization', 'Your Google Drive ({formSize})', { formSize: myHumanFileSize(driveSize, true) }) }}
 						</label>
 						<NcButton v-if="enoughSpaceForDrive && !importingDrive"
@@ -254,18 +200,15 @@
 
 <script>
 import CheckIcon from 'vue-material-design-icons/Check.vue'
-import AccountGroupIcon from 'vue-material-design-icons/AccountGroup.vue'
-import InformationOutlineIcon from 'vue-material-design-icons/InformationOutline.vue'
-import FileDocumentIcon from 'vue-material-design-icons/FileDocument.vue'
-import FileIcon from 'vue-material-design-icons/File.vue'
-import FolderIcon from 'vue-material-design-icons/Folder.vue'
+import AccountGroupOutlineIcon from 'vue-material-design-icons/AccountGroupOutline.vue'
+import FileDocumentOutlineIcon from 'vue-material-design-icons/FileDocumentOutline.vue'
+import FileOutlineIcon from 'vue-material-design-icons/FileOutline.vue'
+import FolderOutlineIcon from 'vue-material-design-icons/FolderOutline.vue'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
-import CalendarIcon from 'vue-material-design-icons/Calendar.vue'
-import FileImageIcon from 'vue-material-design-icons/FileImage.vue'
-import ImageIcon from 'vue-material-design-icons/Image.vue'
-import DownloadIcon from 'vue-material-design-icons/Download.vue'
-import AccountMultipleIcon from 'vue-material-design-icons/AccountMultiple.vue'
-import PencilIcon from 'vue-material-design-icons/Pencil.vue'
+import CalendarImportOutlineIcon from 'vue-material-design-icons/CalendarImportOutline.vue'
+import DownloadOutlineIcon from 'vue-material-design-icons/DownloadOutline.vue'
+import AccountMultipleOutlineIcon from 'vue-material-design-icons/AccountMultipleOutline.vue'
+import PencilOutlineIcon from 'vue-material-design-icons/PencilOutline.vue'
 import GoogleDriveIcon from 'vue-material-design-icons/GoogleDrive.vue'
 
 import GoogleIcon from './icons/GoogleIcon.vue'
@@ -275,33 +218,32 @@ import { generateUrl } from '@nextcloud/router'
 import axios from '@nextcloud/axios'
 import moment from '@nextcloud/moment'
 import { showSuccess, showError } from '@nextcloud/dialogs'
-import NcAppNavigationIconBullet from '@nextcloud/vue/dist/Components/NcAppNavigationIconBullet.js'
-import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
-import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
+import NcAppNavigationIconBullet from '@nextcloud/vue/components/NcAppNavigationIconBullet'
+import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
+import NcButton from '@nextcloud/vue/components/NcButton'
 import { humanFileSize, showServerError } from '../utils.js'
+import GoogleIconColor from './icons/GoogleIconColor.vue'
 
 export default {
 	name: 'PersonalSettings',
 
 	components: {
+		GoogleIconColor,
 		GoogleIcon,
 		NcAppNavigationIconBullet,
 		NcButton,
 		NcCheckboxRadioSwitch,
 		CloseIcon,
 		GoogleDriveIcon,
-		PencilIcon,
-		AccountMultipleIcon,
-		DownloadIcon,
-		CalendarIcon,
-		FileImageIcon,
-		ImageIcon,
-		FolderIcon,
-		FileDocumentIcon,
-		InformationOutlineIcon,
-		FileIcon,
+		PencilOutlineIcon,
+		AccountMultipleOutlineIcon,
+		DownloadOutlineIcon,
+		CalendarImportOutlineIcon,
+		FolderOutlineIcon,
+		FileDocumentOutlineIcon,
+		FileOutlineIcon,
 		CheckIcon,
-		AccountGroupIcon,
+		AccountGroupOutlineIcon,
 	},
 
 	props: [],
@@ -315,19 +257,14 @@ export default {
 			importingCalendar: {},
 			loadingSyncCalendar: {},
 			// contacts
+			considerOtherContacts: false,
 			addressbooks: [],
 			nbContacts: 0,
+			nbOtherContacts: 0,
 			showAddressBooks: false,
 			selectedAddressBook: 0,
 			newAddressBookName: 'Google Contacts import',
 			importingContacts: false,
-			// photos
-			nbPhotos: 0,
-			gettingPhotoInfo: false,
-			importingPhotos: false,
-			lastPhotoImportTimestamp: 0,
-			nbImportedPhotos: 0,
-			photoImportLoop: null,
 			// drive
 			driveSize: 0,
 			gettingDriveInfo: false,
@@ -362,24 +299,6 @@ export default {
 			return this.selectedAddressBook === 0
 				? null
 				: this.addressbooks[this.selectedAddressBook].uri
-		},
-		estimatedPhotoCollectionSize() {
-			// we estimate with an average 1 MB size per photo
-			return this.nbPhotos * 1000000
-		},
-		enoughSpaceForPhotos() {
-			return this.nbPhotos === 0 || this.state.user_quota === 'none' || this.estimatedPhotoCollectionSize < this.state.free_space
-		},
-		lastPhotoImportDate() {
-			return this.lastPhotoImportTimestamp !== 0
-				? t('google_synchronization', 'Last photo import job at {date}', { date: moment.unix(this.lastPhotoImportTimestamp).format('LLL') })
-				: t('google_synchronization', 'Photo import background process will begin soon.') + ' '
-					+ t('google_synchronization', 'You can close this page. You will be notified when it finishes.')
-		},
-		photoImportProgress() {
-			return this.nbPhotos > 0 && this.nbImportedPhotos > 0
-				? parseInt(this.nbImportedPhotos / this.nbPhotos * 100)
-				: 0
 		},
 		enoughSpaceForDrive() {
 			return this.driveSize === 0 || this.state.user_quota === 'none' || this.driveSize < this.state.free_space
@@ -425,10 +344,6 @@ export default {
 				if (this.state.user_scopes.can_access_contacts) {
 					this.getNbGoogleContacts()
 				}
-				if (this.state.user_scopes.can_access_photos) {
-					this.getNbGooglePhotos()
-					this.getPhotoImportValues(true)
-				}
 				if (this.state.user_scopes.can_access_drive) {
 					this.getGoogleDriveInfo()
 					this.getDriveImportValues(true)
@@ -467,8 +382,8 @@ export default {
 				'https://www.googleapis.com/auth/calendar.readonly',
 				'https://www.googleapis.com/auth/calendar.events.readonly',
 				'https://www.googleapis.com/auth/contacts.readonly',
-				'https://www.googleapis.com/auth/photoslibrary.readonly',
 				'https://www.googleapis.com/auth/drive.readonly',
+				'https://www.googleapis.com/auth/contacts.other.readonly',
 			]
 			const requestUrl = 'https://accounts.google.com/o/oauth2/v2/auth?'
 				+ 'client_id=' + encodeURIComponent(this.state.client_id)
@@ -552,53 +467,13 @@ export default {
 				? cal.backgroundColor.replace('#', '')
 				: '0082c9'
 		},
-		getPhotoImportValues(launchLoop = false) {
-			const url = generateUrl('/apps/google_synchronization/import-photos-info')
-			axios.get(url)
-				.then((response) => {
-					if (response.data && Object.keys(response.data).length > 0) {
-						this.lastPhotoImportTimestamp = response.data.last_import_timestamp
-						this.nbImportedPhotos = response.data.nb_imported_photos
-						this.importingPhotos = response.data.importing_photos
-						if (!this.importingPhotos) {
-							clearInterval(this.photoImportLoop)
-						} else if (launchLoop) {
-							// launch loop if we are currently importing AND it's the first time we call getPhotoImportValues
-							this.photoImportLoop = setInterval(() => this.getPhotoImportValues(), 10000)
-						}
-					}
-				})
-				.catch((error) => {
-					console.debug(error)
-				})
-				.then(() => {
-				})
-		},
-		getNbGooglePhotos() {
-			this.gettingPhotoInfo = true
-			const url = generateUrl('/apps/google_synchronization/photo-number')
-			axios.get(url)
-				.then((response) => {
-					if (response.data && Object.keys(response.data).length > 0) {
-						this.nbPhotos = response.data.nbPhotos
-					}
-				})
-				.catch((error) => {
-					showServerError(
-						error,
-						t('google_synchronization', 'Failed to get number of Google photos'),
-					)
-				})
-				.then(() => {
-					this.gettingPhotoInfo = false
-				})
-		},
 		getNbGoogleContacts() {
 			const url = generateUrl('/apps/google_synchronization/contact-number')
 			axios.get(url)
 				.then((response) => {
 					if (response.data && Object.keys(response.data).length > 0) {
 						this.nbContacts = response.data.nbContacts
+						this.nbOtherContacts = response.data.nbOtherContacts ?? 0
 					}
 				})
 				.catch((error) => {
@@ -667,7 +542,7 @@ export default {
 		},
 		onCalendarImport(cal) {
 			const calId = cal.id
-			this.$set(this.importingCalendar, calId, true)
+			this.importingCalendar[calId] = true
 			const req = {
 				params: {
 					calId,
@@ -699,7 +574,7 @@ export default {
 					)
 				})
 				.then(() => {
-					this.$set(this.importingCalendar, calId, false)
+					this.importingCalendar[calId] = false
 				})
 		},
 		onCalendarSyncChange(cal) {
@@ -734,49 +609,6 @@ export default {
 				})
 				.finally(() => {
 					this.$set(this.loadingSyncCalendar, calId, false)
-				})
-		},
-		onImportPhotos() {
-			const req = {
-				params: {
-				},
-			}
-			const url = generateUrl('/apps/google_synchronization/import-photos')
-			axios.get(url, req)
-				.then((response) => {
-					const targetPath = response.data.targetPath
-					showSuccess(
-						t('google_synchronization', 'Starting importing photos in {targetPath} directory', { targetPath }),
-					)
-					this.getPhotoImportValues(true)
-				})
-				.catch((error) => {
-					showServerError(
-						error,
-						t('google_synchronization', 'Failed to start importing Google photos'),
-					)
-				})
-				.then(() => {
-				})
-		},
-		onCancelPhotoImport() {
-			this.importingPhotos = false
-			clearInterval(this.photoImportLoop)
-			const req = {
-				values: {
-					importing_photos: '0',
-					last_import_timestamp: '0',
-					nb_imported_photos: '0',
-				},
-			}
-			const url = generateUrl('/apps/google_synchronization/config')
-			axios.put(url, req)
-				.then((response) => {
-				})
-				.catch((error) => {
-					console.debug(error)
-				})
-				.then(() => {
 				})
 		},
 		getDriveImportValues(launchLoop = false) {
@@ -847,13 +679,17 @@ export default {
 		myHumanFileSize(bytes, approx = false, si = false, dp = 1) {
 			return humanFileSize(bytes, approx, si, dp)
 		},
+		onContactsConsiderOtherChange(newValue) {
+			this.state.consider_other_contacts = newValue
+			this.saveOptions({ consider_other_contacts: this.state.consider_other_contacts ? '1' : '0' }, this.getNbGoogleContacts)
+		},
 		onDriveConsiderSharedChange(newValue) {
 			this.state.consider_shared_files = !newValue
 			this.saveOptions({ consider_shared_files: this.state.consider_shared_files ? '1' : '0' }, this.getGoogleDriveInfo)
 		},
-		onPhotoConsiderSharedChange(newValue) {
-			this.state.consider_shared_albums = !newValue
-			this.saveOptions({ consider_shared_albums: this.state.consider_shared_albums ? '1' : '0' }, this.getNbGooglePhotos)
+		onConsiderAllEventsChange(newValue) {
+			this.state.consider_all_events = newValue
+			this.saveOptions({ consider_all_events: this.state.consider_all_events ? '0' : '1' })
 		},
 		onDocumentFormatChange(e) {
 			this.saveOptions({ document_format: this.state.document_format })
@@ -877,28 +713,13 @@ export default {
 				true,
 			)
 		},
-		onPhotoOutputChange() {
-			OC.dialogs.filepicker(
-				t('google_synchronization', 'Choose where to write imported photos'),
-				(targetPath) => {
-					if (targetPath === '') {
-						targetPath = '/'
-					}
-					this.state.photo_output_dir = targetPath
-					this.saveOptions({ photo_output_dir: this.state.photo_output_dir })
-				},
-				false,
-				'httpd/unix-directory',
-				true,
-			)
-		},
 	},
 }
 </script>
 
 <style scoped lang="scss">
 #google-content {
-	margin-left: 40px;
+	margin-inline-start: 40px;
 
 	h3 {
 		font-weight: bold;
@@ -913,7 +734,7 @@ export default {
 			width: 300px;
 			display: flex;
 			.material-design-icon {
-				margin-right: 8px;
+				margin-inline-end: 8px;
 			}
 		}
 	}
@@ -934,15 +755,12 @@ export default {
 	/* There are better ways to do this, */
 	/* but I'm trying to avoid conflicts with upstream*/
 	.calendar-button-sync {
-		margin-left: 10px;
+		margin-inline-start: 10px;
 	}
 
 	#google-drive button,
-	#google-drive select,
-	#google-photos button {
+	#google-drive select {
 		width: 300px;
-
-		&#google-import-photos,
 		&#google-import-files {
 			height: 34px;
 		}
@@ -958,7 +776,7 @@ export default {
 	}
 
 	.check-option {
-		margin-left: 5px;
+		margin-inline-start: 5px;
 	}
 
 	.edit-output-dir {
@@ -973,11 +791,6 @@ export default {
 		padding: 0;
 		display: flex;
 		align-items: center;
-		.google-signin {
-			background: url('../../img/google.svg');
-			width: 46px;
-			height: 46px;
-		}
 		span {
 			padding: 0 8px 0 8px;
 			font-size: 1.1em;
@@ -989,7 +802,7 @@ h2,
 .settings-hint {
 	display: flex;
 	span {
-		margin-right: 8px;
+		margin-inline-end: 8px;
 	}
 }
 
@@ -1001,7 +814,7 @@ h2,
 }
 
 .sync-checkbox {
-	margin-left: 20px;
+	margin-inline-start: 20px;
 }
 
 </style>
