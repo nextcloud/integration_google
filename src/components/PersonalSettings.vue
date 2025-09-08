@@ -75,7 +75,7 @@
 							:class="{ loading: importingContacts }"
 							@click="onFinalImportContacts">
 							<template #icon>
-								<DownloadOutlineIcon />
+								<TrayArrowDownIcon />
 							</template>
 							{{ t('integration_google', 'Import in "{name}" address book', { name: selectedAddressBookName }) }}
 						</NcButton>
@@ -200,7 +200,7 @@ import FileOutlineIcon from 'vue-material-design-icons/FileOutline.vue'
 import FolderOutlineIcon from 'vue-material-design-icons/FolderOutline.vue'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
 import CalendarImportOutlineIcon from 'vue-material-design-icons/CalendarImportOutline.vue'
-import DownloadOutlineIcon from 'vue-material-design-icons/DownloadOutline.vue'
+import TrayArrowDownIcon from 'vue-material-design-icons/TrayArrowDown.vue'
 import AccountMultipleOutlineIcon from 'vue-material-design-icons/AccountMultipleOutline.vue'
 import PencilOutlineIcon from 'vue-material-design-icons/PencilOutline.vue'
 import GoogleDriveIcon from 'vue-material-design-icons/GoogleDrive.vue'
@@ -231,7 +231,7 @@ export default {
 		GoogleDriveIcon,
 		PencilOutlineIcon,
 		AccountMultipleOutlineIcon,
-		DownloadOutlineIcon,
+		TrayArrowDownIcon,
 		CalendarImportOutlineIcon,
 		FolderOutlineIcon,
 		FileDocumentOutlineIcon,
