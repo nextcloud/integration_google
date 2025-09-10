@@ -300,13 +300,23 @@ class GoogleCalendarAPIService {
 				$calData .= 'DTSTART;VALUE=DATE:' . $start->format('Ymd') . "\n";
 				$end = new DateTime($e['end']['date']);
 				$calData .= 'DTEND;VALUE=DATE:' . $end->format('Ymd') . "\n";
-			} elseif (isset($e['start']['dateTime']) && isset($e['end']['dateTime'])) {
+			} elseif (isset($e['start'], $e['start']['dateTime'], $e['end'], $e['end']['dateTime'])) {
 				$start = new DateTime($e['start']['dateTime']);
-				$start->setTimezone($utcTimezone);
-				$calData .= 'DTSTART;VALUE=DATE-TIME:' . $start->format('Ymd\THis\Z') . "\n";
 				$end = new DateTime($e['end']['dateTime']);
-				$end->setTimezone($utcTimezone);
-				$calData .= 'DTEND;VALUE=DATE-TIME:' . $end->format('Ymd\THis\Z') . "\n";
+
+				if (isset($e['start']['timeZone'], $e['end']['timeZone'])) {
+					$timezoneStart = $e['start']['timeZone'];
+					$start->setTimezone(new DateTimeZone($timezoneStart));
+					$calData .= "DTSTART;TZID=$timezoneStart:" . $start->format('Ymd\THis') . "\n";
+					$timezoneEnd = $e['end']['timeZone'];
+					$end->setTimezone(new DateTimeZone($timezoneEnd));
+					$calData .= "DTEND;TZID=$timezoneEnd:" . $end->format('Ymd\THis') . "\n";
+				} else {
+					$start->setTimezone($utcTimezone);
+					$calData .= 'DTSTART;VALUE=DATE-TIME:' . $start->format('Ymd\THis\Z') . "\n";
+					$end->setTimezone($utcTimezone);
+					$calData .= 'DTEND;VALUE=DATE-TIME:' . $end->format('Ymd\THis\Z') . "\n";
+				}
 			} else {
 				// skip entries without any date
 				continue;
