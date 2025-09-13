@@ -30,7 +30,7 @@ use OCP\Lock\ILockingProvider;
 use OCP\Lock\LockedException;
 use OCP\PreConditionNotMetException;
 use Psr\Log\LoggerInterface;
-
+use RuntimeException;
 use Throwable;
 
 class GoogleDriveAPIService {
@@ -276,44 +276,19 @@ class GoogleDriveAPIService {
 			}
 		}
 
-		$directoriesById = [];
-		$sharedDirectoriesById = [];
 		$directoryIdsToExplore = [];
-		$params = [
-			'pageSize' => 1000,
-			'fields' => '*',
-			'q' => "mimeType='application/vnd.google-apps.folder'",
-		];
-		do {
-			$result = $this->googleApiService->request($userId, 'drive/v3/files', $params);
-			if (isset($result['error'])) {
-				return $result;
+		try {
+			// "ownedByMe" or "'me' in owners" doesn't work for files created by you in a folder that has been shared with you.
+			$directoriesById = $this->collectFolders($directoryProgress, $directoryIdsToExplore, $userId, "mimeType='application/vnd.google-apps.folder' and 'me' in owners");
+			if (isset($rootSharedWithMeImportFolder)) {
+				// misses *files* without folders that are shared with you (those don't have any parent not even 'root').
+				$sharedDirectoriesById = $this->collectFolders($directoryProgress, $directoryIdsToExplore, $userId, "mimeType='application/vnd.google-apps.folder' and sharedWithMe = true");
+			} else {
+				$sharedDirectoriesById = [];
 			}
-			foreach ($result['files'] as $dir) {
-				// ignore shared files
-				if (!$considerSharedFiles && !$dir['ownedByMe']) {
-					continue;
-				}
-
-				$dir_entry = [
-					'name' => preg_replace('/\//', '-slash-', $dir['name']),
-					'parent' => (isset($dir['parents']) && count($dir['parents']) > 0) ? $dir['parents'][0] : null,
-					'modifiedTime' => $dir['modifiedTime'] ?? null,
-				];
-				// this doesn't work for files created by you in a folder that has been shared with you
-				if ($dir['ownedByMe']) {
-					$directoriesById[$dir['id']] = $dir_entry;
-				} else {
-					$sharedDirectoriesById[$dir['id']] = $dir_entry;
-				}
-
-				// what we should explore
-				if (!array_key_exists($dir['id'], $directoryProgress)) {
-					$directoryIdsToExplore[] = $dir['id'];
-				}
-			}
-			$params['pageToken'] = $result['nextPageToken'] ?? '';
-		} while (isset($result['nextPageToken']));
+		} catch (Throwable $e) {
+			return ['error' => $e->getMessage()];
+		}
 
 		// add root if it has not been imported yet
 		if (!array_key_exists('root', $directoryProgress)) {
@@ -357,11 +332,6 @@ class GoogleDriveAPIService {
 				}
 				foreach ($result['files'] as $fileItem) {
 					try {
-						// ignore shared files
-						if (!$considerSharedFiles && !$fileItem['ownedByMe']) {
-							continue;
-						}
-
 						if (isset($fileItem['parents']) && count($fileItem['parents']) > 0) {
 							$parent = $fileItem['parents'][0];
 							if (isset($directoriesById[$parent]['node'])) {
@@ -816,5 +786,34 @@ class GoogleDriveAPIService {
 			return '/';
 		}
 		return $targetPath;
+	}
+
+	private function collectFolders(array $directoryProgress, array &$directoryIdsToExplore, string $userId, string $query): array {
+		$directoriesById = [];
+		$params = [
+			'pageSize' => 1000,
+			'fields' => '*',
+			'q' => $query,
+		];
+		do {
+			$result = $this->googleApiService->request($userId, 'drive/v3/files', $params);
+			if (isset($result['error'])) {
+				throw new RuntimeException($result['error']);
+			}
+			foreach ($result['files'] as $dir) {
+				$directoriesById[$dir['id']] = [
+					'name' => preg_replace('/\//', '-slash-', $dir['name']),
+					'parent' => (isset($dir['parents']) && count($dir['parents']) > 0) ? $dir['parents'][0] : null,
+					'modifiedTime' => $dir['modifiedTime'] ?? null,
+				];
+
+				// what we should explore
+				if (!array_key_exists($dir['id'], $directoryProgress)) {
+					$directoryIdsToExplore[] = $dir['id'];
+				}
+			}
+			$params['pageToken'] = $result['nextPageToken'] ?? '';
+		} while (isset($result['nextPageToken']));
+		return $directoriesById;
 	}
 }
