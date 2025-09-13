@@ -295,6 +295,22 @@ class GoogleDriveAPIService {
 			$directoryIdsToExplore[] = 'root';
 		}
 
+		// filter all directories that belong to you but whose parent is shared with you
+		if (isset($rootSharedWithMeImportFolder)) {
+			try {
+				$rootId = $this->retrieveRootId($userId);
+				foreach ($directoriesById as $id => $dir) {
+					$allParentsOwnedByMe = $this->recursivelyCheckParentOwnership($rootId, $directoriesById, $dir);
+					if (!$allParentsOwnedByMe) {
+						unset($directoriesById[$id]);
+						$sharedDirectoriesById[$id] = $dir;
+					}
+				}
+			} catch (Throwable $e) {
+				return ['error' => $e->getMessage()];
+			}
+		}
+
 		// create directories (recursive powa)
 		if (!$this->createDirsUnder($directoriesById, $rootImportFolder)
 			|| (isset($rootSharedWithMeImportFolder) && !$this->createDirsUnder($sharedDirectoriesById, $rootSharedWithMeImportFolder))) {
@@ -788,6 +804,15 @@ class GoogleDriveAPIService {
 		return $targetPath;
 	}
 
+	private function retrieveRootId(string $userId): string {
+		$fileId = 'root';
+		$result = $this->googleApiService->request($userId, 'drive/v3/files/' . $fileId);
+		if (isset($result['error'])) {
+			throw new RuntimeException($result['error']);
+		}
+		return $result['id'];
+	}
+
 	private function collectFolders(array $directoryProgress, array &$directoryIdsToExplore, string $userId, string $query): array {
 		$directoriesById = [];
 		$params = [
@@ -805,6 +830,7 @@ class GoogleDriveAPIService {
 					'name' => preg_replace('/\//', '-slash-', $dir['name']),
 					'parent' => (isset($dir['parents']) && count($dir['parents']) > 0) ? $dir['parents'][0] : null,
 					'modifiedTime' => $dir['modifiedTime'] ?? null,
+					'ownedByMe' => $dir['ownedByMe'] ?? false,
 				];
 
 				// what we should explore
@@ -815,5 +841,22 @@ class GoogleDriveAPIService {
 			$params['pageToken'] = $result['nextPageToken'] ?? '';
 		} while (isset($result['nextPageToken']));
 		return $directoriesById;
+	}
+
+	private function recursivelyCheckParentOwnership(string $rootId, $directoriesById, $dir_entry): bool {
+		$parentId = $dir_entry['parent'];
+		if (isset($parentId)) {
+			if (!isset($directoriesById[$parentId])) {
+				return $rootId === $parentId;
+			}
+
+			$parent = $directoriesById[$parentId];
+			if (!$parent['ownedByMe']) {
+				return false;
+			}
+			return $this->recursivelyCheckParentOwnership($rootId, $directoriesById, $parent);
+		} else {
+			return $dir_entry['ownedByMe'];
+		}
 	}
 }
