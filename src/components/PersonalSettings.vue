@@ -146,6 +146,22 @@
 						</NcButton>
 						<br><br>
 					</div>
+					<div v-if="!importingDrive && state.consider_shared_files" class="line">
+						<label for="drive-shared-with-me-output">
+							<FolderOutlineIcon />
+							{{ t('integration_google', 'Shared files import directory') }}
+						</label>
+						<input id="drive-shared-with-me-output"
+							:readonly="true"
+							:value="state.drive_shared_with_me_output_dir">
+						<NcButton class="edit-output-dir"
+							@click="onDriveSharedWithMeOutputChange">
+							<template #icon>
+								<PencilOutlineIcon />
+							</template>
+						</NcButton>
+						<br><br>
+					</div>
 					<div class="line">
 						<label v-if="state.consider_shared_files && sharedWithMeSize > 0">
 							<FileOutlineIcon />
@@ -680,6 +696,21 @@ export default {
 				true,
 			)
 		},
+		onDriveSharedWithMeOutputChange() {
+			OC.dialogs.filepicker(
+				t('integration_google', 'Choose where to write imported "shared with me" files'),
+				(targetPath) => {
+					if (targetPath === '') {
+						targetPath = '/'
+					}
+					this.state.drive_shared_with_me_output_dir = targetPath
+					this.saveOptions({ drive_shared_with_me_output_dir: this.state.drive_shared_with_me_output_dir })
+				},
+				false,
+				'httpd/unix-directory',
+				true,
+			)
+		},
 	},
 }
 </script>
@@ -725,6 +756,11 @@ export default {
 			height: 34px;
 		}
 	}
+
+  #google-drive input {
+    // remove right input margin and button width
+    width: calc(300px - 3px - var(--default-clickable-area));
+  }
 
 	#google-contacts {
 		select {

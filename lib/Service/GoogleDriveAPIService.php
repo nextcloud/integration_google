@@ -111,11 +111,16 @@ class GoogleDriveAPIService {
 	public function startImportDrive(string $userId): array {
 		$targetPath = $this->config->getUserValue($userId, Application::APP_ID, 'drive_output_dir', '/Google Drive');
 		$targetPath = $targetPath ?: '/Google Drive';
+		$considerSharedFiles = $this->config->getUserValue($userId, Application::APP_ID, 'consider_shared_files', '0') === '1';
+		$targetSharedPath = $this->config->getUserValue($userId, Application::APP_ID, 'drive_shared_with_me_output_dir', '/Google Drive/Shared with me');
+		$targetSharedPath = $targetSharedPath ?: '/Google Drive/Shared with me';
+
 		$alreadyImporting = $this->config->getUserValue($userId, Application::APP_ID, 'importing_drive', '0') === '1';
 		if ($alreadyImporting) {
 			return ['targetPath' => $targetPath];
 		}
-		// create root folder
+
+		// create root folder(s)
 		$userFolder = $this->root->getUserFolder($userId);
 		if (!$userFolder->nodeExists($targetPath)) {
 			$userFolder->newFolder($targetPath);
@@ -125,6 +130,17 @@ class GoogleDriveAPIService {
 				return ['error' => 'Impossible to create Google Drive folder'];
 			}
 		}
+		if ($considerSharedFiles) {
+			if (!$userFolder->nodeExists($targetSharedPath)) {
+				$userFolder->newFolder($targetSharedPath);
+			} else {
+				$folder = $userFolder->get($targetSharedPath);
+				if (!($folder instanceof Folder)) {
+					return ['error' => 'Impossible to create Google Drive "shared with me" folder'];
+				}
+			}
+		}
+
 		$this->config->setUserValue($userId, Application::APP_ID, 'importing_drive', '1');
 		$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_files', '0');
 		$this->config->setUserValue($userId, Application::APP_ID, 'drive_imported_size', '0');
@@ -167,19 +183,12 @@ class GoogleDriveAPIService {
 		// import batch of files
 		$targetPath = $this->config->getUserValue($userId, Application::APP_ID, 'drive_output_dir', '/Google Drive');
 		$targetPath = $targetPath ?: '/Google Drive';
+		$targetSharedPath = $this->config->getUserValue($userId, Application::APP_ID, 'drive_shared_with_me_output_dir', '/Google Drive/Shared with me');
+		$targetSharedPath = $targetSharedPath ?: '/Google Drive/Shared with me';
 
-		try {
-			$targetNode = $this->root->getUserFolder($userId)->get($targetPath);
-			if ($targetNode->isShared()) {
-				$this->logger->error('Target path ' . $targetPath . 'is shared, resorting to user root folder');
-				$targetPath = '/';
-			}
-		} catch (NotFoundException) {
-			// noop, folder doesn't exist
-		} catch (NotPermittedException) {
-			$this->logger->error('Cannot determine if target path ' . $targetPath . 'is shared, resorting to root folder');
-			$targetPath = '/';
-		}
+		// check if target paths are suitable
+		$targetPath = $this->getNonSharedTargetPath($userId, $targetPath);
+		$targetSharedPath = $this->getNonSharedTargetPath($userId, $targetSharedPath);
 
 		// get progress
 		$directoryProgressStr = $this->config->getUserValue($userId, Application::APP_ID, 'directory_progress', '[]');
@@ -191,7 +200,7 @@ class GoogleDriveAPIService {
 		$alreadyImportedSize = (int)$this->config->getUserValue($userId, Application::APP_ID, 'drive_imported_size', '0');
 		try {
 			$result = $this->importFiles(
-				$userId, $targetPath, 500000000,
+				$userId, $targetPath, $targetSharedPath, 500000000,
 				$alreadyImported, $alreadyImportedSize, $directoryProgress
 			);
 		} catch (Exception|Throwable $e) {
@@ -240,12 +249,13 @@ class GoogleDriveAPIService {
 	 * @throws NoUserException
 	 */
 	public function importFiles(
-		string $userId, string $targetPath,
+		string $userId, string $targetPath, string $targetSharedPath,
 		?int $maxDownloadSize = null, int $alreadyImported = 0, int $alreadyImportedSize = 0,
 		array &$directoryProgress = [],
 	): array {
 		$considerSharedFiles = $this->config->getUserValue($userId, Application::APP_ID, 'consider_shared_files', '0') === '1';
-		// create root folder
+
+		// create root folder(s)
 		$userFolder = $this->root->getUserFolder($userId);
 		if (!$userFolder->nodeExists($targetPath)) {
 			$rootImportFolder = $userFolder->newFolder($targetPath);
@@ -255,8 +265,19 @@ class GoogleDriveAPIService {
 				return ['error' => 'Impossible to create ' . '<redacted>' . ' folder'];
 			}
 		}
+		if ($considerSharedFiles) {
+			if (!$userFolder->nodeExists($targetSharedPath)) {
+				$rootSharedWithMeImportFolder = $userFolder->newFolder($targetSharedPath);
+			} else {
+				$rootSharedWithMeImportFolder = $userFolder->get($targetSharedPath);
+				if (!($rootSharedWithMeImportFolder instanceof Folder)) {
+					return ['error' => 'Impossible to create Google Drive "shared with me" folder'];
+				}
+			}
+		}
 
 		$directoriesById = [];
+		$sharedDirectoriesById = [];
 		$directoryIdsToExplore = [];
 		$params = [
 			'pageSize' => 1000,
@@ -273,11 +294,19 @@ class GoogleDriveAPIService {
 				if (!$considerSharedFiles && !$dir['ownedByMe']) {
 					continue;
 				}
-				$directoriesById[$dir['id']] = [
+
+				$dir_entry = [
 					'name' => preg_replace('/\//', '-slash-', $dir['name']),
 					'parent' => (isset($dir['parents']) && count($dir['parents']) > 0) ? $dir['parents'][0] : null,
 					'modifiedTime' => $dir['modifiedTime'] ?? null,
 				];
+				// this doesn't work for files created by you in a folder that has been shared with you
+				if ($dir['ownedByMe']) {
+					$directoriesById[$dir['id']] = $dir_entry;
+				} else {
+					$sharedDirectoriesById[$dir['id']] = $dir_entry;
+				}
+
 				// what we should explore
 				if (!array_key_exists($dir['id'], $directoryProgress)) {
 					$directoryIdsToExplore[] = $dir['id'];
@@ -292,7 +321,8 @@ class GoogleDriveAPIService {
 		}
 
 		// create directories (recursive powa)
-		if (!$this->createDirsUnder($directoriesById, $rootImportFolder)) {
+		if (!$this->createDirsUnder($directoriesById, $rootImportFolder)
+			|| (isset($rootSharedWithMeImportFolder) && !$this->createDirsUnder($sharedDirectoriesById, $rootSharedWithMeImportFolder))) {
 			return ['error' => 'Impossible to create Drive directories'];
 		}
 
@@ -332,9 +362,16 @@ class GoogleDriveAPIService {
 							continue;
 						}
 
-						if (isset($directoriesById[$fileItem['parents'][0]]['node']) && isset($fileItem['parents']) && count($fileItem['parents']) > 0) {
-							$saveFolder = $directoriesById[$fileItem['parents'][0]]['node'];
-						} else {
+						if (isset($fileItem['parents']) && count($fileItem['parents']) > 0) {
+							$parent = $fileItem['parents'][0];
+							if (isset($directoriesById[$parent]['node'])) {
+								$saveFolder = $directoriesById[$parent]['node'];
+							} elseif (isset($sharedDirectoriesById[$parent]['node'])) {
+								$saveFolder = $sharedDirectoriesById[$parent]['node'];
+							}
+						}
+
+						if (!isset($saveFolder)) {
 							$saveFolder = $rootImportFolder;
 						}
 
@@ -369,7 +406,17 @@ class GoogleDriveAPIService {
 								];
 							}
 						} elseif (!$saveFolder->nodeExists($fileName)) {
-							$filePathInDrive = $dirId === 'root' ? '/' . $fileItem['name'] : $directoriesById[$dirId]['name'] . '/' . $fileItem['name'];
+							if ($dirId === 'root') {
+								$filePathInDrive = '/' . $fileItem['name'];
+							} else {
+								if (isset($directoriesById[$dirId])) {
+									$name = $directoriesById[$dirId]['name'];
+								} elseif (isset($sharedDirectoriesById[$dirId])) {
+									$name = $sharedDirectoriesById[$dirId]['name'];
+								}
+								$filePathInDrive = $name . '/' . $fileItem['name'];
+							}
+
 							$this->logFailedDownloadsForUser($rootImportFolder, $filePathInDrive);
 						}
 					} catch (Throwable $e) {
@@ -383,7 +430,11 @@ class GoogleDriveAPIService {
 			// this dir was fully imported
 			$directoryProgress[$dirId] = 1;
 			if ($dirId !== 'root') {
-				$this->touchFolder($directoriesById[$dirId]);
+				if (isset($directoriesById[$dirId])) {
+					$this->touchFolder($directoriesById[$dirId]);
+				} elseif (isset($sharedDirectoriesById[$dirId])) {
+					$this->touchFolder($sharedDirectoriesById[$dirId]);
+				}
 			}
 		}
 
@@ -689,7 +740,7 @@ class GoogleDriveAPIService {
 			case self::DOCUMENT_MIME_TYPES['presentation']:
 				$params['mimeType'] = $documentFormat === 'openxml'
 					? 'application/vnd.openxmlformats-officedocument.presentationml.presentation'
-					:'application/vnd.oasis.opendocument.presentation';
+					: 'application/vnd.oasis.opendocument.presentation';
 				break;
 		}
 		return $params;
@@ -745,5 +796,25 @@ class GoogleDriveAPIService {
 			return $this->downloadAndSaveFile($saveFolder, $fileName, $userId, $fileUrl, $fileItem);
 		}
 		return null;
+	}
+
+	/**
+	 * @param string $userId
+	 * @param string $targetPath
+	 */
+	private function getNonSharedTargetPath(string $userId, string $targetPath): string {
+		try {
+			$targetNode = $this->root->getUserFolder($userId)->get($targetPath);
+			if ($targetNode->isShared()) {
+				$this->logger->error('Target path ' . $targetPath . 'is shared, resorting to user root folder');
+				return '/';
+			}
+		} catch (NotFoundException) {
+			// noop, folder doesn't exist
+		} catch (NotPermittedException) {
+			$this->logger->error('Cannot determine if target path ' . $targetPath . 'is shared, resorting to root folder');
+			return '/';
+		}
+		return $targetPath;
 	}
 }
