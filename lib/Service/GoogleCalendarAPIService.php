@@ -176,11 +176,12 @@ class GoogleCalendarAPIService {
 
 		$newCalName = trim($calName) . ' (' . $this->l10n->t('Google Calendar import') . ')';
 		$params['{DAV:}displayname'] = $newCalName;
+		$newCalUri = urlencode($newCalName);
 
-		$ncCalId = $this->calendarExists($userId, $newCalName);
+		$ncCalId = $this->calendarExists($userId, $newCalUri);
 		$calendarIsNew = is_null($ncCalId);
 		if (is_null($ncCalId)) {
-			$ncCalId = $this->caldavBackend->createCalendar('principals/users/' . $userId, urlencode($newCalName), $params);
+			$ncCalId = $this->caldavBackend->createCalendar('principals/users/' . $userId, $newCalUri, $params);
 		}
 
 		// get color list
