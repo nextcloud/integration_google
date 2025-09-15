@@ -194,7 +194,7 @@ class GoogleCalendarAPIService {
 		$events = $this->getCalendarEvents($userId, $calId, $allEvents);
 		$nbAdded = 0;
 		$nbUpdated = 0;
-		/** @var array{id: string, start?: array{date?: string, dateTime?: string}, end?: array{date?: string, dateTime?: string}, colorId?: string, summary?: string, visibility?: string, sequence?: string, location?: string, description?: string, status?: string, created?: string, updated?: string, reminders?: array{useDefault?: bool, overrides?: list{array{minutes?: string, hours?: string, days?: string, weeks?: string}}}, recurrence?: list<string>} $e */
+		/** @var array{id: string, start?: array{date?: string, dateTime?: string, timeZone?: string}, end?: array{date?: string, dateTime?: string, timeZone?: string}, colorId?: string, summary?: string, visibility?: string, sequence?: string, location?: string, description?: string, status?: string, created?: string, updated?: string, reminders?: array{useDefault?: bool, overrides?: list{array{minutes?: string, hours?: string, days?: string, weeks?: string}}}, recurrence?: list<string>} $e */
 		foreach ($events as $e) {
 			$objectUri = $e['id'];
 
@@ -294,19 +294,29 @@ class GoogleCalendarAPIService {
 				}
 			}
 
-			if (isset($e['start'], $e['start']['date'], $e['end'], $e['end']['date'])) {
+			if (isset($e['start'], $e['start']['dateTime'], $e['end'], $e['end']['dateTime'])) {
+				$start = new DateTime($e['start']['dateTime']);
+				$end = new DateTime($e['end']['dateTime']);
+
+				if (isset($e['start']['timeZone'], $e['end']['timeZone'])) {
+					$timezoneStart = $e['start']['timeZone'];
+					$start->setTimezone(new DateTimeZone($timezoneStart));
+					$calData .= "DTSTART;TZID=$timezoneStart:" . $start->format('Ymd\THis') . "\n";
+					$timezoneEnd = $e['end']['timeZone'];
+					$end->setTimezone(new DateTimeZone($timezoneEnd));
+					$calData .= "DTEND;TZID=$timezoneEnd:" . $end->format('Ymd\THis') . "\n";
+				} else {
+					$start->setTimezone($utcTimezone);
+					$calData .= 'DTSTART;VALUE=DATE-TIME:' . $start->format('Ymd\THis\Z') . "\n";
+					$end->setTimezone($utcTimezone);
+					$calData .= 'DTEND;VALUE=DATE-TIME:' . $end->format('Ymd\THis\Z') . "\n";
+				}
+			} elseif (isset($e['start'], $e['start']['date'], $e['end'], $e['end']['date'])) {
 				// whole days
 				$start = new DateTime($e['start']['date']);
 				$calData .= 'DTSTART;VALUE=DATE:' . $start->format('Ymd') . "\n";
 				$end = new DateTime($e['end']['date']);
 				$calData .= 'DTEND;VALUE=DATE:' . $end->format('Ymd') . "\n";
-			} elseif (isset($e['start']['dateTime']) && isset($e['end']['dateTime'])) {
-				$start = new DateTime($e['start']['dateTime']);
-				$start->setTimezone($utcTimezone);
-				$calData .= 'DTSTART;VALUE=DATE-TIME:' . $start->format('Ymd\THis\Z') . "\n";
-				$end = new DateTime($e['end']['dateTime']);
-				$end->setTimezone($utcTimezone);
-				$calData .= 'DTEND;VALUE=DATE-TIME:' . $end->format('Ymd\THis\Z') . "\n";
 			} else {
 				// skip entries without any date
 				continue;
