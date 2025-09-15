@@ -33,8 +33,11 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 
 /**
  * Service to make requests to Google v3 (JSON) API
+ *
+ * @phpstan-type Event array{id: string, iCalUID: string, start?: array{date?: string, dateTime?: string, timeZone?: string}, end?: array{date?: string, dateTime?: string, timeZone?: string}, originalStartTime?: array{date?: string, dateTime?: string, timeZone?: string}, recurringEventId?: string, colorId?: string, summary?: string, visibility?: string, sequence?: string, location?: string, description?: string, status?: string, created?: string, updated?: string, reminders?: array{useDefault?: bool, overrides?: list{array{minutes?: string, hours?: string, days?: string, weeks?: string}}}, recurrence?: list<string>}
  */
 class GoogleCalendarAPIService {
+	private DateTimeZone $utcTimezone;
 
 	public function __construct(
 		string $appName,
@@ -44,6 +47,7 @@ class GoogleCalendarAPIService {
 		private GoogleAPIService $googleApiService,
 		private IConfig $config,
 	) {
+		$this->utcTimezone = new DateTimeZone('-0000');
 	}
 
 	/**
@@ -61,13 +65,150 @@ class GoogleCalendarAPIService {
 	/**
 	 * @param string $userId
 	 * @param string $uri
-	 * @return ?int the calendar ID
+	 * @return ?string the calendar ID
 	 */
-	private function calendarExists(string $userId, string $uri): ?int {
+	private function calendarExists(string $userId, string $uri): ?string {
 		$res = $this->caldavBackend->getCalendarByUri('principals/users/' . $userId, $uri);
 		return is_null($res)
 			? null
 			: $res['id'];
+	}
+
+	/**
+	 * @param array{date?: string, dateTime?: string, timeZone?: string} $obj The datetime object to map.
+	 * @return string The date time mapped to the best representation from the available data.
+	 */
+	private function mapTime(array $obj): string {
+		if (isset($obj['dateTime'])) {
+			$dateTime = new DateTime($obj['dateTime']);
+
+			if (isset($obj['timeZone'])) {
+				$timezone = $obj['timeZone'];
+				$dateTime->setTimezone(new DateTimeZone($timezone));
+				return "TZID=$timezone:" . $dateTime->format('Ymd\THis');
+			} else {
+				$dateTime->setTimezone($this->utcTimezone);
+				return 'VALUE=DATE-TIME:' . $dateTime->format('Ymd\THis\Z');
+			}
+		} elseif (isset($obj['date'])) {
+			// whole days
+			$date = new DateTime($obj['date']);
+			return 'VALUE=DATE:' . $date->format('Ymd');
+		} else {
+			// skip entries without any date
+			return '';
+		}
+	}
+
+	/**
+	 * @param Event $e The event from which to generate the data.
+	 * @param array<Event> $events The collection of all events.
+	 * @param string $ncCalId The id of the event's calendar.
+	 * @param array $eventColors The event colors mapping.
+	 */
+	private function generateEventData(array $e, array $events, string $ncCalId, array $eventColors): string {
+		$objectUri = $e['id'];
+
+		$eventData = 'BEGIN:VEVENT' . "\n";
+
+		$eventData .= 'UID:' . $ncCalId . '-' . $e['iCalUID'] . "\n";
+		/* $eventData .= 'UID:' . $ncCalId . '-' . $objectUri . "\n"; */
+		if (isset($e['colorId'], $eventColors[$e['colorId']], $eventColors[$e['colorId']]['background'])) {
+			$closestCssColor = $this->getClosestCssColor($eventColors[$e['colorId']]['background']);
+			$eventData .= 'COLOR:' . $closestCssColor . "\n";
+		}
+		$eventData .= isset($e['summary'])
+			? ('SUMMARY:' . substr(str_replace("\n", '\n', $e['summary']), 0, 250) . "\n")
+			: (($e['visibility'] ?? '') === 'private'
+				? ('SUMMARY:' . $this->l10n->t('Private event') . "\n")
+				: '');
+		$eventData .= isset($e['sequence']) ? ('SEQUENCE:' . $e['sequence'] . "\n") : '';
+		$eventData .= isset($e['location'])
+			? ('LOCATION:' . substr(str_replace("\n", '\n', $e['location']), 0, 250) . "\n")
+			: '';
+		$eventData .= isset($e['description'])
+			? ('DESCRIPTION:' . substr(str_replace("\n", '\n', $e['description']), 0, 250) . "\n")
+			: '';
+		$eventData .= isset($e['status']) ? ('STATUS:' . strtoupper(str_replace("\n", '\n', $e['status'])) . "\n") : '';
+
+		if (isset($e['created'])) {
+			$created = new DateTime($e['created']);
+			$created->setTimezone($this->utcTimezone);
+			$eventData .= 'CREATED:' . $created->format('Ymd\THis\Z') . "\n";
+		}
+
+		if (isset($e['updated'])) {
+			$updated = new DateTime($e['updated']);
+			$updated->setTimezone($this->utcTimezone);
+			$eventData .= 'LAST-MODIFIED:' . $updated->format('Ymd\THis\Z') . "\n";
+		}
+
+		if (isset($e['reminders'], $e['reminders']['useDefault']) && $e['reminders']['useDefault']) {
+			// 15 min before, default alarm
+			$eventData .= 'BEGIN:VALARM' . "\n"
+				. 'ACTION:DISPLAY' . "\n"
+				. 'TRIGGER;RELATED=START:-PT15M' . "\n"
+				. 'END:VALARM' . "\n";
+		}
+		if (isset($e['reminders'], $e['reminders']['overrides'])) {
+			foreach ($e['reminders']['overrides'] as $o) {
+				$nbMin = 0;
+				if (isset($o['minutes'])) {
+					$nbMin += (int)$o['minutes'];
+				}
+				if (isset($o['hours'])) {
+					$nbMin += ((int)$o['hours']) * 60;
+				}
+				if (isset($o['days'])) {
+					$nbMin += ((int)$o['days']) * 60 * 24;
+				}
+				if (isset($o['weeks'])) {
+					$nbMin += ((int)$o['weeks']) * 60 * 24 * 7;
+				}
+				$eventData .= 'BEGIN:VALARM' . "\n"
+					. 'ACTION:DISPLAY' . "\n"
+					. 'TRIGGER;RELATED=START:-PT' . $nbMin . 'M' . "\n"
+					. 'END:VALARM' . "\n";
+			}
+		}
+
+		if (isset($e['recurrence']) && is_array($e['recurrence'])) {
+			foreach ($e['recurrence'] as $r) {
+				$eventData .= $r . "\n";
+			}
+		}
+
+		// skip entries without any date
+		if (!isset($e['start']) || !isset($e['end'])) {
+			return '';
+		}
+
+		$start = $this->mapTime($e['start']);
+		$end = $this->mapTime($e['end']);
+
+		// skip entries without any date
+		if ($start == '' || $end == '') {
+			return '';
+		}
+
+		$eventData .= "DTSTART;$start\n";
+		$eventData .= "DTEND;$end\n";
+
+		if (isset($e['recurringEventId'], $e['originalStartTime'])) {
+			$recurrenceId = $this->mapTime($e['originalStartTime']);
+			$eventData .= "RECURRENCE-ID;$recurrenceId\n";
+		}
+
+		$eventData .= 'CLASS:PUBLIC' . "\n"
+			. 'END:VEVENT' . "\n";
+
+		foreach ($events as $candidateEvent) {
+			if (($candidateEvent['recurringEventId'] == $e['id']) && ($candidateEvent['id'] != $e['id'])) {
+				$eventData .= $this->generateEventData($candidateEvent, $events, $ncCalId, $eventColors);
+			}
+		}
+
+		return $eventData;
 	}
 
 	/**
@@ -194,10 +335,11 @@ class GoogleCalendarAPIService {
 		date_default_timezone_set('UTC');
 		$utcTimezone = new DateTimeZone('-0000');
 		$allEvents = $this->config->getUserValue($userId, Application::APP_ID, 'consider_all_events', '1') === '1';
-		$events = $this->getCalendarEvents($userId, $calId, $allEvents);
+		$eventsGenerator = $this->getCalendarEvents($userId, $calId, $allEvents);
+		$events = iterator_to_array($eventsGenerator);
 		$nbAdded = 0;
 		$nbUpdated = 0;
-		/** @var array{id: string, start?: array{date?: string, dateTime?: string, timeZone?: string}, end?: array{date?: string, dateTime?: string, timeZone?: string}, colorId?: string, summary?: string, visibility?: string, sequence?: string, location?: string, description?: string, status?: string, created?: string, updated?: string, reminders?: array{useDefault?: bool, overrides?: list{array{minutes?: string, hours?: string, days?: string, weeks?: string}}}, recurrence?: list<string>} $e */
+		/** @var Event $e */
 		foreach ($events as $e) {
 			$objectUri = $e['id'];
 
@@ -226,107 +368,21 @@ class GoogleCalendarAPIService {
 				}
 			}
 
-			$calData = 'BEGIN:VCALENDAR' . "\n"
-				. 'VERSION:2.0' . "\n"
-				. 'PRODID:NextCloud Calendar' . "\n"
-				. 'BEGIN:VEVENT' . "\n";
-
-			$calData .= 'UID:' . $ncCalId . '-' . $objectUri . "\n";
-			if (isset($e['colorId'], $eventColors[$e['colorId']], $eventColors[$e['colorId']]['background'])) {
-				$closestCssColor = $this->getClosestCssColor($eventColors[$e['colorId']]['background']);
-				$calData .= 'COLOR:' . $closestCssColor . "\n";
-			}
-			$calData .= isset($e['summary'])
-				? ('SUMMARY:' . substr(str_replace("\n", '\n', $e['summary']), 0, 250) . "\n")
-				: (($e['visibility'] ?? '') === 'private'
-					? ('SUMMARY:' . $this->l10n->t('Private event') . "\n")
-					: '');
-			$calData .= isset($e['sequence']) ? ('SEQUENCE:' . $e['sequence'] . "\n") : '';
-			$calData .= isset($e['location'])
-				? ('LOCATION:' . substr(str_replace("\n", '\n', $e['location']), 0, 250) . "\n")
-				: '';
-			$calData .= isset($e['description'])
-				? ('DESCRIPTION:' . substr(str_replace("\n", '\n', $e['description']), 0, 250) . "\n")
-				: '';
-			$calData .= isset($e['status']) ? ('STATUS:' . strtoupper(str_replace("\n", '\n', $e['status'])) . "\n") : '';
-
-			if (isset($e['created'])) {
-				$created = new DateTime($e['created']);
-				$created->setTimezone($utcTimezone);
-				$calData .= 'CREATED:' . $created->format('Ymd\THis\Z') . "\n";
-			}
-
-			if (isset($e['updated'])) {
-				$updated = new DateTime($e['updated']);
-				$updated->setTimezone($utcTimezone);
-				$calData .= 'LAST-MODIFIED:' . $updated->format('Ymd\THis\Z') . "\n";
-			}
-
-			if (isset($e['reminders'], $e['reminders']['useDefault']) && $e['reminders']['useDefault']) {
-				// 15 min before, default alarm
-				$calData .= 'BEGIN:VALARM' . "\n"
-					. 'ACTION:DISPLAY' . "\n"
-					. 'TRIGGER;RELATED=START:-PT15M' . "\n"
-					. 'END:VALARM' . "\n";
-			}
-			if (isset($e['reminders'], $e['reminders']['overrides'])) {
-				foreach ($e['reminders']['overrides'] as $o) {
-					$nbMin = 0;
-					if (isset($o['minutes'])) {
-						$nbMin += (int)$o['minutes'];
-					}
-					if (isset($o['hours'])) {
-						$nbMin += ((int)$o['hours']) * 60;
-					}
-					if (isset($o['days'])) {
-						$nbMin += ((int)$o['days']) * 60 * 24;
-					}
-					if (isset($o['weeks'])) {
-						$nbMin += ((int)$o['weeks']) * 60 * 24 * 7;
-					}
-					$calData .= 'BEGIN:VALARM' . "\n"
-						. 'ACTION:DISPLAY' . "\n"
-						. 'TRIGGER;RELATED=START:-PT' . $nbMin . 'M' . "\n"
-						. 'END:VALARM' . "\n";
-				}
-			}
-
-			if (isset($e['recurrence']) && is_array($e['recurrence'])) {
-				foreach ($e['recurrence'] as $r) {
-					$calData .= $r . "\n";
-				}
-			}
-
-			if (isset($e['start'], $e['start']['dateTime'], $e['end'], $e['end']['dateTime'])) {
-				$start = new DateTime($e['start']['dateTime']);
-				$end = new DateTime($e['end']['dateTime']);
-
-				if (isset($e['start']['timeZone'], $e['end']['timeZone'])) {
-					$timezoneStart = $e['start']['timeZone'];
-					$start->setTimezone(new DateTimeZone($timezoneStart));
-					$calData .= "DTSTART;TZID=$timezoneStart:" . $start->format('Ymd\THis') . "\n";
-					$timezoneEnd = $e['end']['timeZone'];
-					$end->setTimezone(new DateTimeZone($timezoneEnd));
-					$calData .= "DTEND;TZID=$timezoneEnd:" . $end->format('Ymd\THis') . "\n";
-				} else {
-					$start->setTimezone($utcTimezone);
-					$calData .= 'DTSTART;VALUE=DATE-TIME:' . $start->format('Ymd\THis\Z') . "\n";
-					$end->setTimezone($utcTimezone);
-					$calData .= 'DTEND;VALUE=DATE-TIME:' . $end->format('Ymd\THis\Z') . "\n";
-				}
-			} elseif (isset($e['start'], $e['start']['date'], $e['end'], $e['end']['date'])) {
-				// whole days
-				$start = new DateTime($e['start']['date']);
-				$calData .= 'DTSTART;VALUE=DATE:' . $start->format('Ymd') . "\n";
-				$end = new DateTime($e['end']['date']);
-				$calData .= 'DTEND;VALUE=DATE:' . $end->format('Ymd') . "\n";
-			} else {
-				// skip entries without any date
+			// For recurring events, the parent event recursively calls generateEventData
+			if (isset($e['recurringEventId'])) {
 				continue;
 			}
 
-			$calData .= 'CLASS:PUBLIC' . "\n"
-				. 'END:VEVENT' . "\n"
+			$eventData = $this->generateEventData($e, $events, $ncCalId, $eventColors);
+
+			if ($eventData == '') {
+				continue;
+			}
+
+			$calData = 'BEGIN:VCALENDAR' . "\n"
+				. 'VERSION:2.0' . "\n"
+				. 'PRODID:NextCloud Calendar' . "\n"
+				. $eventData
 				. 'END:VCALENDAR';
 
 			if ($existingEvent !== null) {
@@ -352,7 +408,7 @@ class GoogleCalendarAPIService {
 			}
 		}
 
-		$eventGeneratorReturn = $events->getReturn();
+		$eventGeneratorReturn = $eventsGenerator->getReturn();
 		if (isset($eventGeneratorReturn['error'])) {
 			return $eventGeneratorReturn;
 		}
