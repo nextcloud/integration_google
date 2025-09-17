@@ -107,12 +107,9 @@ class GoogleCalendarAPIService {
 	 * @param array $eventColors The event colors mapping.
 	 */
 	private function generateEventData(array $e, array $events, string $ncCalId, array $eventColors): string {
-		$objectUri = $e['id'];
-
 		$eventData = 'BEGIN:VEVENT' . "\n";
 
 		$eventData .= 'UID:' . $ncCalId . '-' . $e['iCalUID'] . "\n";
-		/* $eventData .= 'UID:' . $ncCalId . '-' . $objectUri . "\n"; */
 		if (isset($e['colorId'], $eventColors[$e['colorId']], $eventColors[$e['colorId']]['background'])) {
 			$closestCssColor = $this->getClosestCssColor($eventColors[$e['colorId']]['background']);
 			$eventData .= 'COLOR:' . $closestCssColor . "\n";
@@ -333,7 +330,6 @@ class GoogleCalendarAPIService {
 		}
 
 		date_default_timezone_set('UTC');
-		$utcTimezone = new DateTimeZone('-0000');
 		$allEvents = $this->config->getUserValue($userId, Application::APP_ID, 'consider_all_events', '1') === '1';
 		$eventsGenerator = $this->getCalendarEvents($userId, $calId, $allEvents);
 		$events = iterator_to_array($eventsGenerator);
