@@ -65,9 +65,9 @@ class GoogleCalendarAPIService {
 	/**
 	 * @param string $userId
 	 * @param string $uri
-	 * @return ?string the calendar ID
+	 * @return ?int the calendar ID
 	 */
-	private function calendarExists(string $userId, string $uri): ?string {
+	private function calendarExists(string $userId, string $uri): ?int {
 		$res = $this->caldavBackend->getCalendarByUri('principals/users/' . $userId, $uri);
 		return is_null($res)
 			? null
@@ -103,13 +103,13 @@ class GoogleCalendarAPIService {
 	/**
 	 * @param Event $e The event from which to generate the data.
 	 * @param array<Event> $events The collection of all events.
-	 * @param string $ncCalId The id of the event's calendar.
+	 * @param int $ncCalId The id of the event's calendar.
 	 * @param array $eventColors The event colors mapping.
 	 */
-	private function generateEventData(array $e, array $events, string $ncCalId, array $eventColors): string {
+	private function generateEventData(array $e, array $events, int $ncCalId, array $eventColors): string {
 		$eventData = 'BEGIN:VEVENT' . "\n";
 
-		$eventData .= 'UID:' . $ncCalId . '-' . $e['iCalUID'] . "\n";
+		$eventData .= 'UID:' . strval($ncCalId) . '-' . $e['iCalUID'] . "\n";
 		if (isset($e['colorId'], $eventColors[$e['colorId']], $eventColors[$e['colorId']]['background'])) {
 			$closestCssColor = $this->getClosestCssColor($eventColors[$e['colorId']]['background']);
 			$eventData .= 'COLOR:' . $closestCssColor . "\n";
