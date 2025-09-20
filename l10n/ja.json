@@ -7,6 +7,7 @@
     "Connected accounts" : "接続済みアカウント",
     "Data migration" : "データ移行",
     "Google API settings" : "Google API 設定",
+    "Put the \"Client ID\" and \"Client secret\" below." : "下記に「クライアントID」と「クライアントシークレット」を入力してください。",
     "Client ID" : "クライアント ID",
     "Client secret" : "クライアントシークレット",
     "Successfully connected to Google!" : "Google への接続に成功しました！",
