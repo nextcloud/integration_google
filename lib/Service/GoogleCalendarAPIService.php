@@ -102,11 +102,11 @@ class GoogleCalendarAPIService {
 
 	/**
 	 * @param Event $e The event from which to generate the data.
-	 * @param array<Event> $events The collection of all events.
+	 * @param array<Event> $exceptions The events that represent recurring exceptions.
 	 * @param int $ncCalId The id of the event's calendar.
 	 * @param array $eventColors The event colors mapping.
 	 */
-	private function generateEventData(array $e, array $events, int $ncCalId, array $eventColors): string {
+	private function generateEventData(array $e, array $exceptions, int $ncCalId, array $eventColors): string {
 		$eventData = 'BEGIN:VEVENT' . "\n";
 
 		$eventData .= 'UID:' . strval($ncCalId) . '-' . $e['iCalUID'] . "\n";
@@ -199,9 +199,9 @@ class GoogleCalendarAPIService {
 		$eventData .= 'CLASS:PUBLIC' . "\n"
 			. 'END:VEVENT' . "\n";
 
-		foreach ($events as $candidateEvent) {
-			if (($candidateEvent['recurringEventId'] == $e['id']) && ($candidateEvent['id'] != $e['id'])) {
-				$eventData .= $this->generateEventData($candidateEvent, $events, $ncCalId, $eventColors);
+		foreach ($exceptions as $candiateException) {
+			if (($candiateException['recurringEventId'] == $e['id']) && ($candiateException['id'] != $e['id'])) {
+				$eventData .= $this->generateEventData($candiateException, $exceptions, $ncCalId, $eventColors);
 			}
 		}
 
@@ -332,9 +332,23 @@ class GoogleCalendarAPIService {
 		date_default_timezone_set('UTC');
 		$allEvents = $this->config->getUserValue($userId, Application::APP_ID, 'consider_all_events', '1') === '1';
 		$eventsGenerator = $this->getCalendarEvents($userId, $calId, $allEvents);
-		$events = iterator_to_array($eventsGenerator);
+
+		// Normal events
+		$events = [];
+		// Exceptions to recurring events (recurringEventId set).
+		$exceptions = [];
+
+		foreach ($eventsGenerator as $e) {
+			if (isset($e['recurringEventId'])) {
+				array_push($exceptions, $e);
+			} else {
+				array_push($events, $e);
+			}
+		}
+
 		$nbAdded = 0;
 		$nbUpdated = 0;
+
 		/** @var Event $e */
 		foreach ($events as $e) {
 			$objectUri = $e['id'];
@@ -364,12 +378,7 @@ class GoogleCalendarAPIService {
 				}
 			}
 
-			// For recurring events, the parent event recursively calls generateEventData
-			if (isset($e['recurringEventId'])) {
-				continue;
-			}
-
-			$eventData = $this->generateEventData($e, $events, $ncCalId, $eventColors);
+			$eventData = $this->generateEventData($e, $exceptions, $ncCalId, $eventColors);
 
 			if ($eventData == '') {
 				continue;
@@ -419,7 +428,7 @@ class GoogleCalendarAPIService {
 	 * @param string $userId
 	 * @param string $calId
 	 * @param bool $allEvents
-	 * @return Generator
+	 * @return Generator<Event>
 	 */
 	private function getCalendarEvents(string $userId, string $calId, bool $allEvents): Generator {
 		$params = [
