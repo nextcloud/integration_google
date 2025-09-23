@@ -1,6 +1,9 @@
 OC.L10N.register(
     "integration_google",
     {
+    "Missing refresh token in Google response." : "Адсутнічае токен абнаўлення ў адказе Google.",
+    "Error getting OAuth access token." : "Памылка атрымання токена доступу OAuth.",
+    "OAuth access token refused" : "Токен доступу OAuth адхілены",
     "Client ID" : "Ідэнтыфікатар кліента",
     "Authentication" : "Аўтэнтыфікацыя",
     "Contacts" : "Кантакты",
