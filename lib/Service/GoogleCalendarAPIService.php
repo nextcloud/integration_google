@@ -199,9 +199,9 @@ class GoogleCalendarAPIService {
 		$eventData .= 'CLASS:PUBLIC' . "\n"
 			. 'END:VEVENT' . "\n";
 
-		foreach ($exceptions as $candiateException) {
-			if (($candiateException['recurringEventId'] == $e['id']) && ($candiateException['id'] != $e['id'])) {
-				$eventData .= $this->generateEventData($candiateException, $exceptions, $ncCalId, $eventColors);
+		foreach ($exceptions as $candidateException) {
+			if (($candidateException['recurringEventId'] == $e['id']) && ($candidateException['id'] != $e['id'])) {
+				$eventData .= $this->generateEventData($candidateException, $exceptions, $ncCalId, $eventColors);
 			}
 		}
 
