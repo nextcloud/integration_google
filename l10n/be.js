@@ -5,6 +5,7 @@ OC.L10N.register(
     "Error getting OAuth access token." : "Памылка атрымання токена доступу OAuth.",
     "OAuth access token refused" : "Токен доступу OAuth адхілены",
     "Client ID" : "Ідэнтыфікатар кліента",
+    "Sign in with Google" : "Увайсці з дапамогай Google",
     "Authentication" : "Аўтэнтыфікацыя",
     "Contacts" : "Кантакты",
     "Calendars" : "Календары",
