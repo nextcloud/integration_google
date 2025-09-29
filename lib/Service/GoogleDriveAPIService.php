@@ -14,6 +14,7 @@ namespace OCA\Google\Service;
 
 use DateTime;
 use Exception;
+use NCU\Config\IUserConfig;
 use OC\User\NoUserException;
 use OCA\Google\AppInfo\Application;
 use OCA\Google\BackgroundJob\ImportDriveJob;
@@ -49,6 +50,7 @@ class GoogleDriveAPIService {
 		string $appName,
 		private LoggerInterface $logger,
 		private IConfig $config,
+		private IUserConfig $userConfig,
 		private IRootFolder $root,
 		private IJobList $jobList,
 		private UserScopeService $userScopeService,
@@ -152,6 +154,10 @@ class GoogleDriveAPIService {
 
 		$this->jobList->add(ImportDriveJob::class, ['user_id' => $userId]);
 		return ['targetPath' => $targetPath];
+	}
+
+	public function cancelImport(string $userId): void {
+		$this->jobList->remove(ImportDriveJob::class, ['user_id' => $userId]);
 	}
 
 	/**
@@ -332,6 +338,12 @@ class GoogleDriveAPIService {
 		}
 
 		foreach ($directoryIdsToExplore as $dirId) {
+			$cancelImport = $this->hasBeenCancelled($userId);
+			if ($cancelImport) {
+				$this->logger->info('Import cancelled by user');
+				break;
+			}
+
 			$query = "mimeType!='application/vnd.google-apps.folder' and '" . $dirId . "' in parents";
 			$earlyResult = $this->retrieveFiles($userId, $dirId, $query, $considerSharedFiles,
 				$rootImportFolder, $rootSharedWithMeImportFolder, $directoriesById, $sharedDirectoriesById,
@@ -356,6 +368,15 @@ class GoogleDriveAPIService {
 			'targetPath' => $targetPath,
 			'finished' => true,
 		];
+	}
+
+	/**
+	 * @param string $userId
+	 * @return bool
+	 */
+	public function hasBeenCancelled(string $userId): bool {
+		$this->userConfig->clearCache($userId);
+		return $this->config->getUserValue($userId, Application::APP_ID, 'importing_drive', '0') === '0';
 	}
 
 	/**
@@ -849,6 +870,12 @@ class GoogleDriveAPIService {
 				return $result;
 			}
 			foreach ($result['files'] as $fileItem) {
+				$cancelImport = $this->hasBeenCancelled($userId);
+				if ($cancelImport) {
+					$this->logger->info('Import cancelled by user');
+					break 2;
+				}
+
 				try {
 					if (isset($fileItem['parents']) && count($fileItem['parents']) > 0) {
 						if (!$allowParents) {
@@ -919,6 +946,12 @@ class GoogleDriveAPIService {
 				}
 			}
 			$params['pageToken'] = $result['nextPageToken'] ?? '';
+
+			$cancelImport = $this->hasBeenCancelled($userId);
+			if ($cancelImport) {
+				$this->logger->info('Import cancelled by user');
+				break;
+			}
 		} while (isset($result['nextPageToken']));
 		return null;
 	}
