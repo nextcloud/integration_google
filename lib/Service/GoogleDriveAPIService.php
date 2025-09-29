@@ -325,94 +325,28 @@ class GoogleDriveAPIService {
 		$downloadedSize = 0;
 		$nbDownloaded = 0;
 
+		if (isset($rootSharedWithMeImportFolder)) {
+			// retrieve "missed" shared files
+			$query = "mimeType!='application/vnd.google-apps.folder' and sharedWithMe = true";
+			$earlyResult = $this->retrieveFiles($userId, 'sharedRoot', $query, true,
+				$rootImportFolder, $rootSharedWithMeImportFolder, $directoriesById, $sharedDirectoriesById,
+				$nbDownloaded, $downloadedSize, $maxDownloadSize,
+				$targetPath, $alreadyImported, $alreadyImportedSize, false);
+			if ($earlyResult != null) {
+				return $earlyResult;
+			}
+		}
+
 		foreach ($directoryIdsToExplore as $dirId) {
-			$conflictingIds = $this->getFilesWithNameConflict($userId, $dirId, $considerSharedFiles);
-			$params = [
-				'pageSize' => 1000,
-				'fields' => implode(',', [
-					'nextPageToken',
-					'files/id',
-					'files/name',
-					'files/parents',
-					'files/mimeType',
-					'files/ownedByMe',
-					'files/webContentLink',
-					'files/modifiedTime',
-				]),
-				'q' => "mimeType!='application/vnd.google-apps.folder' and '" . $dirId . "' in parents",
-			];
-			do {
-				$result = $this->googleApiService->request($userId, 'drive/v3/files', $params);
-				if (isset($result['error'])) {
-					return $result;
-				}
-				foreach ($result['files'] as $fileItem) {
-					try {
-						if (isset($fileItem['parents']) && count($fileItem['parents']) > 0) {
-							$parent = $fileItem['parents'][0];
-							if (isset($directoriesById[$parent]['node'])) {
-								$saveFolder = $directoriesById[$parent]['node'];
-							} elseif (isset($sharedDirectoriesById[$parent]['node'])) {
-								$saveFolder = $sharedDirectoriesById[$parent]['node'];
-							}
-						}
+			$query = "mimeType!='application/vnd.google-apps.folder' and '" . $dirId . "' in parents";
+			$earlyResult = $this->retrieveFiles($userId, $dirId, $query, $considerSharedFiles,
+				$rootImportFolder, $rootSharedWithMeImportFolder, $directoriesById, $sharedDirectoriesById,
+				$nbDownloaded, $downloadedSize, $maxDownloadSize,
+				$targetPath, $alreadyImported, $alreadyImportedSize);
+			if ($earlyResult != null) {
+				return $earlyResult;
+			}
 
-						if (!isset($saveFolder)) {
-							$saveFolder = $rootImportFolder;
-						}
-
-						$fileName = $this->getFileName($fileItem, $userId, in_array($fileItem['id'], $conflictingIds));
-
-						// If file already exists in folder, don't download unless timestamp is different
-						if ($saveFolder->nodeExists($fileName) === true) {
-							$savedFile = $saveFolder->get($fileName);
-							$timestampOnFile = $savedFile->getMtime();
-							$d = new DateTime($fileItem['modifiedTime']);
-							$timestampOnDrive = $d->getTimestamp();
-
-							if ($timestampOnFile < $timestampOnDrive) {
-								$savedFile->delete();
-							} else {
-								continue;
-							}
-						}
-
-						$size = $this->getFile($userId, $fileItem, $saveFolder, $fileName);
-
-						if (!is_null($size)) {
-							$nbDownloaded++;
-							$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_files', $alreadyImported + $nbDownloaded);
-							$downloadedSize += $size;
-							$this->config->setUserValue($userId, Application::APP_ID, 'drive_imported_size', $alreadyImportedSize + $downloadedSize);
-							if ($maxDownloadSize !== null && $downloadedSize > $maxDownloadSize) {
-								return [
-									'nbDownloaded' => $nbDownloaded,
-									'targetPath' => $targetPath,
-									'finished' => false,
-								];
-							}
-						} elseif (!$saveFolder->nodeExists($fileName)) {
-							if ($dirId === 'root') {
-								$filePathInDrive = '/' . $fileItem['name'];
-							} else {
-								if (isset($directoriesById[$dirId])) {
-									$name = $directoriesById[$dirId]['name'];
-								} elseif (isset($sharedDirectoriesById[$dirId])) {
-									$name = $sharedDirectoriesById[$dirId]['name'];
-								}
-								$filePathInDrive = $name . '/' . $fileItem['name'];
-							}
-
-							$this->logFailedDownloadsForUser($rootImportFolder, $filePathInDrive);
-						}
-					} catch (Throwable $e) {
-						$this->logger->warning('Error while importing file', ['exception' => $e]);
-						$this->logger->debug('Skipping file ' . strval($fileItem['id']));
-						continue;
-					}
-				}
-				$params['pageToken'] = $result['nextPageToken'] ?? '';
-			} while (isset($result['nextPageToken']));
 			// this dir was fully imported
 			$directoryProgress[$dirId] = 1;
 			if ($dirId !== 'root') {
@@ -495,7 +429,7 @@ class GoogleDriveAPIService {
 	 * @param bool $considerSharedFiles
 	 * @return array
 	 */
-	private function getFilesWithNameConflict(string $userId, string $dirId, bool $considerSharedFiles): array {
+	private function getFilesWithNameConflict(string $userId, string $query, bool $considerSharedFiles): array {
 		$fileItems = [];
 		$params = [
 			'pageSize' => 1000,
@@ -506,7 +440,7 @@ class GoogleDriveAPIService {
 				'files/parents',
 				'files/ownedByMe',
 			]),
-			'q' => "mimeType!='application/vnd.google-apps.folder' and '" . $dirId . "' in parents",
+			'q' => $query,
 		];
 		do {
 			$result = $this->googleApiService->request($userId, 'drive/v3/files', $params);
@@ -858,5 +792,102 @@ class GoogleDriveAPIService {
 		} else {
 			return $dir_entry['ownedByMe'];
 		}
+	}
+
+	private function retrieveFiles(string $userId, string $dirId, string $query, bool $considerSharedFiles, Folder $rootImportFolder, ?Folder $rootSharedWithMeImportFolder, array $directoriesById, array $sharedDirectoriesById, &$nbDownloaded, &$downloadedSize, $maxDownloadSize, $targetPath, $alreadyImported, $alreadyImportedSize, bool $allowParents = true): ?array {
+		$conflictingIds = $this->getFilesWithNameConflict($userId, $query, $considerSharedFiles);
+		$params = [
+			'pageSize' => 1000,
+			'fields' => implode(',', [
+				'nextPageToken',
+				'files/id',
+				'files/name',
+				'files/parents',
+				'files/mimeType',
+				'files/ownedByMe',
+				'files/webContentLink',
+				'files/modifiedTime',
+			]),
+			'q' => $query,
+		];
+		do {
+			$result = $this->googleApiService->request($userId, 'drive/v3/files', $params);
+			if (isset($result['error'])) {
+				return $result;
+			}
+			foreach ($result['files'] as $fileItem) {
+				try {
+					if (isset($fileItem['parents']) && count($fileItem['parents']) > 0) {
+						if (!$allowParents) {
+							continue;
+						}
+
+						$parent = $fileItem['parents'][0];
+						if (isset($directoriesById[$parent]['node'])) {
+							$saveFolder = $directoriesById[$parent]['node'];
+						} elseif (isset($sharedDirectoriesById[$parent]['node'])) {
+							$saveFolder = $sharedDirectoriesById[$parent]['node'];
+						}
+					}
+
+					if (!isset($saveFolder)) {
+						if ($dirId === 'sharedRoot') {
+							$saveFolder = $rootSharedWithMeImportFolder;
+						} else {
+							$saveFolder = $rootImportFolder;
+						}
+					}
+
+					$fileName = $this->getFileName($fileItem, $userId, in_array($fileItem['id'], $conflictingIds));
+
+					// If file already exists in folder, don't download unless timestamp is different
+					if ($saveFolder->nodeExists($fileName) === true) {
+						$savedFile = $saveFolder->get($fileName);
+						$timestampOnFile = $savedFile->getMtime();
+						$d = new DateTime($fileItem['modifiedTime']);
+						$timestampOnDrive = $d->getTimestamp();
+
+						if ($timestampOnFile < $timestampOnDrive) {
+							$savedFile->delete();
+						} else {
+							continue;
+						}
+					}
+
+					$size = $this->getFile($userId, $fileItem, $saveFolder, $fileName);
+
+					if (!is_null($size)) {
+						$nbDownloaded++;
+						$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_files', $alreadyImported + $nbDownloaded);
+						$downloadedSize += $size;
+						$this->config->setUserValue($userId, Application::APP_ID, 'drive_imported_size', $alreadyImportedSize + $downloadedSize);
+						if ($maxDownloadSize !== null && $downloadedSize > $maxDownloadSize) {
+							return [
+								'nbDownloaded' => $nbDownloaded,
+								'targetPath' => $targetPath,
+								'finished' => false,
+							];
+						}
+					} elseif (!$saveFolder->nodeExists($fileName)) {
+						if ($dirId === 'sharedRoot' || (isset($parent) && isset($sharedDirectoriesById[$parent]['node']))) {
+							$filePathInDrive = '/' . $rootSharedWithMeImportFolder->getName() . $rootSharedWithMeImportFolder->getRelativePath($saveFolder->getPath());
+						} else {
+							$filePathInDrive = $rootImportFolder->getRelativePath($saveFolder->getPath());
+						}
+						if (!str_ends_with($filePathInDrive, '/')) {
+							$filePathInDrive .= '/';
+						}
+						$filePathInDrive .= $fileItem['name'];
+						$this->logFailedDownloadsForUser($rootImportFolder, $filePathInDrive);
+					}
+				} catch (Throwable $e) {
+					$this->logger->warning('Error while importing file', ['exception' => $e]);
+					$this->logger->debug('Skipping file ' . strval($fileItem['id']));
+					continue;
+				}
+			}
+			$params['pageToken'] = $result['nextPageToken'] ?? '';
+		} while (isset($result['nextPageToken']));
+		return null;
 	}
 }
