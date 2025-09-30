@@ -5,6 +5,7 @@ OC.L10N.register(
     "OAuth access token refused" : "OAuth adgangsnøgle afvist",
     "Bad credentials" : "Forkerte legitimationsoplysninger",
     "Connected accounts" : "Forbundne konti",
+    "Data migration" : "Datamigration",
     "Go to \"APIs & Services\" => \"Credentials\" and click on \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\"." : "Gå til \"API'er & services\" => \"Legitimationsoplysninger\" og klik på \"+ OPRET LEGITIMATIONSOPLYSNINGER\" -> \"OAuth klient ID\".",
     "Client ID" : "Klient ID",
     "Client secret" : "Klienthemmelighed",
