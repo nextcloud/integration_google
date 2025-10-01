@@ -155,6 +155,7 @@ class GoogleDriveAPIService {
 		if ($jobRunning) {
 			$lastJobStart = $this->config->getUserValue($userId, Application::APP_ID, 'drive_import_job_last_start');
 			if ($lastJobStart !== '' && ($nowTs - intval($lastJobStart) < Application::IMPORT_JOB_TIMEOUT)) {
+				$this->logger->info('Last job execution (' . strval($nowTs - intval($lastJobStart)) . ') is less than ' . strval(Application::IMPORT_JOB_TIMEOUT) . ' seconds ago, delaying execution');
 				// last job has started less than an hour ago => we consider it can still be running
 				$this->jobList->add(ImportDriveJob::class, ['user_id' => $userId]);
 				return;
