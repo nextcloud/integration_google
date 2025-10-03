@@ -684,8 +684,27 @@ export default {
 					if (targetPath === '') {
 						targetPath = '/'
 					}
+					const oldPath = this.state.drive_output_dir
 					this.state.drive_output_dir = targetPath
-					this.saveOptions({ drive_output_dir: this.state.drive_output_dir }, (response) => {
+					const options = { drive_output_dir: this.state.drive_output_dir }
+
+					if (this.state.drive_shared_with_me_output_dir.startsWith(oldPath)) {
+						let sharedWithMeFolder = this.state.drive_shared_with_me_output_dir.replace(oldPath, '')
+						if (sharedWithMeFolder.length > 0) {
+							if (this.state.drive_output_dir.endsWith('/')) {
+								// drop the leading slash in case the new path ends already with a slash (e.g. root)
+								sharedWithMeFolder = sharedWithMeFolder.substring(1)
+							} else if (!sharedWithMeFolder.startsWith('/')) {
+								// add a leading slash in case the old path ended with a slash (e.g. root)
+								sharedWithMeFolder = '/' + sharedWithMeFolder
+							}
+
+							this.state.drive_shared_with_me_output_dir = this.state.drive_output_dir + sharedWithMeFolder
+							options.drive_shared_with_me_output_dir = this.state.drive_shared_with_me_output_dir
+						}
+					}
+
+					this.saveOptions(options, (response) => {
 						if (response.data && response.data.free_space) {
 							this.state.free_space = response.data.free_space
 						}
