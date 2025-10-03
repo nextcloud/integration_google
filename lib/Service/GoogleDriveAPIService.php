@@ -14,12 +14,12 @@ namespace OCA\Google\Service;
 
 use DateTime;
 use Exception;
-use NCU\Config\IUserConfig;
 use OC\User\NoUserException;
 use OCA\Google\AppInfo\Application;
 use OCA\Google\BackgroundJob\ImportDriveJob;
 use OCA\Google\Service\Utils\FileUtils;
 use OCP\BackgroundJob\IJobList;
+use OCP\Config\IUserConfig;
 use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\Files\InvalidPathException;
