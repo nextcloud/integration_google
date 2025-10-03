@@ -107,6 +107,9 @@ class GoogleDriveAPIService {
 	/**
 	 * @param string $userId
 	 * @return array
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 * @throws PreConditionNotMetException
 	 */
 	public function startImportDrive(string $userId): array {
 		$targetPath = $this->config->getUserValue($userId, Application::APP_ID, 'drive_output_dir', '/Google Drive');
@@ -154,6 +157,7 @@ class GoogleDriveAPIService {
 	/**
 	 * @param string $userId
 	 * @return void
+	 * @throws PreConditionNotMetException
 	 */
 	public function importDriveJob(string $userId): void {
 		$this->logger->debug('Importing drive files for ' . $userId);
@@ -234,17 +238,13 @@ class GoogleDriveAPIService {
 	/**
 	 * @param string $userId
 	 * @param string $targetPath
+	 * @param string $targetSharedPath
 	 * @param ?int $maxDownloadSize
-	 * @param int $alreadyImported
-	 * @param int $alreadyImportedSize
 	 * @param array $directoryProgress
 	 * @return array
 	 * @throws InvalidPathException
-	 * @throws LockedException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
-	 * @throws PreConditionNotMetException
-	 * @throws NoUserException
 	 */
 	public function importFiles(
 		string $userId, string $targetPath, string $targetSharedPath,
@@ -417,7 +417,7 @@ class GoogleDriveAPIService {
 
 	/**
 	 * @param string $userId
-	 * @param string $dirId
+	 * @param string $query
 	 * @param bool $considerSharedFiles
 	 * @return array
 	 */
@@ -500,6 +500,8 @@ class GoogleDriveAPIService {
 	 * @param Folder $currentFolder
 	 * @param string $currentFolderId
 	 * @return bool success
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
 	 */
 	private function createDirsUnder(array &$directoriesById, Folder $currentFolder, string $currentFolderId = ''): bool {
 		foreach ($directoriesById as $id => $dir) {
@@ -664,6 +666,10 @@ class GoogleDriveAPIService {
 	 * @param Folder $saveFolder
 	 * @param string $fileName
 	 * @return ?int downloaded size, null if error getting file
+	 * @throws InvalidPathException
+	 * @throws LockedException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
 	 */
 	private function getFile(string $userId, array $fileItem, Folder $saveFolder, string $fileName): ?int {
 		if (in_array($fileItem['mimeType'], array_values(self::DOCUMENT_MIME_TYPES))) {
@@ -713,6 +719,7 @@ class GoogleDriveAPIService {
 	/**
 	 * @param string $userId
 	 * @param string $targetPath
+	 * @return string the target path if it suitable (e.g. non-shared), otherwise the root path
 	 */
 	private function getNonSharedTargetPath(string $userId, string $targetPath): string {
 		try {
@@ -730,6 +737,10 @@ class GoogleDriveAPIService {
 		return $targetPath;
 	}
 
+	/**
+	 * @param string $userId
+	 * @return string the id of the root folder in Google Drive
+	 */
 	private function retrieveRootId(string $userId): string {
 		$fileId = 'root';
 		$result = $this->googleApiService->request($userId, 'drive/v3/files/' . $fileId);
@@ -739,6 +750,13 @@ class GoogleDriveAPIService {
 		return $result['id'];
 	}
 
+	/**
+	 * @param array $directoryProgress
+	 * @param array $directoryIdsToExplore
+	 * @param string $userId
+	 * @param string $query
+	 * @return array
+	 */
 	private function collectFolders(array $directoryProgress, array &$directoryIdsToExplore, string $userId, string $query): array {
 		$directoriesById = [];
 		$params = [
@@ -769,7 +787,13 @@ class GoogleDriveAPIService {
 		return $directoriesById;
 	}
 
-	private function recursivelyCheckParentOwnership(string $rootId, $directoriesById, $dir_entry): bool {
+	/**
+	 * @param string $rootId
+	 * @param array $directoriesById
+	 * @param $dir_entry
+	 * @return bool whether all parents of this folder are owned by the user themself
+	 */
+	private function recursivelyCheckParentOwnership(string $rootId, array $directoriesById, $dir_entry): bool {
 		$parentId = $dir_entry['parent'];
 		if (isset($parentId)) {
 			if (!isset($directoriesById[$parentId])) {
@@ -786,6 +810,20 @@ class GoogleDriveAPIService {
 		}
 	}
 
+	/**
+	 * @param string $userId
+	 * @param string $dirId
+	 * @param string $query
+	 * @param bool $considerSharedFiles
+	 * @param Folder $rootImportFolder
+	 * @param Folder|null $rootSharedWithMeImportFolder
+	 * @param array $directoriesById
+	 * @param array $sharedDirectoriesById
+	 * @param int|null $maxDownloadSize
+	 * @param string $targetPath
+	 * @param bool $allowParents
+	 * @return array|null
+	 */
 	private function retrieveFiles(string $userId, string $dirId, string $query, bool $considerSharedFiles, Folder $rootImportFolder, ?Folder $rootSharedWithMeImportFolder, array $directoriesById, array $sharedDirectoriesById, ?int $maxDownloadSize, string $targetPath, bool $allowParents = true): ?array {
 		$alreadyImported = (int)$this->config->getUserValue($userId, Application::APP_ID, 'nb_imported_files', '0');
 		$alreadyImportedSize = (int)$this->config->getUserValue($userId, Application::APP_ID, 'drive_imported_size', '0');
