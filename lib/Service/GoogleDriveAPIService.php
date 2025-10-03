@@ -195,13 +195,11 @@ class GoogleDriveAPIService {
 		$directoryProgress = ($directoryProgressStr === '' || $directoryProgressStr === '[]')
 			? []
 			: json_decode($directoryProgressStr, true);
-		// import by batch of 500 Mo
-		$alreadyImported = (int)$this->config->getUserValue($userId, Application::APP_ID, 'nb_imported_files', '0');
-		$alreadyImportedSize = (int)$this->config->getUserValue($userId, Application::APP_ID, 'drive_imported_size', '0');
 		try {
+			// import by batch of 500 Mo
 			$result = $this->importFiles(
-				$userId, $targetPath, $targetSharedPath, 500000000,
-				$alreadyImported, $alreadyImportedSize, $directoryProgress
+				$userId, $targetPath, $targetSharedPath,
+				500000000, $directoryProgress
 			);
 		} catch (Exception|Throwable $e) {
 			$result = [
@@ -250,8 +248,7 @@ class GoogleDriveAPIService {
 	 */
 	public function importFiles(
 		string $userId, string $targetPath, string $targetSharedPath,
-		?int $maxDownloadSize = null, int $alreadyImported = 0, int $alreadyImportedSize = 0,
-		array &$directoryProgress = [],
+		?int $maxDownloadSize = null, array &$directoryProgress = [],
 	): array {
 		$considerSharedFiles = $this->config->getUserValue($userId, Application::APP_ID, 'consider_shared_files', '0') === '1';
 
@@ -322,16 +319,13 @@ class GoogleDriveAPIService {
 		if (isset($info['error'])) {
 			return $info;
 		}
-		$downloadedSize = 0;
-		$nbDownloaded = 0;
 
 		if (isset($rootSharedWithMeImportFolder)) {
 			// retrieve "missed" shared files
 			$query = "mimeType!='application/vnd.google-apps.folder' and sharedWithMe = true";
 			$earlyResult = $this->retrieveFiles($userId, 'sharedRoot', $query, true,
 				$rootImportFolder, $rootSharedWithMeImportFolder, $directoriesById, $sharedDirectoriesById,
-				$nbDownloaded, $downloadedSize, $maxDownloadSize,
-				$targetPath, $alreadyImported, $alreadyImportedSize, false);
+				$maxDownloadSize, $targetPath, false);
 			if ($earlyResult != null) {
 				return $earlyResult;
 			}
@@ -341,8 +335,7 @@ class GoogleDriveAPIService {
 			$query = "mimeType!='application/vnd.google-apps.folder' and '" . $dirId . "' in parents";
 			$earlyResult = $this->retrieveFiles($userId, $dirId, $query, $considerSharedFiles,
 				$rootImportFolder, $rootSharedWithMeImportFolder, $directoriesById, $sharedDirectoriesById,
-				$nbDownloaded, $downloadedSize, $maxDownloadSize,
-				$targetPath, $alreadyImported, $alreadyImportedSize);
+				$maxDownloadSize, $targetPath);
 			if ($earlyResult != null) {
 				return $earlyResult;
 			}
@@ -360,7 +353,6 @@ class GoogleDriveAPIService {
 
 		$this->touchRootImportFolder($userId, $rootImportFolder);
 		return [
-			'nbDownloaded' => $nbDownloaded,
 			'targetPath' => $targetPath,
 			'finished' => true,
 		];
@@ -794,7 +786,10 @@ class GoogleDriveAPIService {
 		}
 	}
 
-	private function retrieveFiles(string $userId, string $dirId, string $query, bool $considerSharedFiles, Folder $rootImportFolder, ?Folder $rootSharedWithMeImportFolder, array $directoriesById, array $sharedDirectoriesById, &$nbDownloaded, &$downloadedSize, $maxDownloadSize, $targetPath, $alreadyImported, $alreadyImportedSize, bool $allowParents = true): ?array {
+	private function retrieveFiles(string $userId, string $dirId, string $query, bool $considerSharedFiles, Folder $rootImportFolder, ?Folder $rootSharedWithMeImportFolder, array $directoriesById, array $sharedDirectoriesById, ?int $maxDownloadSize, string $targetPath, bool $allowParents = true): ?array {
+		$alreadyImported = (int)$this->config->getUserValue($userId, Application::APP_ID, 'nb_imported_files', '0');
+		$alreadyImportedSize = (int)$this->config->getUserValue($userId, Application::APP_ID, 'drive_imported_size', '0');
+
 		$conflictingIds = $this->getFilesWithNameConflict($userId, $query, $considerSharedFiles);
 		$params = [
 			'pageSize' => 1000,
@@ -857,13 +852,12 @@ class GoogleDriveAPIService {
 					$size = $this->getFile($userId, $fileItem, $saveFolder, $fileName);
 
 					if (!is_null($size)) {
-						$nbDownloaded++;
-						$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_files', $alreadyImported + $nbDownloaded);
-						$downloadedSize += $size;
-						$this->config->setUserValue($userId, Application::APP_ID, 'drive_imported_size', $alreadyImportedSize + $downloadedSize);
-						if ($maxDownloadSize !== null && $downloadedSize > $maxDownloadSize) {
+						$alreadyImported++;
+						$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_files', strval($alreadyImported));
+						$alreadyImportedSize += $size;
+						$this->config->setUserValue($userId, Application::APP_ID, 'drive_imported_size', strval($alreadyImportedSize));
+						if ($maxDownloadSize !== null && $alreadyImportedSize > $maxDownloadSize) {
 							return [
-								'nbDownloaded' => $nbDownloaded,
 								'targetPath' => $targetPath,
 								'finished' => false,
 							];
