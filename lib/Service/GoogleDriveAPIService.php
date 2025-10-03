@@ -869,10 +869,13 @@ class GoogleDriveAPIService {
 				return $result;
 			}
 			foreach ($result['files'] as $fileItem) {
-				$cancelImport = $this->hasBeenCancelled($userId);
-				if ($cancelImport) {
-					$this->logger->info('Import cancelled by user');
-					break 2;
+				if (!isset($lastCancelCheck) || (time() - $lastCancelCheck) >= 30) {
+					$cancelImport = $this->hasBeenCancelled($userId);
+					if ($cancelImport) {
+						$this->logger->info('Import cancelled by user');
+						break 2;
+					}
+					$lastCancelCheck = time();
 				}
 
 				try {
