@@ -14,7 +14,6 @@ namespace OCA\Google\Service;
 
 use DateTime;
 use Exception;
-use OC\User\NoUserException;
 use OCA\Google\AppInfo\Application;
 use OCA\Google\BackgroundJob\ImportDriveJob;
 use OCA\Google\Service\Utils\FileUtils;
