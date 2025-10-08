@@ -16,7 +16,7 @@
     <bugs>https://github.com/nextcloud/integration_google/issues</bugs>
     <screenshot>https://github.com/nextcloud/integration_google/raw/master/img/screenshot1.jpg</screenshot>
     <dependencies>
-        <nextcloud min-version="31" max-version="32"/>
+        <nextcloud min-version="32" max-version="32"/>
     </dependencies>
     <settings>
         <admin>OCA\Google\Settings\Admin</admin>
