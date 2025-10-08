@@ -14,7 +14,6 @@ namespace OCA\Google\Service;
 
 use DateTime;
 use Exception;
-use OC\User\NoUserException;
 use OCA\Google\AppInfo\Application;
 use OCA\Google\BackgroundJob\ImportDriveJob;
 use OCA\Google\Service\Utils\FileUtils;
@@ -30,7 +29,7 @@ use OCP\Lock\ILockingProvider;
 use OCP\Lock\LockedException;
 use OCP\PreConditionNotMetException;
 use Psr\Log\LoggerInterface;
-
+use RuntimeException;
 use Throwable;
 
 class GoogleDriveAPIService {
@@ -107,15 +106,23 @@ class GoogleDriveAPIService {
 	/**
 	 * @param string $userId
 	 * @return array
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 * @throws PreConditionNotMetException
 	 */
 	public function startImportDrive(string $userId): array {
 		$targetPath = $this->config->getUserValue($userId, Application::APP_ID, 'drive_output_dir', '/Google Drive');
 		$targetPath = $targetPath ?: '/Google Drive';
+		$considerSharedFiles = $this->config->getUserValue($userId, Application::APP_ID, 'consider_shared_files', '0') === '1';
+		$targetSharedPath = $this->config->getUserValue($userId, Application::APP_ID, 'drive_shared_with_me_output_dir', '/Google Drive/Shared with me');
+		$targetSharedPath = $targetSharedPath ?: '/Google Drive/Shared with me';
+
 		$alreadyImporting = $this->config->getUserValue($userId, Application::APP_ID, 'importing_drive', '0') === '1';
 		if ($alreadyImporting) {
 			return ['targetPath' => $targetPath];
 		}
-		// create root folder
+
+		// create root folder(s)
 		$userFolder = $this->root->getUserFolder($userId);
 		if (!$userFolder->nodeExists($targetPath)) {
 			$userFolder->newFolder($targetPath);
@@ -125,6 +132,17 @@ class GoogleDriveAPIService {
 				return ['error' => 'Impossible to create Google Drive folder'];
 			}
 		}
+		if ($considerSharedFiles) {
+			if (!$userFolder->nodeExists($targetSharedPath)) {
+				$userFolder->newFolder($targetSharedPath);
+			} else {
+				$folder = $userFolder->get($targetSharedPath);
+				if (!($folder instanceof Folder)) {
+					return ['error' => 'Impossible to create Google Drive "shared with me" folder'];
+				}
+			}
+		}
+
 		$this->config->setUserValue($userId, Application::APP_ID, 'importing_drive', '1');
 		$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_files', '0');
 		$this->config->setUserValue($userId, Application::APP_ID, 'drive_imported_size', '0');
@@ -138,6 +156,7 @@ class GoogleDriveAPIService {
 	/**
 	 * @param string $userId
 	 * @return void
+	 * @throws PreConditionNotMetException
 	 */
 	public function importDriveJob(string $userId): void {
 		$this->logger->debug('Importing drive files for ' . $userId);
@@ -167,32 +186,23 @@ class GoogleDriveAPIService {
 		// import batch of files
 		$targetPath = $this->config->getUserValue($userId, Application::APP_ID, 'drive_output_dir', '/Google Drive');
 		$targetPath = $targetPath ?: '/Google Drive';
+		$targetSharedPath = $this->config->getUserValue($userId, Application::APP_ID, 'drive_shared_with_me_output_dir', '/Google Drive/Shared with me');
+		$targetSharedPath = $targetSharedPath ?: '/Google Drive/Shared with me';
 
-		try {
-			$targetNode = $this->root->getUserFolder($userId)->get($targetPath);
-			if ($targetNode->isShared()) {
-				$this->logger->error('Target path ' . $targetPath . 'is shared, resorting to user root folder');
-				$targetPath = '/';
-			}
-		} catch (NotFoundException) {
-			// noop, folder doesn't exist
-		} catch (NotPermittedException) {
-			$this->logger->error('Cannot determine if target path ' . $targetPath . 'is shared, resorting to root folder');
-			$targetPath = '/';
-		}
+		// check if target paths are suitable
+		$targetPath = $this->getNonSharedTargetPath($userId, $targetPath);
+		$targetSharedPath = $this->getNonSharedTargetPath($userId, $targetSharedPath);
 
 		// get progress
 		$directoryProgressStr = $this->config->getUserValue($userId, Application::APP_ID, 'directory_progress', '[]');
 		$directoryProgress = ($directoryProgressStr === '' || $directoryProgressStr === '[]')
 			? []
 			: json_decode($directoryProgressStr, true);
-		// import by batch of 500 Mo
-		$alreadyImported = (int)$this->config->getUserValue($userId, Application::APP_ID, 'nb_imported_files', '0');
-		$alreadyImportedSize = (int)$this->config->getUserValue($userId, Application::APP_ID, 'drive_imported_size', '0');
 		try {
+			// import by batch of 500 Mo
 			$result = $this->importFiles(
-				$userId, $targetPath, 500000000,
-				$alreadyImported, $alreadyImportedSize, $directoryProgress
+				$userId, $targetPath, $targetSharedPath,
+				500000000, $directoryProgress
 			);
 		} catch (Exception|Throwable $e) {
 			$result = [
@@ -227,25 +237,21 @@ class GoogleDriveAPIService {
 	/**
 	 * @param string $userId
 	 * @param string $targetPath
+	 * @param string $targetSharedPath
 	 * @param ?int $maxDownloadSize
-	 * @param int $alreadyImported
-	 * @param int $alreadyImportedSize
 	 * @param array $directoryProgress
 	 * @return array
 	 * @throws InvalidPathException
-	 * @throws LockedException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
-	 * @throws PreConditionNotMetException
-	 * @throws NoUserException
 	 */
 	public function importFiles(
-		string $userId, string $targetPath,
-		?int $maxDownloadSize = null, int $alreadyImported = 0, int $alreadyImportedSize = 0,
-		array &$directoryProgress = [],
+		string $userId, string $targetPath, string $targetSharedPath,
+		?int $maxDownloadSize = null, array &$directoryProgress = [],
 	): array {
 		$considerSharedFiles = $this->config->getUserValue($userId, Application::APP_ID, 'consider_shared_files', '0') === '1';
-		// create root folder
+
+		// create root folder(s)
 		$userFolder = $this->root->getUserFolder($userId);
 		if (!$userFolder->nodeExists($targetPath)) {
 			$rootImportFolder = $userFolder->newFolder($targetPath);
@@ -255,44 +261,55 @@ class GoogleDriveAPIService {
 				return ['error' => 'Impossible to create ' . '<redacted>' . ' folder'];
 			}
 		}
+		if ($considerSharedFiles) {
+			if (!$userFolder->nodeExists($targetSharedPath)) {
+				$rootSharedWithMeImportFolder = $userFolder->newFolder($targetSharedPath);
+			} else {
+				$rootSharedWithMeImportFolder = $userFolder->get($targetSharedPath);
+				if (!($rootSharedWithMeImportFolder instanceof Folder)) {
+					return ['error' => 'Impossible to create Google Drive "shared with me" folder'];
+				}
+			}
+		}
 
-		$directoriesById = [];
 		$directoryIdsToExplore = [];
-		$params = [
-			'pageSize' => 1000,
-			'fields' => '*',
-			'q' => "mimeType='application/vnd.google-apps.folder'",
-		];
-		do {
-			$result = $this->googleApiService->request($userId, 'drive/v3/files', $params);
-			if (isset($result['error'])) {
-				return $result;
+		try {
+			// "ownedByMe" or "'me' in owners" doesn't work for files created by you in a folder that has been shared with you.
+			$directoriesById = $this->collectFolders($directoryProgress, $directoryIdsToExplore, $userId, "mimeType='application/vnd.google-apps.folder' and 'me' in owners");
+			if (isset($rootSharedWithMeImportFolder)) {
+				// misses *files* without folders that are shared with you (those don't have any parent not even 'root').
+				$sharedDirectoriesById = $this->collectFolders($directoryProgress, $directoryIdsToExplore, $userId, "mimeType='application/vnd.google-apps.folder' and sharedWithMe = true");
+			} else {
+				$sharedDirectoriesById = [];
 			}
-			foreach ($result['files'] as $dir) {
-				// ignore shared files
-				if (!$considerSharedFiles && !$dir['ownedByMe']) {
-					continue;
-				}
-				$directoriesById[$dir['id']] = [
-					'name' => preg_replace('/\//', '-slash-', $dir['name']),
-					'parent' => (isset($dir['parents']) && count($dir['parents']) > 0) ? $dir['parents'][0] : null,
-					'modifiedTime' => $dir['modifiedTime'] ?? null,
-				];
-				// what we should explore
-				if (!array_key_exists($dir['id'], $directoryProgress)) {
-					$directoryIdsToExplore[] = $dir['id'];
-				}
-			}
-			$params['pageToken'] = $result['nextPageToken'] ?? '';
-		} while (isset($result['nextPageToken']));
+		} catch (Throwable $e) {
+			return ['error' => $e->getMessage()];
+		}
 
 		// add root if it has not been imported yet
 		if (!array_key_exists('root', $directoryProgress)) {
 			$directoryIdsToExplore[] = 'root';
 		}
 
+		// filter all directories that belong to you but whose parent is shared with you
+		if (isset($rootSharedWithMeImportFolder)) {
+			try {
+				$rootId = $this->retrieveRootId($userId);
+				foreach ($directoriesById as $id => $dir) {
+					$allParentsOwnedByMe = $this->recursivelyCheckParentOwnership($rootId, $directoriesById, $dir);
+					if (!$allParentsOwnedByMe) {
+						unset($directoriesById[$id]);
+						$sharedDirectoriesById[$id] = $dir;
+					}
+				}
+			} catch (Throwable $e) {
+				return ['error' => $e->getMessage()];
+			}
+		}
+
 		// create directories (recursive powa)
-		if (!$this->createDirsUnder($directoriesById, $rootImportFolder)) {
+		if (!$this->createDirsUnder($directoriesById, $rootImportFolder)
+			|| (isset($rootSharedWithMeImportFolder) && !$this->createDirsUnder($sharedDirectoriesById, $rootSharedWithMeImportFolder))) {
 			return ['error' => 'Impossible to create Drive directories'];
 		}
 
@@ -301,95 +318,40 @@ class GoogleDriveAPIService {
 		if (isset($info['error'])) {
 			return $info;
 		}
-		$downloadedSize = 0;
-		$nbDownloaded = 0;
+
+		if (isset($rootSharedWithMeImportFolder)) {
+			// retrieve "missed" shared files
+			$query = "mimeType!='application/vnd.google-apps.folder' and sharedWithMe = true";
+			$earlyResult = $this->retrieveFiles($userId, 'sharedRoot', $query, true,
+				$rootImportFolder, $rootSharedWithMeImportFolder, $directoriesById, $sharedDirectoriesById,
+				$maxDownloadSize, $targetPath, false);
+			if ($earlyResult != null) {
+				return $earlyResult;
+			}
+		}
 
 		foreach ($directoryIdsToExplore as $dirId) {
-			$conflictingIds = $this->getFilesWithNameConflict($userId, $dirId, $considerSharedFiles);
-			$params = [
-				'pageSize' => 1000,
-				'fields' => implode(',', [
-					'nextPageToken',
-					'files/id',
-					'files/name',
-					'files/parents',
-					'files/mimeType',
-					'files/ownedByMe',
-					'files/webContentLink',
-					'files/modifiedTime',
-				]),
-				'q' => "mimeType!='application/vnd.google-apps.folder' and '" . $dirId . "' in parents",
-			];
-			do {
-				$result = $this->googleApiService->request($userId, 'drive/v3/files', $params);
-				if (isset($result['error'])) {
-					return $result;
-				}
-				foreach ($result['files'] as $fileItem) {
-					try {
-						// ignore shared files
-						if (!$considerSharedFiles && !$fileItem['ownedByMe']) {
-							continue;
-						}
+			$query = "mimeType!='application/vnd.google-apps.folder' and '" . $dirId . "' in parents";
+			$earlyResult = $this->retrieveFiles($userId, $dirId, $query, $considerSharedFiles,
+				$rootImportFolder, $rootSharedWithMeImportFolder, $directoriesById, $sharedDirectoriesById,
+				$maxDownloadSize, $targetPath);
+			if ($earlyResult != null) {
+				return $earlyResult;
+			}
 
-						if (isset($directoriesById[$fileItem['parents'][0]]['node']) && isset($fileItem['parents']) && count($fileItem['parents']) > 0) {
-							$saveFolder = $directoriesById[$fileItem['parents'][0]]['node'];
-						} else {
-							$saveFolder = $rootImportFolder;
-						}
-
-						$fileName = $this->getFileName($fileItem, $userId, in_array($fileItem['id'], $conflictingIds));
-
-						// If file already exists in folder, don't download unless timestamp is different
-						if ($saveFolder->nodeExists($fileName) === true) {
-							$savedFile = $saveFolder->get($fileName);
-							$timestampOnFile = $savedFile->getMtime();
-							$d = new DateTime($fileItem['modifiedTime']);
-							$timestampOnDrive = $d->getTimestamp();
-
-							if ($timestampOnFile < $timestampOnDrive) {
-								$savedFile->delete();
-							} else {
-								continue;
-							}
-						}
-
-						$size = $this->getFile($userId, $fileItem, $saveFolder, $fileName);
-
-						if (!is_null($size)) {
-							$nbDownloaded++;
-							$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_files', $alreadyImported + $nbDownloaded);
-							$downloadedSize += $size;
-							$this->config->setUserValue($userId, Application::APP_ID, 'drive_imported_size', $alreadyImportedSize + $downloadedSize);
-							if ($maxDownloadSize !== null && $downloadedSize > $maxDownloadSize) {
-								return [
-									'nbDownloaded' => $nbDownloaded,
-									'targetPath' => $targetPath,
-									'finished' => false,
-								];
-							}
-						} elseif (!$saveFolder->nodeExists($fileName)) {
-							$filePathInDrive = $dirId === 'root' ? '/' . $fileItem['name'] : $directoriesById[$dirId]['name'] . '/' . $fileItem['name'];
-							$this->logFailedDownloadsForUser($rootImportFolder, $filePathInDrive);
-						}
-					} catch (Throwable $e) {
-						$this->logger->warning('Error while importing file', ['exception' => $e]);
-						$this->logger->debug('Skipping file ' . strval($fileItem['id']));
-						continue;
-					}
-				}
-				$params['pageToken'] = $result['nextPageToken'] ?? '';
-			} while (isset($result['nextPageToken']));
 			// this dir was fully imported
 			$directoryProgress[$dirId] = 1;
 			if ($dirId !== 'root') {
-				$this->touchFolder($directoriesById[$dirId]);
+				if (isset($directoriesById[$dirId])) {
+					$this->touchFolder($directoriesById[$dirId]);
+				} elseif (isset($sharedDirectoriesById[$dirId])) {
+					$this->touchFolder($sharedDirectoriesById[$dirId]);
+				}
 			}
 		}
 
 		$this->touchRootImportFolder($userId, $rootImportFolder);
 		return [
-			'nbDownloaded' => $nbDownloaded,
 			'targetPath' => $targetPath,
 			'finished' => true,
 		];
@@ -454,11 +416,11 @@ class GoogleDriveAPIService {
 
 	/**
 	 * @param string $userId
-	 * @param string $dirId
+	 * @param string $query
 	 * @param bool $considerSharedFiles
 	 * @return array
 	 */
-	private function getFilesWithNameConflict(string $userId, string $dirId, bool $considerSharedFiles): array {
+	private function getFilesWithNameConflict(string $userId, string $query, bool $considerSharedFiles): array {
 		$fileItems = [];
 		$params = [
 			'pageSize' => 1000,
@@ -469,7 +431,7 @@ class GoogleDriveAPIService {
 				'files/parents',
 				'files/ownedByMe',
 			]),
-			'q' => "mimeType!='application/vnd.google-apps.folder' and '" . $dirId . "' in parents",
+			'q' => $query,
 		];
 		do {
 			$result = $this->googleApiService->request($userId, 'drive/v3/files', $params);
@@ -537,6 +499,8 @@ class GoogleDriveAPIService {
 	 * @param Folder $currentFolder
 	 * @param string $currentFolderId
 	 * @return bool success
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
 	 */
 	private function createDirsUnder(array &$directoriesById, Folder $currentFolder, string $currentFolderId = ''): bool {
 		foreach ($directoriesById as $id => $dir) {
@@ -689,7 +653,7 @@ class GoogleDriveAPIService {
 			case self::DOCUMENT_MIME_TYPES['presentation']:
 				$params['mimeType'] = $documentFormat === 'openxml'
 					? 'application/vnd.openxmlformats-officedocument.presentationml.presentation'
-					:'application/vnd.oasis.opendocument.presentation';
+					: 'application/vnd.oasis.opendocument.presentation';
 				break;
 		}
 		return $params;
@@ -701,6 +665,10 @@ class GoogleDriveAPIService {
 	 * @param Folder $saveFolder
 	 * @param string $fileName
 	 * @return ?int downloaded size, null if error getting file
+	 * @throws InvalidPathException
+	 * @throws LockedException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
 	 */
 	private function getFile(string $userId, array $fileItem, Folder $saveFolder, string $fileName): ?int {
 		if (in_array($fileItem['mimeType'], array_values(self::DOCUMENT_MIME_TYPES))) {
@@ -744,6 +712,213 @@ class GoogleDriveAPIService {
 			$fileUrl = 'https://www.googleapis.com/drive/v3/files/' . urlencode((string)$fileItem['id']) . '?alt=media';
 			return $this->downloadAndSaveFile($saveFolder, $fileName, $userId, $fileUrl, $fileItem);
 		}
+		return null;
+	}
+
+	/**
+	 * @param string $userId
+	 * @param string $targetPath
+	 * @return string the target path if it suitable (e.g. non-shared), otherwise the root path
+	 */
+	private function getNonSharedTargetPath(string $userId, string $targetPath): string {
+		try {
+			$targetNode = $this->root->getUserFolder($userId)->get($targetPath);
+			if ($targetNode->isShared()) {
+				$this->logger->error('Target path ' . $targetPath . 'is shared, resorting to user root folder');
+				return '/';
+			}
+		} catch (NotFoundException) {
+			// noop, folder doesn't exist
+		} catch (NotPermittedException) {
+			$this->logger->error('Cannot determine if target path ' . $targetPath . 'is shared, resorting to root folder');
+			return '/';
+		}
+		return $targetPath;
+	}
+
+	/**
+	 * @param string $userId
+	 * @return string the id of the root folder in Google Drive
+	 */
+	private function retrieveRootId(string $userId): string {
+		$fileId = 'root';
+		$result = $this->googleApiService->request($userId, 'drive/v3/files/' . $fileId);
+		if (isset($result['error'])) {
+			throw new RuntimeException($result['error']);
+		}
+		return $result['id'];
+	}
+
+	/**
+	 * @param array $directoryProgress
+	 * @param array $directoryIdsToExplore
+	 * @param string $userId
+	 * @param string $query
+	 * @return array
+	 */
+	private function collectFolders(array $directoryProgress, array &$directoryIdsToExplore, string $userId, string $query): array {
+		$directoriesById = [];
+		$params = [
+			'pageSize' => 1000,
+			'fields' => '*',
+			'q' => $query,
+		];
+		do {
+			$result = $this->googleApiService->request($userId, 'drive/v3/files', $params);
+			if (isset($result['error'])) {
+				throw new RuntimeException($result['error']);
+			}
+			foreach ($result['files'] as $dir) {
+				$directoriesById[$dir['id']] = [
+					'name' => preg_replace('/\//', '-slash-', $dir['name']),
+					'parent' => (isset($dir['parents']) && count($dir['parents']) > 0) ? $dir['parents'][0] : null,
+					'modifiedTime' => $dir['modifiedTime'] ?? null,
+					'ownedByMe' => $dir['ownedByMe'] ?? false,
+				];
+
+				// what we should explore
+				if (!array_key_exists($dir['id'], $directoryProgress)) {
+					$directoryIdsToExplore[] = $dir['id'];
+				}
+			}
+			$params['pageToken'] = $result['nextPageToken'] ?? '';
+		} while (isset($result['nextPageToken']));
+		return $directoriesById;
+	}
+
+	/**
+	 * @param string $rootId
+	 * @param array $directoriesById
+	 * @param $dir_entry
+	 * @return bool whether all parents of this folder are owned by the user themself
+	 */
+	private function recursivelyCheckParentOwnership(string $rootId, array $directoriesById, $dir_entry): bool {
+		$parentId = $dir_entry['parent'];
+		if (isset($parentId)) {
+			if (!isset($directoriesById[$parentId])) {
+				return $rootId === $parentId;
+			}
+
+			$parent = $directoriesById[$parentId];
+			if (!$parent['ownedByMe']) {
+				return false;
+			}
+			return $this->recursivelyCheckParentOwnership($rootId, $directoriesById, $parent);
+		} else {
+			return $dir_entry['ownedByMe'];
+		}
+	}
+
+	/**
+	 * @param string $userId
+	 * @param string $dirId
+	 * @param string $query
+	 * @param bool $considerSharedFiles
+	 * @param Folder $rootImportFolder
+	 * @param Folder|null $rootSharedWithMeImportFolder
+	 * @param array $directoriesById
+	 * @param array $sharedDirectoriesById
+	 * @param int|null $maxDownloadSize
+	 * @param string $targetPath
+	 * @param bool $allowParents
+	 * @return array|null
+	 */
+	private function retrieveFiles(string $userId, string $dirId, string $query, bool $considerSharedFiles, Folder $rootImportFolder, ?Folder $rootSharedWithMeImportFolder, array $directoriesById, array $sharedDirectoriesById, ?int $maxDownloadSize, string $targetPath, bool $allowParents = true): ?array {
+		$alreadyImported = (int)$this->config->getUserValue($userId, Application::APP_ID, 'nb_imported_files', '0');
+		$alreadyImportedSize = (int)$this->config->getUserValue($userId, Application::APP_ID, 'drive_imported_size', '0');
+
+		$conflictingIds = $this->getFilesWithNameConflict($userId, $query, $considerSharedFiles);
+		$params = [
+			'pageSize' => 1000,
+			'fields' => implode(',', [
+				'nextPageToken',
+				'files/id',
+				'files/name',
+				'files/parents',
+				'files/mimeType',
+				'files/ownedByMe',
+				'files/webContentLink',
+				'files/modifiedTime',
+			]),
+			'q' => $query,
+		];
+		do {
+			$result = $this->googleApiService->request($userId, 'drive/v3/files', $params);
+			if (isset($result['error'])) {
+				return $result;
+			}
+			foreach ($result['files'] as $fileItem) {
+				try {
+					if (isset($fileItem['parents']) && count($fileItem['parents']) > 0) {
+						if (!$allowParents) {
+							continue;
+						}
+
+						$parent = $fileItem['parents'][0];
+						if (isset($directoriesById[$parent]['node'])) {
+							$saveFolder = $directoriesById[$parent]['node'];
+						} elseif (isset($sharedDirectoriesById[$parent]['node'])) {
+							$saveFolder = $sharedDirectoriesById[$parent]['node'];
+						}
+					}
+
+					if (!isset($saveFolder)) {
+						if ($dirId === 'sharedRoot') {
+							$saveFolder = $rootSharedWithMeImportFolder;
+						} else {
+							$saveFolder = $rootImportFolder;
+						}
+					}
+
+					$fileName = $this->getFileName($fileItem, $userId, in_array($fileItem['id'], $conflictingIds));
+
+					// If file already exists in folder, don't download unless timestamp is different
+					if ($saveFolder->nodeExists($fileName) === true) {
+						$savedFile = $saveFolder->get($fileName);
+						$timestampOnFile = $savedFile->getMtime();
+						$d = new DateTime($fileItem['modifiedTime']);
+						$timestampOnDrive = $d->getTimestamp();
+
+						if ($timestampOnFile < $timestampOnDrive) {
+							$savedFile->delete();
+						} else {
+							continue;
+						}
+					}
+
+					$size = $this->getFile($userId, $fileItem, $saveFolder, $fileName);
+
+					if (!is_null($size)) {
+						$alreadyImported++;
+						$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_files', strval($alreadyImported));
+						$alreadyImportedSize += $size;
+						$this->config->setUserValue($userId, Application::APP_ID, 'drive_imported_size', strval($alreadyImportedSize));
+						if ($maxDownloadSize !== null && $alreadyImportedSize > $maxDownloadSize) {
+							return [
+								'targetPath' => $targetPath,
+								'finished' => false,
+							];
+						}
+					} elseif (!$saveFolder->nodeExists($fileName)) {
+						if ($dirId === 'sharedRoot' || (isset($parent) && isset($sharedDirectoriesById[$parent]['node']))) {
+							$filePathInDrive = '/' . $rootSharedWithMeImportFolder->getName() . $rootSharedWithMeImportFolder->getRelativePath($saveFolder->getPath());
+						} else {
+							$filePathInDrive = $rootImportFolder->getRelativePath($saveFolder->getPath());
+						}
+						if (!str_ends_with($filePathInDrive, '/')) {
+							$filePathInDrive .= '/';
+						}
+						$filePathInDrive .= $fileItem['name'];
+						$this->logFailedDownloadsForUser($rootImportFolder, $filePathInDrive);
+					}
+				} catch (Throwable $e) {
+					$this->logger->warning('Error while importing file', ['exception' => $e]);
+					$this->logger->debug('Skipping file ' . strval($fileItem['id']));
+					continue;
+				}
+			}
+			$params['pageToken'] = $result['nextPageToken'] ?? '';
+		} while (isset($result['nextPageToken']));
 		return null;
 	}
 }
