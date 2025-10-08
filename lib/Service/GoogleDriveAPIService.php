@@ -845,6 +845,7 @@ class GoogleDriveAPIService {
 	 * @return array|null
 	 */
 	private function retrieveFiles(string $userId, string $dirId, string $query, bool $considerSharedFiles, Folder $rootImportFolder, ?Folder $rootSharedWithMeImportFolder, array $directoriesById, array $sharedDirectoriesById, ?int $maxDownloadSize, string $targetPath, bool $allowParents = true): ?array {
+		$lastCancelCheck = time();
 		$alreadyImported = (int)$this->config->getUserValue($userId, Application::APP_ID, 'nb_imported_files', '0');
 		$alreadyImportedSize = (int)$this->config->getUserValue($userId, Application::APP_ID, 'drive_imported_size', '0');
 
@@ -869,7 +870,7 @@ class GoogleDriveAPIService {
 				return $result;
 			}
 			foreach ($result['files'] as $fileItem) {
-				if (!isset($lastCancelCheck) || (time() - $lastCancelCheck) >= 30) {
+				if ((time() - $lastCancelCheck) >= 30) {
 					$cancelImport = $this->hasBeenCancelled($userId);
 					if ($cancelImport) {
 						$this->logger->info('Import cancelled by user');
