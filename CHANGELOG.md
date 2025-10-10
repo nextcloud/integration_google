@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.2.0] - 2025-10-10
+
+### Added
+
+- Support timezones in calendar events #276 @MarcelRobitaille
+- Support recurrence exceptions #281 @MarcelRobitaille
+- Add configurable "shared with me" output directory #285 @Bungeefan
+
+### Changed
+
+- Removing url encoding from calendar names #280 @lukasdotcom
+- Add logging to when job execution is delayed for drive import #284 @Bungeefan
+
+### Fixed
+
+- Replaced mdi download icon with Material Symbol variant #273 @AndyScherzinger
+
 ## [4.1.0] - 2025-07-24
 
 ### Added
