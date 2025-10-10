@@ -18,6 +18,7 @@ use OCA\Google\AppInfo\Application;
 use OCA\Google\BackgroundJob\ImportDriveJob;
 use OCA\Google\Service\Utils\FileUtils;
 use OCP\BackgroundJob\IJobList;
+use OCP\Config\IUserConfig;
 use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\Files\InvalidPathException;
@@ -48,6 +49,7 @@ class GoogleDriveAPIService {
 		string $appName,
 		private LoggerInterface $logger,
 		private IConfig $config,
+		private IUserConfig $userConfig,
 		private IRootFolder $root,
 		private IJobList $jobList,
 		private UserScopeService $userScopeService,
@@ -151,6 +153,10 @@ class GoogleDriveAPIService {
 
 		$this->jobList->add(ImportDriveJob::class, ['user_id' => $userId]);
 		return ['targetPath' => $targetPath];
+	}
+
+	public function cancelImport(string $userId): void {
+		$this->jobList->remove(ImportDriveJob::class, ['user_id' => $userId]);
 	}
 
 	/**
@@ -331,6 +337,12 @@ class GoogleDriveAPIService {
 		}
 
 		foreach ($directoryIdsToExplore as $dirId) {
+			$cancelImport = $this->hasBeenCancelled($userId);
+			if ($cancelImport) {
+				$this->logger->info('Import cancelled by user');
+				break;
+			}
+
 			$query = "mimeType!='application/vnd.google-apps.folder' and '" . $dirId . "' in parents";
 			$earlyResult = $this->retrieveFiles($userId, $dirId, $query, $considerSharedFiles,
 				$rootImportFolder, $rootSharedWithMeImportFolder, $directoriesById, $sharedDirectoriesById,
@@ -355,6 +367,15 @@ class GoogleDriveAPIService {
 			'targetPath' => $targetPath,
 			'finished' => true,
 		];
+	}
+
+	/**
+	 * @param string $userId
+	 * @return bool
+	 */
+	public function hasBeenCancelled(string $userId): bool {
+		$this->userConfig->clearCache($userId);
+		return $this->config->getUserValue($userId, Application::APP_ID, 'importing_drive', '0') === '0';
 	}
 
 	/**
@@ -824,6 +845,7 @@ class GoogleDriveAPIService {
 	 * @return array|null
 	 */
 	private function retrieveFiles(string $userId, string $dirId, string $query, bool $considerSharedFiles, Folder $rootImportFolder, ?Folder $rootSharedWithMeImportFolder, array $directoriesById, array $sharedDirectoriesById, ?int $maxDownloadSize, string $targetPath, bool $allowParents = true): ?array {
+		$lastCancelCheck = time();
 		$alreadyImported = (int)$this->config->getUserValue($userId, Application::APP_ID, 'nb_imported_files', '0');
 		$alreadyImportedSize = (int)$this->config->getUserValue($userId, Application::APP_ID, 'drive_imported_size', '0');
 
@@ -848,6 +870,15 @@ class GoogleDriveAPIService {
 				return $result;
 			}
 			foreach ($result['files'] as $fileItem) {
+				if ((time() - $lastCancelCheck) >= 30) {
+					$cancelImport = $this->hasBeenCancelled($userId);
+					if ($cancelImport) {
+						$this->logger->info('Import cancelled by user');
+						break 2;
+					}
+					$lastCancelCheck = time();
+				}
+
 				try {
 					if (isset($fileItem['parents']) && count($fileItem['parents']) > 0) {
 						if (!$allowParents) {

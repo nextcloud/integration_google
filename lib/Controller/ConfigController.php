@@ -16,6 +16,7 @@ use DateTime;
 use Exception;
 use OCA\Google\AppInfo\Application;
 use OCA\Google\Service\GoogleAPIService;
+use OCA\Google\Service\GoogleDriveAPIService;
 use OCA\Google\Service\SecretService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
@@ -49,6 +50,7 @@ class ConfigController extends Controller {
 		private IContactManager $contactsManager,
 		private IInitialState $initialStateService,
 		private GoogleAPIService $googleApiService,
+		private GoogleDriveAPIService $googleDriveApiService,
 		private ?string $userId,
 		private ICrypto $crypto,
 		private SecretService $secretService,
@@ -84,6 +86,9 @@ class ConfigController extends Controller {
 				$root = \OCP\Server::get(\OCP\Files\IRootFolder::class);
 				$userRoot = $root->getUserFolder($this->userId);
 				$result['free_space'] = \OCA\Google\Settings\Personal::getFreeSpace($userRoot, $values['drive_output_dir']);
+			}
+			if (isset($values['importing_drive']) && $values['importing_drive'] === '0') {
+				$this->googleDriveApiService->cancelImport($this->userId);
 			}
 		}
 		return new DataResponse($result);
