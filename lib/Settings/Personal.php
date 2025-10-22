@@ -7,12 +7,13 @@ use OCA\Google\AppInfo\Application;
 use OCA\Google\Service\GoogleAPIService;
 use OCA\Google\Service\SecretService;
 use OCP\AppFramework\Http\TemplateResponse;
+use OCP\AppFramework\Services\IAppConfig;
 use OCP\AppFramework\Services\IInitialState;
+use OCP\Config\IUserConfig;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
 use OCP\Files\NotPermittedException;
-use OCP\IConfig;
 use OCP\IUserManager;
 use OCP\Settings\ISettings;
 use Throwable;
@@ -20,7 +21,8 @@ use Throwable;
 class Personal implements ISettings {
 
 	public function __construct(
-		private IConfig $config,
+		private IAppConfig $appConfig,
+		private IUserConfig $userConfig,
 		private IRootFolder $root,
 		private IUserManager $userManager,
 		private IInitialState $initialStateService,
@@ -40,24 +42,24 @@ class Personal implements ISettings {
 		if ($this->userId === null) {
 			return new TemplateResponse(Application::APP_ID, 'personalSettings');
 		}
-		$userName = $this->config->getUserValue($this->userId, Application::APP_ID, 'user_name');
-		$driveOutputDir = $this->config->getUserValue($this->userId, Application::APP_ID, 'drive_output_dir', '/Google Drive');
+		$userName = $this->userConfig->getValueString($this->userId, Application::APP_ID, 'user_name', lazy: true);
+		$driveOutputDir = $this->userConfig->getValueString($this->userId, Application::APP_ID, 'drive_output_dir', '/Google Drive', lazy: true);
 		$driveOutputDir = $driveOutputDir ?: '/Google Drive';
-		$driveSharedWithMeOutputDir = $this->config->getUserValue($this->userId, Application::APP_ID, 'drive_shared_with_me_output_dir', '/Google Drive/Shared with me');
+		$driveSharedWithMeOutputDir = $this->userConfig->getValueString($this->userId, Application::APP_ID, 'drive_shared_with_me_output_dir', '/Google Drive/Shared with me', lazy: true);
 		$driveSharedWithMeOutputDir = $driveSharedWithMeOutputDir ?: '/Google Drive/Shared with me';
-		$considerAllEvents = $this->config->getUserValue($this->userId, Application::APP_ID, 'consider_all_events', '1') === '1';
-		$considerSharedFiles = $this->config->getUserValue($this->userId, Application::APP_ID, 'consider_shared_files', '0') === '1';
-		$considerSharedAlbums = $this->config->getUserValue($this->userId, Application::APP_ID, 'consider_shared_albums', '0') === '1';
-		$considerOtherContacts = $this->config->getUserValue($this->userId, Application::APP_ID, 'consider_other_contacts', '0') === '1';
-		$documentFormat = $this->config->getUserValue($this->userId, Application::APP_ID, 'document_format', 'openxml');
+		$considerAllEvents = $this->userConfig->getValueString($this->userId, Application::APP_ID, 'consider_all_events', '1', lazy: true) === '1';
+		$considerSharedFiles = $this->userConfig->getValueString($this->userId, Application::APP_ID, 'consider_shared_files', '0', lazy: true) === '1';
+		$considerSharedAlbums = $this->userConfig->getValueString($this->userId, Application::APP_ID, 'consider_shared_albums', '0', lazy: true) === '1';
+		$considerOtherContacts = $this->userConfig->getValueString($this->userId, Application::APP_ID, 'consider_other_contacts', '0', lazy: true) === '1';
+		$documentFormat = $this->userConfig->getValueString($this->userId, Application::APP_ID, 'document_format', 'openxml', lazy: true);
 		if (!in_array($documentFormat, ['openxml', 'opendoc'])) {
 			$documentFormat = 'openxml';
 		}
 
 		// for OAuth
-		$clientID = $this->secretService->getEncryptedAppValue('client_id');
-		$clientSecret = $this->secretService->getEncryptedAppValue('client_secret') !== '';
-		$usePopup = $this->config->getAppValue(Application::APP_ID, 'use_popup', '0');
+		$clientID = $this->appConfig->getAppValueString('client_id', lazy: true);
+		$clientSecret = $this->appConfig->getAppValueString('client_secret', lazy: true) !== '';
+		$usePopup = $this->appConfig->getAppValueString('use_popup', '0', lazy: true);
 
 		// get free space
 		$userFolder = $this->root->getUserFolder($this->userId);
@@ -71,7 +73,7 @@ class Personal implements ISettings {
 		}
 
 		// Get scopes of user
-		$userScopesString = $this->config->getUserValue($this->userId, Application::APP_ID, 'user_scopes', '{}');
+		$userScopesString = $this->userConfig->getValueString($this->userId, Application::APP_ID, 'user_scopes', '{}', lazy: true);
 		/** @var bool|null|array $userScopes */
 		$userScopes = json_decode($userScopesString, true);
 		if (!is_array($userScopes)) {
