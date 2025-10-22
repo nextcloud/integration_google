@@ -17,8 +17,8 @@ use Exception;
 use Generator;
 use OCA\DAV\CardDAV\CardDavBackend;
 use OCA\Google\AppInfo\Application;
+use OCP\Config\IUserConfig;
 use OCP\Contacts\IManager as IContactManager;
-use OCP\IConfig;
 use Psr\Log\LoggerInterface;
 use Sabre\VObject\Component\VCard;
 use Throwable;
@@ -34,7 +34,7 @@ class GoogleContactsAPIService {
 		private IContactManager $contactsManager,
 		private CardDavBackend $cdBackend,
 		private GoogleAPIService $googleApiService,
-		private IConfig $config,
+		private IUserConfig $userConfig,
 	) {
 	}
 
@@ -85,7 +85,7 @@ class GoogleContactsAPIService {
 			return $contacts;
 		}
 		$result['nbContacts'] = $contacts['totalItems'] ?? 0;
-		$scopes = $this->config->getUserValue($userId, Application::APP_ID, 'user_scopes', '{}');
+		$scopes = $this->userConfig->getValueString($userId, Application::APP_ID, 'user_scopes', '{}', lazy: true);
 		$scopes = json_decode($scopes, true);
 		if (isset($scopes['can_access_other_contacts']) && $scopes['can_access_other_contacts'] === 1) {
 			$params = [
@@ -205,7 +205,7 @@ class GoogleContactsAPIService {
 			}
 			$existingAddressBook = $addressBook;
 		}
-		$otherContacts = $this->config->getUserValue($userId, Application::APP_ID, 'consider_other_contacts', '0') === '1';
+		$otherContacts = $this->userConfig->getValueString($userId, Application::APP_ID, 'consider_other_contacts', '0', lazy: true) === '1';
 		$groupsById = $this->getContactGroupsById($userId);
 		$contacts = $this->getContactList($userId, $otherContacts);
 		$nbAdded = 0;

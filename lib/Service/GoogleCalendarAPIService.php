@@ -18,7 +18,7 @@ use Exception;
 use Generator;
 use OCA\DAV\CalDAV\CalDavBackend;
 use OCA\Google\AppInfo\Application;
-use OCP\IConfig;
+use OCP\Config\IUserConfig;
 use OCP\IL10N;
 use Ortic\ColorConverter\Color;
 use Ortic\ColorConverter\Colors\Named;
@@ -45,7 +45,7 @@ class GoogleCalendarAPIService {
 		private IL10N $l10n,
 		private CalDavBackend $caldavBackend,
 		private GoogleAPIService $googleApiService,
-		private IConfig $config,
+		private IUserConfig $userConfig,
 	) {
 		$this->utcTimezone = new DateTimeZone('-0000');
 	}
@@ -330,7 +330,7 @@ class GoogleCalendarAPIService {
 		}
 
 		date_default_timezone_set('UTC');
-		$allEvents = $this->config->getUserValue($userId, Application::APP_ID, 'consider_all_events', '1') === '1';
+		$allEvents = $this->userConfig->getValueString($userId, Application::APP_ID, 'consider_all_events', '1', lazy: true) === '1';
 		$eventsGenerator = $this->getCalendarEvents($userId, $calId, $allEvents);
 
 		// Normal events

@@ -18,9 +18,10 @@ use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\ServerException;
 use OCA\Google\AppInfo\Application;
+use OCP\AppFramework\Services\IAppConfig;
+use OCP\Config\IUserConfig;
 use OCP\Http\Client\IClientService;
 use OCP\Http\Client\IResponse;
-use OCP\IConfig;
 use OCP\IL10N;
 use OCP\Notification\IManager as INotificationManager;
 use Psr\Log\LoggerInterface;
@@ -37,7 +38,8 @@ class GoogleAPIService {
 		string $appName,
 		private LoggerInterface $logger,
 		private IL10N $l10n,
-		private IConfig $config,
+		private IAppConfig $appConfig,
+		private IUserConfig $userConfig,
 		private INotificationManager $notificationManager,
 		IClientService $clientService,
 		private SecretService $secretService,
@@ -353,10 +355,9 @@ class GoogleAPIService {
 
 	private function checkTokenExpiration(string $userId): void {
 		$refreshToken = $this->secretService->getEncryptedUserValue($userId, 'refresh_token');
-		$expireAt = $this->config->getUserValue($userId, Application::APP_ID, 'token_expires_at');
-		if ($refreshToken !== '' && $expireAt !== '') {
+		$expireAt = $this->userConfig->getValueInt($userId, Application::APP_ID, 'token_expires_at', lazy: true);
+		if ($refreshToken !== '' && $expireAt !== 0) {
 			$nowTs = (new DateTime())->getTimestamp();
-			$expireAt = (int)$expireAt;
 			// if token expires in less than 2 minutes or has already expired
 			if ($nowTs > $expireAt - 120) {
 				$this->refreshToken($userId);
@@ -367,8 +368,8 @@ class GoogleAPIService {
 	public function refreshToken(string $userId): array {
 		$this->logger->debug('Trying to REFRESH the access token', ['app' => Application::APP_ID]);
 		$refreshToken = $this->secretService->getEncryptedUserValue($userId, 'refresh_token');
-		$clientID = $this->secretService->getEncryptedAppValue('client_id');
-		$clientSecret = $this->secretService->getEncryptedAppValue('client_secret');
+		$clientID = $this->appConfig->getAppValueString('client_id', lazy: true);
+		$clientSecret = $this->appConfig->getAppValueString('client_secret', lazy: true);
 		$result = $this->requestOAuthAccessToken([
 			'client_id' => $clientID,
 			'client_secret' => $clientSecret,
@@ -382,7 +383,7 @@ class GoogleAPIService {
 			if (isset($result['expires_in'])) {
 				$nowTs = (new DateTime())->getTimestamp();
 				$expiresAt = $nowTs + (int)$result['expires_in'];
-				$this->config->setUserValue($userId, Application::APP_ID, 'token_expires_at', $expiresAt);
+				$this->userConfig->setValueInt($userId, Application::APP_ID, 'token_expires_at', $expiresAt, lazy: true);
 			}
 		} else {
 			$responseTxt = json_encode($result);

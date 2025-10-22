@@ -25,7 +25,6 @@ use OCP\Files\InvalidPathException;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
 use OCP\Files\NotPermittedException;
-use OCP\IConfig;
 use OCP\Lock\ILockingProvider;
 use OCP\Lock\LockedException;
 use OCP\PreConditionNotMetException;
@@ -48,7 +47,6 @@ class GoogleDriveAPIService {
 	public function __construct(
 		string $appName,
 		private LoggerInterface $logger,
-		private IConfig $config,
 		private IUserConfig $userConfig,
 		private IRootFolder $root,
 		private IJobList $jobList,
@@ -63,7 +61,7 @@ class GoogleDriveAPIService {
 	 * @return array
 	 */
 	public function getDriveSize(string $userId): array {
-		$considerSharedFiles = $this->config->getUserValue($userId, Application::APP_ID, 'consider_shared_files', '0') === '1';
+		$considerSharedFiles = $this->userConfig->getValueString($userId, APPLICATION::APP_ID, 'consider_shared_files', '0', lazy:true) === '1';
 		$params = [
 			'fields' => '*',
 		];
@@ -113,13 +111,13 @@ class GoogleDriveAPIService {
 	 * @throws PreConditionNotMetException
 	 */
 	public function startImportDrive(string $userId): array {
-		$targetPath = $this->config->getUserValue($userId, Application::APP_ID, 'drive_output_dir', '/Google Drive');
+		$targetPath = $this->userConfig->getValueString($userId, APPLICATION::APP_ID, 'drive_output_dir', '/Google Drive', lazy:true);
 		$targetPath = $targetPath ?: '/Google Drive';
-		$considerSharedFiles = $this->config->getUserValue($userId, Application::APP_ID, 'consider_shared_files', '0') === '1';
-		$targetSharedPath = $this->config->getUserValue($userId, Application::APP_ID, 'drive_shared_with_me_output_dir', '/Google Drive/Shared with me');
+		$considerSharedFiles = $this->userConfig->getValueString($userId, APPLICATION::APP_ID, 'consider_shared_files', '0', lazy:true) === '1';
+		$targetSharedPath = $this->userConfig->getValueString($userId, APPLICATION::APP_ID, 'drive_shared_with_me_output_dir', '/Google Drive/Shared with me', lazy:true);
 		$targetSharedPath = $targetSharedPath ?: '/Google Drive/Shared with me';
 
-		$alreadyImporting = $this->config->getUserValue($userId, Application::APP_ID, 'importing_drive', '0') === '1';
+		$alreadyImporting = $this->userConfig->getValueString($userId, APPLICATION::APP_ID, 'importing_drive', '0', lazy:true) === '1';
 		if ($alreadyImporting) {
 			return ['targetPath' => $targetPath];
 		}
@@ -145,11 +143,11 @@ class GoogleDriveAPIService {
 			}
 		}
 
-		$this->config->setUserValue($userId, Application::APP_ID, 'importing_drive', '1');
-		$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_files', '0');
-		$this->config->setUserValue($userId, Application::APP_ID, 'drive_imported_size', '0');
-		$this->config->setUserValue($userId, Application::APP_ID, 'last_drive_import_timestamp', '0');
-		$this->config->deleteUserValue($userId, Application::APP_ID, 'directory_progress');
+		$this->userConfig->setValueString($userId, Application::APP_ID, 'importing_drive', '1', lazy: true);
+		$this->userConfig->setValueInt($userId, Application::APP_ID, 'nb_imported_files', 0, lazy: true);
+		$this->userConfig->setValueInt($userId, Application::APP_ID, 'drive_imported_size', 0, lazy: true);
+		$this->userConfig->setValueInt($userId, Application::APP_ID, 'last_drive_import_timestamp', 0, lazy: true);
+		$this->userConfig->deleteUserConfig($userId, Application::APP_ID, 'directory_progress');
 
 		$this->jobList->add(ImportDriveJob::class, ['user_id' => $userId]);
 		return ['targetPath' => $targetPath];
@@ -171,28 +169,28 @@ class GoogleDriveAPIService {
 		$this->userScopeService->setUserScope($userId);
 		$this->userScopeService->setFilesystemScope($userId);
 
-		$importingDrive = $this->config->getUserValue($userId, Application::APP_ID, 'importing_drive', '0') === '1';
+		$importingDrive = $this->userConfig->getValueString($userId, APPLICATION::APP_ID, 'importing_drive', '0', lazy:true) === '1';
 		if (!$importingDrive) {
 			return;
 		}
-		$jobRunning = $this->config->getUserValue($userId, Application::APP_ID, 'drive_import_running', '0') === '1';
+		$jobRunning = $this->userConfig->getValueString($userId, APPLICATION::APP_ID, 'drive_import_running', '0', lazy:true) === '1';
 		$nowTs = (new DateTime())->getTimestamp();
 		if ($jobRunning) {
-			$lastJobStart = $this->config->getUserValue($userId, Application::APP_ID, 'drive_import_job_last_start');
-			if ($lastJobStart !== '' && ($nowTs - intval($lastJobStart) < Application::IMPORT_JOB_TIMEOUT)) {
+			$lastJobStart = $this->userConfig->getValueInt($userId, APPLICATION::APP_ID, 'drive_import_job_last_start', lazy:true);
+			if ($lastJobStart !== 0 && ($nowTs - intval($lastJobStart) < Application::IMPORT_JOB_TIMEOUT)) {
 				$this->logger->info('Last job execution (' . strval($nowTs - intval($lastJobStart)) . ') is less than ' . strval(Application::IMPORT_JOB_TIMEOUT) . ' seconds ago, delaying execution');
 				// last job has started less than an hour ago => we consider it can still be running
 				$this->jobList->add(ImportDriveJob::class, ['user_id' => $userId]);
 				return;
 			}
 		}
-		$this->config->setUserValue($userId, Application::APP_ID, 'drive_import_running', '1');
-		$this->config->setUserValue($userId, Application::APP_ID, 'drive_import_job_last_start', strval($nowTs));
+		$this->userConfig->setValueString($userId, Application::APP_ID, 'drive_import_running', '1', lazy: true);
+		$this->userConfig->setValueInt($userId, Application::APP_ID, 'drive_import_job_last_start', $nowTs, lazy: true);
 
 		// import batch of files
-		$targetPath = $this->config->getUserValue($userId, Application::APP_ID, 'drive_output_dir', '/Google Drive');
+		$targetPath = $this->userConfig->getValueString($userId, APPLICATION::APP_ID, 'drive_output_dir', '/Google Drive', lazy:true);
 		$targetPath = $targetPath ?: '/Google Drive';
-		$targetSharedPath = $this->config->getUserValue($userId, Application::APP_ID, 'drive_shared_with_me_output_dir', '/Google Drive/Shared with me');
+		$targetSharedPath = $this->userConfig->getValueString($userId, APPLICATION::APP_ID, 'drive_shared_with_me_output_dir', '/Google Drive/Shared with me', lazy:true);
 		$targetSharedPath = $targetSharedPath ?: '/Google Drive/Shared with me';
 
 		// check if target paths are suitable
@@ -200,7 +198,7 @@ class GoogleDriveAPIService {
 		$targetSharedPath = $this->getNonSharedTargetPath($userId, $targetSharedPath);
 
 		// get progress
-		$directoryProgressStr = $this->config->getUserValue($userId, Application::APP_ID, 'directory_progress', '[]');
+		$directoryProgressStr = $this->userConfig->getValueString($userId, APPLICATION::APP_ID, 'directory_progress', '[]', lazy:true);
 		$directoryProgress = ($directoryProgressStr === '' || $directoryProgressStr === '[]')
 			? []
 			: json_decode($directoryProgressStr, true);
@@ -217,7 +215,7 @@ class GoogleDriveAPIService {
 		}
 		if (isset($result['error']) || (isset($result['finished']) && $result['finished'])) {
 			if (isset($result['finished']) && $result['finished']) {
-				$nbImported = (int)$this->config->getUserValue($userId, Application::APP_ID, 'nb_imported_files', '0');
+				$nbImported = $this->userConfig->getValueInt($userId, APPLICATION::APP_ID, 'nb_imported_files', lazy:true);
 				$this->googleApiService->sendNCNotification($userId, 'import_drive_finished', [
 					'nbImported' => $nbImported,
 					'targetPath' => $targetPath,
@@ -226,18 +224,18 @@ class GoogleDriveAPIService {
 			if (isset($result['error'])) {
 				$this->logger->error('Google Drive import error: ' . $result['error'], ['app' => Application::APP_ID]);
 			}
-			$this->config->setUserValue($userId, Application::APP_ID, 'importing_drive', '0');
-			$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_files', '0');
-			$this->config->setUserValue($userId, Application::APP_ID, 'drive_imported_size', '0');
-			$this->config->setUserValue($userId, Application::APP_ID, 'last_drive_import_timestamp', '0');
-			$this->config->deleteUserValue($userId, Application::APP_ID, 'directory_progress');
+			$this->userConfig->setValueString($userId, Application::APP_ID, 'importing_drive', '0', lazy: true);
+			$this->userConfig->setValueInt($userId, Application::APP_ID, 'nb_imported_files', 0, lazy: true);
+			$this->userConfig->setValueInt($userId, Application::APP_ID, 'drive_imported_size', 0, lazy: true);
+			$this->userConfig->setValueInt($userId, Application::APP_ID, 'last_drive_import_timestamp', 0, lazy: true);
+			$this->userConfig->deleteUserConfig($userId, Application::APP_ID, 'directory_progress');
 		} else {
-			$this->config->setUserValue($userId, Application::APP_ID, 'directory_progress', json_encode($directoryProgress));
+			$this->userConfig->setValueString($userId, Application::APP_ID, 'directory_progress', json_encode($directoryProgress), lazy: true);
 			$ts = (new DateTime())->getTimestamp();
-			$this->config->setUserValue($userId, Application::APP_ID, 'last_drive_import_timestamp', $ts);
+			$this->userConfig->setValueInt($userId, Application::APP_ID, 'last_drive_import_timestamp', $ts, lazy: true);
 			$this->jobList->add(ImportDriveJob::class, ['user_id' => $userId]);
 		}
-		$this->config->setUserValue($userId, Application::APP_ID, 'drive_import_running', '0');
+		$this->userConfig->setValueString($userId, Application::APP_ID, 'drive_import_running', '0', lazy: true);
 	}
 
 	/**
@@ -255,7 +253,7 @@ class GoogleDriveAPIService {
 		string $userId, string $targetPath, string $targetSharedPath,
 		?int $maxDownloadSize = null, array &$directoryProgress = [],
 	): array {
-		$considerSharedFiles = $this->config->getUserValue($userId, Application::APP_ID, 'consider_shared_files', '0') === '1';
+		$considerSharedFiles = $this->userConfig->getValueString($userId, APPLICATION::APP_ID, 'consider_shared_files', '0', lazy:true) === '1';
 
 		// create root folder(s)
 		$userFolder = $this->root->getUserFolder($userId);
@@ -375,7 +373,7 @@ class GoogleDriveAPIService {
 	 */
 	public function hasBeenCancelled(string $userId): bool {
 		$this->userConfig->clearCache($userId);
-		return $this->config->getUserValue($userId, Application::APP_ID, 'importing_drive', '0') === '0';
+		return $this->userConfig->getValueString($userId, APPLICATION::APP_ID, 'importing_drive', '0', lazy:true) === '0';
 	}
 
 	/**
@@ -646,7 +644,7 @@ class GoogleDriveAPIService {
 	 * @return string User's preferred document format
 	 */
 	private function getUserDocumentFormat(string $userId): string {
-		$documentFormat = $this->config->getUserValue($userId, Application::APP_ID, 'document_format', 'openxml');
+		$documentFormat = $this->userConfig->getValueString($userId, APPLICATION::APP_ID, 'document_format', 'openxml', lazy:true);
 		if (!in_array($documentFormat, ['openxml', 'opendoc'])) {
 			$documentFormat = 'openxml';
 		}
@@ -846,8 +844,8 @@ class GoogleDriveAPIService {
 	 */
 	private function retrieveFiles(string $userId, string $dirId, string $query, bool $considerSharedFiles, Folder $rootImportFolder, ?Folder $rootSharedWithMeImportFolder, array $directoriesById, array $sharedDirectoriesById, ?int $maxDownloadSize, string $targetPath, bool $allowParents = true): ?array {
 		$lastCancelCheck = time();
-		$alreadyImported = (int)$this->config->getUserValue($userId, Application::APP_ID, 'nb_imported_files', '0');
-		$alreadyImportedSize = (int)$this->config->getUserValue($userId, Application::APP_ID, 'drive_imported_size', '0');
+		$alreadyImported = $this->userConfig->getValueInt($userId, APPLICATION::APP_ID, 'nb_imported_files', lazy:true);
+		$alreadyImportedSize = $this->userConfig->getValueInt($userId, APPLICATION::APP_ID, 'drive_imported_size', lazy:true);
 
 		$conflictingIds = $this->getFilesWithNameConflict($userId, $query, $considerSharedFiles);
 		$params = [
@@ -921,9 +919,9 @@ class GoogleDriveAPIService {
 
 					if (!is_null($size)) {
 						$alreadyImported++;
-						$this->config->setUserValue($userId, Application::APP_ID, 'nb_imported_files', strval($alreadyImported));
+						$this->userConfig->setValueInt($userId, Application::APP_ID, 'nb_imported_files', $alreadyImported, lazy: true);
 						$alreadyImportedSize += $size;
-						$this->config->setUserValue($userId, Application::APP_ID, 'drive_imported_size', strval($alreadyImportedSize));
+						$this->userConfig->setValueInt($userId, Application::APP_ID, 'drive_imported_size', $alreadyImportedSize, lazy: true);
 						if ($maxDownloadSize !== null && $alreadyImportedSize > $maxDownloadSize) {
 							return [
 								'targetPath' => $targetPath,
