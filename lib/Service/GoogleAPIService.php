@@ -355,10 +355,9 @@ class GoogleAPIService {
 
 	private function checkTokenExpiration(string $userId): void {
 		$refreshToken = $this->secretService->getEncryptedUserValue($userId, 'refresh_token');
-		$expireAt = $this->userConfig->getValueString($userId, Application::APP_ID, 'token_expires_at', lazy: true);
-		if ($refreshToken !== '' && $expireAt !== '') {
+		$expireAt = $this->userConfig->getValueInt($userId, Application::APP_ID, 'token_expires_at', lazy: true);
+		if ($refreshToken !== '' && $expireAt !== 0) {
 			$nowTs = (new DateTime())->getTimestamp();
-			$expireAt = (int)$expireAt;
 			// if token expires in less than 2 minutes or has already expired
 			if ($nowTs > $expireAt - 120) {
 				$this->refreshToken($userId);
@@ -384,7 +383,7 @@ class GoogleAPIService {
 			if (isset($result['expires_in'])) {
 				$nowTs = (new DateTime())->getTimestamp();
 				$expiresAt = $nowTs + (int)$result['expires_in'];
-				$this->userConfig->setValueString($userId, Application::APP_ID, 'token_expires_at', $expiresAt, lazy: true);
+				$this->userConfig->setValueInt($userId, Application::APP_ID, 'token_expires_at', $expiresAt, lazy: true);
 			}
 		} else {
 			$responseTxt = json_encode($result);

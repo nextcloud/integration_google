@@ -144,9 +144,9 @@ class GoogleDriveAPIService {
 		}
 
 		$this->userConfig->setValueString($userId, Application::APP_ID, 'importing_drive', '1', lazy: true);
-		$this->userConfig->setValueString($userId, Application::APP_ID, 'nb_imported_files', '0', lazy: true);
-		$this->userConfig->setValueString($userId, Application::APP_ID, 'drive_imported_size', '0', lazy: true);
-		$this->userConfig->setValueString($userId, Application::APP_ID, 'last_drive_import_timestamp', '0', lazy: true);
+		$this->userConfig->setValueInt($userId, Application::APP_ID, 'nb_imported_files', 0, lazy: true);
+		$this->userConfig->setValueInt($userId, Application::APP_ID, 'drive_imported_size', 0, lazy: true);
+		$this->userConfig->setValueInt($userId, Application::APP_ID, 'last_drive_import_timestamp', 0, lazy: true);
 		$this->userConfig->deleteUserConfig($userId, Application::APP_ID, 'directory_progress');
 
 		$this->jobList->add(ImportDriveJob::class, ['user_id' => $userId]);
@@ -176,8 +176,8 @@ class GoogleDriveAPIService {
 		$jobRunning = $this->userConfig->getValueString($userId, APPLICATION::APP_ID, 'drive_import_running', '0', lazy:true) === '1';
 		$nowTs = (new DateTime())->getTimestamp();
 		if ($jobRunning) {
-			$lastJobStart = $this->userConfig->getValueString($userId, APPLICATION::APP_ID, 'drive_import_job_last_start', lazy:true);
-			if ($lastJobStart !== '' && ($nowTs - intval($lastJobStart) < Application::IMPORT_JOB_TIMEOUT)) {
+			$lastJobStart = $this->userConfig->getValueInt($userId, APPLICATION::APP_ID, 'drive_import_job_last_start', lazy:true);
+			if ($lastJobStart !== 0 && ($nowTs - intval($lastJobStart) < Application::IMPORT_JOB_TIMEOUT)) {
 				$this->logger->info('Last job execution (' . strval($nowTs - intval($lastJobStart)) . ') is less than ' . strval(Application::IMPORT_JOB_TIMEOUT) . ' seconds ago, delaying execution');
 				// last job has started less than an hour ago => we consider it can still be running
 				$this->jobList->add(ImportDriveJob::class, ['user_id' => $userId]);
@@ -185,7 +185,7 @@ class GoogleDriveAPIService {
 			}
 		}
 		$this->userConfig->setValueString($userId, Application::APP_ID, 'drive_import_running', '1', lazy: true);
-		$this->userConfig->setValueString($userId, Application::APP_ID, 'drive_import_job_last_start', strval($nowTs), lazy: true);
+		$this->userConfig->setValueInt($userId, Application::APP_ID, 'drive_import_job_last_start', $nowTs, lazy: true);
 
 		// import batch of files
 		$targetPath = $this->userConfig->getValueString($userId, APPLICATION::APP_ID, 'drive_output_dir', '/Google Drive', lazy:true);
@@ -215,7 +215,7 @@ class GoogleDriveAPIService {
 		}
 		if (isset($result['error']) || (isset($result['finished']) && $result['finished'])) {
 			if (isset($result['finished']) && $result['finished']) {
-				$nbImported = (int)$this->userConfig->getValueString($userId, APPLICATION::APP_ID, 'nb_imported_files', '0', lazy:true);
+				$nbImported = $this->userConfig->getValueInt($userId, APPLICATION::APP_ID, 'nb_imported_files', lazy:true);
 				$this->googleApiService->sendNCNotification($userId, 'import_drive_finished', [
 					'nbImported' => $nbImported,
 					'targetPath' => $targetPath,
@@ -225,14 +225,14 @@ class GoogleDriveAPIService {
 				$this->logger->error('Google Drive import error: ' . $result['error'], ['app' => Application::APP_ID]);
 			}
 			$this->userConfig->setValueString($userId, Application::APP_ID, 'importing_drive', '0', lazy: true);
-			$this->userConfig->setValueString($userId, Application::APP_ID, 'nb_imported_files', '0', lazy: true);
-			$this->userConfig->setValueString($userId, Application::APP_ID, 'drive_imported_size', '0', lazy: true);
-			$this->userConfig->setValueString($userId, Application::APP_ID, 'last_drive_import_timestamp', '0', lazy: true);
+			$this->userConfig->setValueInt($userId, Application::APP_ID, 'nb_imported_files', 0, lazy: true);
+			$this->userConfig->setValueInt($userId, Application::APP_ID, 'drive_imported_size', 0, lazy: true);
+			$this->userConfig->setValueInt($userId, Application::APP_ID, 'last_drive_import_timestamp', 0, lazy: true);
 			$this->userConfig->deleteUserConfig($userId, Application::APP_ID, 'directory_progress');
 		} else {
 			$this->userConfig->setValueString($userId, Application::APP_ID, 'directory_progress', json_encode($directoryProgress), lazy: true);
 			$ts = (new DateTime())->getTimestamp();
-			$this->userConfig->setValueString($userId, Application::APP_ID, 'last_drive_import_timestamp', $ts, lazy: true);
+			$this->userConfig->setValueInt($userId, Application::APP_ID, 'last_drive_import_timestamp', $ts, lazy: true);
 			$this->jobList->add(ImportDriveJob::class, ['user_id' => $userId]);
 		}
 		$this->userConfig->setValueString($userId, Application::APP_ID, 'drive_import_running', '0', lazy: true);
@@ -844,8 +844,8 @@ class GoogleDriveAPIService {
 	 */
 	private function retrieveFiles(string $userId, string $dirId, string $query, bool $considerSharedFiles, Folder $rootImportFolder, ?Folder $rootSharedWithMeImportFolder, array $directoriesById, array $sharedDirectoriesById, ?int $maxDownloadSize, string $targetPath, bool $allowParents = true): ?array {
 		$lastCancelCheck = time();
-		$alreadyImported = (int)$this->userConfig->getValueString($userId, APPLICATION::APP_ID, 'nb_imported_files', '0', lazy:true);
-		$alreadyImportedSize = (int)$this->userConfig->getValueString($userId, APPLICATION::APP_ID, 'drive_imported_size', '0', lazy:true);
+		$alreadyImported = $this->userConfig->getValueInt($userId, APPLICATION::APP_ID, 'nb_imported_files', lazy:true);
+		$alreadyImportedSize = $this->userConfig->getValueInt($userId, APPLICATION::APP_ID, 'drive_imported_size', lazy:true);
 
 		$conflictingIds = $this->getFilesWithNameConflict($userId, $query, $considerSharedFiles);
 		$params = [
@@ -919,9 +919,9 @@ class GoogleDriveAPIService {
 
 					if (!is_null($size)) {
 						$alreadyImported++;
-						$this->userConfig->setValueString($userId, Application::APP_ID, 'nb_imported_files', strval($alreadyImported), lazy: true);
+						$this->userConfig->setValueInt($userId, Application::APP_ID, 'nb_imported_files', $alreadyImported, lazy: true);
 						$alreadyImportedSize += $size;
-						$this->userConfig->setValueString($userId, Application::APP_ID, 'drive_imported_size', strval($alreadyImportedSize), lazy: true);
+						$this->userConfig->setValueInt($userId, Application::APP_ID, 'drive_imported_size', $alreadyImportedSize, lazy: true);
 						if ($maxDownloadSize !== null && $alreadyImportedSize > $maxDownloadSize) {
 							return [
 								'targetPath' => $targetPath,

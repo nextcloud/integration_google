@@ -207,7 +207,7 @@ class ConfigController extends Controller {
 				if (isset($result['expires_in'])) {
 					$nowTs = (new DateTime())->getTimestamp();
 					$expiresAt = $nowTs + (int)$result['expires_in'];
-					$this->userConfig->setValueString($this->userId, Application::APP_ID, 'token_expires_at', (string)$expiresAt, lazy: true);
+					$this->userConfig->setValueInt($this->userId, Application::APP_ID, 'token_expires_at', $expiresAt, lazy: true);
 				}
 				$this->secretService->setEncryptedUserValue($this->userId, 'token', $accessToken);
 				$this->secretService->setEncryptedUserValue($this->userId, 'refresh_token', $refreshToken);
