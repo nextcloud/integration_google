@@ -31,7 +31,7 @@ OC.L10N.register(
     "Client ID" : "Client-ID",
     "Client ID of your Google application" : "Client-ID der Google-Anwendung",
     "Client secret" : "Geheime Zeichenkette des Clients",
-    "Client secret of your Google application" : "Client-Geheimnis der  Google-Anwendung",
+    "Client secret of your Google application" : "Client-Geheimnis der Google-Anwendung",
     "Use a pop-up to authenticate" : "Pop-up zur Authentifizierung verwenden",
     "Last Google Drive import job at {date}" : "Letzter Google-Drive-Import am {date} ",
     "Google Drive background import process will begin soon." : "Prozess der Google Drive-Importierung wird bald beginnen.",
@@ -80,6 +80,6 @@ OC.L10N.register(
     "Import Google Drive files" : "Google Drive-Dateien importieren",
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Dein Google Drive ist größer als der verbleibende Speicherplatz ({formSpace})",
     "Cancel Google Drive import" : "Google Drive-Import abbrechen",
-    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} Datei importiert ({progress}%)","{amount} Dateien importiert ({progress}%)"]
+    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} Datei importiert ({progress}%)","{amount} Dateien importiert ({progress} %)"]
 },
 "nplurals=2; plural=(n != 1);");
