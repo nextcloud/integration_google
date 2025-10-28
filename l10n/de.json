@@ -24,7 +24,7 @@
     "Google Search console" : "Google-Suchkonsole",
     "Make sure you set one \"Authorized redirect URI\" to" : "Stelle sicher, dass eine \"Autorisierte Weiterleitungs-URI\" gesetzt ist auf",
     "Put the \"Client ID\" and \"Client secret\" below." : "Gib unten die \"Client ID\" und \"Client-Geheimnis\" ein.",
-    "Finally, go to \"APIs & Services\" => \"Library\" and add the following APIs: \"Google Drive API\", \"Google Calendar API\", and \"People API\"." : "Abbschließend zu „APIs & Services“ => „Bibliothek“ gehen und die folgenden APIs hinzufügen: „Google Drive API“, „Google Calendar API“ sowie „People API“.",
+    "Finally, go to \"APIs & Services\" => \"Library\" and add the following APIs: \"Google Drive API\", \"Google Calendar API\", and \"People API\"." : "Abbschließend zu \"APIs & Services\" => \"Bibliothek\" gehen und die folgenden APIs hinzufügen: \"Google Drive API\", \"Google Calendar API\" sowie \"People API\".",
     "Your Nextcloud users will then see a \"Connect to Google\" button in their personal settings." : "Deine Nextcloud-Nutzer sehen dann in ihren persönlichen Einstellungen die Schaltfläche \"Mit Google verbinden\".",
     "Client ID" : "Client-ID",
     "Client ID of your Google application" : "Client-ID der Google-Anwendung",
