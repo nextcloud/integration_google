@@ -16,6 +16,11 @@
       <code><![CDATA[public function postSchemaChange(IOutput $output, Closure $schemaClosure, array $options) {]]></code>
     </MissingOverrideAttribute>
   </file>
+  <file src="lib/Migration/Version04003001Date20251022113940.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function postSchemaChange(IOutput $output, Closure $schemaClosure, array $options) {]]></code>
+    </MissingOverrideAttribute>
+  </file>
   <file src="lib/Notification/Notifier.php">
     <MissingOverrideAttribute>
       <code><![CDATA[public function getID(): string {]]></code>
@@ -24,9 +29,6 @@
     </MissingOverrideAttribute>
   </file>
   <file src="lib/Service/GoogleAPIService.php">
-    <InvalidArgument>
-      <code><![CDATA[$expiresAt]]></code>
-    </InvalidArgument>
     <InvalidOperand>
       <code><![CDATA[$response->getStatusCode()]]></code>
       <code><![CDATA[$response->getStatusCode()]]></code>
@@ -149,19 +151,6 @@
     <ImplicitToStringCast>
       <code><![CDATA[$e]]></code>
     </ImplicitToStringCast>
-    <InvalidArgument>
-      <code><![CDATA[$alreadyImported + $nbDownloaded]]></code>
-      <code><![CDATA[$alreadyImportedSize + $downloadedSize]]></code>
-      <code><![CDATA[$ts]]></code>
-    </InvalidArgument>
-    <UndefinedDocblockClass>
-      <code><![CDATA[NoUserException]]></code>
-    </UndefinedDocblockClass>
-  </file>
-  <file src="lib/Service/Utils/FileUtils.php">
-    <UndefinedInterfaceMethod>
-      <code><![CDATA[sanitizeFilename]]></code>
-    </UndefinedInterfaceMethod>
   </file>
   <file src="lib/Settings/Admin.php">
     <MissingOverrideAttribute>

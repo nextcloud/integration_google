@@ -23,10 +23,11 @@ use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Http\TemplateResponse;
+use OCP\AppFramework\Services\IAppConfig;
 use OCP\AppFramework\Services\IInitialState;
+use OCP\Config\IUserConfig;
 use OCP\Constants;
 use OCP\Contacts\IManager as IContactManager;
-use OCP\IConfig;
 use OCP\IL10N;
 use OCP\IRequest;
 use OCP\IURLGenerator;
@@ -44,7 +45,8 @@ class ConfigController extends Controller {
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		private IConfig $config,
+		private IAppConfig $appConfig,
+		private IUserConfig $userConfig,
 		private IURLGenerator $urlGenerator,
 		private IL10N $l,
 		private IContactManager $contactsManager,
@@ -70,16 +72,16 @@ class ConfigController extends Controller {
 			return new DataResponse([], Http::STATUS_BAD_REQUEST);
 		}
 		foreach ($values as $key => $value) {
-			$this->config->setUserValue($this->userId, Application::APP_ID, $key, $value);
+			$this->userConfig->setValueString($this->userId, Application::APP_ID, $key, $value, lazy: true);
 		}
 		$result = [];
 
 		if (isset($values['user_name']) && $values['user_name'] === '') {
-			$this->config->deleteUserValue($this->userId, Application::APP_ID, 'user_id');
-			$this->config->deleteUserValue($this->userId, Application::APP_ID, 'user_name');
-			$this->config->deleteUserValue($this->userId, Application::APP_ID, 'refresh_token');
-			$this->config->deleteUserValue($this->userId, Application::APP_ID, 'token_expires_at');
-			$this->config->deleteUserValue($this->userId, Application::APP_ID, 'token');
+			$this->userConfig->deleteUserConfig($this->userId, Application::APP_ID, 'user_id');
+			$this->userConfig->deleteUserConfig($this->userId, Application::APP_ID, 'user_name');
+			$this->userConfig->deleteUserConfig($this->userId, Application::APP_ID, 'refresh_token');
+			$this->userConfig->deleteUserConfig($this->userId, Application::APP_ID, 'token_expires_at');
+			$this->userConfig->deleteUserConfig($this->userId, Application::APP_ID, 'token');
 			$result['user_name'] = '';
 		} else {
 			if (isset($values['drive_output_dir'])) {
@@ -106,10 +108,8 @@ class ConfigController extends Controller {
 			if ($key === 'client_secret' && $value === 'dummySecret') {
 				continue;
 			}
-			if (in_array($key, ['client_secret', 'client_id'], true) && $value !== '') {
-				$value = $this->crypto->encrypt($value);
-			}
-			$this->config->setAppValue(Application::APP_ID, $key, $value);
+			$sensitive = in_array($key, ['client_secret', 'client_id'], true);
+			$this->appConfig->setAppValueString($key, $value, lazy: true, sensitive: $sensitive);
 		}
 		return new DataResponse(1);
 	}
@@ -172,9 +172,9 @@ class ConfigController extends Controller {
 			);
 		}
 
-		$configState = $this->config->getUserValue($this->userId, Application::APP_ID, 'oauth_state');
-		$clientID = $this->secretService->getEncryptedAppValue('client_id');
-		$clientSecret = $this->secretService->getEncryptedAppValue('client_secret');
+		$configState = $this->userConfig->getValueString($this->userId, Application::APP_ID, 'oauth_state', lazy: true);
+		$clientID = $this->appConfig->getAppValueString('client_id', lazy: true);
+		$clientSecret = $this->appConfig->getAppValueString('client_secret', lazy: true);
 
 		// Store given scopes in space-separated string
 		$scopes = explode(' ', $scope);
@@ -186,13 +186,13 @@ class ConfigController extends Controller {
 			'can_access_calendar' => (in_array(self::CALENDAR_SCOPE, $scopes) && in_array(self::CALENDAR_EVENTS_SCOPE, $scopes)) ? 1 : 0,
 		];
 
-		$this->config->setUserValue($this->userId, Application::APP_ID, 'user_scopes', json_encode($scopesArray));
+		$this->userConfig->setValueString($this->userId, Application::APP_ID, 'user_scopes', json_encode($scopesArray), lazy: true);
 
 		// anyway, reset state
-		$this->config->setUserValue($this->userId, Application::APP_ID, 'oauth_state', '');
+		$this->userConfig->setValueString($this->userId, Application::APP_ID, 'oauth_state', '', lazy: true);
 
 		if ($clientID && $clientSecret && $configState !== '' && $configState === $state) {
-			$redirect_uri = $this->config->getUserValue($this->userId, Application::APP_ID, 'redirect_uri');
+			$redirect_uri = $this->userConfig->getValueString($this->userId, Application::APP_ID, 'redirect_uri', lazy: true);
 			/** @var array{access_token?:string, refresh_token?:string, expires_in?:string, error?:string} $result */
 			$result = $this->googleApiService->requestOAuthAccessToken([
 				'client_id' => $clientID,
@@ -207,12 +207,12 @@ class ConfigController extends Controller {
 				if (isset($result['expires_in'])) {
 					$nowTs = (new DateTime())->getTimestamp();
 					$expiresAt = $nowTs + (int)$result['expires_in'];
-					$this->config->setUserValue($this->userId, Application::APP_ID, 'token_expires_at', (string)$expiresAt);
+					$this->userConfig->setValueInt($this->userId, Application::APP_ID, 'token_expires_at', $expiresAt, lazy: true);
 				}
 				$this->secretService->setEncryptedUserValue($this->userId, 'token', $accessToken);
 				$this->secretService->setEncryptedUserValue($this->userId, 'refresh_token', $refreshToken);
 				$username = $this->storeUserInfo();
-				$usePopup = $this->config->getAppValue(Application::APP_ID, 'use_popup', '0') === '1';
+				$usePopup = $this->appConfig->getAppValueString('use_popup', '0', lazy: true) === '1';
 				if ($usePopup) {
 					return new RedirectResponse(
 						$this->urlGenerator->linkToRoute('integration_google.config.popupSuccessPage', ['username' => $username])
@@ -248,12 +248,12 @@ class ConfigController extends Controller {
 		/** @var array{id?:string, name?:string} $info */
 		$info = $this->googleApiService->request($this->userId, 'oauth2/v1/userinfo', ['alt' => 'json']);
 		if (isset($info['name'], $info['id'])) {
-			$this->config->setUserValue($this->userId, Application::APP_ID, 'user_id', $info['id']);
-			$this->config->setUserValue($this->userId, Application::APP_ID, 'user_name', $info['name']);
+			$this->userConfig->setValueString($this->userId, Application::APP_ID, 'user_id', $info['id'], lazy: true);
+			$this->userConfig->setValueString($this->userId, Application::APP_ID, 'user_name', $info['name'], lazy: true);
 			return $info['name'];
 		} else {
-			$this->config->setUserValue($this->userId, Application::APP_ID, 'user_id', '');
-			$this->config->setUserValue($this->userId, Application::APP_ID, 'user_name', '');
+			$this->userConfig->setValueString($this->userId, Application::APP_ID, 'user_id', '', lazy: true);
+			$this->userConfig->setValueString($this->userId, Application::APP_ID, 'user_name', '', lazy: true);
 			return '';
 		}
 	}

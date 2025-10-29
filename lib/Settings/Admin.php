@@ -3,18 +3,16 @@
 namespace OCA\Google\Settings;
 
 use OCA\Google\AppInfo\Application;
-use OCA\Google\Service\SecretService;
 use OCP\AppFramework\Http\TemplateResponse;
+use OCP\AppFramework\Services\IAppConfig;
 use OCP\AppFramework\Services\IInitialState;
-use OCP\IConfig;
 use OCP\Settings\ISettings;
 
 class Admin implements ISettings {
 
 	public function __construct(
-		private IConfig $config,
+		private IAppConfig $appConfig,
 		private IInitialState $initialStateService,
-		private SecretService $secretService,
 	) {
 	}
 
@@ -22,9 +20,9 @@ class Admin implements ISettings {
 	 * @return TemplateResponse
 	 */
 	public function getForm(): TemplateResponse {
-		$clientID = $this->secretService->getEncryptedAppValue('client_id');
-		$clientSecret = $this->secretService->getEncryptedAppValue('client_secret');
-		$usePopup = $this->config->getAppValue(Application::APP_ID, 'use_popup', '0');
+		$clientID = $this->appConfig->getAppValueString('client_id', lazy: true);
+		$clientSecret = $this->appConfig->getAppValueString('client_secret', lazy: true);
+		$usePopup = $this->appConfig->getAppValueString('use_popup', '0', lazy: true);
 
 		$adminConfig = [
 			'client_id' => $clientID,

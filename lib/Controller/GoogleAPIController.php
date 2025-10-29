@@ -19,7 +19,7 @@ use OCA\Google\Service\GoogleDriveAPIService;
 use OCA\Google\Service\SecretService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
-use OCP\IConfig;
+use OCP\Config\IUserConfig;
 use OCP\IRequest;
 
 class GoogleAPIController extends Controller {
@@ -29,7 +29,7 @@ class GoogleAPIController extends Controller {
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		private IConfig $config,
+		private IUserConfig $userConfig,
 		private GoogleContactsAPIService $googleContactsAPIService,
 		private GoogleDriveAPIService $googleDriveAPIService,
 		private GoogleCalendarAPIService $googleCalendarAPIService,
@@ -50,10 +50,10 @@ class GoogleAPIController extends Controller {
 			return new DataResponse([], 400);
 		}
 		return new DataResponse([
-			'importing_drive' => $this->config->getUserValue($this->userId, Application::APP_ID, 'importing_drive') === '1',
-			'last_drive_import_timestamp' => (int)$this->config->getUserValue($this->userId, Application::APP_ID, 'last_drive_import_timestamp', '0'),
-			'nb_imported_files' => (int)$this->config->getUserValue($this->userId, Application::APP_ID, 'nb_imported_files', '0'),
-			'drive_imported_size' => (int)$this->config->getUserValue($this->userId, Application::APP_ID, 'drive_imported_size', '0'),
+			'importing_drive' => $this->userConfig->getValueString($this->userId, Application::APP_ID, 'importing_drive', lazy: true) === '1',
+			'last_drive_import_timestamp' => $this->userConfig->getValueInt($this->userId, Application::APP_ID, 'last_drive_import_timestamp', lazy: true),
+			'nb_imported_files' => $this->userConfig->getValueInt($this->userId, Application::APP_ID, 'nb_imported_files', lazy: true),
+			'drive_imported_size' => $this->userConfig->getValueInt($this->userId, Application::APP_ID, 'drive_imported_size', lazy: true),
 		]);
 	}
 

@@ -10,8 +10,8 @@ namespace OCA\Google\Migration;
 
 use Closure;
 use OCA\Google\AppInfo\Application;
+use OCP\AppFramework\Services\IAppConfig;
 use OCP\DB\QueryBuilder\IQueryBuilder;
-use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\Migration\IOutput;
 use OCP\Migration\SimpleMigrationStep;
@@ -20,7 +20,7 @@ use OCP\Security\ICrypto;
 class Version03001001Date20241111105515 extends SimpleMigrationStep {
 
 	public function __construct(
-		private IConfig $config,
+		private IAppConfig $appConfig,
 		private IDBConnection $connection,
 		private ICrypto $crypto,
 	) {
@@ -34,11 +34,11 @@ class Version03001001Date20241111105515 extends SimpleMigrationStep {
 	public function postSchemaChange(IOutput $output, Closure $schemaClosure, array $options) {
 		// migrate api credentials in app config
 		foreach (['client_id', 'client_secret'] as $key) {
-			$value = $this->config->getAppValue(Application::APP_ID, $key);
+			$value = $this->appConfig->getAppValueString($key, '');
 			if ($value === '') {
 				continue;
 			}
-			$this->config->setAppValue(Application::APP_ID, $key, $this->crypto->encrypt($value));
+			$this->appConfig->setAppValueString($key, $this->crypto->encrypt($value));
 		}
 
 		// user tokens
