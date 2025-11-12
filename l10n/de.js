@@ -15,7 +15,7 @@ OC.L10N.register(
     "Data migration" : "Datenmigration",
     "Google integration" : "Google-Einbindung",
     "Import Google data into Nextcloud" : "Google-Daten in Nextcloud importieren",
-    "Google integration allows you to automatically migrate your Google calendars, contacts, and files into Nextcloud." : "Mit der Google-Integration können Google-Kalender, -Kontakte und -Dateien automatisch nach Nextcloud migriert werden.",
+    "Google integration allows you to automatically migrate your Google calendars, contacts, and files into Nextcloud." : "Mit der Google-Einbindung können Google-Kalender, -Kontakte und -Dateien automatisch nach Nextcloud migriert werden.",
     "Google admin options saved" : "Google-Administrationseinstellungen gespeichert",
     "Failed to save Google admin options" : "Google-Administrationseinstellungen konnten nicht gespeichert werden",
     "If you want to allow your Nextcloud users to authenticate to Google, create an OAuth application in your Google settings." : "Wenn du deinen Benutzern erlauben willst, sich bei Google zu authentifizieren, erstelle eine OAuth-Anwendung in deinen Google Einstellungen.",
