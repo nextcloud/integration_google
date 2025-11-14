@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.3.0] - 2025-10-29
+
+### Changed
+
+- Use lazy loading for config and stop using deprecated IConfig and added support for Nextcloud 33 #305 @lukasdotcom
+
+### Fixed
+
+- Allow cancelling an already running drive import job # 286 @Bungeefan
+
 ## [4.2.0] - 2025-10-10
 
 ### Added
