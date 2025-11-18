@@ -10,6 +10,7 @@ OC.L10N.register(
     "Private event" : "Privaatne sündmus",
     "Google Calendar import" : "Import Google'i kalendrist",
     "Connected accounts" : "Ühendatud kasutajakontod",
+    "Data migration" : "Andmete ümbertõstmine",
     "Google integration" : "Google'i teenuste lõiming",
     "Google integration allows you to automatically migrate your Google calendars, contacts, and files into Nextcloud." : "Google'i lõiming võimaldab sul automaatselt kolida Google'i kalendrid, kontaktid ja failid Nextcloudi.",
     "Google API settings" : "Google'i API seadistused",
