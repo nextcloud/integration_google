@@ -253,6 +253,7 @@ class GoogleDriveAPIService {
 		string $userId, string $targetPath, string $targetSharedPath,
 		?int $maxDownloadSize = null, array &$directoryProgress = [],
 	): array {
+		$rootSharedWithMeImportFolder = null;
 		$considerSharedFiles = $this->userConfig->getValueString($userId, APPLICATION::APP_ID, 'consider_shared_files', '0', lazy:true) === '1';
 
 		// create root folder(s)
@@ -892,7 +893,7 @@ class GoogleDriveAPIService {
 					}
 
 					if (!isset($saveFolder)) {
-						if ($dirId === 'sharedRoot') {
+						if ($dirId === 'sharedRoot' && $rootSharedWithMeImportFolder !== null) {
 							$saveFolder = $rootSharedWithMeImportFolder;
 						} else {
 							$saveFolder = $rootImportFolder;
