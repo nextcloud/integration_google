@@ -8,6 +8,7 @@ OC.L10N.register(
     "Client ID" : "ID Klien",
     "Client secret" : "Rahasia klien",
     "Use a pop-up to authenticate" : "Gunakan pop-up untuk mengautentikasi",
+    "Sign in with Google" : "Masuk dengan Google",
     "Authentication" : "Otentikasi",
     "Connected as {user}" : "Terhubung sebagai {user}",
     "Contacts" : "Kontak",
