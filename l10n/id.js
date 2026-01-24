@@ -5,13 +5,17 @@ OC.L10N.register(
     "OAuth access token refused" : "Token akses OAuth ditolak",
     "Bad credentials" : "Kredensial tidak benar",
     "Connected accounts" : "Akun terhubung",
+    "Data migration" : "Migrasi data",
     "Client ID" : "ID Klien",
     "Client secret" : "Rahasia klien",
     "Use a pop-up to authenticate" : "Gunakan pop-up untuk mengautentikasi",
     "Sign in with Google" : "Masuk dengan Google",
+    "Starting importing files in {targetPath} directory" : "Mulai mengimpor file ke direktori {targetPath}",
+    "Choose where to write imported files" : "Pilih lokasi untuk menulis file yang diimpor",
     "Authentication" : "Otentikasi",
     "Connected as {user}" : "Terhubung sebagai {user}",
     "Contacts" : "Kontak",
-    "Calendars" : "Kalender"
+    "Calendars" : "Kalender",
+    "Import directory" : "Direktori impor"
 },
 "nplurals=1; plural=0;");
