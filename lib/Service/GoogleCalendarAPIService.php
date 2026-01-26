@@ -24,6 +24,7 @@ use Ortic\ColorConverter\Color;
 use Ortic\ColorConverter\Colors\Named;
 use Psr\Log\LoggerInterface;
 use Sabre\DAV\Exception\BadRequest;
+use Sabre\DAV\PropPatch;
 use Sabre\VObject\Component\VCalendar;
 use Sabre\VObject\Component\VEvent;
 use Sabre\VObject\Reader;
@@ -320,6 +321,9 @@ class GoogleCalendarAPIService {
 		$calendarIsNew = is_null($ncCalId);
 		if (is_null($ncCalId)) {
 			$ncCalId = $this->caldavBackend->createCalendar('principals/users/' . $userId, $newCalUri, $params);
+			// Ensures the right name is given to the calendar
+			$proppatch = new PropPatch(['{DAV:}displayname' => $newCalName]);
+			$this->caldavBackend->updateCalendar($ncCalId, $proppatch);
 		}
 
 		// get color list
