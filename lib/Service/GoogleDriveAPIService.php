@@ -191,6 +191,7 @@ class GoogleDriveAPIService {
 		$targetPath = $this->userConfig->getValueString($userId, APPLICATION::APP_ID, 'drive_output_dir', '/Google Drive', lazy:true);
 		$targetPath = $targetPath ?: '/Google Drive';
 		$targetSharedPath = $this->userConfig->getValueString($userId, APPLICATION::APP_ID, 'drive_shared_with_me_output_dir', '/Google Drive/Shared with me', lazy:true);
+		$downloadLimit = $this->userConfig->getValueInt($userId, APPLICATION::APP_ID, 'drive_imported_size', 0, lazy:true) + 500000000;
 		$targetSharedPath = $targetSharedPath ?: '/Google Drive/Shared with me';
 
 		// check if target paths are suitable
@@ -203,10 +204,10 @@ class GoogleDriveAPIService {
 			? []
 			: json_decode($directoryProgressStr, true);
 		try {
-			// import by batch of 500 Mo
+			// import by batch of 500 Mb
 			$result = $this->importFiles(
 				$userId, $targetPath, $targetSharedPath,
-				500000000, $directoryProgress
+				$downloadLimit, $directoryProgress
 			);
 		} catch (Exception|Throwable $e) {
 			$result = [
