@@ -52,7 +52,7 @@
     "Choose where to write imported files" : "Виберіть, куди записувати імпортовані файли",
     "Google data migration" : "Міграція даних Google",
     "No Google OAuth app configured. Ask your Nextcloud administrator to configure Google connected accounts admin section." : "Не налаштовано додаток Google OAuth. Попросіть адміністратора Nextcloud налаштувати розділ адміністрування підключених акаунтів Google.",
-    "Authentication" : "Авторизація",
+    "Authentication" : "Автентифікація",
     "Connected as {user}" : "Підключено як {user}",
     "Disconnect from Google" : "Відключіться від Google",
     "Contacts" : "Контакти",
