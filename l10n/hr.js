@@ -33,6 +33,7 @@ OC.L10N.register(
     "Google connection error:" : "Pogreška veze s Googleom:",
     "Google options saved" : "Postavke Googlea su spremljene",
     "Failed to save Google options" : "Spremanje postavki Googlea nije uspjelo",
+    "Sign in with Google" : "Prijavi se putem Googlea",
     "Failed to save Google OAuth state" : "Spremanje stanja Google OAuth nije uspjelo",
     "Failed to get Google Drive information" : "Dohvaćanje informacija s Google Drivea nije uspjelo",
     "Failed to get calendar list" : "Nije moguće dobiti popis kalendara",
