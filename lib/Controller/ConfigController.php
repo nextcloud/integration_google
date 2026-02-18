@@ -42,6 +42,8 @@ class ConfigController extends Controller {
 	public const CALENDAR_SCOPE = 'https://www.googleapis.com/auth/calendar.readonly';
 	public const CALENDAR_EVENTS_SCOPE = 'https://www.googleapis.com/auth/calendar.events.readonly';
 
+	public const INT_CONFIGS = ['nb_imported_files', 'drive_imported_size', 'last_drive_import_timestamp', 'drive_import_job_last_start'];
+
 	public function __construct(
 		string $appName,
 		IRequest $request,
@@ -72,7 +74,13 @@ class ConfigController extends Controller {
 			return new DataResponse([], Http::STATUS_BAD_REQUEST);
 		}
 		foreach ($values as $key => $value) {
-			$this->userConfig->setValueString($this->userId, Application::APP_ID, $key, $value, lazy: true);
+			if (in_array($key, self::INT_CONFIGS, true)) {
+				$intValue = (int)$value;
+				$this->userConfig->setValueInt($this->userId, Application::APP_ID, $key, $intValue, lazy: true);
+			} else {
+				$value = (string)$value;
+				$this->userConfig->setValueString($this->userId, Application::APP_ID, $key, $value, lazy: true);
+			}
 		}
 		$result = [];
 
