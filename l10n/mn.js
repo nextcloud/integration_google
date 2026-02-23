@@ -2,6 +2,7 @@ OC.L10N.register(
     "integration_google",
     {
     "Bad credentials" : "Буруу нэвтрэх мэдээлэл",
+    "Connected accounts" : "Холбогдсон бүртгэлүүд",
     "Client ID" : "Хэрэглэгчийн ID",
     "Client secret" : "Клиентийн нууц",
     "Sign in with Google" : "Google-ээр нэвтрэх",
