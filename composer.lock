@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3242ce5c249ebe8bcd73497863dfff63",
+    "content-hash": "68c6a307a758da504a363751fe1bc107",
     "packages": [
         {
             "name": "ortic/color-converter",
@@ -57,16 +57,16 @@
     "packages-dev": [
         {
             "name": "kubawerlos/php-cs-fixer-custom-fixers",
-            "version": "v3.35.1",
+            "version": "v3.36.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kubawerlos/php-cs-fixer-custom-fixers.git",
-                "reference": "2a35f80ae24ca77443a7af1599c3a3db1b6bd395"
+                "reference": "ec9776e80f5ea9bf0d8ec16d662e431bfab19a24"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kubawerlos/php-cs-fixer-custom-fixers/zipball/2a35f80ae24ca77443a7af1599c3a3db1b6bd395",
-                "reference": "2a35f80ae24ca77443a7af1599c3a3db1b6bd395",
+                "url": "https://api.github.com/repos/kubawerlos/php-cs-fixer-custom-fixers/zipball/ec9776e80f5ea9bf0d8ec16d662e431bfab19a24",
+                "reference": "ec9776e80f5ea9bf0d8ec16d662e431bfab19a24",
                 "shasum": ""
             },
             "require": {
@@ -76,7 +76,7 @@
                 "php": "^7.4 || ^8.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^9.6.24 || ^10.5.51 || ^11.5.32"
+                "phpunit/phpunit": "^9.6.24 || ^10.5.51 || ^11.5.44"
             },
             "type": "library",
             "autoload": {
@@ -97,7 +97,7 @@
             "description": "A set of custom fixers for PHP CS Fixer",
             "support": {
                 "issues": "https://github.com/kubawerlos/php-cs-fixer-custom-fixers/issues",
-                "source": "https://github.com/kubawerlos/php-cs-fixer-custom-fixers/tree/v3.35.1"
+                "source": "https://github.com/kubawerlos/php-cs-fixer-custom-fixers/tree/v3.36.1"
             },
             "funding": [
                 {
@@ -105,7 +105,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-09-28T18:43:35+00:00"
+            "time": "2026-03-07T11:35:13+00:00"
         },
         {
             "name": "nextcloud/coding-standard",
@@ -158,12 +158,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nextcloud-deps/ocp.git",
-                "reference": "9a0a913a96c1910d63ec78d6e805d977c10bc85e"
+                "reference": "50fef0ff2189206a5228b81044f1730c2aa4b396"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nextcloud-deps/ocp/zipball/9a0a913a96c1910d63ec78d6e805d977c10bc85e",
-                "reference": "9a0a913a96c1910d63ec78d6e805d977c10bc85e",
+                "url": "https://api.github.com/repos/nextcloud-deps/ocp/zipball/50fef0ff2189206a5228b81044f1730c2aa4b396",
+                "reference": "50fef0ff2189206a5228b81044f1730c2aa4b396",
                 "shasum": ""
             },
             "require": {
@@ -199,20 +199,20 @@
                 "issues": "https://github.com/nextcloud-deps/ocp/issues",
                 "source": "https://github.com/nextcloud-deps/ocp/tree/master"
             },
-            "time": "2026-01-27T16:26:06+00:00"
+            "time": "2026-03-31T01:18:57+00:00"
         },
         {
             "name": "php-cs-fixer/shim",
-            "version": "v3.93.0",
+            "version": "v3.94.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-CS-Fixer/shim.git",
-                "reference": "a5666a80c1a02c6b9a63660d023e55ffddbe742e"
+                "reference": "80fd29f44a736136a2f05bae5464816a444b91d1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-CS-Fixer/shim/zipball/a5666a80c1a02c6b9a63660d023e55ffddbe742e",
-                "reference": "a5666a80c1a02c6b9a63660d023e55ffddbe742e",
+                "url": "https://api.github.com/repos/PHP-CS-Fixer/shim/zipball/80fd29f44a736136a2f05bae5464816a444b91d1",
+                "reference": "80fd29f44a736136a2f05bae5464816a444b91d1",
                 "shasum": ""
             },
             "require": {
@@ -249,22 +249,22 @@
             "description": "A tool to automatically fix PHP code style",
             "support": {
                 "issues": "https://github.com/PHP-CS-Fixer/shim/issues",
-                "source": "https://github.com/PHP-CS-Fixer/shim/tree/v3.93.0"
+                "source": "https://github.com/PHP-CS-Fixer/shim/tree/v3.94.2"
             },
-            "time": "2026-01-23T17:33:44+00:00"
+            "time": "2026-02-20T16:14:17+00:00"
         },
         {
             "name": "psalm/phar",
-            "version": "6.7.0",
+            "version": "6.8.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/psalm/phar.git",
-                "reference": "8eb3a469fa888c862b8a382f1fe1671b4e989f06"
+                "reference": "333a7a0d7805b699860262e1b4ea8cf14e1cd118"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/psalm/phar/zipball/8eb3a469fa888c862b8a382f1fe1671b4e989f06",
-                "reference": "8eb3a469fa888c862b8a382f1fe1671b4e989f06",
+                "url": "https://api.github.com/repos/psalm/phar/zipball/333a7a0d7805b699860262e1b4ea8cf14e1cd118",
+                "reference": "333a7a0d7805b699860262e1b4ea8cf14e1cd118",
                 "shasum": ""
             },
             "require": {
@@ -284,9 +284,9 @@
             "description": "Composer-based Psalm Phar",
             "support": {
                 "issues": "https://github.com/psalm/phar/issues",
-                "source": "https://github.com/psalm/phar/tree/6.7.0"
+                "source": "https://github.com/psalm/phar/tree/6.8.2"
             },
-            "time": "2025-02-17T10:44:04+00:00"
+            "time": "2025-02-20T08:23:26+00:00"
         },
         {
             "name": "psr/clock",
