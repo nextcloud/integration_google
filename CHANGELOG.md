@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.3.1] - 2026-03-31
+
+### Changed
+
+- Update screenshot URL to use the main branch #350 @jospoortvliet
+
+### Fixed
+
+- Fix type conflict exception for user config #348 @lukasdotcom
+- Fix download limit handling #345 @lukasdotcom
+- Fix calendar display name #342 @lukasdotcom
+- Fix undefined variable `rootSharedWithMeImportFolder` #313 @lukasdotcom
+
 ## [4.3.0] - 2025-10-29
 
 ### Changed
