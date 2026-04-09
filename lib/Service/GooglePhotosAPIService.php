@@ -117,6 +117,10 @@ class GooglePhotosAPIService {
 	 * @return array{targetPath?:string, error?:string}
 	 */
 	public function startImportPhotos(string $userId, string $sessionId): array {
+		if (trim($sessionId) === '') {
+			return ['error' => 'No picker session ID provided'];
+		}
+
 		$targetPath = $this->userConfig->getValueString($userId, Application::APP_ID, 'photo_output_dir', '/Google Photos', lazy: true);
 		$targetPath = $targetPath ?: '/Google Photos';
 
@@ -219,6 +223,10 @@ class GooglePhotosAPIService {
 			}
 			if (isset($result['error'])) {
 				$this->logger->error('Google Photo import error: ' . $result['error'], ['app' => Application::APP_ID]);
+				// Clean up the picker session on error to avoid stale sessions
+				if ($sessionId !== '') {
+					$this->deletePickerSession($userId, $sessionId);
+				}
 			}
 			$this->userConfig->setValueString($userId, Application::APP_ID, 'importing_photos', '0', lazy: true);
 			$this->userConfig->setValueInt($userId, Application::APP_ID, 'nb_imported_photos', 0, lazy: true);
@@ -317,7 +325,9 @@ class GooglePhotosAPIService {
 					$downloadedSize += $size;
 					if ($maxDownloadSize !== null && $downloadedSize > $maxDownloadSize) {
 						$this->userConfig->setValueInt($userId, Application::APP_ID, 'nb_photos_seen', $totalSeenNumber, lazy: true);
-						$this->userConfig->setValueString($userId, Application::APP_ID, 'imported_photo_ids', json_encode($importedIds), lazy: true);					$this->userConfig->setValueString($userId, Application::APP_ID, 'photo_next_page_token', $currentPageToken, lazy: true);						return [
+						$this->userConfig->setValueString($userId, Application::APP_ID, 'imported_photo_ids', json_encode($importedIds), lazy: true);
+						$this->userConfig->setValueString($userId, Application::APP_ID, 'photo_next_page_token', $currentPageToken, lazy: true);
+						return [
 							'nbDownloaded' => $nbDownloaded,
 							'targetPath' => $targetPath,
 							'finished' => false,
