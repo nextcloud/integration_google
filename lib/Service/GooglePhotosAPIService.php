@@ -67,10 +67,6 @@ class GooglePhotosAPIService {
 		if (isset($result['error'])) {
 			return $result;
 		}
-		// persist session id so the background job can use it
-		if (isset($result['id'])) {
-			$this->userConfig->setValueString($userId, Application::APP_ID, 'picker_session_id', $result['id'], lazy: true);
-		}
 		// append /autoclose so Google Photos closes its window after selection is done
 		if (isset($result['pickerUri'])) {
 			$result['pickerUri'] .= '/autoclose';
@@ -98,6 +94,9 @@ class GooglePhotosAPIService {
 	/**
 	 * Delete a Picker session (cleanup after import)
 	 *
+	 * Only clears the stored picker_session_id when it matches the session being deleted,
+	 * so deleting a UI/queued session does not corrupt the active import session ID.
+	 *
 	 * @param string $userId
 	 * @param string $sessionId
 	 * @return array
@@ -110,7 +109,10 @@ class GooglePhotosAPIService {
 			'DELETE',
 			self::PICKER_BASE_URL,
 		);
-		$this->userConfig->setValueString($userId, Application::APP_ID, 'picker_session_id', '', lazy: true);
+		$storedSessionId = $this->userConfig->getValueString($userId, Application::APP_ID, 'picker_session_id', '', lazy: true);
+		if ($storedSessionId === $sessionId) {
+			$this->userConfig->setValueString($userId, Application::APP_ID, 'picker_session_id', '', lazy: true);
+		}
 		return $result;
 	}
 
