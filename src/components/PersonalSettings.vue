@@ -119,10 +119,46 @@
 								{{ n('integration_google', '{amount} photo imported', '{amount} photos imported', nbImportedPhotos, { amount: nbImportedPhotos }) }}
 							</span>
 						</div>
+						<p v-if="queuedSessions > 0" class="settings-hint">
+							<InformationOutlineIcon />
+							{{ n('integration_google', '{count} session queued', '{count} sessions queued', queuedSessions, { count: queuedSessions }) }}
+						</p>
 						<p class="settings-hint">
 							<InformationOutlineIcon />
 							{{ t('integration_google', 'You can close this page. You will be notified when the import finishes.') }}
 						</p>
+						<!-- Queue another session while import is running -->
+						<div v-if="!pickerSessionId">
+							<NcButton :class="{ loading: creatingPickerSession }"
+								:disabled="creatingPickerSession"
+								@click="onOpenPicker">
+								<template #icon>
+									<ImageMultipleOutlineIcon />
+								</template>
+								{{ t('integration_google', 'Queue another session') }}
+							</NcButton>
+						</div>
+						<div v-else>
+							<p class="settings-hint">
+								<InformationOutlineIcon />
+								{{ t('integration_google', 'Waiting for you to finish your selection in the Google Photos window…') }}
+							</p>
+							<NcButton :class="{ loading: creatingPickerSession }"
+								:disabled="creatingPickerSession"
+								@click="onOpenPicker">
+								<template #icon>
+									<ImageMultipleOutlineIcon />
+								</template>
+								{{ t('integration_google', 'Open Google Photos picker') }}
+							</NcButton>
+							<NcButton class="cancel-session-btn"
+								@click="onCancelPickerSession">
+								<template #icon>
+									<CloseIcon />
+								</template>
+								{{ t('integration_google', 'Cancel') }}
+							</NcButton>
+						</div>
 						<NcButton @click="onCancelPhotoImport">
 							<template #icon>
 								<CloseIcon />
@@ -326,7 +362,6 @@ import NcAppNavigationIconBullet from '@nextcloud/vue/components/NcAppNavigation
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
-import NcProgressBar from '@nextcloud/vue/components/NcProgressBar'
 import { humanFileSize } from '../utils.js'
 import GoogleIconColor from './icons/GoogleIconColor.vue'
 
@@ -354,7 +389,6 @@ export default {
 		CheckIcon,
 		AccountGroupOutlineIcon,
 		NcLoadingIcon,
-		NcProgressBar,
 	},
 
 	props: [],
@@ -383,6 +417,7 @@ export default {
 			importingPhotos: false,
 			lastPhotoImportTimestamp: 0,
 			nbImportedPhotos: 0,
+			queuedSessions: 0,
 			photoImportLoop: null,
 			// drive
 			driveSize: 0,
@@ -762,6 +797,7 @@ export default {
 					if (response.data && Object.keys(response.data).length > 0) {
 						this.lastPhotoImportTimestamp = response.data.last_import_timestamp
 						this.nbImportedPhotos = response.data.nb_imported_photos
+						this.queuedSessions = response.data.nb_queued_sessions ?? 0
 						this.importingPhotos = response.data.importing_photos
 						if (!this.importingPhotos) {
 							clearInterval(this.photoImportLoop)
@@ -846,14 +882,21 @@ export default {
 			const url = generateUrl('/apps/integration_google/import-photos')
 			axios.post(url, { sessionId: this.pickerSessionId })
 				.then((response) => {
-					const targetPath = response.data.targetPath
-					showSuccess(
-						t('integration_google', 'Starting importing photos in {targetPath} directory', { targetPath }),
-					)
-					// Reset picker state; import progress tracked via polling
 					this.pickerSessionId = null
 					this.pickerUri = null
-					this.getPhotoImportValues(true)
+					if (response.data.queued) {
+						showSuccess(
+							t('integration_google', 'Session queued, it will start automatically after the current import finishes'),
+						)
+						this.getPhotoImportValues()
+					} else {
+						const targetPath = response.data.targetPath
+						showSuccess(
+							t('integration_google', 'Starting importing photos in {targetPath} directory', { targetPath }),
+						)
+						// Reset picker state; import progress tracked via polling
+						this.getPhotoImportValues(true)
+					}
 				})
 				.catch((error) => {
 					showError(

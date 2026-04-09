@@ -131,7 +131,12 @@ class GooglePhotosAPIService {
 
 		$alreadyImporting = $this->userConfig->getValueString($userId, Application::APP_ID, 'importing_photos', '0', lazy: true) === '1';
 		if ($alreadyImporting) {
-			return ['targetPath' => $targetPath];
+			// Queue this session to run after the current one finishes
+			$queueRaw = $this->userConfig->getValueString($userId, Application::APP_ID, 'picker_session_queue', '[]', lazy: true);
+			$queue = json_decode($queueRaw, true) ?? [];
+			$queue[] = $sessionId;
+			$this->userConfig->setValueString($userId, Application::APP_ID, 'picker_session_queue', json_encode($queue), lazy: true);
+			return ['targetPath' => $targetPath, 'queued' => true];
 		}
 
 		// create root folder
@@ -150,6 +155,7 @@ class GooglePhotosAPIService {
 		$this->userConfig->setValueInt($userId, Application::APP_ID, 'nb_imported_photos', 0, lazy: true);
 		$this->userConfig->setValueInt($userId, Application::APP_ID, 'last_import_timestamp', 0, lazy: true);
 		$this->userConfig->setValueString($userId, Application::APP_ID, 'photo_next_page_token', '', lazy: true);
+		$this->userConfig->setValueString($userId, Application::APP_ID, 'picker_session_queue', '[]', lazy: true);
 
 		$this->jobList->add(ImportPhotosJob::class, ['user_id' => $userId]);
 		return ['targetPath' => $targetPath];
@@ -167,6 +173,7 @@ class GooglePhotosAPIService {
 		if ($sessionId !== '') {
 			$this->deletePickerSession($userId, $sessionId);
 		}
+		$this->userConfig->setValueString($userId, Application::APP_ID, 'picker_session_queue', '[]', lazy: true);
 	}
 
 	/**
@@ -235,6 +242,21 @@ class GooglePhotosAPIService {
 			$this->userConfig->setValueString($userId, Application::APP_ID, 'importing_photos', '0', lazy: true);
 			$this->userConfig->setValueInt($userId, Application::APP_ID, 'nb_imported_photos', 0, lazy: true);
 			$this->userConfig->setValueInt($userId, Application::APP_ID, 'last_import_timestamp', 0, lazy: true);
+			// On successful completion, start the next queued session if any
+			if (isset($result['finished']) && $result['finished']) {
+				$queueRaw = $this->userConfig->getValueString($userId, Application::APP_ID, 'picker_session_queue', '[]', lazy: true);
+				$queue = json_decode($queueRaw, true) ?? [];
+				if (!empty($queue)) {
+					$nextSessionId = array_shift($queue);
+					$this->userConfig->setValueString($userId, Application::APP_ID, 'picker_session_queue', json_encode($queue), lazy: true);
+					$this->userConfig->setValueString($userId, Application::APP_ID, 'importing_photos', '1', lazy: true);
+					$this->userConfig->setValueString($userId, Application::APP_ID, 'picker_session_id', $nextSessionId, lazy: true);
+					$this->userConfig->setValueInt($userId, Application::APP_ID, 'nb_imported_photos', 0, lazy: true);
+					$this->userConfig->setValueInt($userId, Application::APP_ID, 'last_import_timestamp', 0, lazy: true);
+					$this->userConfig->setValueString($userId, Application::APP_ID, 'photo_next_page_token', '', lazy: true);
+					$this->jobList->add(ImportPhotosJob::class, ['user_id' => $userId]);
+				}
+			}
 		} else {
 			$ts = (new DateTime())->getTimestamp();
 			$this->userConfig->setValueInt($userId, Application::APP_ID, 'last_import_timestamp', $ts, lazy: true);
