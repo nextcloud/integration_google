@@ -239,23 +239,28 @@ class GooglePhotosAPIService {
 					$this->deletePickerSession($userId, $sessionId);
 				}
 			}
-			$this->userConfig->setValueString($userId, Application::APP_ID, 'importing_photos', '0', lazy: true);
-			$this->userConfig->setValueInt($userId, Application::APP_ID, 'nb_imported_photos', 0, lazy: true);
-			$this->userConfig->setValueInt($userId, Application::APP_ID, 'last_import_timestamp', 0, lazy: true);
-			// On successful completion, start the next queued session if any
+			// On successful completion, atomically transition to the next queued session if any,
+			// so importing_photos never has a transient '0' that would stop the polling client.
 			if (isset($result['finished']) && $result['finished']) {
 				$queueRaw = $this->userConfig->getValueString($userId, Application::APP_ID, 'picker_session_queue', '[]', lazy: true);
 				$queue = json_decode($queueRaw, true) ?? [];
 				if (!empty($queue)) {
 					$nextSessionId = array_shift($queue);
 					$this->userConfig->setValueString($userId, Application::APP_ID, 'picker_session_queue', json_encode($queue), lazy: true);
-					$this->userConfig->setValueString($userId, Application::APP_ID, 'importing_photos', '1', lazy: true);
 					$this->userConfig->setValueString($userId, Application::APP_ID, 'picker_session_id', $nextSessionId, lazy: true);
 					$this->userConfig->setValueInt($userId, Application::APP_ID, 'nb_imported_photos', 0, lazy: true);
 					$this->userConfig->setValueInt($userId, Application::APP_ID, 'last_import_timestamp', 0, lazy: true);
 					$this->userConfig->setValueString($userId, Application::APP_ID, 'photo_next_page_token', '', lazy: true);
 					$this->jobList->add(ImportPhotosJob::class, ['user_id' => $userId]);
+				} else {
+					$this->userConfig->setValueString($userId, Application::APP_ID, 'importing_photos', '0', lazy: true);
+					$this->userConfig->setValueInt($userId, Application::APP_ID, 'nb_imported_photos', 0, lazy: true);
+					$this->userConfig->setValueInt($userId, Application::APP_ID, 'last_import_timestamp', 0, lazy: true);
 				}
+			} else {
+				$this->userConfig->setValueString($userId, Application::APP_ID, 'importing_photos', '0', lazy: true);
+				$this->userConfig->setValueInt($userId, Application::APP_ID, 'nb_imported_photos', 0, lazy: true);
+				$this->userConfig->setValueInt($userId, Application::APP_ID, 'last_import_timestamp', 0, lazy: true);
 			}
 		} else {
 			$ts = (new DateTime())->getTimestamp();
