@@ -545,17 +545,17 @@ export default {
 					const ssoWindow = window.open(
 						requestUrl,
 						t('integration_google', 'Sign in with Google'),
-						'toolbar=no, menubar=no, width=600, height=700',
+						'toolbar=no, menubar=no, width=600, height=700,noopener,noreferrer',
 					)
-					ssoWindow.focus()
-					const messageListener = (event) => {
-						if (event.origin !== window.location.origin) {
-							return
-						}
+					if (ssoWindow) {
+						ssoWindow.focus()
+					}
+					const bc = new BroadcastChannel('integration_google_oauth')
+					bc.onmessage = (event) => {
 						if (!event.data?.username) {
 							return
 						}
-						window.removeEventListener('message', messageListener)
+						bc.close()
 						console.debug('Child window message received', event)
 						this.state.user_name = event.data.username
 						// Fetch the full config (including user_scopes) so the page
@@ -572,7 +572,6 @@ export default {
 								this.loadData()
 							})
 					}
-					window.addEventListener('message', messageListener)
 				} else {
 					window.location.replace(requestUrl)
 				}
@@ -770,7 +769,7 @@ export default {
 				const pickerWindow = window.open(
 					this.pickerUri,
 					t('integration_google', 'Google Photos Picker'),
-					'toolbar=no, menubar=no, width=900, height=700',
+					'toolbar=no, menubar=no, width=900, height=700,noopener,noreferrer',
 				)
 				if (pickerWindow) {
 					pickerWindow.focus()
@@ -787,7 +786,7 @@ export default {
 					const pickerWindow = window.open(
 						response.data.pickerUri,
 						t('integration_google', 'Google Photos Picker'),
-						'toolbar=no, menubar=no, width=900, height=700',
+						'toolbar=no, menubar=no, width=900, height=700,noopener,noreferrer',
 					)
 					if (pickerWindow) {
 						pickerWindow.focus()
