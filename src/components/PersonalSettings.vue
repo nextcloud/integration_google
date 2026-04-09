@@ -138,7 +138,7 @@
 								{{ t('integration_google', 'Queue another session') }}
 							</NcButton>
 						</div>
-						<div v-else>
+						<div v-else class="picker-session-buttons">
 							<p class="settings-hint">
 								<InformationOutlineIcon />
 								{{ t('integration_google', 'Waiting for you to finish your selection in the Google Photos window…') }}
@@ -156,14 +156,14 @@
 								<template #icon>
 									<CloseIcon />
 								</template>
-								{{ t('integration_google', 'Cancel') }}
+								{{ t('integration_google', 'Cancel photo picking') }}
 							</NcButton>
 						</div>
 						<NcButton @click="onCancelPhotoImport">
 							<template #icon>
 								<CloseIcon />
 							</template>
-							{{ t('integration_google', 'Cancel photo import') }}
+							{{ t('integration_google', 'Cancel importing all photos') }}
 						</NcButton>
 					</div>
 					<!-- Picker flow -->
@@ -204,7 +204,7 @@
 							</NcButton>
 						</div>
 						<!-- Session active: waiting for selection -->
-						<div v-else>
+						<div v-else class="picker-session-buttons">
 							<p class="settings-hint">
 								<InformationOutlineIcon />
 								{{ t('integration_google', 'Waiting for you to finish your selection in the Google Photos window…') }}
@@ -226,7 +226,7 @@
 								<template #icon>
 									<CloseIcon />
 								</template>
-								{{ t('integration_google', 'Cancel') }}
+								{{ t('integration_google', 'Cancel photo picking') }}
 							</NcButton>
 						</div>
 					</div>
@@ -1166,8 +1166,14 @@ export default {
 		width: 300px;
 	}
 
+	.picker-session-buttons {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+
 	.cancel-session-btn {
-		margin-top: 8px;
+		margin-top: 0;
 	}
 
 	#google-contacts {
