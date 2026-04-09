@@ -924,6 +924,7 @@ export default {
 		onCancelPhotoImport() {
 			this.importingPhotos = false
 			clearInterval(this.photoImportLoop)
+			this.photoImportLoop = null
 			const req = {
 				values: {
 					importing_photos: '0',
