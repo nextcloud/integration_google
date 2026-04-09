@@ -23,6 +23,7 @@ use OCP\Files\Folder;
 use OCP\Files\InvalidPathException;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotPermittedException;
+use OCP\FilesMetadata\IFilesMetadataManager;
 use OCP\Lock\ILockingProvider;
 use OCP\Lock\LockedException;
 use Psr\Log\LoggerInterface;
@@ -34,6 +35,7 @@ use Throwable;
 class GooglePhotosAPIService {
 
 	private const PICKER_BASE_URL = 'https://photospicker.googleapis.com/';
+	private const METADATA_KEY = 'integration_google_photo_id';
 
 	public function __construct(
 		string $appName,
@@ -44,6 +46,7 @@ class GooglePhotosAPIService {
 		private UserScopeService $userScopeService,
 		private GoogleAPIService $googleApiService,
 		private FileUtils $fileUtils,
+		private IFilesMetadataManager $metadataManager,
 	) {
 	}
 
@@ -354,14 +357,31 @@ class GooglePhotosAPIService {
 
 		$mimeType = $mediaFile['mimeType'] ?? '';
 		$rawName = $mediaFile['filename'] ?? ($item['id'] ?? 'unknown');
-		$fileName = $this->fileUtils->sanitizeFilename($rawName, (string)($item['id'] ?? ''));
+		$itemId = (string)($item['id'] ?? '');
+		$baseName = $this->fileUtils->sanitizeFilename($rawName, $itemId);
 
-		// Avoid duplicate filenames
-		if ($folder->nodeExists($fileName)) {
-			$fileName = ($item['id'] ?? 'dup') . '_' . $fileName;
-		}
-		if ($folder->nodeExists($fileName)) {
-			return null; // already imported
+		// Determine the target filename.
+		// Happy path: use the original name. If a file with that name already exists,
+		// check its metadata: same Google ID means this exact photo was already
+		// imported, so skip it. A different ID (name collision with another photo)
+		// falls back to an ID-prefixed filename, which is then the definitive name
+		// for this item across all future sessions.
+		if ($folder->nodeExists($baseName)) {
+			try {
+				$existing = $folder->get($baseName);
+				$meta = $this->metadataManager->getMetadata($existing->getId());
+				if ($meta->hasKey(self::METADATA_KEY) && $meta->getString(self::METADATA_KEY) === $itemId) {
+					return null; // already imported
+				}
+			} catch (\Throwable) {
+				// fall through to ID-prefixed name on any unexpected error
+			}
+			$fileName = $itemId . '_' . $baseName;
+			if ($folder->nodeExists($fileName)) {
+				return null; // ID-prefixed version already imported too
+			}
+		} else {
+			$fileName = $baseName;
 		}
 
 		// Build the download URL: images get =d (full quality + EXIF), videos get =dv
@@ -402,6 +422,17 @@ class GooglePhotosAPIService {
 				$savedFile->touch($d->getTimestamp());
 			} else {
 				$savedFile->touch();
+			}
+			// Store the Google media ID in file metadata so future imports can
+			// identify this file by ID rather than filename alone.
+			if ($itemId !== '') {
+				try {
+					$meta = $this->metadataManager->getMetadata($savedFile->getId(), true);
+					$meta->setString(self::METADATA_KEY, $itemId);
+					$this->metadataManager->saveMetadata($meta);
+				} catch (\Throwable $e) {
+					$this->logger->warning('Google Photo, could not save file metadata: ' . $e->getMessage(), ['app' => Application::APP_ID]);
+				}
 			}
 			$stat = $savedFile->stat();
 			return (int)($stat['size'] ?? 0);
