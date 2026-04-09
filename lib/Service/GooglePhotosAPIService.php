@@ -271,19 +271,6 @@ class GooglePhotosAPIService {
 			}
 		}
 
-		// Load cross-session dedup state, scoped to the current target folder.
-		// If the user has changed the output folder, reset the ID list so photos
-		// can be imported again into the new (empty) location.
-		$dedupTargetPath = $this->userConfig->getValueString($userId, Application::APP_ID, 'photo_dedup_target_path', '', lazy: true);
-		if ($dedupTargetPath !== $targetPath) {
-			$importedIds = [];
-			$this->userConfig->setValueString($userId, Application::APP_ID, 'photo_dedup_target_path', $targetPath, lazy: true);
-			$this->userConfig->setValueString($userId, Application::APP_ID, 'imported_photo_ids', '{}', lazy: true);
-		} else {
-			$importedIdsRaw = $this->userConfig->getValueString($userId, Application::APP_ID, 'imported_photo_ids', '{}', lazy: true);
-			$importedIds = json_decode($importedIdsRaw, true) ?? [];
-		}
-
 		// Page through all picked media items
 		$downloadedSize = 0;
 		$nbDownloaded = 0;
@@ -312,17 +299,9 @@ class GooglePhotosAPIService {
 			$items = $result['mediaItems'] ?? [];
 			foreach ($items as $item) {
 				$totalSeenNumber++;
-				$itemId = $item['id'] ?? '';
-				// Skip photos already imported in a previous session
-				if ($itemId !== '' && array_key_exists($itemId, $importedIds)) {
-					continue;
-				}
 				$size = $this->downloadPickerItem($userId, $item, $folder);
 				if ($size !== null) {
 					$nbDownloaded++;
-					if ($itemId !== '') {
-						$importedIds[$itemId] = 1;
-					}
 					$this->userConfig->setValueInt(
 						$userId, Application::APP_ID, 'nb_imported_photos',
 						$alreadyImported + $nbDownloaded, lazy: true,
@@ -330,7 +309,6 @@ class GooglePhotosAPIService {
 					$downloadedSize += $size;
 					if ($maxDownloadSize !== null && $downloadedSize > $maxDownloadSize) {
 						$this->userConfig->setValueInt($userId, Application::APP_ID, 'nb_photos_seen', $totalSeenNumber, lazy: true);
-						$this->userConfig->setValueString($userId, Application::APP_ID, 'imported_photo_ids', json_encode($importedIds), lazy: true);
 						$this->userConfig->setValueString($userId, Application::APP_ID, 'photo_next_page_token', $currentPageToken, lazy: true);
 						return [
 							'nbDownloaded' => $nbDownloaded,
@@ -343,14 +321,10 @@ class GooglePhotosAPIService {
 			}
 			// Update progress counters after each page
 			$this->userConfig->setValueInt($userId, Application::APP_ID, 'nb_photos_seen', $totalSeenNumber, lazy: true);
-			$this->userConfig->setValueString($userId, Application::APP_ID, 'imported_photo_ids', json_encode($importedIds), lazy: true);
 			$params['pageToken'] = $result['nextPageToken'] ?? '';
 		} while (isset($result['nextPageToken']));
 
 		$this->userConfig->setValueString($userId, Application::APP_ID, 'photo_next_page_token', '', lazy: true);
-		// Session is done; clear the dedup map so it does not grow unboundedly
-		// across future sessions (a new session always picks a fresh selection).
-		$this->userConfig->setValueString($userId, Application::APP_ID, 'imported_photo_ids', '{}', lazy: true);
 		return [
 			'nbDownloaded' => $nbDownloaded,
 			'targetPath' => $targetPath,
