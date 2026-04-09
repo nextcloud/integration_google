@@ -116,7 +116,7 @@
 								{{ t('integration_google', 'Import queued, starting soon…') }}
 							</span>
 							<span v-else-if="nbPhotosSeen > 0">
-								{{ n('integration_google', '{imported} of {total} photo imported', '{imported} of {total} photos imported', nbImportedPhotos, { imported: nbImportedPhotos, total: nbPhotosSeen }) }}
+								{{ t('integration_google', '{imported} of {total} photos imported', { imported: nbImportedPhotos, total: nbPhotosSeen }) }}
 							</span>
 							<span v-else>
 								{{ n('integration_google', '{amount} photo imported', '{amount} photos imported', nbImportedPhotos, { amount: nbImportedPhotos }) }}
@@ -744,7 +744,8 @@ export default {
 						this.importingPhotos = response.data.importing_photos
 						if (!this.importingPhotos) {
 							clearInterval(this.photoImportLoop)
-						} else if (launchLoop) {
+							this.photoImportLoop = null
+						} else if (launchLoop && !this.photoImportLoop) {
 							this.photoImportLoop = setInterval(() => this.getPhotoImportValues(), 5000)
 						}
 					}
