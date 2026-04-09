@@ -57,7 +57,7 @@ class GooglePhotosAPIService {
 		$result = $this->googleApiService->request(
 			$userId,
 			'v1/sessions',
-			['pickingConfig' => ['maxItemCount' => '2000']],
+			['pickingConfig' => ['maxItemCount' => 2000]],
 			'POST',
 			self::PICKER_BASE_URL,
 		);
@@ -348,6 +348,9 @@ class GooglePhotosAPIService {
 		} while (isset($result['nextPageToken']));
 
 		$this->userConfig->setValueString($userId, Application::APP_ID, 'photo_next_page_token', '', lazy: true);
+		// Session is done; clear the dedup map so it does not grow unboundedly
+		// across future sessions (a new session always picks a fresh selection).
+		$this->userConfig->setValueString($userId, Application::APP_ID, 'imported_photo_ids', '{}', lazy: true);
 		return [
 			'nbDownloaded' => $nbDownloaded,
 			'targetPath' => $targetPath,
