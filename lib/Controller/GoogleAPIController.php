@@ -56,7 +56,6 @@ class GoogleAPIController extends Controller {
 			'importing_photos' => $this->userConfig->getValueString($this->userId, Application::APP_ID, 'importing_photos', lazy: true) === '1',
 			'last_import_timestamp' => $this->userConfig->getValueInt($this->userId, Application::APP_ID, 'last_import_timestamp', lazy: true),
 			'nb_imported_photos' => $this->userConfig->getValueInt($this->userId, Application::APP_ID, 'nb_imported_photos', lazy: true),
-			'nb_photos_seen' => $this->userConfig->getValueInt($this->userId, Application::APP_ID, 'nb_photos_seen', lazy: true),
 		]);
 	}
 

@@ -148,7 +148,6 @@ class GooglePhotosAPIService {
 		$this->userConfig->setValueString($userId, Application::APP_ID, 'importing_photos', '1', lazy: true);
 		$this->userConfig->setValueString($userId, Application::APP_ID, 'picker_session_id', $sessionId, lazy: true);
 		$this->userConfig->setValueInt($userId, Application::APP_ID, 'nb_imported_photos', 0, lazy: true);
-		$this->userConfig->setValueInt($userId, Application::APP_ID, 'nb_photos_seen', 0, lazy: true);
 		$this->userConfig->setValueInt($userId, Application::APP_ID, 'last_import_timestamp', 0, lazy: true);
 		$this->userConfig->setValueString($userId, Application::APP_ID, 'photo_next_page_token', '', lazy: true);
 
@@ -235,7 +234,6 @@ class GooglePhotosAPIService {
 			}
 			$this->userConfig->setValueString($userId, Application::APP_ID, 'importing_photos', '0', lazy: true);
 			$this->userConfig->setValueInt($userId, Application::APP_ID, 'nb_imported_photos', 0, lazy: true);
-			$this->userConfig->setValueInt($userId, Application::APP_ID, 'nb_photos_seen', 0, lazy: true);
 			$this->userConfig->setValueInt($userId, Application::APP_ID, 'last_import_timestamp', 0, lazy: true);
 		} else {
 			$ts = (new DateTime())->getTimestamp();
@@ -279,10 +277,6 @@ class GooglePhotosAPIService {
 		$nbDownloaded = 0;
 		$params = ['sessionId' => $sessionId, 'pageSize' => 100];
 		$resumeToken = $this->userConfig->getValueString($userId, Application::APP_ID, 'photo_next_page_token', '', lazy: true);
-		// Seed seen counter from stored value when resuming so progress stays monotonic
-		$totalSeenNumber = $resumeToken !== ''
-			? $this->userConfig->getValueInt($userId, Application::APP_ID, 'nb_photos_seen', 0, lazy: true)
-			: 0;
 		if ($resumeToken !== '') {
 			$params['pageToken'] = $resumeToken;
 		}
@@ -301,7 +295,6 @@ class GooglePhotosAPIService {
 			}
 			$items = $result['mediaItems'] ?? [];
 			foreach ($items as $item) {
-				$totalSeenNumber++;
 				$size = $this->downloadPickerItem($userId, $item, $folder);
 				if ($size !== null) {
 					$nbDownloaded++;
@@ -311,19 +304,15 @@ class GooglePhotosAPIService {
 					);
 					$downloadedSize += $size;
 					if ($maxDownloadSize !== null && $downloadedSize > $maxDownloadSize) {
-						$this->userConfig->setValueInt($userId, Application::APP_ID, 'nb_photos_seen', $totalSeenNumber, lazy: true);
 						$this->userConfig->setValueString($userId, Application::APP_ID, 'photo_next_page_token', $currentPageToken, lazy: true);
 						return [
 							'nbDownloaded' => $nbDownloaded,
 							'targetPath' => $targetPath,
 							'finished' => false,
-							'totalSeen' => $totalSeenNumber,
 						];
 					}
 				}
 			}
-			// Update progress counters after each page
-			$this->userConfig->setValueInt($userId, Application::APP_ID, 'nb_photos_seen', $totalSeenNumber, lazy: true);
 			$params['pageToken'] = $result['nextPageToken'] ?? '';
 		} while (isset($result['nextPageToken']));
 
@@ -332,7 +321,6 @@ class GooglePhotosAPIService {
 			'nbDownloaded' => $nbDownloaded,
 			'targetPath' => $targetPath,
 			'finished' => true,
-			'totalSeen' => $totalSeenNumber,
 		];
 	}
 
@@ -418,8 +406,13 @@ class GooglePhotosAPIService {
 				fclose($resource);
 			}
 			if (isset($item['createTime'])) {
-				$d = new DateTime($item['createTime']);
-				$savedFile->touch($d->getTimestamp());
+				try {
+					$d = new DateTime($item['createTime']);
+					$savedFile->touch($d->getTimestamp());
+				} catch (Exception $e) {
+					$this->logger->warning('Google Photo, invalid createTime, using current time: ' . $e->getMessage(), ['app' => Application::APP_ID]);
+					$savedFile->touch();
+				}
 			} else {
 				$savedFile->touch();
 			}

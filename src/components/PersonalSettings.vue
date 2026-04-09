@@ -115,16 +115,10 @@
 							<span v-if="nbImportedPhotos === 0">
 								{{ t('integration_google', 'Import queued, starting soon…') }}
 							</span>
-							<span v-else-if="nbPhotosSeen > 0">
-								{{ t('integration_google', '{imported} of {total} photos imported', { imported: nbImportedPhotos, total: nbPhotosSeen }) }}
-							</span>
 							<span v-else>
 								{{ n('integration_google', '{amount} photo imported', '{amount} photos imported', nbImportedPhotos, { amount: nbImportedPhotos }) }}
 							</span>
 						</div>
-						<NcProgressBar v-if="nbPhotosSeen > 0"
-							:value="Math.round(nbImportedPhotos / nbPhotosSeen * 100)"
-							class="photo-progress-bar" />
 						<p class="settings-hint">
 							<InformationOutlineIcon />
 							{{ t('integration_google', 'You can close this page. You will be notified when the import finishes.') }}
@@ -389,7 +383,6 @@ export default {
 			importingPhotos: false,
 			lastPhotoImportTimestamp: 0,
 			nbImportedPhotos: 0,
-			nbPhotosSeen: 0,
 			photoImportLoop: null,
 			// drive
 			driveSize: 0,
@@ -550,12 +543,10 @@ export default {
 					if (ssoWindow) {
 						ssoWindow.focus()
 					}
-					const bc = new BroadcastChannel('integration_google_oauth')
-					bc.onmessage = (event) => {
+					const handleOAuthMessage = (event) => {
 						if (!event.data?.username) {
 							return
 						}
-						bc.close()
 						console.debug('Child window message received', event)
 						this.state.user_name = event.data.username
 						// Fetch the full config (including user_scopes) so the page
@@ -571,6 +562,31 @@ export default {
 							.catch(() => {
 								this.loadData()
 							})
+					}
+					try {
+						if (typeof BroadcastChannel !== 'undefined') {
+							const bc = new BroadcastChannel('integration_google_oauth')
+							bc.onmessage = (event) => {
+								bc.close()
+								handleOAuthMessage(event)
+							}
+						} else {
+							window.addEventListener('message', function listener(event) {
+								if (event.origin !== window.location.origin || !event.data?.username) {
+									return
+								}
+								window.removeEventListener('message', listener)
+								handleOAuthMessage(event)
+							})
+						}
+					} catch (e) {
+						window.addEventListener('message', function listener(event) {
+							if (event.origin !== window.location.origin || !event.data?.username) {
+								return
+							}
+							window.removeEventListener('message', listener)
+							handleOAuthMessage(event)
+						})
 					}
 				} else {
 					window.location.replace(requestUrl)
@@ -746,7 +762,6 @@ export default {
 					if (response.data && Object.keys(response.data).length > 0) {
 						this.lastPhotoImportTimestamp = response.data.last_import_timestamp
 						this.nbImportedPhotos = response.data.nb_imported_photos
-						this.nbPhotosSeen = response.data.nb_photos_seen ?? 0
 						this.importingPhotos = response.data.importing_photos
 						if (!this.importingPhotos) {
 							clearInterval(this.photoImportLoop)
@@ -829,7 +844,7 @@ export default {
 		 */
 		onImportPhotos() {
 			const url = generateUrl('/apps/integration_google/import-photos')
-			axios.get(url, { params: { sessionId: this.pickerSessionId } })
+			axios.post(url, { sessionId: this.pickerSessionId })
 				.then((response) => {
 					const targetPath = response.data.targetPath
 					showSuccess(
