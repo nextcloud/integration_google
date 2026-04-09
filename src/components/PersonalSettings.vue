@@ -105,6 +105,103 @@
 					</div>
 					<br>
 				</div>
+				<div v-if="state.user_scopes.can_access_photos"
+					id="google-photos">
+					<h3>{{ t('integration_google', 'Photos') }}</h3>
+					<!-- Import in progress -->
+					<div v-if="importingPhotos" class="photo-import-status">
+						<div class="photo-import-info">
+							<NcLoadingIcon :size="20" />
+							<span v-if="nbImportedPhotos === 0">
+								{{ t('integration_google', 'Import queued, starting soon…') }}
+							</span>
+							<span v-else-if="nbPhotosSeen > 0">
+								{{ n('integration_google', '{imported} of {total} photo imported', '{imported} of {total} photos imported', nbImportedPhotos, { imported: nbImportedPhotos, total: nbPhotosSeen }) }}
+							</span>
+							<span v-else>
+								{{ n('integration_google', '{amount} photo imported', '{amount} photos imported', nbImportedPhotos, { amount: nbImportedPhotos }) }}
+							</span>
+						</div>
+						<NcProgressBar v-if="nbPhotosSeen > 0"
+							:value="Math.round(nbImportedPhotos / nbPhotosSeen * 100)"
+							class="photo-progress-bar" />
+						<p class="settings-hint">
+							<InformationOutlineIcon />
+							{{ t('integration_google', 'You can close this page. You will be notified when the import finishes.') }}
+						</p>
+						<NcButton @click="onCancelPhotoImport">
+							<template #icon>
+								<CloseIcon />
+							</template>
+							{{ t('integration_google', 'Cancel photo import') }}
+						</NcButton>
+					</div>
+					<!-- Picker flow -->
+					<div v-else>
+						<div class="line">
+							<label for="photo-output">
+								<FolderOutlineIcon />
+								{{ t('integration_google', 'Import directory') }}
+							</label>
+							<input id="photo-output"
+								:readonly="true"
+								:value="state.photo_output_dir">
+							<NcButton class="edit-output-dir"
+								@click="onPhotoOutputChange">
+								<template #icon>
+									<PencilOutlineIcon />
+								</template>
+							</NcButton>
+						</div>
+						<br>
+						<!-- No active session: show hints + open button -->
+						<div v-if="!pickerSessionId">
+							<p class="settings-hint">
+								<InformationOutlineIcon />
+								{{ t('integration_google', 'Up to 2,000 photos can be imported per session. Hold Shift and click to select many photos at once in the Google Photos picker.') }}
+							</p>
+							<p class="settings-hint">
+								<AlertOutlineIcon />
+								{{ t('integration_google', 'Warning: Google does not provide location data in imported photos.') }}
+							</p>
+							<NcButton :class="{ loading: creatingPickerSession }"
+								:disabled="creatingPickerSession"
+								@click="onOpenPicker">
+								<template #icon>
+									<ImageMultipleOutlineIcon />
+								</template>
+								{{ t('integration_google', 'Open Google Photos picker') }}
+							</NcButton>
+						</div>
+						<!-- Session active: waiting for selection -->
+						<div v-else>
+							<p class="settings-hint">
+								<InformationOutlineIcon />
+								{{ t('integration_google', 'Waiting for you to finish your selection in the Google Photos window…') }}
+							</p>
+							<p class="settings-hint">
+								<InformationOutlineIcon />
+								{{ t('integration_google', 'Import will start automatically once you confirm your selection.') }}
+							</p>
+							<NcButton :class="{ loading: creatingPickerSession }"
+								:disabled="creatingPickerSession"
+								@click="onOpenPicker">
+								<template #icon>
+									<ImageMultipleOutlineIcon />
+								</template>
+								{{ t('integration_google', 'Open Google Photos picker') }}
+							</NcButton>
+							<NcButton class="cancel-session-btn"
+								@click="onCancelPickerSession">
+								<template #icon>
+									<CloseIcon />
+								</template>
+								{{ t('integration_google', 'Cancel') }}
+							</NcButton>
+						</div>
+					</div>
+					<br><br>
+				</div>
 				<div v-if="showDrive"
 					id="google-drive">
 					<h3>{{ t('integration_google', 'Drive') }}</h3>
@@ -212,6 +309,9 @@
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 import AccountGroupOutlineIcon from 'vue-material-design-icons/AccountGroupOutline.vue'
 import FileDocumentOutlineIcon from 'vue-material-design-icons/FileDocumentOutline.vue'
+import ImageMultipleOutlineIcon from 'vue-material-design-icons/ImageMultipleOutline.vue'
+import InformationOutlineIcon from 'vue-material-design-icons/InformationOutline.vue'
+import AlertOutlineIcon from 'vue-material-design-icons/AlertOutline.vue'
 import FileOutlineIcon from 'vue-material-design-icons/FileOutline.vue'
 import FolderOutlineIcon from 'vue-material-design-icons/FolderOutline.vue'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
@@ -231,6 +331,8 @@ import { showSuccess, showError } from '@nextcloud/dialogs'
 import NcAppNavigationIconBullet from '@nextcloud/vue/components/NcAppNavigationIconBullet'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 import NcButton from '@nextcloud/vue/components/NcButton'
+import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
+import NcProgressBar from '@nextcloud/vue/components/NcProgressBar'
 import { humanFileSize } from '../utils.js'
 import GoogleIconColor from './icons/GoogleIconColor.vue'
 
@@ -245,6 +347,9 @@ export default {
 		NcCheckboxRadioSwitch,
 		CloseIcon,
 		GoogleDriveIcon,
+		ImageMultipleOutlineIcon,
+		InformationOutlineIcon,
+		AlertOutlineIcon,
 		PencilOutlineIcon,
 		AccountMultipleOutlineIcon,
 		TrayArrowDownIcon,
@@ -254,6 +359,8 @@ export default {
 		FileOutlineIcon,
 		CheckIcon,
 		AccountGroupOutlineIcon,
+		NcLoadingIcon,
+		NcProgressBar,
 	},
 
 	props: [],
@@ -274,6 +381,16 @@ export default {
 			selectedAddressBook: 0,
 			newAddressBookName: 'Google Contacts import',
 			importingContacts: false,
+			// photos (Picker API)
+			creatingPickerSession: false,
+			pickerSessionId: null,
+			pickerUri: null,
+			pickerPollTimer: null,
+			importingPhotos: false,
+			lastPhotoImportTimestamp: 0,
+			nbImportedPhotos: 0,
+			nbPhotosSeen: 0,
+			photoImportLoop: null,
 			// drive
 			driveSize: 0,
 			gettingDriveInfo: false,
@@ -353,6 +470,9 @@ export default {
 				if (this.state.user_scopes.can_access_contacts) {
 					this.getNbGoogleContacts()
 				}
+				if (this.state.user_scopes.can_access_photos) {
+					this.getPhotoImportValues(true)
+				}
 				if (this.state.user_scopes.can_access_drive) {
 					this.getGoogleDriveInfo()
 					this.getDriveImportValues(true)
@@ -395,6 +515,7 @@ export default {
 				'https://www.googleapis.com/auth/contacts.readonly',
 				'https://www.googleapis.com/auth/drive.readonly',
 				'https://www.googleapis.com/auth/contacts.other.readonly',
+				'https://www.googleapis.com/auth/photospicker.mediaitems.readonly',
 			]
 			const requestUrl = 'https://accounts.google.com/o/oauth2/v2/auth?'
 				+ 'client_id=' + encodeURIComponent(this.state.client_id)
@@ -420,11 +541,31 @@ export default {
 						'toolbar=no, menubar=no, width=600, height=700',
 					)
 					ssoWindow.focus()
-					window.addEventListener('message', (event) => {
+					const messageListener = (event) => {
+						if (event.origin !== window.location.origin) {
+							return
+						}
+						if (!event.data?.username) {
+							return
+						}
+						window.removeEventListener('message', messageListener)
 						console.debug('Child window message received', event)
 						this.state.user_name = event.data.username
-						this.loadData()
-					})
+						// Fetch the full config (including user_scopes) so the page
+						// updates without requiring a manual refresh
+						const configUrl = generateUrl('/apps/integration_google/config')
+						axios.get(configUrl)
+							.then((response) => {
+								if (response.data) {
+									Object.assign(this.state, response.data)
+								}
+								this.loadData()
+							})
+							.catch(() => {
+								this.loadData()
+							})
+					}
+					window.addEventListener('message', messageListener)
 				} else {
 					window.location.replace(requestUrl)
 				}
@@ -591,6 +732,160 @@ export default {
 				.then(() => {
 					this.importingCalendar[calId] = false
 				})
+		},
+		getPhotoImportValues(launchLoop = false) {
+			const url = generateUrl('/apps/integration_google/import-photos-info')
+			axios.get(url)
+				.then((response) => {
+					if (response.data && Object.keys(response.data).length > 0) {
+						this.lastPhotoImportTimestamp = response.data.last_import_timestamp
+						this.nbImportedPhotos = response.data.nb_imported_photos
+						this.nbPhotosSeen = response.data.nb_photos_seen ?? 0
+						this.importingPhotos = response.data.importing_photos
+						if (!this.importingPhotos) {
+							clearInterval(this.photoImportLoop)
+						} else if (launchLoop) {
+							this.photoImportLoop = setInterval(() => this.getPhotoImportValues(), 5000)
+						}
+					}
+				})
+				.catch((error) => {
+					console.debug(error)
+				})
+		},
+		/**
+		 * Step 1 – Create a Picker session and open the Google Photos picker window.
+		 */
+		onOpenPicker() {
+			// If a session is already open, just reopen the picker popup
+			if (this.pickerSessionId && this.pickerUri) {
+				const pickerWindow = window.open(
+					this.pickerUri,
+					t('integration_google', 'Google Photos Picker'),
+					'toolbar=no, menubar=no, width=900, height=700',
+				)
+				if (pickerWindow) {
+					pickerWindow.focus()
+				}
+				return
+			}
+			this.creatingPickerSession = true
+			const url = generateUrl('/apps/integration_google/picker-session')
+			axios.post(url)
+				.then((response) => {
+					this.pickerSessionId = response.data.id
+					this.pickerUri = response.data.pickerUri
+					// Open the picker in a popup window immediately
+					const pickerWindow = window.open(
+						response.data.pickerUri,
+						t('integration_google', 'Google Photos Picker'),
+						'toolbar=no, menubar=no, width=900, height=700',
+					)
+					if (pickerWindow) {
+						pickerWindow.focus()
+					}
+					// Start polling for selection completion
+					const pollInterval = parseFloat(response.data.pollingConfig?.pollInterval ?? '5s') * 1000
+					this.pickerPollTimer = setInterval(() => this.pollPickerSession(), Math.max(pollInterval, 4000))
+				})
+				.catch((error) => {
+					showError(
+						t('integration_google', 'Failed to create Google Photos picker session')
+						+ ': ' + error.response?.request?.responseText,
+					)
+				})
+				.finally(() => {
+					this.creatingPickerSession = false
+				})
+		},
+		/**
+		 * Poll the picker session until the user confirms their selection, then auto-import.
+		 */
+		pollPickerSession() {
+			if (!this.pickerSessionId) {
+				return
+			}
+			const url = generateUrl('/apps/integration_google/picker-session')
+			axios.get(url, { params: { sessionId: this.pickerSessionId } })
+				.then((response) => {
+					if (response.data.mediaItemsSet === true) {
+						clearInterval(this.pickerPollTimer)
+						this.onImportPhotos()
+					}
+				})
+				.catch((error) => {
+					console.debug('Picker poll error', error)
+				})
+		},
+		/**
+		 * Step 3 – User confirmed selection; trigger the background import job.
+		 */
+		onImportPhotos() {
+			const url = generateUrl('/apps/integration_google/import-photos')
+			axios.get(url, { params: { sessionId: this.pickerSessionId } })
+				.then((response) => {
+					const targetPath = response.data.targetPath
+					showSuccess(
+						t('integration_google', 'Starting importing photos in {targetPath} directory', { targetPath }),
+					)
+					// Reset picker state; import progress tracked via polling
+					this.pickerSessionId = null
+					this.pickerUri = null
+					this.getPhotoImportValues(true)
+				})
+				.catch((error) => {
+					showError(
+						t('integration_google', 'Failed to start importing Google Photos')
+						+ ': ' + error.response?.request?.responseText,
+					)
+				})
+		},
+		/**
+		 * Cancel an in-progress picker session or background import.
+		 */
+		onCancelPickerSession() {
+			clearInterval(this.pickerPollTimer)
+			const sessionId = this.pickerSessionId
+			this.pickerSessionId = null
+			this.pickerUri = null
+			if (sessionId) {
+				const url = generateUrl('/apps/integration_google/picker-session')
+				axios.delete(url, { params: { sessionId } })
+					.catch((error) => {
+						console.debug('Failed to delete picker session', error)
+					})
+			}
+		},
+		onCancelPhotoImport() {
+			this.importingPhotos = false
+			clearInterval(this.photoImportLoop)
+			const req = {
+				values: {
+					importing_photos: '0',
+					last_import_timestamp: '0',
+					nb_imported_photos: '0',
+				},
+			}
+			const url = generateUrl('/apps/integration_google/config')
+			axios.put(url, req)
+				.catch((error) => {
+					console.debug(error)
+				})
+		},
+		onPhotoOutputChange() {
+			OC.dialogs.filepicker(
+				t('integration_google', 'Choose where to write imported photos'),
+				(targetPath) => {
+					if (targetPath === '') {
+						targetPath = '/'
+					}
+					this.state.photo_output_dir = targetPath
+					this.saveOptions({ photo_output_dir: this.state.photo_output_dir })
+				},
+				false,
+				'httpd/unix-directory',
+				true,
+			)
 		},
 		getDriveImportValues(launchLoop = false) {
 			const url = generateUrl('/apps/integration_google/import-files-info')
@@ -780,6 +1075,35 @@ export default {
     // remove right input margin and button width
     width: calc(300px - 3px - var(--default-clickable-area));
   }
+
+	#google-photos input {
+		width: calc(300px - 3px - var(--default-clickable-area));
+	}
+
+	#google-photos button {
+		margin-top: 4px;
+	}
+
+	.photo-import-status {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 8px;
+	}
+
+	.photo-import-info {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+	}
+
+	.photo-progress-bar {
+		width: 300px;
+	}
+
+	.cancel-session-btn {
+		margin-top: 8px;
+	}
 
 	#google-contacts {
 		select {
