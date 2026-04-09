@@ -602,6 +602,9 @@ export default {
 						if (typeof BroadcastChannel !== 'undefined') {
 							const bc = new BroadcastChannel('integration_google_oauth')
 							bc.onmessage = (event) => {
+								if (!event.data?.username) {
+									return
+								}
 								bc.close()
 								handleOAuthMessage(event)
 							}
