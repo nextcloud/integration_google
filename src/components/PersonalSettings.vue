@@ -445,6 +445,13 @@ export default {
 	watch: {
 	},
 
+	beforeUnmount() {
+		clearInterval(this.pickerPollTimer)
+		this.pickerPollTimer = null
+		clearInterval(this.photoImportLoop)
+		this.photoImportLoop = null
+	},
+
 	mounted() {
 		const paramString = window.location.search.slice(1)
 		// eslint-disable-next-line

@@ -20,7 +20,9 @@ use OCA\Google\Service\Utils\FileUtils;
 use OCP\BackgroundJob\IJobList;
 use OCP\Config\IUserConfig;
 use OCP\Files\Folder;
+use OCP\Files\InvalidPathException;
 use OCP\Files\IRootFolder;
+use OCP\Files\NotPermittedException;
 use OCP\Lock\ILockingProvider;
 use OCP\Lock\LockedException;
 use Psr\Log\LoggerInterface;
@@ -285,9 +287,12 @@ class GooglePhotosAPIService {
 		// Page through all picked media items
 		$downloadedSize = 0;
 		$nbDownloaded = 0;
-		$totalSeenNumber = 0;
 		$params = ['sessionId' => $sessionId, 'pageSize' => 100];
 		$resumeToken = $this->userConfig->getValueString($userId, Application::APP_ID, 'photo_next_page_token', '', lazy: true);
+		// Seed seen counter from stored value when resuming so progress stays monotonic
+		$totalSeenNumber = $resumeToken !== ''
+			? $this->userConfig->getValueInt($userId, Application::APP_ID, 'nb_photos_seen', 0, lazy: true)
+			: 0;
 		if ($resumeToken !== '') {
 			$params['pageToken'] = $resumeToken;
 		}
@@ -386,7 +391,13 @@ class GooglePhotosAPIService {
 		$isVideo = str_starts_with($mimeType, 'video/');
 		$downloadUrl = $isVideo ? ($baseUrl . '=dv') : ($baseUrl . '=d');
 
-		$savedFile = $folder->newFile($fileName);
+		try {
+			$savedFile = $folder->newFile($fileName);
+		} catch (NotPermittedException|InvalidPathException $e) {
+			$this->logger->warning('Google Photo, skipping file creation for picker item: ' . $e->getMessage(), ['app' => Application::APP_ID]);
+			return null;
+		}
+
 		try {
 			$resource = $savedFile->fopen('w');
 		} catch (LockedException $e) {
