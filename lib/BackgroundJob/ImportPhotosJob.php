@@ -7,7 +7,7 @@
  * later. See the COPYING file.
  *
  * @author Ahsan Ahmed
- * @copyright Nextcloud GmbH and Nextcloud contributors 2025
+ * @copyright Nextcloud GmbH and Nextcloud contributors 2026
  */
 
 namespace OCA\Google\BackgroundJob;
