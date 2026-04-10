@@ -419,6 +419,7 @@ export default {
 			nbImportedPhotos: 0,
 			queuedSessions: 0,
 			photoImportLoop: null,
+			oauthBroadcastChannel: null,
 			// drive
 			driveSize: 0,
 			gettingDriveInfo: false,
@@ -478,6 +479,10 @@ export default {
 		this.pickerPollTimer = null
 		clearInterval(this.photoImportLoop)
 		this.photoImportLoop = null
+		if (this.oauthBroadcastChannel) {
+			this.oauthBroadcastChannel.close()
+			this.oauthBroadcastChannel = null
+		}
 	},
 
 	mounted() {
@@ -598,12 +603,17 @@ export default {
 								this.loadData()
 							})
 					}
-					const bc = new BroadcastChannel('integration_google_oauth')
-					bc.onmessage = (event) => {
+					// Close any previous channel before creating a new one
+					if (this.oauthBroadcastChannel) {
+						this.oauthBroadcastChannel.close()
+					}
+					this.oauthBroadcastChannel = new BroadcastChannel('integration_google_oauth')
+					this.oauthBroadcastChannel.onmessage = (event) => {
 						if (!event.data?.username) {
 							return
 						}
-						bc.close()
+						this.oauthBroadcastChannel.close()
+						this.oauthBroadcastChannel = null
 						handleOAuthMessage(event)
 					}
 				} else {
