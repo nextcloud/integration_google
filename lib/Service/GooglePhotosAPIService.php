@@ -246,6 +246,9 @@ class GooglePhotosAPIService {
 				if ($sessionId !== '') {
 					$this->deletePickerSession($userId, $sessionId);
 				}
+				// Clear the queue and page token so queued sessions are not left stuck after a failure
+				$this->userConfig->setValueString($userId, Application::APP_ID, 'picker_session_queue', '[]', lazy: true);
+				$this->userConfig->setValueString($userId, Application::APP_ID, 'photo_next_page_token', '', lazy: true);
 			}
 			// On successful completion, atomically transition to the next queued session if any,
 			// so importing_photos never has a transient '0' that would stop the polling client.
