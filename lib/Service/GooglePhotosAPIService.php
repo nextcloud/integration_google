@@ -6,8 +6,8 @@
  * This file is licensed under the Affero General Public License version 3 or
  * later. See the COPYING file.
  *
- * @author Julien Veyssier
- * @copyright Julien Veyssier 2020
+ * @author Ahsan Ahmed
+ * @copyright Nextcloud GmbH and Nextcloud contributors 2025
  */
 
 namespace OCA\Google\Service;
@@ -20,12 +20,8 @@ use OCA\Google\Service\Utils\FileUtils;
 use OCP\BackgroundJob\IJobList;
 use OCP\Config\IUserConfig;
 use OCP\Files\Folder;
-use OCP\Files\InvalidPathException;
 use OCP\Files\IRootFolder;
-use OCP\Files\NotPermittedException;
 use OCP\FilesMetadata\IFilesMetadataManager;
-use OCP\Lock\ILockingProvider;
-use OCP\Lock\LockedException;
 use Psr\Log\LoggerInterface;
 use Throwable;
 
@@ -54,7 +50,7 @@ class GooglePhotosAPIService {
 	 * Create a new Picker API session (max 2000 items per session)
 	 *
 	 * @param string $userId
-	 * @return array{id?:string, pickerUri?:string, pollingConfig?:array, expireTime?:string, error?:string}
+	 * @return array{id?:string, pickerUri?:string, pollingConfig?:array<array-key, mixed>, expireTime?:string, error?:mixed}
 	 */
 	public function createPickerSession(string $userId): array {
 		$result = $this->googleApiService->request(
@@ -65,12 +61,14 @@ class GooglePhotosAPIService {
 			self::PICKER_BASE_URL,
 		);
 		if (isset($result['error'])) {
+			/** @psalm-suppress InvalidReturnStatement */
 			return $result;
 		}
 		// append /autoclose so Google Photos closes its window after selection is done
 		if (isset($result['pickerUri'])) {
 			$result['pickerUri'] .= '/autoclose';
 		}
+		/** @psalm-suppress InvalidReturnStatement */
 		return $result;
 	}
 
@@ -121,7 +119,7 @@ class GooglePhotosAPIService {
 	 *
 	 * @param string $userId
 	 * @param string $sessionId
-	 * @return array{targetPath?:string, error?:string}
+	 * @return array{targetPath?:string, error?:string, queued?:true}
 	 */
 	public function startImportPhotos(string $userId, string $sessionId): array {
 		if (trim($sessionId) === '') {
@@ -414,69 +412,32 @@ class GooglePhotosAPIService {
 		$isVideo = str_starts_with($mimeType, 'video/');
 		$downloadUrl = $isVideo ? ($baseUrl . '=dv') : ($baseUrl . '=d');
 
-		try {
-			$savedFile = $folder->newFile($fileName);
-		} catch (NotPermittedException|InvalidPathException $e) {
-			$this->logger->warning('Google Photo, skipping file creation for picker item: ' . $e->getMessage(), ['app' => Application::APP_ID]);
+		$mtime = null;
+		if (isset($item['createTime'])) {
+			try {
+				$mtime = (new DateTime($item['createTime']))->getTimestamp();
+			} catch (Exception $e) {
+				$this->logger->warning('Google Photo, invalid createTime, using current time: ' . $e->getMessage(), ['app' => Application::APP_ID]);
+			}
+		}
+
+		$size = $this->googleApiService->downloadAndSaveFile($userId, $folder, $fileName, $downloadUrl, $mtime);
+		if ($size === null) {
 			return null;
 		}
 
-		try {
-			$resource = $savedFile->fopen('w');
-		} catch (LockedException $e) {
-			$this->logger->warning('Google Photo, error opening target file: file is locked', ['app' => Application::APP_ID]);
-			if ($savedFile->isDeletable()) {
-				$savedFile->delete();
-			}
-			return null;
-		}
-		if ($resource === false) {
-			$this->logger->warning('Google Photo, error opening target file', ['app' => Application::APP_ID]);
-			if ($savedFile->isDeletable()) {
-				$savedFile->delete();
-			}
-			return null;
-		}
-
-		$res = $this->googleApiService->simpleDownload($userId, $downloadUrl, $resource);
-		if (!isset($res['error'])) {
-			if (is_resource($resource)) {
-				fclose($resource);
-			}
-			if (isset($item['createTime'])) {
-				try {
-					$d = new DateTime($item['createTime']);
-					$savedFile->touch($d->getTimestamp());
-				} catch (Exception $e) {
-					$this->logger->warning('Google Photo, invalid createTime, using current time: ' . $e->getMessage(), ['app' => Application::APP_ID]);
-					$savedFile->touch();
-				}
-			} else {
-				$savedFile->touch();
-			}
-			// Store the Google media ID in file metadata so future imports can
-			// identify this file by ID rather than filename alone.
-			if ($itemId !== '') {
-				try {
-					$meta = $this->metadataManager->getMetadata($savedFile->getId(), true);
-					$meta->setString(self::METADATA_KEY, $itemId);
-					$this->metadataManager->saveMetadata($meta);
-				} catch (\Throwable $e) {
-					$this->logger->warning('Google Photo, could not save file metadata: ' . $e->getMessage(), ['app' => Application::APP_ID]);
-				}
-			}
-			$stat = $savedFile->stat();
-			return (int)($stat['size'] ?? 0);
-		} else {
-			$this->logger->warning('Google API error downloading photo: ' . $res['error'], ['app' => Application::APP_ID]);
-			if (is_resource($resource)) {
-				fclose($resource);
-			}
-			if ($savedFile->isDeletable()) {
-				$savedFile->unlock(ILockingProvider::LOCK_EXCLUSIVE);
-				$savedFile->delete();
+		// Store the Google media ID in file metadata so future imports can
+		// identify this file by ID rather than filename alone.
+		if ($itemId !== '') {
+			try {
+				$savedFile = $folder->get($fileName);
+				$meta = $this->metadataManager->getMetadata($savedFile->getId(), true);
+				$meta->setString(self::METADATA_KEY, $itemId);
+				$this->metadataManager->saveMetadata($meta);
+			} catch (\Throwable $e) {
+				$this->logger->warning('Google Photo, could not save file metadata: ' . $e->getMessage(), ['app' => Application::APP_ID]);
 			}
 		}
-		return null;
+		return $size;
 	}
 }
