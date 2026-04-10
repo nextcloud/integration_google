@@ -252,7 +252,10 @@ class GooglePhotosAPIService {
 			// so importing_photos never has a transient '0' that would stop the polling client.
 			if (isset($result['finished']) && $result['finished']) {
 				$queueRaw = $this->userConfig->getValueString($userId, Application::APP_ID, 'picker_session_queue', '[]', lazy: true);
-				$queue = json_decode($queueRaw, true) ?? [];
+				$queue = json_decode($queueRaw, true);
+				if (!is_array($queue)) {
+					$queue = [];
+				}
 				if (!empty($queue)) {
 					$nextSessionId = array_shift($queue);
 					$this->userConfig->setValueString($userId, Application::APP_ID, 'picker_session_queue', json_encode($queue), lazy: true);
