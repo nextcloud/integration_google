@@ -135,7 +135,10 @@ class GooglePhotosAPIService {
 		if ($alreadyImporting) {
 			// Queue this session to run after the current one finishes
 			$queueRaw = $this->userConfig->getValueString($userId, Application::APP_ID, 'picker_session_queue', '[]', lazy: true);
-			$queue = json_decode($queueRaw, true) ?? [];
+			$queue = json_decode($queueRaw, true);
+			if (!is_array($queue)) {
+				$queue = [];
+			}
 			$queue[] = $sessionId;
 			$this->userConfig->setValueString($userId, Application::APP_ID, 'picker_session_queue', json_encode($queue), lazy: true);
 			return ['targetPath' => $targetPath, 'queued' => true];
@@ -192,6 +195,9 @@ class GooglePhotosAPIService {
 
 		$importingPhotos = $this->userConfig->getValueString($userId, Application::APP_ID, 'importing_photos', '0', lazy: true) === '1';
 		if (!$importingPhotos) {
+			// Clear the concurrency guard so it does not delay future imports
+			$this->userConfig->setValueString($userId, Application::APP_ID, 'photo_import_running', '0', lazy: true);
+			$this->userConfig->setValueInt($userId, Application::APP_ID, 'photo_import_job_last_start', 0, lazy: true);
 			return;
 		}
 
