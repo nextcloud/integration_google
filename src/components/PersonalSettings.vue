@@ -479,6 +479,8 @@ export default {
 		this.pickerPollTimer = null
 		clearInterval(this.photoImportLoop)
 		this.photoImportLoop = null
+		clearInterval(this.driveImportLoop)
+		this.driveImportLoop = null
 		if (this.oauthBroadcastChannel) {
 			this.oauthBroadcastChannel.close()
 			this.oauthBroadcastChannel = null
@@ -860,7 +862,6 @@ export default {
 			axios.get(url, { params: { sessionId: this.pickerSessionId } })
 				.then((response) => {
 					if (response.data.mediaItemsSet === true) {
-						clearInterval(this.pickerPollTimer)
 						this.onImportPhotos()
 					}
 				})
@@ -875,6 +876,8 @@ export default {
 			const url = generateUrl('/apps/integration_google/import-photos')
 			axios.post(url, { sessionId: this.pickerSessionId })
 				.then((response) => {
+					clearInterval(this.pickerPollTimer)
+					this.pickerPollTimer = null
 					this.pickerSessionId = null
 					this.pickerUri = null
 					if (response.data.queued) {
@@ -896,6 +899,10 @@ export default {
 						t('integration_google', 'Failed to start importing Google Photos')
 						+ ': ' + error.response?.request?.responseText,
 					)
+					// Restart polling so the user can retry once the session is ready
+					if (this.pickerSessionId && !this.pickerPollTimer) {
+						this.pickerPollTimer = setInterval(() => this.pollPickerSession(), 5000)
+					}
 				})
 		},
 		/**

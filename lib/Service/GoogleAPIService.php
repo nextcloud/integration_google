@@ -387,9 +387,15 @@ class GoogleAPIService {
 		try {
 			$resource = $savedFile->fopen('w');
 		} catch (LockedException $e) {
+			if ($savedFile->isDeletable()) {
+				$savedFile->delete();
+			}
 			return null;
 		}
 		if ($resource === false) {
+			if ($savedFile->isDeletable()) {
+				$savedFile->delete();
+			}
 			return null;
 		}
 
