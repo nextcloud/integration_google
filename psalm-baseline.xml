@@ -11,6 +11,11 @@
       <code><![CDATA[public function run($argument) {]]></code>
     </MissingOverrideAttribute>
   </file>
+  <file src="lib/BackgroundJob/ImportPhotosJob.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function run($argument) {]]></code>
+    </MissingOverrideAttribute>
+  </file>
   <file src="lib/Migration/Version03001001Date20241111105515.php">
     <MissingOverrideAttribute>
       <code><![CDATA[public function postSchemaChange(IOutput $output, Closure $schemaClosure, array $options) {]]></code>
