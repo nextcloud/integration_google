@@ -598,33 +598,13 @@ export default {
 								this.loadData()
 							})
 					}
-					try {
-						if (typeof BroadcastChannel !== 'undefined') {
-							const bc = new BroadcastChannel('integration_google_oauth')
-							bc.onmessage = (event) => {
-								if (!event.data?.username) {
-									return
-								}
-								bc.close()
-								handleOAuthMessage(event)
-							}
-						} else {
-							window.addEventListener('message', function listener(event) {
-								if (event.origin !== window.location.origin || !event.data?.username) {
-									return
-								}
-								window.removeEventListener('message', listener)
-								handleOAuthMessage(event)
-							})
+					const bc = new BroadcastChannel('integration_google_oauth')
+					bc.onmessage = (event) => {
+						if (!event.data?.username) {
+							return
 						}
-					} catch (e) {
-						window.addEventListener('message', function listener(event) {
-							if (event.origin !== window.location.origin || !event.data?.username) {
-								return
-							}
-							window.removeEventListener('message', listener)
-							handleOAuthMessage(event)
-						})
+						bc.close()
+						handleOAuthMessage(event)
 					}
 				} else {
 					window.location.replace(requestUrl)
