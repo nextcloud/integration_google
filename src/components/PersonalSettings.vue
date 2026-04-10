@@ -411,6 +411,7 @@ export default {
 			importingContacts: false,
 			// photos (Picker API)
 			creatingPickerSession: false,
+			startingPhotoImport: false,
 			pickerSessionId: null,
 			pickerUri: null,
 			pickerPollTimer: null,
@@ -861,7 +862,7 @@ export default {
 			const url = generateUrl('/apps/integration_google/picker-session')
 			axios.get(url, { params: { sessionId: this.pickerSessionId } })
 				.then((response) => {
-					if (response.data.mediaItemsSet === true) {
+					if (response.data.mediaItemsSet === true && !this.startingPhotoImport) {
 						this.onImportPhotos()
 					}
 				})
@@ -873,9 +874,11 @@ export default {
 		 * Step 3 – User confirmed selection; trigger the background import job.
 		 */
 		onImportPhotos() {
+			this.startingPhotoImport = true
 			const url = generateUrl('/apps/integration_google/import-photos')
 			axios.post(url, { sessionId: this.pickerSessionId })
 				.then((response) => {
+					this.startingPhotoImport = false
 					clearInterval(this.pickerPollTimer)
 					this.pickerPollTimer = null
 					this.pickerSessionId = null
@@ -895,6 +898,7 @@ export default {
 					}
 				})
 				.catch((error) => {
+					this.startingPhotoImport = false
 					showError(
 						t('integration_google', 'Failed to start importing Google Photos')
 						+ ': ' + error.response?.request?.responseText,

@@ -116,6 +116,10 @@ class ConfigController extends Controller {
 			$this->userConfig->deleteUserConfig($this->userId, Application::APP_ID, 'token_expires_at');
 			$this->userConfig->deleteUserConfig($this->userId, Application::APP_ID, 'token');
 			$this->userConfig->deleteUserConfig($this->userId, Application::APP_ID, 'user_scopes');
+			// Cancel any in-progress imports so background jobs don't keep re-queuing
+			// and failing against the now-deleted tokens
+			$this->googleDriveApiService->cancelImport($this->userId);
+			$this->googlePhotosApiService->cancelImport($this->userId);
 			$result['user_name'] = '';
 		} else {
 			if (isset($values['drive_output_dir'])) {
