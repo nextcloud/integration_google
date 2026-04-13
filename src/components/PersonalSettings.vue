@@ -839,8 +839,10 @@ export default {
 						pickerWindow.focus()
 					}
 					// Start polling for selection completion
-					const pollInterval = parseFloat(response.data.pollingConfig?.pollInterval ?? '5s') * 1000
-					this.pickerPollTimer = setInterval(() => this.pollPickerSession(), Math.max(pollInterval, 4000))
+					const defaultPollInterval = 5000
+					const parsedPollInterval = parseFloat(response.data.pollingConfig?.pollInterval ?? '5s') * 1000
+					const pollInterval = Number.isFinite(parsedPollInterval) ? Math.max(parsedPollInterval, 4000) : defaultPollInterval
+					this.pickerPollTimer = setInterval(() => this.pollPickerSession(), pollInterval)
 				})
 				.catch((error) => {
 					showError(
@@ -914,6 +916,7 @@ export default {
 		 */
 		onCancelPickerSession() {
 			clearInterval(this.pickerPollTimer)
+			this.pickerPollTimer = null
 			const sessionId = this.pickerSessionId
 			this.pickerSessionId = null
 			this.pickerUri = null

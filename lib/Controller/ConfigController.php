@@ -120,6 +120,12 @@ class ConfigController extends Controller {
 			// and failing against the now-deleted tokens
 			$this->googleDriveApiService->cancelImport($this->userId);
 			$this->googlePhotosApiService->cancelImport($this->userId);
+			// Explicitly clear import-running flags so any currently-executing job
+			// that re-queues itself will exit on its next iteration
+			$this->userConfig->setValueString($this->userId, Application::APP_ID, 'importing_drive', '0', lazy: true);
+			$this->userConfig->setValueString($this->userId, Application::APP_ID, 'drive_import_running', '0', lazy: true);
+			$this->userConfig->setValueString($this->userId, Application::APP_ID, 'importing_photos', '0', lazy: true);
+			$this->userConfig->setValueString($this->userId, Application::APP_ID, 'photo_import_running', '0', lazy: true);
 			$result['user_name'] = '';
 		} else {
 			if (isset($values['drive_output_dir'])) {
