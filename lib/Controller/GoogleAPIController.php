@@ -16,6 +16,7 @@ use OCA\Google\AppInfo\Application;
 use OCA\Google\Service\GoogleCalendarAPIService;
 use OCA\Google\Service\GoogleContactsAPIService;
 use OCA\Google\Service\GoogleDriveAPIService;
+use OCA\Google\Service\GooglePhotosAPIService;
 use OCA\Google\Service\SecretService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
@@ -30,6 +31,7 @@ class GoogleAPIController extends Controller {
 		string $appName,
 		IRequest $request,
 		private IUserConfig $userConfig,
+		private GooglePhotosAPIService $googlePhotosAPIService,
 		private GoogleContactsAPIService $googleContactsAPIService,
 		private GoogleDriveAPIService $googleDriveAPIService,
 		private GoogleCalendarAPIService $googleCalendarAPIService,
@@ -38,6 +40,106 @@ class GoogleAPIController extends Controller {
 	) {
 		parent::__construct($appName, $request);
 		$this->accessToken = $this->userId !== null ? $this->secretService->getEncryptedUserValue($this->userId, 'token') : '';
+	}
+
+
+	/**
+	 * @NoAdminRequired
+	 *
+	 * @return DataResponse
+	 */
+	public function getImportPhotosInformation(): DataResponse {
+		if ($this->accessToken === '') {
+			return new DataResponse([], 400);
+		}
+		$pickerSessionQueue = json_decode(
+			$this->userConfig->getValueString($this->userId, Application::APP_ID, 'picker_session_queue', '[]', lazy: true),
+			true,
+		);
+		if (!is_array($pickerSessionQueue)) {
+			$pickerSessionQueue = [];
+		}
+		return new DataResponse([
+			'importing_photos' => $this->userConfig->getValueString($this->userId, Application::APP_ID, 'importing_photos', lazy: true) === '1',
+			'last_import_timestamp' => $this->userConfig->getValueInt($this->userId, Application::APP_ID, 'last_import_timestamp', lazy: true),
+			'nb_imported_photos' => $this->userConfig->getValueInt($this->userId, Application::APP_ID, 'nb_imported_photos', lazy: true),
+			'nb_queued_sessions' => count($pickerSessionQueue),
+		]);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 *
+	 * Create a new Google Photos Picker session (Picker API)
+	 *
+	 * @return DataResponse
+	 */
+	public function createPickerSession(): DataResponse {
+		if ($this->accessToken === '' || $this->userId === null) {
+			return new DataResponse([], 400);
+		}
+		$result = $this->googlePhotosAPIService->createPickerSession($this->userId);
+		if (isset($result['error'])) {
+			return new DataResponse($result['error'], 401);
+		}
+		return new DataResponse($result);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 *
+	 * Poll a Google Photos Picker session
+	 *
+	 * @param string $sessionId
+	 * @return DataResponse
+	 */
+	public function getPickerSession(string $sessionId): DataResponse {
+		if ($this->accessToken === '' || $this->userId === null) {
+			return new DataResponse([], 400);
+		}
+		$result = $this->googlePhotosAPIService->getPickerSession($this->userId, $sessionId);
+		if (isset($result['error'])) {
+			return new DataResponse($result['error'], 401);
+		}
+		return new DataResponse($result);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 *
+	 * Delete a Google Photos Picker session
+	 *
+	 * @param string $sessionId
+	 * @return DataResponse
+	 */
+	public function deletePickerSession(string $sessionId): DataResponse {
+		if ($this->accessToken === '' || $this->userId === null) {
+			return new DataResponse([], 400);
+		}
+		$result = $this->googlePhotosAPIService->deletePickerSession($this->userId, $sessionId);
+		if (isset($result['error'])) {
+			return new DataResponse($result['error'], 401);
+		}
+		return new DataResponse($result);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 *
+	 * Start downloading photos from a completed Picker session
+	 *
+	 * @param string $sessionId
+	 * @return DataResponse
+	 */
+	public function importPhotos(string $sessionId = ''): DataResponse {
+		if ($this->accessToken === '' || $this->userId === null) {
+			return new DataResponse([], 400);
+		}
+		$result = $this->googlePhotosAPIService->startImportPhotos($this->userId, $sessionId);
+		if (isset($result['error'])) {
+			return new DataResponse($result['error'], 401);
+		}
+		return new DataResponse($result);
 	}
 
 	/**

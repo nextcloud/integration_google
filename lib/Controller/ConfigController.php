@@ -17,6 +17,7 @@ use Exception;
 use OCA\Google\AppInfo\Application;
 use OCA\Google\Service\GoogleAPIService;
 use OCA\Google\Service\GoogleDriveAPIService;
+use OCA\Google\Service\GooglePhotosAPIService;
 use OCA\Google\Service\SecretService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
@@ -41,8 +42,9 @@ class ConfigController extends Controller {
 	public const CONTACTS_OTHER_SCOPE = 'https://www.googleapis.com/auth/contacts.other.readonly';
 	public const CALENDAR_SCOPE = 'https://www.googleapis.com/auth/calendar.readonly';
 	public const CALENDAR_EVENTS_SCOPE = 'https://www.googleapis.com/auth/calendar.events.readonly';
+	public const PHOTOS_SCOPE = 'https://www.googleapis.com/auth/photospicker.mediaitems.readonly';
 
-	public const INT_CONFIGS = ['nb_imported_files', 'drive_imported_size', 'last_drive_import_timestamp', 'drive_import_job_last_start'];
+	public const INT_CONFIGS = ['nb_imported_files', 'drive_imported_size', 'last_drive_import_timestamp', 'drive_import_job_last_start', 'nb_imported_photos', 'last_import_timestamp', 'photo_import_job_last_start'];
 
 	public function __construct(
 		string $appName,
@@ -55,11 +57,34 @@ class ConfigController extends Controller {
 		private IInitialState $initialStateService,
 		private GoogleAPIService $googleApiService,
 		private GoogleDriveAPIService $googleDriveApiService,
+		private GooglePhotosAPIService $googlePhotosApiService,
 		private ?string $userId,
 		private ICrypto $crypto,
 		private SecretService $secretService,
 	) {
 		parent::__construct($appName, $request);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * Get current user config values (used after OAuth popup to refresh state)
+	 *
+	 * @return DataResponse
+	 */
+	public function getConfig(): DataResponse {
+		if ($this->userId === null) {
+			return new DataResponse([], Http::STATUS_BAD_REQUEST);
+		}
+		$userName = $this->userConfig->getValueString($this->userId, Application::APP_ID, 'user_name', lazy: true);
+		$userScopesString = $this->userConfig->getValueString($this->userId, Application::APP_ID, 'user_scopes', '{}', lazy: true);
+		$userScopes = json_decode($userScopesString, true);
+		if (!is_array($userScopes)) {
+			$userScopes = [];
+		}
+		return new DataResponse([
+			'user_name' => $userName,
+			'user_scopes' => $userScopes,
+		]);
 	}
 
 	/**
@@ -90,6 +115,17 @@ class ConfigController extends Controller {
 			$this->userConfig->deleteUserConfig($this->userId, Application::APP_ID, 'refresh_token');
 			$this->userConfig->deleteUserConfig($this->userId, Application::APP_ID, 'token_expires_at');
 			$this->userConfig->deleteUserConfig($this->userId, Application::APP_ID, 'token');
+			$this->userConfig->deleteUserConfig($this->userId, Application::APP_ID, 'user_scopes');
+			// Cancel any in-progress imports so background jobs don't keep re-queuing
+			// and failing against the now-deleted tokens
+			$this->googleDriveApiService->cancelImport($this->userId);
+			$this->googlePhotosApiService->cancelImport($this->userId);
+			// Explicitly clear import-running flags so any currently-executing job
+			// that re-queues itself will exit on its next iteration
+			$this->userConfig->setValueString($this->userId, Application::APP_ID, 'importing_drive', '0', lazy: true);
+			$this->userConfig->setValueString($this->userId, Application::APP_ID, 'drive_import_running', '0', lazy: true);
+			$this->userConfig->setValueString($this->userId, Application::APP_ID, 'importing_photos', '0', lazy: true);
+			$this->userConfig->setValueString($this->userId, Application::APP_ID, 'photo_import_running', '0', lazy: true);
 			$result['user_name'] = '';
 		} else {
 			if (isset($values['drive_output_dir'])) {
@@ -99,6 +135,9 @@ class ConfigController extends Controller {
 			}
 			if (isset($values['importing_drive']) && $values['importing_drive'] === '0') {
 				$this->googleDriveApiService->cancelImport($this->userId);
+			}
+			if (isset($values['importing_photos']) && $values['importing_photos'] === '0') {
+				$this->googlePhotosApiService->cancelImport($this->userId);
 			}
 		}
 		return new DataResponse($result);
@@ -192,6 +231,7 @@ class ConfigController extends Controller {
 			'can_access_contacts' => in_array(self::CONTACTS_SCOPE, $scopes) ? 1 : 0,
 			'can_access_other_contacts' => in_array(self::CONTACTS_OTHER_SCOPE, $scopes) ? 1 : 0,
 			'can_access_calendar' => (in_array(self::CALENDAR_SCOPE, $scopes) && in_array(self::CALENDAR_EVENTS_SCOPE, $scopes)) ? 1 : 0,
+			'can_access_photos' => in_array(self::PHOTOS_SCOPE, $scopes) ? 1 : 0,
 		];
 
 		$this->userConfig->setValueString($this->userId, Application::APP_ID, 'user_scopes', json_encode($scopesArray), lazy: true);
