@@ -25,7 +25,6 @@ use OCP\Files\InvalidPathException;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
 use OCP\Files\NotPermittedException;
-use OCP\Lock\ILockingProvider;
 use OCP\Lock\LockedException;
 use OCP\PreConditionNotMetException;
 use Psr\Log\LoggerInterface;
@@ -155,6 +154,8 @@ class GoogleDriveAPIService {
 
 	public function cancelImport(string $userId): void {
 		$this->jobList->remove(ImportDriveJob::class, ['user_id' => $userId]);
+		$this->userConfig->setValueString($userId, Application::APP_ID, 'importing_drive', '0', lazy: true);
+		$this->userConfig->setValueString($userId, Application::APP_ID, 'drive_import_running', '0', lazy: true);
 	}
 
 	/**
@@ -550,62 +551,6 @@ class GoogleDriveAPIService {
 
 	/**
 	 * Create new file in the given folder with given filename
-	 * Download contents of the file from Google Drive and save it into the created file
-	 * @param Folder $saveFolder
-	 * @param string $fileName
-	 * @param string $userId
-	 * @param string $fileUrl
-	 * @param array $fileItem
-	 * @param array $params
-	 * @return ?int downloaded size, null if error during file creation or download
-	 * @throws InvalidPathException
-	 * @throws LockedException
-	 * @throws NotFoundException
-	 * @throws NotPermittedException
-	 */
-	private function downloadAndSaveFile(
-		Folder $saveFolder, string $fileName, string $userId,
-		string $fileUrl, array $fileItem, array $params = [],
-	): ?int {
-		try {
-			$savedFile = $saveFolder->newFile($fileName);
-		} catch (NotPermittedException $e) {
-			return null;
-		}
-
-		try {
-			$resource = $savedFile->fopen('w');
-		} catch (LockedException $e) {
-			return null;
-		}
-		if ($resource === false) {
-			return null;
-		}
-
-		$res = $this->googleApiService->simpleDownload($userId, $fileUrl, $resource, $params);
-		if (!isset($res['error'])) {
-			if (is_resource($resource)) {
-				fclose($resource);
-			}
-			if (isset($fileItem['modifiedTime'])) {
-				$d = new DateTime($fileItem['modifiedTime']);
-				$ts = $d->getTimestamp();
-				$savedFile->touch($ts);
-			} else {
-				$savedFile->touch();
-			}
-			$stat = $savedFile->stat();
-			return $stat['size'] ?? 0;
-		} else {
-			if ($savedFile->isDeletable()) {
-				$savedFile->unlock(ILockingProvider::LOCK_EXCLUSIVE);
-				$savedFile->delete();
-			}
-		}
-		return null;
-	}
-
-	/**
 	 * @param array $fileItem
 	 * @param string $userId
 	 * @param bool $hasNameConflict
@@ -692,12 +637,21 @@ class GoogleDriveAPIService {
 	 * @throws NotPermittedException
 	 */
 	private function getFile(string $userId, array $fileItem, Folder $saveFolder, string $fileName): ?int {
+		$mtime = null;
+		if (isset($fileItem['modifiedTime'])) {
+			try {
+				$mtime = (new DateTime($fileItem['modifiedTime']))->getTimestamp();
+			} catch (Exception $e) {
+				// fall through: use null (current time)
+			}
+		}
+
 		if (in_array($fileItem['mimeType'], array_values(self::DOCUMENT_MIME_TYPES))) {
 			$documentFormat = $this->getUserDocumentFormat($userId);
 			// potentially a doc
 			$params = $this->getDocumentRequestParams($fileItem['mimeType'], $documentFormat);
 			$fileUrl = 'https://www.googleapis.com/drive/v3/files/' . urlencode((string)$fileItem['id']) . '/export';
-			$result = $this->downloadAndSaveFile($saveFolder, $fileName, $userId, $fileUrl, $fileItem, $params);
+			$result = $this->googleApiService->downloadAndSaveFile($userId, $saveFolder, $fileName, $fileUrl, $mtime, $params);
 			if ($result !== null) {
 				return $result;
 			}
@@ -727,11 +681,11 @@ class GoogleDriveAPIService {
 				}
 			}
 			$this->logger->debug('Document export succeeded', ['fileItem' => $fileItem, 'fileUrl' => $fileUrl]);
-			return $this->downloadAndSaveFile($saveFolder, $fileName, $userId, $fileUrl, $fileItem);
+			return $this->googleApiService->downloadAndSaveFile($userId, $saveFolder, $fileName, $fileUrl, $mtime);
 		} elseif (isset($fileItem['webContentLink'])) {
 			// classic file
 			$fileUrl = 'https://www.googleapis.com/drive/v3/files/' . urlencode((string)$fileItem['id']) . '?alt=media';
-			return $this->downloadAndSaveFile($saveFolder, $fileName, $userId, $fileUrl, $fileItem);
+			return $this->googleApiService->downloadAndSaveFile($userId, $saveFolder, $fileName, $fileUrl, $mtime);
 		}
 		return null;
 	}

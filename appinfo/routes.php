@@ -12,6 +12,7 @@
 return [
 	'routes' => [
 		['name' => 'config#oauthRedirect', 'url' => '/oauth-redirect', 'verb' => 'GET'],
+		['name' => 'config#getConfig', 'url' => '/config', 'verb' => 'GET'],
 		['name' => 'config#setConfig', 'url' => '/config', 'verb' => 'PUT'],
 		['name' => 'config#setAdminConfig', 'url' => '/admin-config', 'verb' => 'PUT'],
 		['name' => 'config#getLocalAddressBooks', 'url' => '/local-addressbooks', 'verb' => 'GET'],
@@ -22,6 +23,11 @@ return [
 		['name' => 'googleAPI#getContactNumber', 'url' => '/contact-number', 'verb' => 'GET'],
 		['name' => 'googleAPI#importCalendar', 'url' => '/import-calendar', 'verb' => 'GET'],
 		['name' => 'googleAPI#importContacts', 'url' => '/import-contacts', 'verb' => 'GET'],
+		['name' => 'googleAPI#createPickerSession', 'url' => '/picker-session', 'verb' => 'POST'],
+		['name' => 'googleAPI#getPickerSession', 'url' => '/picker-session', 'verb' => 'GET'],
+		['name' => 'googleAPI#deletePickerSession', 'url' => '/picker-session', 'verb' => 'DELETE'],
+		['name' => 'googleAPI#importPhotos', 'url' => '/import-photos', 'verb' => 'POST'],
+		['name' => 'googleAPI#getImportPhotosInformation', 'url' => '/import-photos-info', 'verb' => 'GET'],
 		['name' => 'googleAPI#importDrive', 'url' => '/import-files', 'verb' => 'GET'],
 		['name' => 'googleAPI#getImportDriveInformation', 'url' => '/import-files-info', 'verb' => 'GET'],
 	]
