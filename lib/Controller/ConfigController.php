@@ -44,7 +44,7 @@ class ConfigController extends Controller {
 	public const CALENDAR_EVENTS_SCOPE = 'https://www.googleapis.com/auth/calendar.events.readonly';
 	public const PHOTOS_SCOPE = 'https://www.googleapis.com/auth/photospicker.mediaitems.readonly';
 
-	public const INT_CONFIGS = ['nb_imported_files', 'drive_imported_size', 'last_drive_import_timestamp', 'drive_import_job_last_start', 'nb_imported_photos', 'last_import_timestamp', 'photo_import_job_last_start'];
+	public const INT_CONFIGS = ['nb_imported_files', 'drive_imported_size', 'last_drive_import_timestamp', 'drive_import_job_last_start', 'nb_imported_photos', 'last_photo_import_timestamp', 'photo_import_job_last_start'];
 
 	public function __construct(
 		string $appName,
@@ -120,12 +120,6 @@ class ConfigController extends Controller {
 			// and failing against the now-deleted tokens
 			$this->googleDriveApiService->cancelImport($this->userId);
 			$this->googlePhotosApiService->cancelImport($this->userId);
-			// Explicitly clear import-running flags so any currently-executing job
-			// that re-queues itself will exit on its next iteration
-			$this->userConfig->setValueString($this->userId, Application::APP_ID, 'importing_drive', '0', lazy: true);
-			$this->userConfig->setValueString($this->userId, Application::APP_ID, 'drive_import_running', '0', lazy: true);
-			$this->userConfig->setValueString($this->userId, Application::APP_ID, 'importing_photos', '0', lazy: true);
-			$this->userConfig->setValueString($this->userId, Application::APP_ID, 'photo_import_running', '0', lazy: true);
 			$result['user_name'] = '';
 		} else {
 			if (isset($values['drive_output_dir'])) {

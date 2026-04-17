@@ -592,19 +592,7 @@ export default {
 						}
 						console.debug('Child window message received', event)
 						this.state.user_name = event.data.username
-						// Fetch the full config (including user_scopes) so the page
-						// updates without requiring a manual refresh
-						const configUrl = generateUrl('/apps/integration_google/config')
-						axios.get(configUrl)
-							.then((response) => {
-								if (response.data) {
-									Object.assign(this.state, response.data)
-								}
-								this.loadData()
-							})
-							.catch(() => {
-								this.loadData()
-							})
+						this.loadData()
 					}
 					// Close any previous channel before creating a new one
 					if (this.oauthBroadcastChannel) {
@@ -791,7 +779,7 @@ export default {
 			axios.get(url)
 				.then((response) => {
 					if (response.data && Object.keys(response.data).length > 0) {
-						this.lastPhotoImportTimestamp = response.data.last_import_timestamp
+						this.lastPhotoImportTimestamp = response.data.last_photo_import_timestamp
 						this.nbImportedPhotos = response.data.nb_imported_photos
 						this.queuedSessions = response.data.nb_queued_sessions ?? 0
 						this.importingPhotos = response.data.importing_photos
@@ -935,7 +923,7 @@ export default {
 			const req = {
 				values: {
 					importing_photos: '0',
-					last_import_timestamp: '0',
+					last_photo_import_timestamp: '0',
 					nb_imported_photos: '0',
 				},
 			}

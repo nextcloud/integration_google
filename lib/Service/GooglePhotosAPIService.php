@@ -156,7 +156,7 @@ class GooglePhotosAPIService {
 		$this->userConfig->setValueString($userId, Application::APP_ID, 'importing_photos', '1', lazy: true);
 		$this->userConfig->setValueString($userId, Application::APP_ID, 'picker_session_id', $sessionId, lazy: true);
 		$this->userConfig->setValueInt($userId, Application::APP_ID, 'nb_imported_photos', 0, lazy: true);
-		$this->userConfig->setValueInt($userId, Application::APP_ID, 'last_import_timestamp', 0, lazy: true);
+		$this->userConfig->setValueInt($userId, Application::APP_ID, 'last_photo_import_timestamp', 0, lazy: true);
 		$this->userConfig->setValueString($userId, Application::APP_ID, 'photo_next_page_token', '', lazy: true);
 		$this->userConfig->setValueString($userId, Application::APP_ID, 'picker_session_queue', '[]', lazy: true);
 
@@ -172,9 +172,21 @@ class GooglePhotosAPIService {
 	 */
 	public function cancelImport(string $userId): void {
 		$this->jobList->remove(ImportPhotosJob::class, ['user_id' => $userId]);
+		$this->userConfig->setValueString($userId, Application::APP_ID, 'importing_photos', '0', lazy: true);
+		$this->userConfig->setValueString($userId, Application::APP_ID, 'photo_import_running', '0', lazy: true);
 		$sessionId = $this->userConfig->getValueString($userId, Application::APP_ID, 'picker_session_id', '', lazy: true);
 		if ($sessionId !== '') {
 			$this->deletePickerSession($userId, $sessionId);
+		}
+		// Also delete all queued sessions so they don't remain as stale open sessions in Google
+		$queueRaw = $this->userConfig->getValueString($userId, Application::APP_ID, 'picker_session_queue', '[]', lazy: true);
+		$queue = json_decode($queueRaw, true);
+		if (is_array($queue)) {
+			foreach ($queue as $queuedSessionId) {
+				if (is_string($queuedSessionId) && $queuedSessionId !== '') {
+					$this->deletePickerSession($userId, $queuedSessionId);
+				}
+			}
 		}
 		$this->userConfig->setValueString($userId, Application::APP_ID, 'picker_session_queue', '[]', lazy: true);
 	}
@@ -228,22 +240,18 @@ class GooglePhotosAPIService {
 		}
 
 		if (isset($result['error']) || (isset($result['finished']) && $result['finished'])) {
+			// Clean up the picker session in both success and error cases
+			if ($sessionId !== '') {
+				$this->deletePickerSession($userId, $sessionId);
+			}
 			if (isset($result['finished']) && $result['finished']) {
 				$this->googleApiService->sendNCNotification($userId, 'import_photos_finished', [
 					'nbImported' => $alreadyImported + ($result['nbDownloaded'] ?? 0),
 					'targetPath' => $targetPath,
 				]);
-				// Clean up the picker session now that we have all items
-				if ($sessionId !== '') {
-					$this->deletePickerSession($userId, $sessionId);
-				}
 			}
 			if (isset($result['error'])) {
 				$this->logger->error('Google Photo import error: ' . $result['error'], ['app' => Application::APP_ID]);
-				// Clean up the picker session on error to avoid stale sessions
-				if ($sessionId !== '') {
-					$this->deletePickerSession($userId, $sessionId);
-				}
 				// Clear the queue and page token so queued sessions are not left stuck after a failure
 				$this->userConfig->setValueString($userId, Application::APP_ID, 'picker_session_queue', '[]', lazy: true);
 				$this->userConfig->setValueString($userId, Application::APP_ID, 'photo_next_page_token', '', lazy: true);
@@ -261,22 +269,22 @@ class GooglePhotosAPIService {
 					$this->userConfig->setValueString($userId, Application::APP_ID, 'picker_session_queue', json_encode($queue), lazy: true);
 					$this->userConfig->setValueString($userId, Application::APP_ID, 'picker_session_id', $nextSessionId, lazy: true);
 					$this->userConfig->setValueInt($userId, Application::APP_ID, 'nb_imported_photos', 0, lazy: true);
-					$this->userConfig->setValueInt($userId, Application::APP_ID, 'last_import_timestamp', 0, lazy: true);
+					$this->userConfig->setValueInt($userId, Application::APP_ID, 'last_photo_import_timestamp', 0, lazy: true);
 					$this->userConfig->setValueString($userId, Application::APP_ID, 'photo_next_page_token', '', lazy: true);
 					$this->jobList->add(ImportPhotosJob::class, ['user_id' => $userId]);
 				} else {
 					$this->userConfig->setValueString($userId, Application::APP_ID, 'importing_photos', '0', lazy: true);
 					$this->userConfig->setValueInt($userId, Application::APP_ID, 'nb_imported_photos', 0, lazy: true);
-					$this->userConfig->setValueInt($userId, Application::APP_ID, 'last_import_timestamp', 0, lazy: true);
+					$this->userConfig->setValueInt($userId, Application::APP_ID, 'last_photo_import_timestamp', 0, lazy: true);
 				}
 			} else {
 				$this->userConfig->setValueString($userId, Application::APP_ID, 'importing_photos', '0', lazy: true);
 				$this->userConfig->setValueInt($userId, Application::APP_ID, 'nb_imported_photos', 0, lazy: true);
-				$this->userConfig->setValueInt($userId, Application::APP_ID, 'last_import_timestamp', 0, lazy: true);
+				$this->userConfig->setValueInt($userId, Application::APP_ID, 'last_photo_import_timestamp', 0, lazy: true);
 			}
 		} else {
 			$ts = (new DateTime())->getTimestamp();
-			$this->userConfig->setValueInt($userId, Application::APP_ID, 'last_import_timestamp', $ts, lazy: true);
+			$this->userConfig->setValueInt($userId, Application::APP_ID, 'last_photo_import_timestamp', $ts, lazy: true);
 			$this->jobList->add(ImportPhotosJob::class, ['user_id' => $userId]);
 		}
 		$this->userConfig->setValueString($userId, Application::APP_ID, 'photo_import_running', '0', lazy: true);

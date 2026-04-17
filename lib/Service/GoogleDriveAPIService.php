@@ -154,6 +154,8 @@ class GoogleDriveAPIService {
 
 	public function cancelImport(string $userId): void {
 		$this->jobList->remove(ImportDriveJob::class, ['user_id' => $userId]);
+		$this->userConfig->setValueString($userId, Application::APP_ID, 'importing_drive', '0', lazy: true);
+		$this->userConfig->setValueString($userId, Application::APP_ID, 'drive_import_running', '0', lazy: true);
 	}
 
 	/**
@@ -549,7 +551,6 @@ class GoogleDriveAPIService {
 
 	/**
 	 * Create new file in the given folder with given filename
-	/**
 	 * @param array $fileItem
 	 * @param string $userId
 	 * @param bool $hasNameConflict
