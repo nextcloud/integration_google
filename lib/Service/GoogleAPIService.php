@@ -388,13 +388,19 @@ class GoogleAPIService {
 			$resource = $savedFile->fopen('w');
 		} catch (LockedException $e) {
 			if ($savedFile->isDeletable()) {
-				$savedFile->delete();
+				try {
+					$savedFile->delete();
+				} catch (\Throwable $e) {
+				}
 			}
 			return null;
 		}
 		if ($resource === false) {
 			if ($savedFile->isDeletable()) {
-				$savedFile->delete();
+				try {
+					$savedFile->delete();
+				} catch (\Throwable $e) {
+				}
 			}
 			return null;
 		}
@@ -416,8 +422,14 @@ class GoogleAPIService {
 				fclose($resource);
 			}
 			if ($savedFile->isDeletable()) {
-				$savedFile->unlock(ILockingProvider::LOCK_EXCLUSIVE);
-				$savedFile->delete();
+				try {
+					$savedFile->unlock(ILockingProvider::LOCK_EXCLUSIVE);
+				} catch (\Throwable $e) {
+				}
+				try {
+					$savedFile->delete();
+				} catch (\Throwable $e) {
+				}
 			}
 		}
 		return null;
