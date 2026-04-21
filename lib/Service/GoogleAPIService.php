@@ -20,9 +20,14 @@ use GuzzleHttp\Exception\ServerException;
 use OCA\Google\AppInfo\Application;
 use OCP\AppFramework\Services\IAppConfig;
 use OCP\Config\IUserConfig;
+use OCP\Files\Folder;
+use OCP\Files\InvalidPathException;
+use OCP\Files\NotPermittedException;
 use OCP\Http\Client\IClientService;
 use OCP\Http\Client\IResponse;
 use OCP\IL10N;
+use OCP\Lock\ILockingProvider;
+use OCP\Lock\LockedException;
 use OCP\Notification\IManager as INotificationManager;
 use Psr\Log\LoggerInterface;
 use Throwable;
@@ -351,6 +356,83 @@ class GoogleAPIService {
 		} catch (Throwable|Exception $e) {
 			return ['error' => 'Unknown error: ' . $e->getMessage()];
 		}
+	}
+
+	/**
+	 * Download content from a URL and save it as a new file in a folder.
+	 * Handles resource management, timestamp setting, and cleanup on failure.
+	 *
+	 * @param string $userId
+	 * @param Folder $saveFolder Target Nextcloud folder
+	 * @param string $fileName Name of the file to create
+	 * @param string $fileUrl URL to download from
+	 * @param int|null $mtime Unix timestamp for the file modification time; uses current time if null
+	 * @param array $params Additional HTTP query parameters
+	 * @return int|null downloaded file size in bytes, or null on failure
+	 */
+	public function downloadAndSaveFile(
+		string $userId,
+		Folder $saveFolder,
+		string $fileName,
+		string $fileUrl,
+		?int $mtime = null,
+		array $params = [],
+	): ?int {
+		try {
+			$savedFile = $saveFolder->newFile($fileName);
+		} catch (NotPermittedException|InvalidPathException $e) {
+			return null;
+		}
+
+		try {
+			$resource = $savedFile->fopen('w');
+		} catch (LockedException $e) {
+			if ($savedFile->isDeletable()) {
+				try {
+					$savedFile->delete();
+				} catch (\Throwable $e) {
+				}
+			}
+			return null;
+		}
+		if ($resource === false) {
+			if ($savedFile->isDeletable()) {
+				try {
+					$savedFile->delete();
+				} catch (\Throwable $e) {
+				}
+			}
+			return null;
+		}
+
+		$res = $this->simpleDownload($userId, $fileUrl, $resource, $params);
+		if (!isset($res['error'])) {
+			if (is_resource($resource)) {
+				fclose($resource);
+			}
+			if ($mtime !== null) {
+				$savedFile->touch($mtime);
+			} else {
+				$savedFile->touch();
+			}
+			$stat = $savedFile->stat();
+			return (int)($stat['size'] ?? 0);
+		} else {
+			if (is_resource($resource)) {
+				fclose($resource);
+			}
+			if ($savedFile->isDeletable()) {
+				try {
+					$savedFile->unlock(ILockingProvider::LOCK_EXCLUSIVE);
+				} catch (\Throwable $e) {
+				}
+				try {
+					$savedFile->delete();
+				} catch (\Throwable $e) {
+				}
+			}
+		}
+		return null;
 	}
 
 	private function checkTokenExpiration(string $userId): void {

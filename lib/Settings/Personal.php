@@ -45,6 +45,8 @@ class Personal implements ISettings {
 		$userName = $this->userConfig->getValueString($this->userId, Application::APP_ID, 'user_name', lazy: true);
 		$driveOutputDir = $this->userConfig->getValueString($this->userId, Application::APP_ID, 'drive_output_dir', '/Google Drive', lazy: true);
 		$driveOutputDir = $driveOutputDir ?: '/Google Drive';
+		$photoOutputDir = $this->userConfig->getValueString($this->userId, Application::APP_ID, 'photo_output_dir', '/Google Photos', lazy: true);
+		$photoOutputDir = $photoOutputDir ?: '/Google Photos';
 		$driveSharedWithMeOutputDir = $this->userConfig->getValueString($this->userId, Application::APP_ID, 'drive_shared_with_me_output_dir', '/Google Drive/Shared with me', lazy: true);
 		$driveSharedWithMeOutputDir = $driveSharedWithMeOutputDir ?: '/Google Drive/Shared with me';
 		$considerAllEvents = $this->userConfig->getValueString($this->userId, Application::APP_ID, 'consider_all_events', '1', lazy: true) === '1';
@@ -94,6 +96,7 @@ class Personal implements ISettings {
 			'document_format' => $documentFormat,
 			'drive_output_dir' => $driveOutputDir,
 			'drive_shared_with_me_output_dir' => $driveSharedWithMeOutputDir,
+			'photo_output_dir' => $photoOutputDir,
 			'user_scopes' => $userScopes,
 		];
 		$this->initialStateService->provideInitialState('user-config', $userConfig);
