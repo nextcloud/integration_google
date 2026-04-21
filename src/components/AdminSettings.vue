@@ -56,11 +56,13 @@
 					@input="onInput"
 					@focus="readonly = false">
 			</div>
-			<NcCheckboxRadioSwitch
-				v-model="state.use_popup"
-				@update:model-value="onUsePopupChanged">
-				{{ t('integration_google', 'Use a pop-up to authenticate') }}
-			</NcCheckboxRadioSwitch>
+			<div class="line">
+				<NcFormSwitch
+					v-model="state.use_popup"
+					@update:model-value="onUsePopupChanged">
+					{{ t('integration_google', 'Use a pop-up to authenticate') }}
+				</NcFormSwitch>
+			</div>
 		</div>
 	</div>
 </template>
@@ -76,7 +78,7 @@ import { generateUrl } from '@nextcloud/router'
 import axios from '@nextcloud/axios'
 import { delay } from '../utils.js'
 import { showSuccess, showError } from '@nextcloud/dialogs'
-import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
+import NcFormSwitch from '@nextcloud/vue/components/NcFormBoxSwitch'
 import { confirmPassword } from '@nextcloud/password-confirmation'
 
 export default {
@@ -84,7 +86,7 @@ export default {
 
 	components: {
 		GoogleIcon,
-		NcCheckboxRadioSwitch,
+		NcFormSwitch,
 		KeyOutlineIcon,
 		InformationOutlineIcon,
 	},
