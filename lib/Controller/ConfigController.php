@@ -67,28 +67,6 @@ class ConfigController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 * Get current user config values (used after OAuth popup to refresh state)
-	 *
-	 * @return DataResponse
-	 */
-	public function getConfig(): DataResponse {
-		if ($this->userId === null) {
-			return new DataResponse([], Http::STATUS_BAD_REQUEST);
-		}
-		$userName = $this->userConfig->getValueString($this->userId, Application::APP_ID, 'user_name', lazy: true);
-		$userScopesString = $this->userConfig->getValueString($this->userId, Application::APP_ID, 'user_scopes', '{}', lazy: true);
-		$userScopes = json_decode($userScopesString, true);
-		if (!is_array($userScopes)) {
-			$userScopes = [];
-		}
-		return new DataResponse([
-			'user_name' => $userName,
-			'user_scopes' => $userScopes,
-		]);
-	}
-
-	/**
-	 * @NoAdminRequired
 	 * Set config values
 	 *
 	 * @param array<string,string> $values key/value pairs to store in user preferences

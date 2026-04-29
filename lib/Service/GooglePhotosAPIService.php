@@ -239,12 +239,14 @@ class GooglePhotosAPIService {
 			$result = ['error' => 'Unknown job failure. ' . $e->getMessage()];
 		}
 
-		if (isset($result['error']) || (isset($result['finished']) && $result['finished'])) {
+		$finished = isset($result['finished']) && $result['finished'];
+
+		if (isset($result['error']) || $finished) {
 			// Clean up the picker session in both success and error cases
 			if ($sessionId !== '') {
 				$this->deletePickerSession($userId, $sessionId);
 			}
-			if (isset($result['finished']) && $result['finished']) {
+			if ($finished) {
 				$this->googleApiService->sendNCNotification($userId, 'import_photos_finished', [
 					'nbImported' => $alreadyImported + ($result['nbDownloaded'] ?? 0),
 					'targetPath' => $targetPath,
@@ -258,7 +260,7 @@ class GooglePhotosAPIService {
 			}
 			// On successful completion, atomically transition to the next queued session if any,
 			// so importing_photos never has a transient '0' that would stop the polling client.
-			if (isset($result['finished']) && $result['finished']) {
+			if ($finished) {
 				$queueRaw = $this->userConfig->getValueString($userId, Application::APP_ID, 'picker_session_queue', '[]', lazy: true);
 				$queue = json_decode($queueRaw, true);
 				if (!is_array($queue)) {

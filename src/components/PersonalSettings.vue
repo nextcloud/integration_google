@@ -186,14 +186,12 @@
 						<br>
 						<!-- No active session: show hints + open button -->
 						<div v-if="!pickerSessionId">
-							<p class="settings-hint">
-								<InformationOutlineIcon />
+							<NcNoteCard type="info">
 								{{ t('integration_google', 'Up to 2,000 photos can be imported per session. Hold Shift and click to select many photos at once in the Google Photos picker.') }}
-							</p>
-							<p class="settings-hint">
-								<AlertOutlineIcon />
-								{{ t('integration_google', 'Warning: Google does not provide location data in imported photos.') }}
-							</p>
+							</NcNoteCard>
+							<NcNoteCard type="warning">
+								{{ t('integration_google', 'Google does not provide location data in imported photos, and imported videos may be lower quality than the original files.') }}
+							</NcNoteCard>
 							<NcButton :class="{ loading: creatingPickerSession }"
 								:disabled="creatingPickerSession"
 								@click="onOpenPicker">
@@ -341,7 +339,6 @@ import AccountGroupOutlineIcon from 'vue-material-design-icons/AccountGroupOutli
 import FileDocumentOutlineIcon from 'vue-material-design-icons/FileDocumentOutline.vue'
 import ImageMultipleOutlineIcon from 'vue-material-design-icons/ImageMultipleOutline.vue'
 import InformationOutlineIcon from 'vue-material-design-icons/InformationOutline.vue'
-import AlertOutlineIcon from 'vue-material-design-icons/AlertOutline.vue'
 import FileOutlineIcon from 'vue-material-design-icons/FileOutline.vue'
 import FolderOutlineIcon from 'vue-material-design-icons/FolderOutline.vue'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
@@ -362,6 +359,7 @@ import NcAppNavigationIconBullet from '@nextcloud/vue/components/NcAppNavigation
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
+import NcNoteCard from '@nextcloud/vue/components/NcNoteCard'
 import { humanFileSize } from '../utils.js'
 import GoogleIconColor from './icons/GoogleIconColor.vue'
 
@@ -374,11 +372,11 @@ export default {
 		NcAppNavigationIconBullet,
 		NcButton,
 		NcCheckboxRadioSwitch,
+		NcNoteCard,
 		CloseIcon,
 		GoogleDriveIcon,
 		ImageMultipleOutlineIcon,
 		InformationOutlineIcon,
-		AlertOutlineIcon,
 		PencilOutlineIcon,
 		AccountMultipleOutlineIcon,
 		TrayArrowDownIcon,
@@ -1158,14 +1156,15 @@ export default {
 		gap: 8px;
 	}
 
-	.photo-progress-bar {
-		width: 300px;
-	}
-
 	.picker-session-buttons {
 		display: flex;
 		flex-direction: column;
 		gap: 8px;
+	}
+
+	::v-deep(.nc-note-card) {
+		max-width: 420px;
+		margin-bottom: 8px;
 	}
 
 	.cancel-session-btn {
