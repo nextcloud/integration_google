@@ -577,29 +577,14 @@ export default {
 						'toolbar=no, menubar=no, width=600, height=700',
 					)
 					ssoWindow.focus()
-					const messageListener = (event) => {
-						if (event.origin !== window.location.origin) {
-							return
-						}
+					window.addEventListener('message', (event) => {
 						if (!event.data?.username) {
 							return
 						}
-						window.removeEventListener('message', messageListener)
 						console.debug('Child window message received', event)
 						this.state.user_name = event.data.username
-						const configUrl = generateUrl('/apps/integration_google/config')
-						axios.get(configUrl)
-							.then((response) => {
-								if (response.data) {
-									Object.assign(this.state, response.data)
-								}
-								this.loadData()
-							})
-							.catch(() => {
-								this.loadData()
-							})
-					}
-					window.addEventListener('message', messageListener)
+						this.loadData()
+					})
 				} else {
 					window.location.replace(requestUrl)
 				}
