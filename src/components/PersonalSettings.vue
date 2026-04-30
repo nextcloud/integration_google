@@ -1130,17 +1130,10 @@ export default {
 		}
 	}
 
-  #google-drive input {
-    // remove right input margin and button width
-    width: calc(300px - 3px - var(--default-clickable-area));
-  }
-
+	#google-drive input,
 	#google-photos input {
+		// remove right input margin and button width
 		width: calc(300px - 3px - var(--default-clickable-area));
-	}
-
-	#google-photos button {
-		margin-top: 4px;
 	}
 
 	.photo-import-status {
@@ -1167,9 +1160,6 @@ export default {
 		margin-bottom: 8px;
 	}
 
-	.cancel-session-btn {
-		margin-top: 0;
-	}
 
 	#google-contacts {
 		select {
