@@ -576,9 +576,7 @@ export default {
 						t('integration_google', 'Sign in with Google'),
 						'toolbar=no, menubar=no, width=600, height=700',
 					)
-					if (ssoWindow) {
-						ssoWindow.focus()
-					}
+					ssoWindow.focus()
 					const messageListener = (event) => {
 						if (event.origin !== window.location.origin) {
 							return
