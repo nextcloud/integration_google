@@ -246,12 +246,6 @@ class GooglePhotosAPIService {
 			if ($sessionId !== '') {
 				$this->deletePickerSession($userId, $sessionId);
 			}
-			if ($finished) {
-				$this->googleApiService->sendNCNotification($userId, 'import_photos_finished', [
-					'nbImported' => $alreadyImported + ($result['nbDownloaded'] ?? 0),
-					'targetPath' => $targetPath,
-				]);
-			}
 			if (isset($result['error'])) {
 				$this->logger->error('Google Photo import error: ' . $result['error'], ['app' => Application::APP_ID]);
 				// Clear the queue and page token so queued sessions are not left stuck after a failure
@@ -261,6 +255,10 @@ class GooglePhotosAPIService {
 			// On successful completion, atomically transition to the next queued session if any,
 			// so importing_photos never has a transient '0' that would stop the polling client.
 			if ($finished) {
+				$this->googleApiService->sendNCNotification($userId, 'import_photos_finished', [
+					'nbImported' => $alreadyImported + ($result['nbDownloaded'] ?? 0),
+					'targetPath' => $targetPath,
+				]);
 				$queueRaw = $this->userConfig->getValueString($userId, Application::APP_ID, 'picker_session_queue', '[]', lazy: true);
 				$queue = json_decode($queueRaw, true);
 				if (!is_array($queue)) {
