@@ -1152,9 +1152,8 @@ export default {
 		gap: 8px;
 	}
 
-	::v-deep(.nc-note-card) {
-		max-width: 420px;
-		margin-bottom: 8px;
+	.cancel-session-btn {
+		margin-top: 0;
 	}
 
 	#google-contacts {
