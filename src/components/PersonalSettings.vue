@@ -871,10 +871,6 @@ export default {
 						t('integration_google', 'Failed to start importing Google Photos')
 						+ ': ' + error.response?.request?.responseText,
 					)
-					// Restart polling so the user can retry once the session is ready
-					if (this.pickerSessionId && !this.pickerPollTimer) {
-						this.pickerPollTimer = setInterval(() => this.pollPickerSession(), 5000)
-					}
 				})
 		},
 		/**
