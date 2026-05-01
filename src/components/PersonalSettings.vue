@@ -807,7 +807,7 @@ export default {
 					// Start polling for selection completion
 					const defaultPollInterval = 5000
 					const parsedPollInterval = parseFloat(response.data.pollingConfig?.pollInterval ?? '5s') * 1000
-					const pollInterval = Number.isFinite(parsedPollInterval) ? Math.max(parsedPollInterval, 4000) : defaultPollInterval
+					const pollInterval = Number.isFinite(parsedPollInterval) ? Math.max(parsedPollInterval, defaultPollInterval) : defaultPollInterval
 					this.pickerPollTimer = setInterval(() => this.pollPickerSession(), pollInterval)
 				})
 				.catch((error) => {
