@@ -11,6 +11,7 @@ OC.L10N.register(
     "Failed to start importing Google Drive" : "Nun se pue comenzar a importar Google Drive",
     "Authentication" : "Autenticación",
     "Contacts" : "Contautos",
-    "Calendars" : "Calendarios"
+    "Calendars" : "Calendarios",
+    "Photos" : "Semeyes"
 },
 "nplurals=2; plural=(n != 1);");

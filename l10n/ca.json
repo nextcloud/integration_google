@@ -53,12 +53,14 @@
     "address book name" : "nom de la llibreta d'adreces",
     "Calendars" : "Celendaris",
     "Import calendar" : "Importa un calendari",
+    "Photos" : "Fotos",
+    "Import directory" : "Carpeta d'importació",
     "Drive" : "Conduir",
     "Ignore shared files" : "Ignora els fitxers compartits",
-    "Import directory" : "Carpeta d'importació",
     "Import Google Drive files" : "Importar fitxers de Google Drive",
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "El seu Google Drive és més gran que l'espai restant que queda ({formSpace})",
     "Cancel Google Drive import" : "Cancel·lar la importació de Google Drive",
+    "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} foto importada","{amount} fotos importades"],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} fitxer importat ({progress}%)","{amount} fitxers importats ({progress}%)"]
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

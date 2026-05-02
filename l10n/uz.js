@@ -6,6 +6,7 @@ OC.L10N.register(
     "Client ID" : "Mijoz identifikatori",
     "Authentication" : "Autentifikatsiya",
     "Contacts" : "Contacts",
-    "Calendars" : "Taqvimlar"
+    "Calendars" : "Taqvimlar",
+    "Photos" : "Photos"
 },
 "nplurals=1; plural=0;");

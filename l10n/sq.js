@@ -5,6 +5,7 @@ OC.L10N.register(
     "Client secret" : "E fshehtë klienti",
     "Authentication" : "Mirëfilltësim",
     "Contacts" : "Kontaktet",
-    "Import calendar" : "Importo kalendar"
+    "Import calendar" : "Importo kalendar",
+    "Photos" : "Fotot"
 },
 "nplurals=2; plural=(n != 1);");

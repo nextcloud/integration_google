@@ -24,7 +24,8 @@ OC.L10N.register(
     "address book name" : "adressbokens namn",
     "Calendars" : "Kalendrar",
     "Import calendar" : "Importera kalender",
-    "Drive" : "Biltur",
-    "Import directory" : "Importera katalog"
+    "Photos" : "Foton",
+    "Import directory" : "Importera katalog",
+    "Drive" : "Biltur"
 },
 "nplurals=2; plural=(n != 1);");

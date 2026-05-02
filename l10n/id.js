@@ -16,6 +16,7 @@ OC.L10N.register(
     "Connected as {user}" : "Terhubung sebagai {user}",
     "Contacts" : "Kontak",
     "Calendars" : "Kalender",
+    "Photos" : "Foto",
     "Import directory" : "Direktori impor"
 },
 "nplurals=1; plural=0;");

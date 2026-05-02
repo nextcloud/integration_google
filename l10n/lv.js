@@ -16,6 +16,7 @@ OC.L10N.register(
     "Import in \"{name}\" address book" : "Ievietot adrešu grāmatā \"{name}\"",
     "Calendars" : "Kalendāri",
     "Import calendar" : "Ievietot kalendāru",
+    "Photos" : "Fotoattēli",
     "Drive" : "Braukt"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);");

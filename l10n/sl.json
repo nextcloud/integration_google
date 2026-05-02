@@ -3,6 +3,7 @@
     "Error getting OAuth access token." : " Napaka med pridobivanjem žetona OAuth za dostop",
     "Error during OAuth exchanges" : " Napaka med izmenjavo podatkov OAuth",
     "Google" : "Google",
+    "_%n photo was imported from Google._::_%n photos were imported from Google._" : ["Iz programa Google Photos je bila uvožena %n slika.","Iz programa Google Photos sta bili uvoženi %n sliki.","Iz programa Google Photos so bile uvožene %n slike.","Iz programa Google Photos je bilo uvoženih %n slik."],
     "OAuth access token refused" : "Žeton OAuth za dostop je bil zavrnjen",
     "Bad credentials" : "Neustrezna poverila",
     "Private event" : "Zasebni dogodek",
@@ -38,6 +39,8 @@
     "Failed to get number of Google contacts" : "Pridobivanje podatka o številu stikov je spodletelo",
     "Failed to get address book list" : "Pridobivanje seznama imenika je spodletelo",
     "Failed to import Google calendar" : "Uvažanje koledarja Google je spodletelo",
+    "Starting importing photos in {targetPath} directory" : "Začeto je uvažanje slik v mapo {targetPath}.",
+    "Choose where to write imported photos" : "Izbor mesta za shranjevanje uvoženih slik",
     "Starting importing files in {targetPath} directory" : "Začeto je uvažanje datotek v mapo {targetPath}.",
     "Failed to start importing Google Drive" : "Uvažanje vsebine Google Drive je spodletelo",
     "Choose where to write imported files" : "Izbor mesta za shranjevanje uvoženih datotek",
@@ -54,13 +57,15 @@
     "address book name" : "ime imenika",
     "Calendars" : "Koledarji",
     "Import calendar" : "Uvozi koledar",
+    "Photos" : "Fotografije",
+    "Import directory" : "Uvozi mapo",
     "Drive" : "Drive",
     "Ignore shared files" : "Prezri datoteke v souporabi",
     "Google documents import format" : "Zapis za uvoz dokumentov Google",
-    "Import directory" : "Uvozi mapo",
     "Import Google Drive files" : "Uvozi datoteke z oblaka Google Drive",
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Velikost datotek v oblaku Google Drive je večja od preostalega prostora ({formSpace})",
     "Cancel Google Drive import" : "Prekliči uvoz datotek Google Drive",
+    "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} uvožena slika","{amount} uvoženi sliki","{amount} uvožene slike","{amount} uvoženih slik"],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} uvožena datoteka ({progress}%)","{amount} uvoženi datoteki ({progress}%)","{amount} uvožene datoteke ({progress}%)","{amount} uvoženih datotek ({progress}%)"]
 },"pluralForm" :"nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);"
 }

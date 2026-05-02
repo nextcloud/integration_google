@@ -9,6 +9,7 @@ OC.L10N.register(
     "Contacts" : "รายชื่อ",
     "{amount} Google contacts" : "{amount} รายชื่อผู้ติดต่อ Google",
     "Calendars" : "ปฏิทิน",
-    "Import calendar" : "นำเข้าปฏิทิน"
+    "Import calendar" : "นำเข้าปฏิทิน",
+    "Photos" : "รูปภาพ"
 },
 "nplurals=1; plural=0;");

@@ -10,6 +10,7 @@ OC.L10N.register(
     "Contacts" : "Харилцагчид",
     "New address book" : "Шинэ хаягийн дэвтэр",
     "Calendars" : "Календарууд",
-    "Import calendar" : "Цагийн хуваарь оруулах"
+    "Import calendar" : "Цагийн хуваарь оруулах",
+    "Photos" : "–ó—É—Ä–∞–≥–Ω—É—É–¥"
 },
 "nplurals=2; plural=(n != 1);");
