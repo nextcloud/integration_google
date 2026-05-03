@@ -5,6 +5,7 @@ OC.L10N.register(
     "Error getting OAuth access token." : "Грешка при получаване на маркер за достъп на OAuth.",
     "Error during OAuth exchanges" : "Грешка по време на обмен на OAuth",
     "Google" : "Google",
+    "_%n photo was imported from Google._::_%n photos were imported from Google._" : ["%n от снимка бяха импортирани от Google. ","%n снимки бяха импортирани от Google."],
     "_%n file was imported from Google Drive._::_%n files were imported from Google Drive._" : ["%n от файлове бяха импортирани от Google Диск.","%n от файлове бяха импортирани от Google Диск."],
     "OAuth access token refused" : " Маркерът за достъп OAuth е отказан",
     "Bad credentials" : "Лоши идентификационни данни",
@@ -43,6 +44,7 @@ OC.L10N.register(
     "_{nbSeen} Google contact seen. {nbAdded} added, {nbUpdated} updated in {name}_::_{nbSeen} Google contacts seen. {nbAdded} added, {nbUpdated} updated in {name}_" : ["{nbSeen} Видяни контакти в Google. {nbAdded} добавен, {nbUpdated} актуализиран в {name}","{nbSeen} Видян в Google контакти. {nbAdded} добавен, {nbUpdated} актуализиран в {name}"],
     "_{total} event successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_::_{total} events successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_" : ["{total} успешно импортирани събития в {name} ({nbAdded} създадени, {nbUpdated} актуализирани)","{total} успешно импортирани събития в {name} ({nbAdded} създадени, {nbUpdated} актуализирани)"],
     "Failed to import Google calendar" : "Импортирането на Google календар беше неуспешно",
+    "Starting importing photos in {targetPath} directory" : "Започва импортирането на снимки в директория {targetPath}",
     "Choose where to write imported photos" : "Изберете къде да запишете импортираните снимки",
     "Starting importing files in {targetPath} directory" : "Започва импортирането на файлове в директория {targetPath}",
     "Failed to start importing Google Drive" : "Неуспешно стартиране на импортирането на Google Диск",
@@ -61,6 +63,7 @@ OC.L10N.register(
     "Import in \"{name}\" address book" : "Импортиране в адресна книга \"{name}\"",
     "Calendars" : "Kалендари",
     "Import calendar" : "Внасяне на календар",
+    "Photos" : "Снимки",
     "Import directory" : "Директория за импортиране",
     "Drive" : "Диск",
     "Ignore shared files" : "Игнориране на споделените файлове",
@@ -70,6 +73,7 @@ OC.L10N.register(
     "Import Google Drive files" : "Импортиране на файлове от Google Диск",
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Вашият Google Диск е по-голям от оставащото ви място ({formSpace})",
     "Cancel Google Drive import" : "Отказ на импортирането от Google Диск",
+    "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} снимки са импортирани","{amount} снимки са импортирани"],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} импортирани файлове ({progress}%)","{amount} импортирани файлове ({progress}%)"]
 },
 "nplurals=2; plural=(n != 1);");

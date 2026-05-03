@@ -4,6 +4,7 @@
     "Error getting OAuth access token." : "خطأ في الحصول على أَمَارَة الوصول access token إلى التصديق المفتوح OAuth",
     "Error during OAuth exchanges" : "خطأ أثناء تبادلات التصديق المفتوح OAuth exchanges",
     "Google" : "قوقل Google",
+    "_%n photo was imported from Google._::_%n photos were imported from Google._" : ["%n صور تم استيرادها من جوجل","%n صورة تم استيرادها من جوجل","%n صور تم استيرادها من جوجل","%n صور تم استيرادها من جوجل","%n صور تم استيرادها من جوجل","%n صور تمّ استيرادها من Google"],
     "_%n file was imported from Google Drive._::_%n files were imported from Google Drive._" : ["%n ملفات تم استيرادها من جوجل درايف","%n ملف تم استيراده من جوجل درايف","%n ملفات تم استيرادها من جوجل درايف","%n ملفات تم استيرادها من جوجل درايف","%n ملف تم استيرادها من جوجل درايف","%n ملف تمّ استيرادها من Google Drive"],
     "OAuth access token refused" : " أَمَارَة الوصول access token إلى التصديق المفتوح OAuth تمّ رفضها",
     "Bad credentials" : "بيانات تسجيل الدخول غير صحيحة",
@@ -45,6 +46,7 @@
     "_{nbSeen} Google contact seen. {nbAdded} added, {nbUpdated} updated in {name}_::_{nbSeen} Google contacts seen. {nbAdded} added, {nbUpdated} updated in {name}_" : ["{nbSeen} رؤية جهات اتصال جوجل. تمت إضافة {nb added} وتم تحديث {nbUpdated} في {name}","{nbSeen} رؤية جهة اتصال جوجل. تمت إضافة {nb added} وتم تحديث {nbUpdated} في {name}","{nbSeen} رؤية جهات اتصال جوجل. تمت إضافة {nb added} وتم تحديث {nbUpdated} في {name}","{nbSeen} رؤية جهات اتصال جوجل. تمت إضافة {nb added} وتم تحديث {nbUpdated} في {name}","{nbSeen} رؤية جهات اتصال جوجل. تمت إضافة {nb added} وتم تحديث {nbUpdated} في {name}","{nbSeen} رؤية جهات اتصال جوجل. تمت إضافة {nb added} وتم تحديث {nbUpdated} في {name}"],
     "_{total} event successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_::_{total} events successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_" : ["تم استيراد {total} أحداث بنجاح في {name} (تم إنشاء {nb added} وتم تحديث {nbUpdated})","تم استيراد {total} حدث بنجاح في {name} (تم إنشاء {nb added} وتم تحديث {nbUpdated})","تم استيراد {total} أحداث بنجاح في {name} (تم إنشاء {nb added} وتم تحديث {nbUpdated})","تم استيراد {total} أحداث بنجاح في {name} (تم إنشاء {nb added} وتم تحديث {nbUpdated})","تم استيراد {total} أحداث بنجاح في {name} (تم إنشاء {nb added} وتم تحديث {nbUpdated})","تم استيراد {total} أحداث بنجاح في {name} (تم إنشاء {nb added} وتم تحديث {nbUpdated})"],
     "Failed to import Google calendar" : "تعذّر الاستيراد من تقويم قوقل Google calendar",
+    "Starting importing photos in {targetPath} directory" : "بدء استيراد الصور إلى الدليل {targetPath}  ",
     "Choose where to write imported photos" : "تحديد إلى أين ستتم كتابة الصور المستوردة",
     "Starting importing files in {targetPath} directory" : "بدء استيراد الملفات إلى الدليل {targetPath} ",
     "Failed to start importing Google Drive" : "تعذّر البدء في استيراد قوقل درايف Google Drive",
@@ -63,6 +65,7 @@
     "Import in \"{name}\" address book" : "إستيراد إلى دفتر العناوين \"{name}\" ",
     "Calendars" : "التقاويم",
     "Import calendar" : "إستيراد التقويم",
+    "Photos" : "الصور",
     "Import directory" : "إستيراد دليل",
     "Drive" : "درايف Drive",
     "Ignore shared files" : "تجاهل الملفات المُشارَكة",
@@ -72,6 +75,7 @@
     "Import Google Drive files" : "إستيراد ملفات قوقل درايف Google Drive",
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "قوقل درايف خاصّتُك أكبر من المساحة المتبقية لديك ({formSpace})",
     "Cancel Google Drive import" : "إلغاء استيراد قوقل درايف Google Drive",
+    "_{amount} photo imported_::_{amount} photos imported_" : ["تم استيراد {amount} صور","تم استيراد {amount} صورة","تم استيراد {amount} صور","تم استيراد {amount} صور","تم استيراد {amount} صور","تم استيراد {amount} صور"],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} ملفات تم استيرادها ({progress}%)","{amount} ملف تم استيراده ({progress}%)","{amount} ملفات تم استيرادها ({progress}%)","{amount} ملفات تم استيرادها ({progress}%)","{amount} ملفات تم استيرادها ({progress}%)","{amount}  ملفات تم استيرادها ({progress}%)"]
 },"pluralForm" :"nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;"
 }

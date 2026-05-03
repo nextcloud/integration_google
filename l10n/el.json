@@ -4,6 +4,7 @@
     "Error getting OAuth access token." : "Σφάλμα κατά τη λήψη διακριτικού πρόσβασης OAuth.",
     "Error during OAuth exchanges" : "Σφάλμα κατά την ανταλλαγή OAuth",
     "Google" : "Google",
+    "_%n photo was imported from Google._::_%n photos were imported from Google._" : ["Θα εισαχθεί από τη Google %n φωτογραφία.","Θα εισαχθούν από τη Google %n φωτογραφίες."],
     "_%n file was imported from Google Drive._::_%n files were imported from Google Drive._" : ["%n αρχείο εισήχθη από το Google Drive.","%n αρχεία εισήχθησαν από το Google Drive."],
     "OAuth access token refused" : "Το διακριτικό πρόσβασης OAuth απορρίφθηκε",
     "Bad credentials" : "Εσφαλμένα διαπιστευτήρια",
