@@ -26,7 +26,7 @@ OC.L10N.register(
     "Google may require site verification for OAuth to work with your site, which can be done in Google's search console" : "Google kann eine Seitenüberprüfung anfordern, damit OAuth mit deiner Website funktioniert. Dies kann in der Google-Suchkonsole erledigt werden",
     "Google Search console" : "Google-Suchkonsole",
     "Make sure you set one \"Authorized redirect URI\" to" : "Stelle sicher, dass eine \"Autorisierte Weiterleitungs-URI\" gesetzt ist auf",
-    "Put the \"Client ID\" and \"Client secret\" below." : "Gib unten die \"Client ID\" und \"Client-Geheimnis\" ein.",
+    "Put the \"Client ID\" and \"Client secret\" below." : "Unten die \"Client ID\" und \"Client-Geheimnis\" eingeben.",
     "Finally, go to \"APIs & Services\" => \"Library\" and add the following APIs: \"Google Drive API\", \"Google Calendar API\", \"People API\" and \"Google Photos Picker API\"." : "Abschließend gehe zu \"API & Dienste\" =>\"Bibliothek\" und füge die folgenden APIs hinzu: \"Google Calendar API\", \"People API\" und \"Google Photos API\".",
     "Your Nextcloud users will then see a \"Connect to Google\" button in their personal settings." : "Deine Nextcloud-Nutzer sehen dann in ihren persönlichen Einstellungen die Schaltfläche \"Mit Google verbinden\".",
     "Client ID" : "Client-ID",
