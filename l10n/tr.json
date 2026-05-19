@@ -54,7 +54,7 @@
     "Choose where to write imported files" : "İçe aktarılan dosyaların kaydedileceği konumu seçin",
     "Choose where to write imported \"shared with me\" files" : "İçe aktarılan \"benimle paylaşılan\" dosyaların yazılacağı konumu seçin",
     "Google data migration" : "Google veri aktarımı",
-    "No Google OAuth app configured. Ask your Nextcloud administrator to configure Google connected accounts admin section." : "Herhangi bir Google OAuth uygulaması yapılandırılmamış. Nextcloud yöneticinizden, yönetim bölümünden Google bağlantılı hesapları yapılandırmasını isteyin.",
+    "No Google OAuth app configured. Ask your Nextcloud administrator to configure Google connected accounts admin section." : "Herhangi bir Google OAuth uygulaması yapılandırılmamış. Nextcloud yöneticinizden, yönetim bölümünden Google bağlı hesaplarını yapılandırmasını isteyin.",
     "Authentication" : "Kimlik doğrulama",
     "Connected as {user}" : "{user} olarak bağlantı kuruldu",
     "Disconnect from Google" : "Google bağlantısını kes",
