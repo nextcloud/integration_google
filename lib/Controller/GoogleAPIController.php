@@ -42,7 +42,6 @@ class GoogleAPIController extends Controller {
 		$this->accessToken = $this->userId !== null ? $this->secretService->getEncryptedUserValue($this->userId, 'token') : '';
 	}
 
-
 	/**
 	 * @NoAdminRequired
 	 *
