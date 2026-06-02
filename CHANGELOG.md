@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.4.0] - 2026-06-02
+
+### Added
+
+- feat(photos): Add Google Photos import via Picker API #356 @AhsanIsEpic
+
+### Changed
+
+- Update dependencies #359 @lukasdotcom
+
+### Fixed
+
+- Fix: throw UnknownActivityException on Notifier #358 @lukasdotcom
+
 ## [4.3.1] - 2026-03-31
 
 ### Changed
