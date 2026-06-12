@@ -1,0 +1,12 @@
+OC.L10N.register(
+    "integration_google",
+    {
+    "Client ID" : "Asulay ID n wemsaɣ",
+    "Sign in with Google" : "Qqen s Google",
+    "Authentication" : "Asesteb",
+    "Connected as {user}" : "D uqqin am {user}",
+    "Contacts" : "Inermisen",
+    "Calendars" : "Iwitayen",
+    "Photos" : "Tiwlafin"
+},
+"nplurals=2; plural=(n != 1);");
