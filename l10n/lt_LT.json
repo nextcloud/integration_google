@@ -23,7 +23,7 @@
     "Set the \"Application type\" to \"Web application\" and give a name to the application." : "„Programėlės tipas“ nustatykite kaip „Žiniatinklio programėlė“ ir suteikite programėlei pavadinimą.",
     "Google may require site verification for OAuth to work with your site, which can be done in Google's search console" : "Kad OAuth veiktų jūsų svetainėje, „Google“ gali reikalauti, kad svetainė būtų patvirtinta; tai galima padaryti „Google“ paieškos konsolėje",
     "Google Search console" : "„Google“ paieškos konsolė",
-    "Make sure you set one \"Authorized redirect URI\" to" : "Būtinai nustatykite vieną „Autorizuotą nukreipimo URI“ į",
+    "Make sure you set one \"Authorized redirect URI\" to" : "Įsitikinkite, kad vieną „Autorizuotą nukreipimo URI“ nustatėte kaip",
     "Put the \"Client ID\" and \"Client secret\" below." : "Įrašykite žemiau „Kliento ID“ ir „Kliento paslaptį“.",
     "Finally, go to \"APIs & Services\" => \"Library\" and add the following APIs: \"Google Drive API\", \"Google Calendar API\", \"People API\" and \"Google Photos Picker API\"." : "Galiausiai eikite į „API ir paslaugos“ => „Biblioteka“ ir pridėkite šias API: „Google Drive API“, „Google Calendar API“, „People API“ ir „Google Photos Picker API“.",
     "Your Nextcloud users will then see a \"Connect to Google\" button in their personal settings." : "Tuomet jūsų Nextcloud naudotojai savo asmeniniuose nustatymuose matys mygtuką „Prisijungti prie „Google““",
