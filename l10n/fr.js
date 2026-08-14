@@ -49,7 +49,9 @@ OC.L10N.register(
     "_{nbSeen} Google contact seen. {nbAdded} added, {nbUpdated} updated in {name}_::_{nbSeen} Google contacts seen. {nbAdded} added, {nbUpdated} updated in {name}_" : ["{nbSeen} contact Google identifié. {nbAdded} ajouté et {nbUpdated} mis à jour dans {name}","{nbSeen} contacts Google identifiés. {nbAdded} ajoutés et {nbUpdated} mis à jour dans {name}","{nbSeen} contacts Google identifiés. {nbAdded} ajoutés et {nbUpdated} mis à jour dans {name}"],
     "_{total} event successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_::_{total} events successfully imported in {name} ({nbAdded} created, {nbUpdated} updated)_" : ["{total} événement importé avec succès dans {name} ({nbAdded} créé, {nbUpdated} mis à jour)","{total} événements importés avec succès dans {name} ({nbAdded} créés, {nbUpdated} mis à jour)","{total} événements importés avec succès dans {name} ({nbAdded} créés, {nbUpdated} mis à jour)"],
     "Failed to import Google calendar" : "Échec de l'importation du calendrier Google",
+    "Session queued, it will start automatically after the current import finishes" : "Session mise en file d'attente, elle démarrera automatiquement une fois l'importation actuelle terminée",
     "Starting importing photos in {targetPath} directory" : "Démarrage de l'importation de photos dans le répertoire {targetPath}",
+    "Failed to start importing Google Photos" : "Échec du démarrage de l'importation de Google Photos",
     "Choose where to write imported photos" : "Choisissez où écrire les photos importées",
     "Starting importing files in {targetPath} directory" : "Démarrage de l'importation de fichiers dans le répertoire {targetPath}",
     "Failed to start importing Google Drive" : "Échec du démarrage de l'importation de Google Drive",
@@ -72,7 +74,10 @@ OC.L10N.register(
     "Import all events including Birthdays" : "Importer tous les événements, y compris les anniversaires",
     "Import calendar" : "Importer un calendrier",
     "Photos" : "Images",
+    "You can close this page. You will be notified when the import finishes." : "Vous pouvez fermer cette page. Vous serez averti lorsque l'importation sera terminée.",
     "Import directory" : "Importer le répertoire",
+    "Google does not provide location data in imported photos, and imported videos may be lower quality than the original files." : "Google ne fournit pas les données d'emplacement dans les photos importées, et les vidéos importées peuvent être de qualité inférieure à celle des fichiers d'origine.",
+    "Import will start automatically once you confirm your selection." : "L'importation démarrera automatiquement une fois votre sélection confirmée.",
     "Drive" : "Drive",
     "Ignore shared files" : "Ignorer les fichiers partagés",
     "Google documents import format" : "Format d'importation des documents Google",
@@ -82,6 +87,7 @@ OC.L10N.register(
     "Your Google Drive is bigger than your remaining space left ({formSpace})" : "Votre Google Drive est plus grand que l'espace restant ({formSpace})",
     "Cancel Google Drive import" : "Annuler l'import Google Drive",
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} photo importée","{amount} photos importées","{amount} photos importées"],
+    "_{count} session queued_::_{count} sessions queued_" : ["{count} session en file d'attente","{count} sessions en file d'attente","{count} sessions en file d'attente"],
     "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} fichier importé ({progress}%)","{amount} fichiers importés ({progress}%)","{amount} fichiers importés ({progress}%)"]
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
