@@ -1,0 +1,10 @@
+{ "translations": {
+    "Google" : "Google",
+    "Client ID" : "Client ID",
+    "Authentication" : "Authentifikatioun",
+    "Contacts" : "Kontakter",
+    "Calendars" : "Kalenneren",
+    "Import calendar" : "Kalenner importéiren",
+    "Drive" : "Drive"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}
