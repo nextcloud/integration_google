@@ -100,6 +100,6 @@ OC.L10N.register(
     "Cancel Google Drive import" : "Zrušiť import z Disku Google",
     "_{amount} photo imported_::_{amount} photos imported_" : ["{amount} importovaná fotka","{amount} importované fotky","{amount} importované fotky","{amount} importovaných fotiek"],
     "_{count} session queued_::_{count} sessions queued_" : ["Vo fronte je {count} relácia","Vo fronte sú {count} relácie","Vo fronte je {count} relácií","Vo fronte je {count} relácií"],
-    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} importovaný súbor ({progress}%)","{amount} importované súbory ({progress}%)","{amount} importované súbory ({progress}%)","{amount} importovaných súborov ({progress}%)"]
+    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} importovaný súbor ({progress}%)","{amount} importované súbory ({progress}%)","{amount} importovaných súborov ({progress}%)","{amount} importovaných súborov ({progress}%)"]
 },
 "nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);");
