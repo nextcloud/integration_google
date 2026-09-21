@@ -385,6 +385,9 @@ class GoogleDriveAPIService {
 	 * @throws Exception
 	 */
 	private function touchFolder(array $dirInfo): void {
+		if (!isset($dirInfo['node']) || !($dirInfo['node'] instanceof Folder)) {
+			return;
+		}
 		if (isset($dirInfo['modifiedTime']) && $dirInfo['modifiedTime'] !== null) {
 			$d = new DateTime($dirInfo['modifiedTime']);
 			$ts = $d->getTimestamp();
@@ -531,13 +534,18 @@ class GoogleDriveAPIService {
 			if (($currentFolderId === '' && !array_key_exists($parentId, $directoriesById))
 				|| $parentId === $currentFolderId) {
 				$name = $this->fileUtils->sanitizeFilename((string)($dir['name']), (string)$id);
-				if (!$currentFolder->nodeExists($name)) {
-					$newDir = $currentFolder->newFolder($name);
-				} else {
-					$newDir = $currentFolder->get($name);
-					if (!($newDir instanceof Folder)) {
-						return false;
+				try {
+					if (!$currentFolder->nodeExists($name)) {
+						$newDir = $currentFolder->newFolder($name);
+					} else {
+						$newDir = $currentFolder->get($name);
+						if (!($newDir instanceof Folder)) {
+							return false;
+						}
 					}
+				} catch (InvalidPathException) {
+					$this->logger->warning('Skipping Drive directory with invalid path', ['name' => $name, 'id' => $id, 'parentId' => $parentId]);
+					continue;
 				}
 				$directoriesById[$id]['node'] = $newDir;
 				$success = $this->createDirsUnder($directoriesById, $newDir, (string)$id);
