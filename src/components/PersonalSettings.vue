@@ -830,7 +830,8 @@ export default {
 			const url = generateUrl('/apps/integration_google/picker-session')
 			axios.get(url, { params: { sessionId: this.pickerSessionId } })
 				.then((response) => {
-					if (response.data.mediaItemsSet === true && !this.startingPhotoImport) {
+					// Check pickerSessionId again to fix race condition (could have changed in the meantime)
+					if (response.data.mediaItemsSet === true && !this.startingPhotoImport && this.pickerSessionId) {
 						this.onImportPhotos()
 					}
 				})
