@@ -827,11 +827,16 @@ export default {
 			if (!this.pickerSessionId) {
 				return
 			}
+
+			// Save the picker session ID to throw out the response if it changed since the request was made
+			// There's a race condition if onImportPhotos resolved in the meantime
+			const pickerSessionIdOfRequest = this.pickerSessionId
+
 			const url = generateUrl('/apps/integration_google/picker-session')
 			axios.get(url, { params: { sessionId: this.pickerSessionId } })
 				.then((response) => {
 					// Check pickerSessionId again to fix race condition (could have changed in the meantime)
-					if (response.data.mediaItemsSet === true && !this.startingPhotoImport && this.pickerSessionId) {
+					if (response.data.mediaItemsSet === true && !this.startingPhotoImport && (pickerSessionIdOfRequest === this.pickerSessionId)) {
 						this.onImportPhotos()
 					}
 				})
