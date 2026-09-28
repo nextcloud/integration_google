@@ -16,7 +16,7 @@
     "Import Google data into Nextcloud" : "Importovať údaje Google do Nextcloud",
     "Google integration allows you to automatically migrate your Google calendars, contacts, and files into Nextcloud." : "Integrácia Google umožňuje automaticky migrovať kalendáre, kontakty a súbory Google do Nextcloudu.",
     "Google admin options saved" : "Možnosti nastavenia Google boli uložené",
-    "Failed to save Google admin options" : "Nepodarilo sa uložiť možnosti nastavenia Google",
+    "Failed to save Google admin options" : "Nepodarilo sa uložiť možnosti správcu Google",
     "If you want to allow your Nextcloud users to authenticate to Google, create an OAuth application in your Google settings." : "Ak chcete používateľom Nextcloudu umožniť autentifikáciu na Googli, vytvorte si v nastaveniach Google aplikáciu OAuth.",
     "Google API settings" : "Nastavenia Google API",
     "Go to \"APIs & Services\" => \"Credentials\" and click on \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\"." : "Choďte na \"APIs & Services\" => \"Credentials\" a kliknite na \"+ CREATE CREDENTIALS\" -> \"OAuth client ID\".",
