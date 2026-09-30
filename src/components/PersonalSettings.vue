@@ -1008,7 +1008,7 @@ export default {
 		},
 		onConsiderAllEventsChange(newValue) {
 			this.state.consider_all_events = newValue
-			this.saveOptions({ consider_all_events: this.state.consider_all_events ? '0' : '1' })
+			this.saveOptions({ consider_all_events: this.state.consider_all_events ? '1' : '0' })
 		},
 		onDocumentFormatChange(e) {
 			this.saveOptions({ document_format: this.state.document_format })
