@@ -116,16 +116,16 @@ class GoogleCalendarAPIService {
 			$eventData .= 'COLOR:' . $closestCssColor . "\n";
 		}
 		$eventData .= isset($e['summary'])
-			? ('SUMMARY:' . substr(str_replace("\n", '\n', $e['summary']), 0, 250) . "\n")
+			? ('SUMMARY:' . mb_strcut(str_replace("\n", '\n', $e['summary']), 0, 250) . "\n")
 			: (($e['visibility'] ?? '') === 'private'
 				? ('SUMMARY:' . $this->l10n->t('Private event') . "\n")
 				: '');
 		$eventData .= isset($e['sequence']) ? ('SEQUENCE:' . $e['sequence'] . "\n") : '';
 		$eventData .= isset($e['location'])
-			? ('LOCATION:' . substr(str_replace("\n", '\n', $e['location']), 0, 250) . "\n")
+			? ('LOCATION:' . mb_strcut(str_replace("\n", '\n', $e['location']), 0, 250) . "\n")
 			: '';
 		$eventData .= isset($e['description'])
-			? ('DESCRIPTION:' . substr(str_replace("\n", '\n', $e['description']), 0, 250) . "\n")
+			? ('DESCRIPTION:' . mb_strcut(str_replace("\n", '\n', $e['description']), 0, 250) . "\n")
 			: '';
 		$eventData .= isset($e['status']) ? ('STATUS:' . strtoupper(str_replace("\n", '\n', $e['status'])) . "\n") : '';
 
