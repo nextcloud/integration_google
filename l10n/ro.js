@@ -8,6 +8,7 @@ OC.L10N.register(
     "Data migration" : "Migrarea datelor",
     "Client ID" : "ID client",
     "Client secret" : "Secret client",
+    "Sign in with Google" : "Autentifică-te cu Google",
     "Authentication" : "Autentificare",
     "Contacts" : "Contacte",
     "Calendars" : "Calendare",
