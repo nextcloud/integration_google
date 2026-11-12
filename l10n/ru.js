@@ -100,6 +100,6 @@ OC.L10N.register(
     "Cancel Google Drive import" : "Отменить импорт из Google Диска",
     "_{amount} photo imported_::_{amount} photos imported_" : ["Импортирована {amount} фотография","Импортировано {amount} фотографии","Импортировано {amount} фотографий","Импортировано {amount} фотографии"],
     "_{count} session queued_::_{count} sessions queued_" : ["{count} сеанс в очереди","{count} сеанса в очереди","{count} сеансов в очереди","{count} сеансов в очереди"],
-    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} файл импортирован ({progress}%)","{amount} файла импортировано ({progress}%)","{amount} файлов импортировано ({progress}%)","{amount} файлов импортировано ({progress}%)"]
+    "_{amount} file imported ({progress}%)_::_{amount} files imported ({progress}%)_" : ["{amount} файл импортирован ({progress} %)","{amount} файла импортировано ({progress} %)","{amount} файлов импортировано ({progress} %)","{amount} файлов импортировано ({progress} %)"]
 },
 "nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);");
