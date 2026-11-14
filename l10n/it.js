@@ -59,6 +59,7 @@ OC.L10N.register(
     "address book name" : "nome della rubrica",
     "Calendars" : "Calendari",
     "Import calendar" : "Importa calendario",
+    "Photos" : "Foto",
     "Import directory" : "Cartella di importazione",
     "Drive" : "Drive",
     "Ignore shared files" : "Ignora i file condivisi",
